@@ -28,16 +28,26 @@ BBOX_RE = re.compile(
 		(?P<y1> \d+)
 	''', re.VERBOSE)
 
-def construct(node):
-	if node.tag == ET.Comment:
-		return
-	def gather_children_results():
+def update_bbox(parent_bbox, child_bbox):
+	for i in xrange(4):
+		if parent_bbox[i] is None:
+			parent_bbox[i] = child_bbox[i]
+		elif i < 2 and child_bbox[i] is not None and parent_bbox[i] > child_bbox[i]:
+			parent_bbox[i] = child_bbox[i]
+		elif i > 1 and child_bbox[i] is not None and parent_bbox[i] < child_bbox[i]:
+			parent_bbox[i] = child_bbox[i]
+
+def _scan(node, buffer, parent_bbox):
+	def look_down(buffer, parent_bbox):
 		have_subresults = False
 		for child in node.iterchildren():
-			for subresult in construct(child):
-				yield subresult
-		if not have_subresults:
-			yield (node.text or '')
+			_scan(child, buffer, parent_bbox)
+			if node.tail and node.tail.strip():
+				buffer.append(node.tail)
+		if node.text and node.text.strip():
+			buffer.append(node.text)
+	if not isinstance(node.tag, basestring):
+		return
 	hocr_classes = (node.get('class') or '').split()
 	djvu_class = None
 	for hocr_class in hocr_classes:
@@ -47,20 +57,34 @@ def construct(node):
 	if djvu_class:
 		m = BBOX_RE.search(node.get('title') or '')
 		if m is None:
-			djvu_class = None
+			bbox = [None] * 4
+		else:
+			bbox = [int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')]
+			update_bbox(parent_bbox, bbox)
 	if djvu_class:
 		result = [miniexp.Symbol(djvu_class)]
-		result += (int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1'))
-		result += gather_children_results()
-		yield tuple(result)
+		result += [None] * 4
+		look_down(result, bbox)
+		result[1:5] = bbox
+		if len(result) == 5:
+			result.append('')
+		buffer.append(result)
 	else:
-		for subresult in gather_children_results():
-			yield subresult
+		look_down(buffer, parent_bbox)
+
+def scan(node):
+	buffer = []
+	bbox = [None] * 4
+	_scan(node, buffer, bbox)
+	return buffer
 
 def main():
 	doc = ET.parse(sys.stdin, ET.HTMLParser())
-	x = tuple(construct(doc.find('/body')))
-	miniexp.Expression(x).print_into(sys.stdout, 80)
+	sys.stdout.write('select\nremove-txt\n\n')
+	for i, text in enumerate(scan(doc.find('/body'))):
+		sys.stdout.write('select %d\nset-txt\n' % (i + 1))
+		miniexp.Expression(text).print_into(sys.stdout, 80)
+		sys.stdout.write('\n.\n\n')
 
 if __name__ == '__main__':
 	main()
