@@ -28,14 +28,44 @@ BBOX_RE = re.compile(
 		(?P<y1> \d+)
 	''', re.VERBOSE)
 
-def update_bbox(parent_bbox, child_bbox):
-	for i in xrange(4):
-		if parent_bbox[i] is None:
-			parent_bbox[i] = child_bbox[i]
-		elif i < 2 and child_bbox[i] is not None and parent_bbox[i] > child_bbox[i]:
-			parent_bbox[i] = child_bbox[i]
-		elif i > 1 and child_bbox[i] is not None and parent_bbox[i] < child_bbox[i]:
-			parent_bbox[i] = child_bbox[i]
+class BBox(object):
+
+	def __init__(self, x0 = None, y0 = None, x1 = None, y1 = None):
+		self._coordinates = [x0, y0, x1, y1]
+	
+	@property
+	def x0(self):
+		return self[0]
+	@property
+
+	def y0(self):
+		return self[1]
+
+	@property
+	def x1(self):
+		return self[2]
+
+	@property
+	def y1(self):
+		return self[3]
+
+	def __getitem__(self, item):
+		return self._coordinates[item]
+
+	def __nonzero__(self):
+		for value in self._coordinates:
+			if value is None:
+				return False
+		return False
+
+	def update(self, bbox):
+		for i, self_i in enumerate(self._coordinates):
+			if self_i is None:
+				self._coordinates[i] = bbox[i]
+			elif i < 2 and bbox[i] is not None and self[i] > bbox[i]:
+				self._coordinates[i] = bbox[i]
+			elif i > 1 and bbox[i] is not None and self[i] < bbox[i]:
+				self._coordinates[i] = bbox[i]
 
 def _scan(node, buffer, parent_bbox):
 	def look_down(buffer, parent_bbox):
@@ -57,10 +87,10 @@ def _scan(node, buffer, parent_bbox):
 	if djvu_class:
 		m = BBOX_RE.search(node.get('title') or '')
 		if m is None:
-			bbox = [None] * 4
+			bbox = BBox()
 		else:
-			bbox = [int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')]
-			update_bbox(parent_bbox, bbox)
+			bbox = BBox(*(int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')))
+			parent_bbox.update(bbox)
 	if djvu_class:
 		result = [miniexp.Symbol(djvu_class)]
 		result += [None] * 4
@@ -74,8 +104,7 @@ def _scan(node, buffer, parent_bbox):
 
 def scan(node):
 	buffer = []
-	bbox = [None] * 4
-	_scan(node, buffer, bbox)
+	_scan(node, buffer, BBox())
 	return buffer
 
 def main():
