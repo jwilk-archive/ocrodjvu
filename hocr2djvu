@@ -57,6 +57,9 @@ class BBox(object):
 			if value is None:
 				return False
 		return False
+	
+	def __repr__(self):
+		return '%s(%r, %r, %r, %r)' % ((self.__class__.__name__,) + tuple(self._coordinates))
 
 	def update(self, bbox):
 		for i, self_i in enumerate(self._coordinates):
@@ -92,6 +95,8 @@ def _scan(node, buffer, parent_bbox):
 			bbox = BBox(*(int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')))
 			parent_bbox.update(bbox)
 	if djvu_class:
+		if djvu_class == 'page' and not bbox:
+			raise Exception("Cannot determine page\'s bbox")
 		result = [miniexp.Symbol(djvu_class)]
 		result += [None] * 4
 		look_down(result, bbox)
