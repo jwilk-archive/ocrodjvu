@@ -8,6 +8,8 @@ import sys
 import re
 from djvu import miniexp
 
+from image_size import get_image_size
+
 hocr_class_to_djvu = \
 dict(
 	ocr_page = 'page',
@@ -18,6 +20,11 @@ dict(
 	ocrx_line = 'line',
 	ocrx_word = 'word'
 ).get
+
+IMAGE_RE = re.compile(
+	r'''
+		image \s+ (?P<file_name> \S+)
+	''', re.VERBOSE)
 
 BBOX_RE = re.compile(
 	r'''
@@ -70,11 +77,11 @@ class BBox(object):
 			elif i > 1 and bbox[i] is not None and self[i] < bbox[i]:
 				self._coordinates[i] = bbox[i]
 
-def _scan(node, buffer, parent_bbox):
+def _scan(node, buffer, parent_bbox, page_height = None):
 	def look_down(buffer, parent_bbox):
 		have_subresults = False
 		for child in node.iterchildren():
-			_scan(child, buffer, parent_bbox)
+			_scan(child, buffer, parent_bbox, page_height)
 			if node.tail and node.tail.strip():
 				buffer.append(node.tail)
 		if node.text and node.text.strip():
@@ -88,19 +95,36 @@ def _scan(node, buffer, parent_bbox):
 		if djvu_class:
 			break
 	if djvu_class:
-		m = BBOX_RE.search(node.get('title') or '')
+		title = node.get('title') or ''
+		m = BBOX_RE.search(title)
 		if m is None:
 			bbox = BBox()
 		else:
 			bbox = BBox(*(int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')))
 			parent_bbox.update(bbox)
 	if djvu_class:
-		if djvu_class == 'page' and not bbox:
-			raise Exception("Cannot determine page\'s bbox")
+		if djvu_class == 'page':
+			if not bbox:
+				m = IMAGE_RE.search(title)
+				if m is None:
+					raise Exception("Cannot determine page's bbox")
+				page_width, page_height = get_image_size(m.group('file_name'))
+				bbox = BBox(0, 0, page_width - 1, page_height - 1)
+				parent_bbox.update(bbox)
+			else:
+				if (bbox.x0, bbox.y0) != (0, 0):
+					raise Exception("Page's bbox should start with (0, 0)")
+				page_width, page_height = bbox.x1, bbox.y1
 		result = [miniexp.Symbol(djvu_class)]
 		result += [None] * 4
 		look_down(result, bbox)
 		result[1:5] = bbox
+		if page_height is None:
+			raise Exception('Unable to determina page height')
+		result[1] = bbox.x0
+		result[2] = page_height - 1 - bbox.y1
+		result[3] = bbox.x1
+		result[4] = page_height - 1 - bbox.y0
 		if len(result) == 5:
 			result.append('')
 		buffer.append(result)
