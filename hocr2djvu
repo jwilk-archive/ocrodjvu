@@ -1,4 +1,13 @@
 #!/usr/bin/python
+
+'''
+Usage:
+
+  hocr2djvu < ocr_file.html | djvused -s ocr_file.djvu
+
+'''
+
+
 try:
 	import lxml.etree as ET
 except ImportError, ex:
