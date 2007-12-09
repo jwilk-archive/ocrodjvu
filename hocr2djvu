@@ -23,6 +23,7 @@ hocr_class_to_djvu = \
 dict(
 	ocr_page = 'page',
 	ocr_column = 'column',
+	ocr_carea = 'column',
 	ocr_par = 'para',
 	ocr_line = 'line',
 	ocrx_block = 'region',
