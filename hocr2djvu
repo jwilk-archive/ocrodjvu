@@ -15,7 +15,7 @@ except ImportError, ex:
 	raise
 import sys
 import re
-from djvu import miniexp
+from djvu import sexpr
 
 from image_size import get_image_size
 
@@ -125,7 +125,7 @@ def _scan(node, buffer, parent_bbox, page_height = None):
 				if (bbox.x0, bbox.y0) != (0, 0):
 					raise Exception("Page's bbox should start with (0, 0)")
 				page_width, page_height = bbox.x1, bbox.y1
-		result = [miniexp.Symbol(djvu_class)]
+		result = [sexpr.Symbol(djvu_class)]
 		result += [None] * 4
 		look_down(result, bbox)
 		result[1:5] = bbox
@@ -151,7 +151,7 @@ def main():
 	sys.stdout.write('select\nremove-txt\n\n')
 	for i, text in enumerate(scan(doc.find('/body'))):
 		sys.stdout.write('select %d\nset-txt\n' % (i + 1))
-		miniexp.Expression(text).print_into(sys.stdout, 80)
+		sexpr.Expression(text).print_into(sys.stdout, 80)
 		sys.stdout.write('\n.\n\n')
 
 if __name__ == '__main__':
