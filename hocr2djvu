@@ -15,7 +15,11 @@ except ImportError, ex:
 	raise
 import sys
 import re
-from djvu import sexpr
+try:
+	from djvu import sexpr
+except ImportError, ex:
+	ex.args = '%s; please install the python-djvulibre package' % str(ex)
+	raise
 
 from image_size import get_image_size
 
