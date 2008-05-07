@@ -80,8 +80,8 @@ class BBox(object):
 				self._coordinates[i] = bbox[i]
 
 def _scan(node, buffer, parent_bbox, page_height = None):
+	print '_scan(%r)' % node
 	def look_down(buffer, parent_bbox):
-		have_subresults = False
 		for child in node.iterchildren():
 			_scan(child, buffer, parent_bbox, page_height)
 			if node.tail and node.tail.strip():
@@ -120,7 +120,8 @@ def _scan(node, buffer, parent_bbox, page_height = None):
 		result = [sexpr.Symbol(djvu_class)]
 		result += [None] * 4
 		look_down(result, bbox)
-		result[1:5] = bbox
+		if not bbox and not len(node):
+			return
 		if page_height is None:
 			raise Exception('Unable to determine page height')
 		result[1] = bbox.x0
