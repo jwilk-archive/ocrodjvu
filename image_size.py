@@ -4,7 +4,7 @@
 from cStringIO import StringIO
 import struct
 
-__all__ = ['UnknownSize', 'get_image_size']
+__all__ = 'UnknownSize', 'get_image_size'
 
 class UnknownSize(Exception):
 	pass
@@ -41,12 +41,12 @@ def def_pnm_size(stream):
 def get_jpeg_size(stream):
 	stream.read(2)
 	while True:
-		(marker, code, length) = struct.unpack('>BBH', stream.read(4))
+		marker, code, length = struct.unpack('>BBH', stream.read(4))
 		if marker != 0xff:
 			raise UnknownSize('[JPEG] JPEG marker not found')
 		elif 0xc0 <= code <= 0xc3:
-			(y, x) = struct.unpack('>xHH', stream.read(5))
-			return (x, y)
+			y, x = struct.unpack('>xHH', stream.read(5))
+			return x, y
 		else:
 			stream.read(length - 2)
 	raise UnknownSize('[JPEG] End of file')
@@ -55,8 +55,8 @@ def get_jpeg_size(stream):
 def get_png_size(stream):
 	stream.read(12)
 	if stream.read(4) == 'IHDR':
-		(x, y) = struct.unpack('>LL', stream.read(8))
-		return (x, y)
+		x, y = struct.unpack('>LL', stream.read(8))
+		return x, y
 	raise UnknownSize('[PNG] IHDR not found')
 
 @header('MM\x00\x2a', 'II\x2a\x00')
@@ -104,6 +104,6 @@ def get_tiff_size(stream):
 	if errors:
 		raise UnknownSize('[TIFF] ' + ' '.join(errors))
 	else:
-		return (x, y)
+		return x, y
 
 # vim:ts=4 sw=4 noet
