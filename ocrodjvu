@@ -11,8 +11,6 @@ import djvu.decode
 
 import hocr
 
-# TODO: Require python-djvulibre 0.1.5
-
 PIXEL_FORMAT = djvu.decode.PixelFormatPackedBits('>')
 PIXEL_FORMAT.rows_top_to_bottom = 1
 PIXEL_FORMAT.y_top_to_bottom = 1
@@ -66,7 +64,7 @@ class Context(djvu.decode.Context):
 		rect = (0, 0) + size
 		pfile = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='.pbm')
 		try:
-			pfile.write('P4 %d %d\n' % size)
+			pfile.write('P4 %d %d\n' % size) # PBM header
 			data = page_job.render(
 				djvu.decode.RENDER_MASK_ONLY,
 				rect, rect,
