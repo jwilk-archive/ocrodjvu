@@ -135,7 +135,7 @@ def _scan(node, buffer, parent_bbox, page_height = None):
 		look_down(result, bbox)
 		result[1:5] = bbox
 		if page_height is None:
-			raise Exception('Unable to determina page height')
+			raise Exception('Unable to determine page height')
 		result[1] = bbox.x0
 		result[2] = page_height - 1 - bbox.y1
 		result[3] = bbox.x1
