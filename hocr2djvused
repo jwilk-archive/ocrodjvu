@@ -3,7 +3,7 @@
 '''\
 Usage:
 
-  hocr2djvu < ocr_file.html | djvused -s ocr_file.djvu
+  hocr2djvused < ocr_file.html | djvused -s ocr_file.djvu
 \
 '''
 
