@@ -56,20 +56,16 @@ class BBox(object):
 		self._coordinates = [x0, y0, x1, y1]
 	
 	@property
-	def x0(self):
-		return self[0]
-	@property
-
-	def y0(self):
-		return self[1]
+	def x0(self): return self[0]
 
 	@property
-	def x1(self):
-		return self[2]
+	def y0(self): return self[1]
 
 	@property
-	def y1(self):
-		return self[3]
+	def x1(self): return self[2]
+
+	@property
+	def y1(self): return self[3]
 
 	def __getitem__(self, item):
 		return self._coordinates[item]
