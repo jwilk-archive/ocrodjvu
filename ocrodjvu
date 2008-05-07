@@ -5,6 +5,7 @@ import tempfile
 import subprocess
 import shutil
 import os.path
+import optparse
 
 import djvu.decode
 
@@ -15,6 +16,20 @@ import hocr
 PIXEL_FORMAT = djvu.decode.PixelFormatPackedBits('>')
 PIXEL_FORMAT.rows_top_to_bottom = 1
 PIXEL_FORMAT.y_top_to_bottom = 1
+
+class OptionParser(optparse.OptionParser):
+	def __init__(self):
+		optparse.OptionParser.__init__(self, usage='%prog [options] <djvu-file>')
+		self.add_option('-p', '--pages', dest='pages', action='store', default=None)
+	
+	def parse_args(self):
+		try:
+			options, [path] = optparse.OptionParser.parse_args(self)
+		except ValueError:
+			self.error()
+		if options.pages is not None:
+			options.pages = map(int, options.pages.split(','))
+		return options, path
 
 class Subprocess(subprocess.Popen):
 
@@ -61,20 +76,24 @@ class Context(djvu.decode.Context):
 		finally:
 			pfile.close()
 
-	def process(self, path):
+	def process(self, path, pages = None):
 		print >>sys.stderr, 'Processing %r:' % path
 		document = self.new_document(djvu.decode.FileURI(path))
 		document.decoding_job.wait()
+		if pages is None:
+			pages = iter(document.pages)
+		else:
+			pages = (document.pages[i-1] for i in pages)
 		sed_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='djvused')
 		try:
 			sed_file.write('remove-txt\n')
-			for page in document.pages:
+			for page in pages:
 				sed_file.write('select %d\n' % (page.n + 1))
 				sed_file.write('set-txt\n')
 				self.process_page(page).print_into(sed_file)
 				sed_file.write('\n.\n\n')
 			sed_file.flush()
-			del document
+			document = None
 			path = os.path.abspath(path)
 			djvused = Subprocess(['djvused', '-s', '-f', sed_file.name, path])
 			djvused.wait()
@@ -82,8 +101,10 @@ class Context(djvu.decode.Context):
 			sed_file.close()
 
 def main():
+	oparser = OptionParser()
+	options, path = oparser.parse_args()
 	context = Context()
-	context.process(sys.argv[1])
+	context.process(path, options.pages)
 
 if __name__ == '__main__':
 	main()
