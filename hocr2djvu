@@ -7,14 +7,15 @@ Usage:
 
 '''
 
+import sys
+import re
 
 try:
 	import lxml.etree as ET
 except ImportError, ex:
 	ex.args = '%s; please install the python-lxml package <http://codespeak.net/lxml/>' % str(ex),
 	raise
-import sys
-import re
+
 try:
 	from djvu import sexpr
 	from djvu import const
