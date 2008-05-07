@@ -28,7 +28,14 @@ class OptionParser(optparse.OptionParser):
 		except ValueError:
 			self.error()
 		if options.pages is not None:
-			options.pages = map(int, options.pages.split(','))
+			pages = []
+			for range in options.pages.split(','):
+				if '-' in range:
+					x, y = map(int, options.pages.split('-', 1))
+					pages += xrange(x, y + 1)
+				else:
+					pages += int(range),
+			options.pages = pages
 		return options, path
 
 class Subprocess(subprocess.Popen):
