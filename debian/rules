@@ -1,0 +1,47 @@
+#!/usr/bin/make -f
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+
+build: build-stamp
+
+build-stamp: configure-stamp 
+	dh_testdir
+
+clean:
+	dh_testdir
+	dh_testroot
+	dh_clean 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	dh_installdirs
+	dh_install
+	sed -i -e '1,/^$$/ {s|^$$|\nimport sys; sys.path.insert(0, "/usr/share/ocrodjvu/")|;}' $(CURDIR)/debian/ocrodjvu/usr/bin/*
+
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs 
+	dh_installdocs
+	dh_installexamples
+	dh_pysupport
+	dh_installman
+	dh_link
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary-arch: build install
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure
+
+# vim:ts=4 sw=4 noet

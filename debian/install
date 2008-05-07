@@ -1,0 +1,3 @@
+*.py		usr/share/ocrodjvu/
+hocr2djvused	usr/bin
+ocrodjvu	usr/bin
