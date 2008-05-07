@@ -24,16 +24,19 @@ class OptionParser(optparse.OptionParser):
 		try:
 			options, [path] = optparse.OptionParser.parse_args(self)
 		except ValueError:
-			self.error()
-		if options.pages is not None:
-			pages = []
-			for range in options.pages.split(','):
-				if '-' in range:
-					x, y = map(int, options.pages.split('-', 1))
-					pages += xrange(x, y + 1)
-				else:
-					pages += int(range),
-			options.pages = pages
+			self.error('Invalid number of arguments')
+		try:
+			if options.pages is not None:
+				pages = []
+				for range in options.pages.split(','):
+					if '-' in range:
+						x, y = map(int, options.pages.split('-', 1))
+						pages += xrange(x, y + 1)
+					else:
+						pages += int(range),
+				options.pages = pages
+		except (TypeError, ValueError):
+			self.error('Unable to parse page numbers')
 		return options, path
 
 class Subprocess(subprocess.Popen):
