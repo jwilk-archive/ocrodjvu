@@ -118,7 +118,7 @@ def _scan(node, buffer, parent_bbox, page_height = None):
 			bbox = BBox(*(int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')))
 			parent_bbox.update(bbox)
 	if djvu_class:
-		if djvu_class == 'page':
+		if djvu_class is const.TEXT_ZONE_PAGE:
 			if not bbox:
 				m = IMAGE_RE.search(title)
 				if m is None:
