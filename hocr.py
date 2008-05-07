@@ -1,3 +1,10 @@
+'''
+Process hOCR documents.
+
+The hOCR format specification:
+http://docs.google.com/Doc?id=dfxcv4vc_67g844kf
+'''
+
 import re
 
 try:
@@ -14,6 +21,8 @@ except ImportError, ex:
 	raise
 
 from image_size import get_image_size
+
+__all__ = 'extract_text'
 
 hocr_class_to_djvu = \
 dict(
@@ -139,6 +148,9 @@ def scan(node):
 	return buffer
 
 def extract_text(stream):
+	'''
+	Extract DjVu text from an hOCR stream.
+	'''
 	doc = ET.parse(stream, ET.HTMLParser())
 	scan_result = scan(doc.find('/body'))
 	return sexpr.Expression(scan_result)
