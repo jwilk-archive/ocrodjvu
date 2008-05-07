@@ -1,0 +1,91 @@
+#!/usr/bin/python
+
+import sys
+import tempfile
+import subprocess
+import shutil
+import os.path
+
+import djvu.decode
+
+import hocr
+
+# TODO: Require python-djvulibre 0.1.5
+
+PIXEL_FORMAT = djvu.decode.PixelFormatPackedBits('>')
+PIXEL_FORMAT.rows_top_to_bottom = 1
+PIXEL_FORMAT.y_top_to_bottom = 1
+
+class Subprocess(subprocess.Popen):
+
+	def __init__(self, *args, **kwargs):
+		subprocess.Popen.__init__(self, *args, **kwargs)
+		try:
+			self.__command = kwargs['args'][0]
+		except KeyError:
+			self.__command = args[0][0]
+
+	def wait(self):
+		return_code = subprocess.Popen.wait(self)
+		if return_code != 0:
+			raise subprocess.CalledProcessError(return_code, self.__command)
+
+class Context(djvu.decode.Context):
+
+	def handle_message(self, message):
+		if isinstance(message, djvu.decode.ErrorMessage):
+			print >>sys.stderr, message
+			sys.exit(1)
+
+	def process_page(self, page):
+		print >>sys.stderr, '- Page #%d' % (page.n + 1)
+		page_job = page.decode(wait=True)
+		size = page_job.size
+		rect = (0, 0) + size
+		pfile = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='.pbm')
+		try:
+			pfile.write('P4 %d %d\n' % size)
+			data = page_job.render(
+				djvu.decode.RENDER_MASK_ONLY,
+				rect, rect,
+				PIXEL_FORMAT
+			)
+			pfile.write(data)
+			pfile.flush()
+			ocropus = Subprocess(['ocrocmd', pfile.name], stdout=subprocess.PIPE)
+			try:
+				text, = hocr.extract_text(ocropus.stdout)
+				return text
+			finally:
+				ocropus.wait()
+		finally:
+			pfile.close()
+
+	def process(self, path):
+		print >>sys.stderr, 'Processing %r:' % path
+		document = self.new_document(djvu.decode.FileURI(path))
+		document.decoding_job.wait()
+		sed_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='djvused')
+		try:
+			sed_file.write('remove-txt\n')
+			for page in document.pages:
+				sed_file.write('select %d\n' % (page.n + 1))
+				sed_file.write('set-txt\n')
+				self.process_page(page).print_into(sed_file)
+				sed_file.write('\n.\n\n')
+			sed_file.flush()
+			del document
+			path = os.path.abspath(path)
+			djvused = Subprocess(['djvused', '-s', '-f', sed_file.name, path])
+			djvused.wait()
+		finally:
+			sed_file.close()
+
+def main():
+	context = Context()
+	context.process(sys.argv[1])
+
+if __name__ == '__main__':
+	main()
+
+# vim:ts=4 sw=4 noet
