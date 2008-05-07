@@ -1,16 +1,19 @@
 #!/usr/bin/python
 
-'''
+'''\
 Usage:
 
   hocr2djvu < ocr_file.html | djvused -s ocr_file.djvu
-
+\
 '''
 
 import sys
 import hocr
 
 def main():
+	if len(sys.argv) > 1:
+		print >>sys.stderr, __doc__
+		sys.exit(1)
 	text, = hocr.extract_text(sys.stdin)
 	sys.stdout.write('select 1\nremove-txt\nset-txt\n')
 	text.print_into(sys.stdout, 80)
