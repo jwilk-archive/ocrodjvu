@@ -80,7 +80,6 @@ class BBox(object):
 				self._coordinates[i] = bbox[i]
 
 def _scan(node, buffer, parent_bbox, page_height = None):
-	print '_scan(%r)' % node
 	def look_down(buffer, parent_bbox):
 		for child in node.iterchildren():
 			_scan(child, buffer, parent_bbox, page_height)
