@@ -17,22 +17,23 @@ import sys
 import re
 try:
 	from djvu import sexpr
+	from djvu import const
 except ImportError, ex:
-	ex.args = '%s; please install the python-djvulibre package' % str(ex)
+	ex.args = '%s; please install the python-djvulibre package' % str(ex),
 	raise
 
 from image_size import get_image_size
 
 hocr_class_to_djvu = \
 dict(
-	ocr_page = 'page',
-	ocr_column = 'column',
-	ocr_carea = 'column',
-	ocr_par = 'para',
-	ocr_line = 'line',
-	ocrx_block = 'region',
-	ocrx_line = 'line',
-	ocrx_word = 'word'
+	ocr_page = const.TEXT_ZONE_PAGE,
+	ocr_column = const.TEXT_ZONE_COLUMN,
+	ocr_carea = const.TEXT_ZONE_COLUMN,
+	ocr_par = const.TEXT_ZONE_PARAGRAPH,
+	ocr_line = const.TEXT_ZONE_LINE,
+	ocrx_block = const.TEXT_ZONE_REGION,
+	ocrx_line = const.TEXT_ZONE_LINE,
+	ocrx_word = const.TEXT_ZONE_WORD
 ).get
 
 IMAGE_RE = re.compile(
