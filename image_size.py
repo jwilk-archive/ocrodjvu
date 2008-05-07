@@ -32,6 +32,11 @@ def header(*values):
 		return f
 	return wrapper
 
+@header(*('P%d' % (i + 1) for i in xrange(6)))
+def def_pnm_size(stream):
+	head, x, y, tail = stream.read(64).split(None, 3)
+	return int(x), int(y)
+
 @header('\xff\xd8')
 def get_jpeg_size(stream):
 	stream.read(2)
