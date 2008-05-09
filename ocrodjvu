@@ -17,6 +17,17 @@ PIXEL_FORMAT = djvu.decode.PixelFormatPackedBits('>')
 PIXEL_FORMAT.rows_top_to_bottom = 1
 PIXEL_FORMAT.y_top_to_bottom = 1
 
+try:
+	from subprocess import CalledProcessError
+except ImportError:
+	class CalledProcessError(Exception):
+		def __init__(self, return_code, command):
+			Exception.__init__(self, command, return_code)
+		def __str__(self):
+			return 'Command %r returned non-zero exit status %d' % self.args
+	subprocess.CalledProcessError = CalledProcessError
+del CalledProcessError
+
 class OptionParser(optparse.OptionParser):
 	def __init__(self):
 		optparse.OptionParser.__init__(self, usage='%prog [options] <djvu-file>')
