@@ -1,3 +1,9 @@
+ocrodjvu (0.1.1) UNRELEASED; urgency=low
+
+  * Depend on python-lxml.
+
+ -- Jakub Wilk <ubanus@users.sf.net>  Fri, 09 May 2008 12:29:36 +0200
+
 ocrodjvu (0.1) unstable; urgency=low
 
   * Initial release.
