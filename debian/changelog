@@ -1,9 +1,9 @@
-ocrodjvu (0.1.1) UNRELEASED; urgency=low
+ocrodjvu (0.1.1) unstable; urgency=low
 
   * Depend on python-lxml.
   * Better compatibility with Python 2.4.
 
- -- Jakub Wilk <ubanus@users.sf.net>  Fri, 09 May 2008 15:26:55 +0200
+ -- Jakub Wilk <ubanus@users.sf.net>  Wed, 14 May 2008 11:23:13 +0200
 
 ocrodjvu (0.1) unstable; urgency=low
 
