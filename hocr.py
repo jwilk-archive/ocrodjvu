@@ -19,6 +19,7 @@ except ImportError, ex:
 try:
 	from djvu import sexpr
 	from djvu import const
+	from djvu import decode
 except ImportError, ex:
 	ex.args = '%s; please install the python-djvulibre package' % str(ex),
 	raise
@@ -91,10 +92,10 @@ class BBox(object):
 			elif i > 1 and bbox[i] is not None and self[i] < bbox[i]:
 				self._coordinates[i] = bbox[i]
 
-def _scan(node, buffer, parent_bbox, page_height = None):
+def _scan(node, buffer, parent_bbox, page_size=None, rotation=0):
 	def look_down(buffer, parent_bbox):
 		for child in node.iterchildren():
-			_scan(child, buffer, parent_bbox, page_height)
+			_scan(child, buffer, parent_bbox, page_size, rotation)
 			if node.tail and node.tail.strip():
 				buffer.append(node.tail)
 		if node.text and node.text.strip():
@@ -121,41 +122,54 @@ def _scan(node, buffer, parent_bbox, page_height = None):
 				m = IMAGE_RE.search(title)
 				if m is None:
 					raise Exception("Cannot determine page's bbox")
-				page_width, page_height = get_image_size(m.group('file_name'))
+				page_size = get_image_size(m.group('file_name'))
 				bbox = BBox(0, 0, page_width - 1, page_height - 1)
 				parent_bbox.update(bbox)
 			else:
 				if (bbox.x0, bbox.y0) != (0, 0):
 					raise Exception("Page's bbox should start with (0, 0)")
-				page_width, page_height = bbox.x1, bbox.y1
+				page_size = bbox.x1, bbox.y1
 		result = [sexpr.Symbol(djvu_class)]
 		result += [None] * 4
 		look_down(result, bbox)
 		if not bbox and not len(node):
 			return
-		if page_height is None:
-			raise Exception('Unable to determine page height')
-		result[1] = bbox.x0
-		result[2] = page_height - 1 - bbox.y1
-		result[3] = bbox.x1
-		result[4] = page_height - 1 - bbox.y0
+		if page_size is None:
+			raise Exception('Unable to determine page size')
+		if (rotation / 90) & 1:
+			page_width, page_height = page_size
+			xform = decode.AffineTransform((0, 0, page_height, page_width), (0, 0) + page_size)
+		else:
+			xform = decode.AffineTransform((0, 0) + page_size, (0, 0) + page_size)
+		xform.mirror_y()
+		xform.rotate(rotation)
+		print '(%d)' % rotation
+		x0, y0, x1, y1 = bbox
+		print x0, y0, x1, y1, '->',
+		x0, y0 = xform.inverse((x0, y0))
+		x1, y1 = xform.inverse((x1, y1))
+		print x0, y0, x1, y1
+		result[1] = x0
+		result[2] = y0
+		result[3] = x1
+		result[4] = y1
 		if len(result) == 5:
 			result.append('')
 		buffer.append(result)
 	else:
 		look_down(buffer, parent_bbox)
 
-def scan(node):
+def scan(node, rotation=0):
 	buffer = []
-	_scan(node, buffer, BBox())
+	_scan(node, buffer, BBox(), rotation=rotation)
 	return buffer
 
-def extract_text(stream):
+def extract_text(stream, rotation=0):
 	'''
 	Extract DjVu text from an hOCR stream.
 	'''
 	doc = ET.parse(stream, ET.HTMLParser())
-	scan_result = scan(doc.find('/body'))
+	scan_result = scan(doc.find('/body'), rotation=rotation)
 	return sexpr.Expression(scan_result)
 
 # vim:ts=4 sw=4 noet

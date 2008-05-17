@@ -90,7 +90,7 @@ class Context(djvu.decode.Context):
 			pfile.flush()
 			ocropus = Subprocess(['ocrocmd', pfile.name], stdout=subprocess.PIPE)
 			try:
-				text, = hocr.extract_text(ocropus.stdout)
+				text, = hocr.extract_text(ocropus.stdout, page.rotation)
 				return text
 			finally:
 				ocropus.wait()
