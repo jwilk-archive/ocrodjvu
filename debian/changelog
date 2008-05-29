@@ -1,3 +1,10 @@
+ocrodjvu (0.1.2) UNRELEASED; urgency=low
+
+  * Make hocr2djvused work with hOCR for multiple pages. 
+  * Handle rotated pages correctly.
+
+ -- Jakub Wilk <ubanus@users.sf.net>  Thu, 29 May 2008 23:38:43 +0200
+
 ocrodjvu (0.1.1) unstable; urgency=low
 
   * Depend on python-lxml.
