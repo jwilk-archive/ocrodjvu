@@ -123,6 +123,7 @@ def _scan(node, buffer, parent_bbox, page_size=None, rotation=0):
 				if m is None:
 					raise Exception("Cannot determine page's bbox")
 				page_size = get_image_size(m.group('file_name'))
+				page_width, page_height = page_size
 				bbox = BBox(0, 0, page_width - 1, page_height - 1)
 				parent_bbox.update(bbox)
 			else:
@@ -143,12 +144,9 @@ def _scan(node, buffer, parent_bbox, page_size=None, rotation=0):
 			xform = decode.AffineTransform((0, 0) + page_size, (0, 0) + page_size)
 		xform.mirror_y()
 		xform.rotate(rotation)
-		print '(%d)' % rotation
 		x0, y0, x1, y1 = bbox
-		print x0, y0, x1, y1, '->',
 		x0, y0 = xform.inverse((x0, y0))
 		x1, y1 = xform.inverse((x1, y1))
-		print x0, y0, x1, y1
 		result[1] = x0
 		result[2] = y0
 		result[3] = x1
