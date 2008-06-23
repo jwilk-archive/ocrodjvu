@@ -2,8 +2,9 @@ ocrodjvu (0.1.2) UNRELEASED; urgency=low
 
   * Make hocr2djvused work with hOCR for multiple pages. 
   * Handle rotated pages correctly.
+  * Ignore IW44-only pages.
 
- -- Jakub Wilk <ubanus@users.sf.net>  Thu, 29 May 2008 23:38:43 +0200
+ -- Jakub Wilk <ubanus@users.sf.net>  Mon, 23 Jun 2008 20:12:29 +0200
 
 ocrodjvu (0.1.1) unstable; urgency=low
 

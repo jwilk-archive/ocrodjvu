@@ -111,7 +111,10 @@ class Context(djvu.decode.Context):
 			for page in pages:
 				sed_file.write('select %d\n' % (page.n + 1))
 				sed_file.write('set-txt\n')
-				self.process_page(page).print_into(sed_file)
+				try:
+					self.process_page(page).print_into(sed_file)
+				except djvu.decode.NotAvailable:
+					print >>sys.stderr, 'No image suitable for OCR.'
 				sed_file.write('\n.\n\n')
 			sed_file.flush()
 			document = None
