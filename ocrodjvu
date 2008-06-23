@@ -105,7 +105,7 @@ class Context(djvu.decode.Context):
 			pages = iter(document.pages)
 		else:
 			pages = (document.pages[i-1] for i in pages)
-		sed_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='djvused')
+		sed_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='.djvused')
 		try:
 			sed_file.write('remove-txt\n')
 			for page in pages:
