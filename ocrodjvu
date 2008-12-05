@@ -18,119 +18,119 @@ PIXEL_FORMAT.rows_top_to_bottom = 1
 PIXEL_FORMAT.y_top_to_bottom = 1
 
 try:
-	from subprocess import CalledProcessError
+    from subprocess import CalledProcessError
 except ImportError:
-	class CalledProcessError(Exception):
-		def __init__(self, return_code, command):
-			Exception.__init__(self, command, return_code)
-		def __str__(self):
-			return 'Command %r returned non-zero exit status %d' % self.args
-	subprocess.CalledProcessError = CalledProcessError
+    class CalledProcessError(Exception):
+        def __init__(self, return_code, command):
+            Exception.__init__(self, command, return_code)
+        def __str__(self):
+            return 'Command %r returned non-zero exit status %d' % self.args
+    subprocess.CalledProcessError = CalledProcessError
 del CalledProcessError
 
 class OptionParser(optparse.OptionParser):
-	def __init__(self):
-		optparse.OptionParser.__init__(self, usage='%prog [options] <djvu-file>')
-		self.add_option('-p', '--pages', dest='pages', action='store', default=None)
-	
-	def parse_args(self):
-		try:
-			options, [path] = optparse.OptionParser.parse_args(self)
-		except ValueError:
-			self.error('Invalid number of arguments')
-		try:
-			if options.pages is not None:
-				pages = []
-				for range in options.pages.split(','):
-					if '-' in range:
-						x, y = map(int, options.pages.split('-', 1))
-						pages += xrange(x, y + 1)
-					else:
-						pages += int(range),
-				options.pages = pages
-		except (TypeError, ValueError):
-			self.error('Unable to parse page numbers')
-		return options, path
+    def __init__(self):
+        optparse.OptionParser.__init__(self, usage='%prog [options] <djvu-file>')
+        self.add_option('-p', '--pages', dest='pages', action='store', default=None)
+    
+    def parse_args(self):
+        try:
+            options, [path] = optparse.OptionParser.parse_args(self)
+        except ValueError:
+            self.error('Invalid number of arguments')
+        try:
+            if options.pages is not None:
+                pages = []
+                for range in options.pages.split(','):
+                    if '-' in range:
+                        x, y = map(int, options.pages.split('-', 1))
+                        pages += xrange(x, y + 1)
+                    else:
+                        pages += int(range),
+                options.pages = pages
+        except (TypeError, ValueError):
+            self.error('Unable to parse page numbers')
+        return options, path
 
 class Subprocess(subprocess.Popen):
 
-	def __init__(self, *args, **kwargs):
-		subprocess.Popen.__init__(self, *args, **kwargs)
-		try:
-			self.__command = kwargs['args'][0]
-		except KeyError:
-			self.__command = args[0][0]
+    def __init__(self, *args, **kwargs):
+        subprocess.Popen.__init__(self, *args, **kwargs)
+        try:
+            self.__command = kwargs['args'][0]
+        except KeyError:
+            self.__command = args[0][0]
 
-	def wait(self):
-		return_code = subprocess.Popen.wait(self)
-		if return_code != 0:
-			raise subprocess.CalledProcessError(return_code, self.__command)
+    def wait(self):
+        return_code = subprocess.Popen.wait(self)
+        if return_code != 0:
+            raise subprocess.CalledProcessError(return_code, self.__command)
 
 class Context(djvu.decode.Context):
 
-	def handle_message(self, message):
-		if isinstance(message, djvu.decode.ErrorMessage):
-			print >>sys.stderr, message
-			sys.exit(1)
+    def handle_message(self, message):
+        if isinstance(message, djvu.decode.ErrorMessage):
+            print >>sys.stderr, message
+            sys.exit(1)
 
-	def process_page(self, page):
-		print >>sys.stderr, '- Page #%d' % (page.n + 1)
-		page_job = page.decode(wait=True)
-		size = page_job.size
-		rect = (0, 0) + size
-		pfile = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='.pbm')
-		try:
-			pfile.write('P4 %d %d\n' % size) # PBM header
-			data = page_job.render(
-				djvu.decode.RENDER_MASK_ONLY,
-				rect, rect,
-				PIXEL_FORMAT
-			)
-			pfile.write(data)
-			pfile.flush()
-			ocropus = Subprocess(['ocrocmd', pfile.name], stdout=subprocess.PIPE)
-			try:
-				text, = hocr.extract_text(ocropus.stdout, page.rotation)
-				return text
-			finally:
-				ocropus.wait()
-		finally:
-			pfile.close()
+    def process_page(self, page):
+        print >>sys.stderr, '- Page #%d' % (page.n + 1)
+        page_job = page.decode(wait=True)
+        size = page_job.size
+        rect = (0, 0) + size
+        pfile = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='.pbm')
+        try:
+            pfile.write('P4 %d %d\n' % size) # PBM header
+            data = page_job.render(
+                djvu.decode.RENDER_MASK_ONLY,
+                rect, rect,
+                PIXEL_FORMAT
+            )
+            pfile.write(data)
+            pfile.flush()
+            ocropus = Subprocess(['ocrocmd', pfile.name], stdout=subprocess.PIPE)
+            try:
+                text, = hocr.extract_text(ocropus.stdout, page.rotation)
+                return text
+            finally:
+                ocropus.wait()
+        finally:
+            pfile.close()
 
-	def process(self, path, pages = None):
-		print >>sys.stderr, 'Processing %r:' % path
-		document = self.new_document(djvu.decode.FileURI(path))
-		document.decoding_job.wait()
-		if pages is None:
-			pages = iter(document.pages)
-		else:
-			pages = (document.pages[i-1] for i in pages)
-		sed_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='.djvused')
-		try:
-			sed_file.write('remove-txt\n')
-			for page in pages:
-				sed_file.write('select %d\n' % (page.n + 1))
-				sed_file.write('set-txt\n')
-				try:
-					self.process_page(page).print_into(sed_file)
-				except djvu.decode.NotAvailable:
-					print >>sys.stderr, 'No image suitable for OCR.'
-				sed_file.write('\n.\n\n')
-			sed_file.flush()
-			document = None
-			path = os.path.abspath(path)
-			djvused = Subprocess(['djvused', '-s', '-f', sed_file.name, path])
-			djvused.wait()
-		finally:
-			sed_file.close()
+    def process(self, path, pages = None):
+        print >>sys.stderr, 'Processing %r:' % path
+        document = self.new_document(djvu.decode.FileURI(path))
+        document.decoding_job.wait()
+        if pages is None:
+            pages = iter(document.pages)
+        else:
+            pages = (document.pages[i-1] for i in pages)
+        sed_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='.djvused')
+        try:
+            sed_file.write('remove-txt\n')
+            for page in pages:
+                sed_file.write('select %d\n' % (page.n + 1))
+                sed_file.write('set-txt\n')
+                try:
+                    self.process_page(page).print_into(sed_file)
+                except djvu.decode.NotAvailable:
+                    print >>sys.stderr, 'No image suitable for OCR.'
+                sed_file.write('\n.\n\n')
+            sed_file.flush()
+            document = None
+            path = os.path.abspath(path)
+            djvused = Subprocess(['djvused', '-s', '-f', sed_file.name, path])
+            djvused.wait()
+        finally:
+            sed_file.close()
 
 def main():
-	oparser = OptionParser()
-	options, path = oparser.parse_args()
-	context = Context()
-	context.process(path, options.pages)
+    oparser = OptionParser()
+    options, path = oparser.parse_args()
+    context = Context()
+    context.process(path, options.pages)
 
 if __name__ == '__main__':
-	main()
+    main()
 
-# vim:ts=4 sw=4 noet
+# vim:ts=4 sw=4 et

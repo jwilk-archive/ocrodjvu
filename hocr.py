@@ -170,4 +170,4 @@ def extract_text(stream, rotation=0):
 	scan_result = scan(doc.find('/body'), rotation=rotation)
 	return sexpr.Expression(scan_result)
 
-# vim:ts=4 sw=4 noet
+# vim:ts=4 sw=4 et
