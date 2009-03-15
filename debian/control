@@ -3,7 +3,7 @@ Section: text
 Priority: extra
 Maintainer: Jakub Wilk <ubanus@users.sf.net>
 Build-Depends: debhelper (>= 7.0.50), python-support
-Standards-Version: 3.8.0
+Standards-Version: 3.8.1
 
 Package: ocrodjvu
 Architecture: all
