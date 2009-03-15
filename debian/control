@@ -11,3 +11,5 @@ Architecture: all
 Depends: ${python:Depends}, ${misc:Depends}, ocropus (>= 0.2), python-djvulibre (>= 0.1.6), python-lxml, djvulibre-bin
 Conflicts: djvulibre-bin (= 3.5.20-4)
 Description: OCRopus for DjVu files
+ ocrodjvu is a wrapper for OCRopus, an OCR system, that allows you to
+ perform OCR on DjVu files.
