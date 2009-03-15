@@ -97,7 +97,7 @@ class Context(djvu.decode.Context):
             )
             pfile.write(data)
             pfile.flush()
-            ocropus = Subprocess(['ocrocmd', pfile.name], stdout=subprocess.PIPE)
+            ocropus = Subprocess(['ocroscript', 'rec-tess', pfile.name], stdout=subprocess.PIPE)
             try:
                 text, = hocr.extract_text(ocropus.stdout, page.rotation)
                 return text
