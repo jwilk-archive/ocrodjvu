@@ -1,10 +1,17 @@
 #!/usr/bin/make -f
 
+XSL = /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl
+
 %:
 	dh $(@)
 
 override_dh_install:
 	dh_install
 	sed -i -e '1,/^$$/ {s|^$$|\nimport sys; sys.path.insert(0, "/usr/share/ocrodjvu/")|;}' $(CURDIR)/debian/ocrodjvu/usr/bin/*
+
+override_dh_installman:
+	xsltproc --nonet $(XSL) doc/ocrodjvu.xml
+	dh_installman *.1
+	$(RM) *.1
 
 # vim:ts=4 sw=4 noet

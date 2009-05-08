@@ -2,7 +2,7 @@ Source: ocrodjvu
 Section: text
 Priority: extra
 Maintainer: Jakub Wilk <ubanus@users.sf.net>
-Build-Depends: debhelper (>= 7.0.50), python-support
+Build-Depends: debhelper (>= 7.0.50), python-support, xsltproc, docbook-xsl
 Standards-Version: 3.8.1
 
 Package: ocrodjvu
