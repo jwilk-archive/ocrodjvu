@@ -77,6 +77,19 @@
 				</para>
 			</listitem>
 		</varlistentry>
+		<varlistentry>
+			<term><option>--version</option></term>
+			<listitem>
+				<para>Output version information and exit.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><option>-h</option></term>
+			<term><option>--help</option></term>
+			<listitem>
+				<para>Display help and exit.</para>
+			</listitem>
+		</varlistentry>
 		</variablelist>
 	</para>
 </refsection>
