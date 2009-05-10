@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-XSL = /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl
+XSL = http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl
 
 %:
 	dh $(@)
