@@ -44,7 +44,7 @@ class OptionParser(optparse.OptionParser):
         usage = '%prog [options] <djvu-file>'
         version = '%%prog %s' % __version__
         optparse.OptionParser.__init__(self, usage=usage, version=version)
-        self.add_option('-p', '--pages', dest='pages', action='store', default=None)
+        self.add_option('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
         self.add_option('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
     
     def parse_args(self):
