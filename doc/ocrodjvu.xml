@@ -78,6 +78,12 @@
 			</listitem>
 		</varlistentry>
 		<varlistentry>
+			<term><option>--debug</option></term>
+			<listitem>
+				<para>To ease debugging, don't delete intermediate files.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
 			<term><option>--version</option></term>
 			<listitem>
 				<para>Output version information and exit.</para>

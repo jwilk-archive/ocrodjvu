@@ -45,6 +45,7 @@ class OptionParser(optparse.OptionParser):
         version = '%%prog %s' % __version__
         optparse.OptionParser.__init__(self, usage=usage, version=version)
         self.add_option('-p', '--pages', dest='pages', action='store', default=None)
+        self.add_option('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
     
     def parse_args(self):
         try:
@@ -81,6 +82,17 @@ class Subprocess(subprocess.Popen):
 
 class Context(djvu.decode.Context):
 
+    def init(self, debug):
+        self._temp_dir = tempfile.mkdtemp(prefix='ocrodjvu.')
+        self._debug = debug
+
+    def _temp_file(self, name):
+        path = os.path.join(self._temp_dir, name)
+        file = open(path, 'w+b')
+        if not self._debug:
+            file = tempfile._TemporaryFileWrapper(file, file.name)
+        return file
+
     def handle_message(self, message):
         if isinstance(message, djvu.decode.ErrorMessage):
             print >>sys.stderr, message
@@ -91,7 +103,7 @@ class Context(djvu.decode.Context):
         page_job = page.decode(wait=True)
         size = page_job.size
         rect = (0, 0) + size
-        pfile = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='.pbm')
+        pfile = self._temp_file('%06d.pbm' % page.n)
         try:
             pfile.write('P4 %d %d\n' % size) # PBM header
             data = page_job.render(
@@ -102,10 +114,20 @@ class Context(djvu.decode.Context):
             pfile.write(data)
             pfile.flush()
             ocropus = Subprocess(['ocroscript', 'rec-tess', pfile.name], stdout=subprocess.PIPE)
+            html_file = None
             try:
-                text, = hocr.extract_text(ocropus.stdout, page.rotation)
+                if self._debug:
+                    html_file = self._temp_file('%06d.html' % page.n)
+                    html = ocropus.stdout.read()
+                    html_file.write(html)
+                    html_file.seek(0)
+                else:
+                    html_file = ocropus.stdout
+                text, = hocr.extract_text(html_file, page.rotation)
                 return text
             finally:
+                if html_file is not None:
+                    html_file.close()
                 ocropus.wait()
         finally:
             pfile.close()
@@ -118,7 +140,7 @@ class Context(djvu.decode.Context):
             pages = iter(document.pages)
         else:
             pages = (document.pages[i-1] for i in pages)
-        sed_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='.djvused')
+        sed_file = self._temp_file('ocrodjvu.djvused')
         try:
             sed_file.write('remove-txt\n')
             for page in pages:
@@ -137,11 +159,23 @@ class Context(djvu.decode.Context):
         finally:
             sed_file.close()
 
+    def close(self):
+        if self._debug:
+            return self._temp_dir
+        else:
+            shutil.rmtree(self._temp_dir)
+
 def main():
     oparser = OptionParser()
     options, path = oparser.parse_args()
     context = Context()
-    context.process(path, options.pages)
+    context.init(options.debug)
+    try:
+        context.process(path, options.pages)
+    finally:
+        temp_dir = context.close()
+        if temp_dir is not None:
+            print >>sys.stderr, 'Intermediate files were left in the %r directory.' % temp_dir
 
 if __name__ == '__main__':
     main()
