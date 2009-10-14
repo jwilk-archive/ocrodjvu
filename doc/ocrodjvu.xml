@@ -134,6 +134,9 @@
                 <para>
                     Save OCR results in place.
                 </para>
+                <para>
+                    (Use this option to retain compatibility with &p; &lt; 2.0.)
+                </para>
             </listitem>
         </varlistentry>
         <varlistentry>
@@ -148,6 +151,9 @@
             <term><option>--clear-text</option></term>
             <listitem>
                 <para>Remove existing hidden text.</para>
+                <para>
+                    (Use this option to retain compatibility with &p; &lt; 2.0.)
+                </para>
             </listitem>
         </varlistentry>
         <varlistentry>

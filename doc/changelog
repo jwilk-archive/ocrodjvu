@@ -11,6 +11,9 @@ ocrodjvu (0.2.0) UNRELEASED; urgency=low
   * Add the --clear-text option.
   * Add the --ocr-only option.
 
+  * Please use the --in-place and --clear-text options to retain compatibility
+    with ocrodjvu < 0.2.
+
  -- Jakub Wilk <ubanus@users.sf.net>  Wed, 14 Oct 2009 18:51:10 +0200
 
 ocrodjvu (0.1.3) unstable; urgency=low
