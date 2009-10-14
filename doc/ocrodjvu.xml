@@ -65,6 +65,7 @@
 		<command>&p;</command> accepts the following options:
 		<variablelist>
 		<varlistentry>
+			<term><option>-p</option></term>
 			<term><option>--pages=<replaceable>page-range</replaceable></option></term>
 			<listitem>
 				<para>
@@ -78,6 +79,7 @@
 			</listitem>
 		</varlistentry>
 		<varlistentry>
+			<term><option>-D</option></term>
 			<term><option>--debug</option></term>
 			<listitem>
 				<para>To ease debugging, don't delete intermediate files.</para>
