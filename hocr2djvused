@@ -26,7 +26,7 @@ def main():
         print >>sys.stderr, __doc__
         sys.exit(1)
     for i, text in enumerate(hocr.extract_text(sys.stdin)):
-        sys.stdout.write('select %d\nremove-txt\nset-txt\n' % (i+1))
+        sys.stdout.write('select %d\nremove-txt\nset-txt\n' % (i + 1))
         text.print_into(sys.stdout, 80)
         sys.stdout.write('\n.\n\n')
 
