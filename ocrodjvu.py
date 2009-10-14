@@ -150,7 +150,7 @@ class OptionParser(optparse.OptionParser):
                 )
             )
         self.add_option('--ocr-only', dest='ocr_only', action='store_true', default=False, help='''don't save pages without OCR''')
-        self.add_option('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
+        self.add_option('--clear-text', dest='clear_text', action='store_true', default=False, help='remove exisiting hidden text')
         self.add_option('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
         self.add_option('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
     
