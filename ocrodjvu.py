@@ -308,7 +308,4 @@ def main():
         if temp_dir is not None:
             print >>sys.stderr, 'Intermediate files were left in the %r directory.' % temp_dir
 
-if __name__ == '__main__':
-    main()
-
 # vim:ts=4 sw=4 et
