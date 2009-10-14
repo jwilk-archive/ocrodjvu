@@ -65,7 +65,7 @@ BBOX_RE = re.compile(
 
 class BBox(object):
 
-    def __init__(self, x0 = None, y0 = None, x1 = None, y1 = None):
+    def __init__(self, x0=None, y0=None, x1=None, y1=None):
         self._coordinates = [x0, y0, x1, y1]
     
     @property

@@ -268,7 +268,7 @@ class Context(djvu.decode.Context):
         finally:
             pfile.close()
 
-    def process(self, path, pages = None):
+    def process(self, path, pages=None):
         print >>sys.stderr, 'Processing %r:' % path
         document = self.new_document(djvu.decode.FileURI(path))
         document.decoding_job.wait()
