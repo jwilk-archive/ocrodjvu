@@ -1,218 +1,218 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE refentry PUBLIC '-//OASIS//DTD DocBook XML V4.5//EN' 'http://www.docbook.org/xml/4.5/docbookx.dtd' 
 [
-	<!ENTITY p 'ocrodjvu'>
-	<!ENTITY version '0.1.3'>
+    <!ENTITY p 'ocrodjvu'>
+    <!ENTITY version '0.1.3'>
 ]>
 
 <refentry>
 
 <refentryinfo>
-	<title>&p; manual</title>
-	<productname>&p;</productname>
-	<author>
-		<firstname>Jakub</firstname> <surname>Wilk</surname>
-		<affiliation>
-			<address>
-				<email>ubanus@users.sf.net</email>
-			</address>
-		</affiliation>
-	</author>
-	<copyright>
-		<year>2008</year>
-		<year>2009</year>
-		<holder>Jakub Wilk</holder>
-	</copyright>
+    <title>&p; manual</title>
+    <productname>&p;</productname>
+    <author>
+        <firstname>Jakub</firstname> <surname>Wilk</surname>
+        <affiliation>
+            <address>
+                <email>ubanus@users.sf.net</email>
+            </address>
+        </affiliation>
+    </author>
+    <copyright>
+        <year>2008</year>
+        <year>2009</year>
+        <holder>Jakub Wilk</holder>
+    </copyright>
 </refentryinfo>
 
 <refmeta>
-	<refentrytitle>&p;</refentrytitle>
-	<manvolnum>1</manvolnum>
-	<refmiscinfo class='version'>&version;</refmiscinfo>
+    <refentrytitle>&p;</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class='version'>&version;</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-	<refname>&p;</refname>
-	<refpurpose>OCRopus for DjVu files</refpurpose>
+    <refname>&p;</refname>
+    <refpurpose>OCRopus for DjVu files</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
-	<cmdsynopsis>
-		<command>&p;</command>
-		<group choice='req'>
-			<arg choice='plain'><option>-o</option></arg>
-			<arg choice='plain'><option>--save-bundled</option></arg>
-		</group>
-		<arg choice='plain'><replaceable>output-djvu-file</replaceable></arg>
-		<arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
-		<arg choice='plain'><replaceable>djvu-file</replaceable></arg>
-	</cmdsynopsis>
-	<cmdsynopsis>
-		<command>&p;</command>
-		<group choice='req'>
-			<arg choice='plain'><option>-i</option></arg>
-			<arg choice='plain'><option>--save-indirect</option></arg>
-		</group>
-		<arg choice='plain'><replaceable>index-djvu-file</replaceable></arg>
-		<arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
-		<arg choice='plain'><replaceable>djvu-file</replaceable></arg>
-	</cmdsynopsis>
-	<cmdsynopsis>
-		<command>&p;</command>
-		<arg choice='plain'><option>--save-script</option></arg>
-		<arg choice='plain'><replaceable>script-file</replaceable></arg>
-		<arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
-		<arg choice='plain'><replaceable>djvu-file</replaceable></arg>
-	</cmdsynopsis>
-	<cmdsynopsis>
-		<command>&p;</command>
-		<arg choice='plain'><option>--in-place</option></arg>
-		<arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
-		<arg choice='plain'><replaceable>djvu-file</replaceable></arg>
-	</cmdsynopsis>
-	<cmdsynopsis>
-		<command>&p;</command>
-		<arg choice='plain'><option>--dry-run</option></arg>
-		<arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
-		<arg choice='plain'><replaceable>djvu-file</replaceable></arg>
-	</cmdsynopsis>
-	<cmdsynopsis>
-		<command>&p;</command>
-		<group choice='req'>
-			<arg choice='plain'><option>--version</option></arg>
-			<arg choice='plain'><option>--help</option></arg>
-			<arg choice='plain'><option>-h</option></arg>
-		</group>
-	</cmdsynopsis>
+    <cmdsynopsis>
+        <command>&p;</command>
+        <group choice='req'>
+            <arg choice='plain'><option>-o</option></arg>
+            <arg choice='plain'><option>--save-bundled</option></arg>
+        </group>
+        <arg choice='plain'><replaceable>output-djvu-file</replaceable></arg>
+        <arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+        <arg choice='plain'><replaceable>djvu-file</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+        <command>&p;</command>
+        <group choice='req'>
+            <arg choice='plain'><option>-i</option></arg>
+            <arg choice='plain'><option>--save-indirect</option></arg>
+        </group>
+        <arg choice='plain'><replaceable>index-djvu-file</replaceable></arg>
+        <arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+        <arg choice='plain'><replaceable>djvu-file</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+        <command>&p;</command>
+        <arg choice='plain'><option>--save-script</option></arg>
+        <arg choice='plain'><replaceable>script-file</replaceable></arg>
+        <arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+        <arg choice='plain'><replaceable>djvu-file</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+        <command>&p;</command>
+        <arg choice='plain'><option>--in-place</option></arg>
+        <arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+        <arg choice='plain'><replaceable>djvu-file</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+        <command>&p;</command>
+        <arg choice='plain'><option>--dry-run</option></arg>
+        <arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+        <arg choice='plain'><replaceable>djvu-file</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+        <command>&p;</command>
+        <group choice='req'>
+            <arg choice='plain'><option>--version</option></arg>
+            <arg choice='plain'><option>--help</option></arg>
+            <arg choice='plain'><option>-h</option></arg>
+        </group>
+    </cmdsynopsis>
 </refsynopsisdiv>
 
 <refsection>
-	<title>Description</title>
-	<para>
-		&p; is a wrapper for OCRopus, an OCR system, that allows you to perform OCR on DjVu files.
-	</para>
+    <title>Description</title>
+    <para>
+        &p; is a wrapper for OCRopus, an OCR system, that allows you to perform OCR on DjVu files.
+    </para>
 </refsection>
 
 <refsection>
-	<title>Options</title>
-	<para>
-		<command>&p;</command> accepts the following options:
-		<variablelist>
-		<varlistentry>
-			<term><option>-o</option></term>
-			<term><option>--save-bundled=<filename><replaceable>output-djvu-file</replaceable></filename></option></term>
-			<listitem>
-				<para>
-					Save OCR results as a bundled multi-page document into
-					<filename><replaceable>output-djvu-file</replaceable></filename>.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><option>-i</option></term>
-			<term><option>--save-indirect=<filename><replaceable>index-djvu-file</replaceable></filename></option></term>
-			<listitem>
-				<para>
-					Save OCR results as an indirect multi-page document. Use
-					<filename><replaceable>index-djvu-file</replaceable></filename> as the index file name; put the
-					component files into the same directory. The directory must exist and be writable.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><option>--save-script=<filename><replaceable>script-file</replaceable></filename></option></term>
-			<listitem>
-				<para>
-					Save a <command>djvused</command> script with OCR results into
-					<replaceable>script-file</replaceable>.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><option>--in-place</option></term>
-			<listitem>
-				<para>
-					Save OCR results in place.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><option>--dry-run</option></term>
-			<listitem>
-				<para>
-					Don't change any files, throw OCR results away.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><option>-p</option></term>
-			<term><option>--pages=<replaceable>page-range</replaceable></option></term>
-			<listitem>
-				<para>
-					Specifies pages to process. <replaceable>page-range</replaceable> is a comma-separated list of
-					sub-ranges. Each sub-range is either a single page (e.g. <literal>17</literal>) or a contiguous
-					range of pages (e.g. <literal>37-42</literal>). Pages are numbered from 1.
-				</para>
-				<para>
-					The default is to process all pages.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><option>-D</option></term>
-			<term><option>--debug</option></term>
-			<listitem>
-				<para>To ease debugging, don't delete intermediate files.</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><option>--version</option></term>
-			<listitem>
-				<para>Output version information and exit.</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><option>-h</option></term>
-			<term><option>--help</option></term>
-			<listitem>
-				<para>Display help and exit.</para>
-			</listitem>
-		</varlistentry>
-		</variablelist>
-	</para>
+    <title>Options</title>
+    <para>
+        <command>&p;</command> accepts the following options:
+        <variablelist>
+        <varlistentry>
+            <term><option>-o</option></term>
+            <term><option>--save-bundled=<filename><replaceable>output-djvu-file</replaceable></filename></option></term>
+            <listitem>
+                <para>
+                    Save OCR results as a bundled multi-page document into
+                    <filename><replaceable>output-djvu-file</replaceable></filename>.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>-i</option></term>
+            <term><option>--save-indirect=<filename><replaceable>index-djvu-file</replaceable></filename></option></term>
+            <listitem>
+                <para>
+                    Save OCR results as an indirect multi-page document. Use
+                    <filename><replaceable>index-djvu-file</replaceable></filename> as the index file name; put the
+                    component files into the same directory. The directory must exist and be writable.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--save-script=<filename><replaceable>script-file</replaceable></filename></option></term>
+            <listitem>
+                <para>
+                    Save a <command>djvused</command> script with OCR results into
+                    <replaceable>script-file</replaceable>.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--in-place</option></term>
+            <listitem>
+                <para>
+                    Save OCR results in place.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--dry-run</option></term>
+            <listitem>
+                <para>
+                    Don't change any files, throw OCR results away.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>-p</option></term>
+            <term><option>--pages=<replaceable>page-range</replaceable></option></term>
+            <listitem>
+                <para>
+                    Specifies pages to process. <replaceable>page-range</replaceable> is a comma-separated list of
+                    sub-ranges. Each sub-range is either a single page (e.g. <literal>17</literal>) or a contiguous
+                    range of pages (e.g. <literal>37-42</literal>). Pages are numbered from 1.
+                </para>
+                <para>
+                    The default is to process all pages.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>-D</option></term>
+            <term><option>--debug</option></term>
+            <listitem>
+                <para>To ease debugging, don't delete intermediate files.</para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--version</option></term>
+            <listitem>
+                <para>Output version information and exit.</para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>-h</option></term>
+            <term><option>--help</option></term>
+            <listitem>
+                <para>Display help and exit.</para>
+            </listitem>
+        </varlistentry>
+        </variablelist>
+    </para>
 </refsection>
 
 <refsection>
-	<title>Environment</title>
-	<para>
-		The following environment variables affects <command>&p;</command>:
-		<variablelist>
-		<varlistentry>
-			<term><varname>tesslanguage</varname></term>
-			<listitem>
-				<para>
-					Recognition language for Tesseract.
-				</para>
-			</listitem>
-		</varlistentry>
-		</variablelist>
-	</para>
+    <title>Environment</title>
+    <para>
+        The following environment variables affects <command>&p;</command>:
+        <variablelist>
+        <varlistentry>
+            <term><varname>tesslanguage</varname></term>
+            <listitem>
+                <para>
+                    Recognition language for Tesseract.
+                </para>
+            </listitem>
+        </varlistentry>
+        </variablelist>
+    </para>
 </refsection>
 
 <refsection>
-	<title>See also</title>
-	<para>
-		<citerefentry>
-			<refentrytitle>ocroscript</refentrytitle>
-			<manvolnum>1</manvolnum>
-		</citerefentry>,
-		<citerefentry>
-			<refentrytitle>tesseract</refentrytitle>
-			<manvolnum>1</manvolnum>
-		</citerefentry>
-	</para>
+    <title>See also</title>
+    <para>
+        <citerefentry>
+            <refentrytitle>ocroscript</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>,
+        <citerefentry>
+            <refentrytitle>tesseract</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>
+    </para>
 </refsection>
 
 </refentry>
 
-<!-- vim:set ts=4 sw=4 tw=120: -->
+<!-- vim:set ts=4 sw=4 tw=120 et: -->
