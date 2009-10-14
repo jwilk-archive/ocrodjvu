@@ -39,6 +39,40 @@
 <refsynopsisdiv>
 	<cmdsynopsis>
 		<command>&p;</command>
+		<group choice='req'>
+			<arg choice='plain'><option>-o</option></arg>
+			<arg choice='plain'><option>--save-bundled</option></arg>
+		</group>
+		<arg choice='plain'><replaceable>output-djvu-file</replaceable></arg>
+		<arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+		<arg choice='plain'><replaceable>djvu-file</replaceable></arg>
+	</cmdsynopsis>
+	<cmdsynopsis>
+		<command>&p;</command>
+		<group choice='req'>
+			<arg choice='plain'><option>-i</option></arg>
+			<arg choice='plain'><option>--save-indirect</option></arg>
+		</group>
+		<arg choice='plain'><replaceable>index-djvu-file</replaceable></arg>
+		<arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+		<arg choice='plain'><replaceable>djvu-file</replaceable></arg>
+	</cmdsynopsis>
+	<cmdsynopsis>
+		<command>&p;</command>
+		<arg choice='plain'><option>--save-script</option></arg>
+		<arg choice='plain'><replaceable>script-file</replaceable></arg>
+		<arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+		<arg choice='plain'><replaceable>djvu-file</replaceable></arg>
+	</cmdsynopsis>
+	<cmdsynopsis>
+		<command>&p;</command>
+		<arg choice='plain'><option>--in-place</option></arg>
+		<arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+		<arg choice='plain'><replaceable>djvu-file</replaceable></arg>
+	</cmdsynopsis>
+	<cmdsynopsis>
+		<command>&p;</command>
+		<arg choice='plain'><option>--dry-run</option></arg>
 		<arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
 		<arg choice='plain'><replaceable>djvu-file</replaceable></arg>
 	</cmdsynopsis>
@@ -64,6 +98,52 @@
 	<para>
 		<command>&p;</command> accepts the following options:
 		<variablelist>
+		<varlistentry>
+			<term><option>-o</option></term>
+			<term><option>--save-bundled=<filename><replaceable>output-djvu-file</replaceable></filename></option></term>
+			<listitem>
+				<para>
+					Save OCR results as a bundled multi-page document into
+					<filename><replaceable>output-djvu-file</replaceable></filename>.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><option>-i</option></term>
+			<term><option>--save-indirect=<filename><replaceable>index-djvu-file</replaceable></filename></option></term>
+			<listitem>
+				<para>
+					Save OCR results as an indirect multi-page document. Use
+					<filename><replaceable>index-djvu-file</replaceable></filename> as the index file name; put the
+					component files into the same directory. The directory must exist and be writable.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><option>--save-script=<filename><replaceable>script-file</replaceable></filename></option></term>
+			<listitem>
+				<para>
+					Save a <command>djvused</command> script with OCR results into
+					<replaceable>script-file</replaceable>.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><option>--in-place</option></term>
+			<listitem>
+				<para>
+					Save OCR results in place.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><option>--dry-run</option></term>
+			<listitem>
+				<para>
+					Don't change any files, throw OCR results away.
+				</para>
+			</listitem>
+		</varlistentry>
 		<varlistentry>
 			<term><option>-p</option></term>
 			<term><option>--pages=<replaceable>page-range</replaceable></option></term>
