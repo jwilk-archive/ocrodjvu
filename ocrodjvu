@@ -13,6 +13,7 @@
 
 __version__ = '0.1.3'
 
+import inspect
 import sys
 import tempfile
 import subprocess
@@ -39,14 +40,133 @@ except ImportError:
     subprocess.CalledProcessError = CalledProcessError
 del CalledProcessError
 
+class Saver(object):
+
+    in_place = False
+
+    def save(self, document, djvu_path, sed_file):
+        raise NotImplementedError
+
+class BundledSaver(Saver):
+
+    '''save results as a bundled multi page-document'''
+
+    options = '-o', '--save-bundled'
+
+    def __init__(self, save_path):
+        self._save_path = os.path.abspath(save_path)
+
+    def save(self, document, djvu_path, sed_file):
+        djvused = Subprocess([
+            'djvmcvt', '-b',
+            os.path.abspath(djvu_path),
+            self._save_path
+        ])
+        djvused.wait()
+        InPlaceSaver().save(None, self._save_path, sed_file)
+
+class IndirectSaver(Saver):
+
+    '''save results as an indirect multi page-document'''
+
+    options = '-i', '--save-indirect'
+
+    def __init__(self, save_path):
+        self._save_path = os.path.abspath(save_path)
+
+    def save(self, document, djvu_path, sed_file):
+        djvused = Subprocess([
+            'djvmcvt', '-i',
+            os.path.abspath(djvu_path),
+            os.path.dirname(self._save_path),
+            self._save_path
+        ])
+        djvused.wait()
+        InPlaceSaver().save(None, self._save_path, sed_file)
+
+class ScriptSaver(Saver):
+
+    '''save a djvused script with results'''
+
+    options = '--save-script',
+
+    def __init__(self, save_path):
+        self._save_path = os.path.abspath(save_path)
+
+    def save(self, document, djvu_path, sed_file):
+        shutil.copyfile(sed_file.name, self._save_path)
+
+class InPlaceSaver(Saver):
+
+    '''save results in-place'''
+
+    options = '--in-place',
+    in_place = True
+
+    def save(self, document, djvu_path, sed_file):
+        djvused = Subprocess([
+            'djvused', '-s', '-f',
+            os.path.abspath(sed_file.name),
+            os.path.abspath(djvu_path)
+        ])
+        djvused.wait()
+
+class DryRunSaver(Saver):
+
+    '''don't change any files'''
+
+    options = '--dry-run',
+
+    def save(self, document, djvu_path, sed_file):
+        pass
+
 class OptionParser(optparse.OptionParser):
+
+    savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
+
     def __init__(self):
         usage = '%prog [options] <djvu-file>'
         version = '%%prog %s' % __version__
         optparse.OptionParser.__init__(self, usage=usage, version=version)
+        for saver_type in self.savers:
+            options = saver_type.options
+            try:
+                init_args, _, _, _ = inspect.getargspec(saver_type.__init__)
+                n_args = len(init_args) - 1
+            except TypeError:
+                n_args = 0
+            arg_type = None
+            metavar = None
+            if n_args > 0:
+                arg_type = 'string'
+            if n_args == 1:
+                metavar = 'FILE'
+            self.add_option(
+                *options,
+                **dict(
+                    type=arg_type, metavar=metavar,
+                    action='callback', callback=self.set_output,
+                    callback_args=(saver_type,), nargs=n_args,
+                    help=saver_type.__doc__
+                )
+            )
         self.add_option('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
         self.add_option('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
     
+    @staticmethod
+    def set_output(option, opt_str, value, parser, *args):
+        [saver_type] = args
+        try:
+            parser.values.saver
+        except AttributeError:
+            if value is None:
+                value = []
+            else:
+                value = [value]
+            parser.values.saver = saver_type(*value)
+        else:
+            parser.values.saver = None
+
     def parse_args(self):
         try:
             options, [path] = optparse.OptionParser.parse_args(self)
@@ -64,6 +184,15 @@ class OptionParser(optparse.OptionParser):
                 options.pages = pages
         except (TypeError, ValueError):
             self.error('Unable to parse page numbers')
+        try:
+            saver = options.saver
+        except AttributeError:
+            saver = None
+        if saver is None:
+            self.error(
+                'You must use exactly one of the following options: %s' %
+                ', '.join('/'.join(saver.options) for saver in self.savers)
+            )
         return options, path
 
 class Subprocess(subprocess.Popen):
@@ -82,9 +211,10 @@ class Subprocess(subprocess.Popen):
 
 class Context(djvu.decode.Context):
 
-    def init(self, debug):
+    def init(self, options):
         self._temp_dir = tempfile.mkdtemp(prefix='ocrodjvu.')
-        self._debug = debug
+        self._debug = options.debug
+        self._options = options
 
     def _temp_file(self, name):
         path = os.path.join(self._temp_dir, name)
@@ -152,10 +282,11 @@ class Context(djvu.decode.Context):
                     print >>sys.stderr, 'No image suitable for OCR.'
                 sed_file.write('\n.\n\n')
             sed_file.flush()
+            saver = self._options.saver
+            if saver.in_place:
+                document = None
+            self._options.saver.save(document, path, sed_file)
             document = None
-            path = os.path.abspath(path)
-            djvused = Subprocess(['djvused', '-s', '-f', sed_file.name, path])
-            djvused.wait()
         finally:
             sed_file.close()
 
@@ -169,7 +300,7 @@ def main():
     oparser = OptionParser()
     options, path = oparser.parse_args()
     context = Context()
-    context.init(options.debug)
+    context.init(options)
     try:
         context.process(path, options.pages)
     finally:

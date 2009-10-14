@@ -2,6 +2,12 @@ ocrodjvu (0.2.0) UNRELEASED; urgency=low
 
   * Provide a manual page.
   * Add the -D/--debug option.
+  * Add options to specify how results are stored:
+    + -o/--save-bundled,
+    + -i/--save-indirect,
+    + --save-script,
+    + --in-place,
+    + --dry-run.
 
  -- Jakub Wilk <ubanus@users.sf.net>  Wed, 14 Oct 2009 12:24:48 +0200
 
