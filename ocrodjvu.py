@@ -13,6 +13,7 @@
 
 __version__ = '0.1.3'
 
+import re
 import inspect
 import sys
 import tempfile
@@ -40,11 +41,16 @@ except ImportError:
     subprocess.CalledProcessError = CalledProcessError
 del CalledProcessError
 
+class SecurityConcern(Exception):
+
+    def __init__(self):
+        Exception.__init__(self, 'I refuse to process this file due to security concerns')
+
 class Saver(object):
 
     in_place = False
 
-    def save(self, document, djvu_path, sed_file):
+    def save(self, document, pages, djvu_path, sed_file):
         raise NotImplementedError
 
 class BundledSaver(Saver):
@@ -56,14 +62,13 @@ class BundledSaver(Saver):
     def __init__(self, save_path):
         self._save_path = os.path.abspath(save_path)
 
-    def save(self, document, djvu_path, sed_file):
-        djvused = Subprocess([
-            'djvmcvt', '-b',
-            os.path.abspath(djvu_path),
-            self._save_path
-        ])
-        djvused.wait()
-        InPlaceSaver().save(None, self._save_path, sed_file)
+    def save(self, document, pages, djvu_path, sed_file):
+        file = open(self._save_path, 'wb')
+        try:
+            document.save(file=file, pages=pages)
+        finally:
+            file.close()
+        InPlaceSaver().save(None, pages, self._save_path, sed_file)
 
 class IndirectSaver(Saver):
 
@@ -74,15 +79,9 @@ class IndirectSaver(Saver):
     def __init__(self, save_path):
         self._save_path = os.path.abspath(save_path)
 
-    def save(self, document, djvu_path, sed_file):
-        djvused = Subprocess([
-            'djvmcvt', '-i',
-            os.path.abspath(djvu_path),
-            os.path.dirname(self._save_path),
-            self._save_path
-        ])
-        djvused.wait()
-        InPlaceSaver().save(None, self._save_path, sed_file)
+    def save(self, document, pages, djvu_path, sed_file):
+        document.save(indirect=self._save_path, pages=pages)
+        InPlaceSaver().save(None, pages, self._save_path, sed_file)
 
 class ScriptSaver(Saver):
 
@@ -93,7 +92,7 @@ class ScriptSaver(Saver):
     def __init__(self, save_path):
         self._save_path = os.path.abspath(save_path)
 
-    def save(self, document, djvu_path, sed_file):
+    def save(self, document, pages, djvu_path, sed_file):
         shutil.copyfile(sed_file.name, self._save_path)
 
 class InPlaceSaver(Saver):
@@ -103,7 +102,7 @@ class InPlaceSaver(Saver):
     options = '--in-place',
     in_place = True
 
-    def save(self, document, djvu_path, sed_file):
+    def save(self, document, pages, djvu_path, sed_file):
         djvused = Subprocess([
             'djvused', '-s', '-f',
             os.path.abspath(sed_file.name),
@@ -117,7 +116,7 @@ class DryRunSaver(Saver):
 
     options = '--dry-run',
 
-    def save(self, document, djvu_path, sed_file):
+    def save(self, document, pages, djvu_path, sed_file):
         pass
 
 class OptionParser(optparse.OptionParser):
@@ -150,6 +149,8 @@ class OptionParser(optparse.OptionParser):
                     help=saver_type.__doc__
                 )
             )
+        self.add_option('--ocr-only', dest='ocr_only', action='store_true', default=False, help='''don't save pages without OCR''')
+        self.add_option('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
         self.add_option('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
         self.add_option('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
     
@@ -194,6 +195,11 @@ class OptionParser(optparse.OptionParser):
                 ', '.join('/'.join(saver.options) for saver in self.savers)
             )
         return options, path
+
+def validate_file_id(id):
+    if re.compile(r'[/\\\s]').search(id):
+        raise SecurityConcern()
+    return id
 
 class Subprocess(subprocess.Popen):
 
@@ -267,14 +273,15 @@ class Context(djvu.decode.Context):
         document = self.new_document(djvu.decode.FileURI(path))
         document.decoding_job.wait()
         if pages is None:
-            pages = iter(document.pages)
+            pages = list(document.pages)
         else:
-            pages = (document.pages[i-1] for i in pages)
+            pages = [document.pages[i - 1] for i in pages]
         sed_file = self._temp_file('ocrodjvu.djvused')
         try:
-            sed_file.write('remove-txt\n')
+            if self._options.clear_text:
+                sed_file.write('remove-txt\n')
             for page in pages:
-                sed_file.write('select %d\n' % (page.n + 1))
+                sed_file.write('select %s\n' % validate_file_id(page.file.id))
                 sed_file.write('set-txt\n')
                 try:
                     self.process_page(page).print_into(sed_file)
@@ -285,7 +292,10 @@ class Context(djvu.decode.Context):
             saver = self._options.saver
             if saver.in_place:
                 document = None
-            self._options.saver.save(document, path, sed_file)
+            pages_to_save = None
+            if self._options.ocr_only:
+                pages_to_save = [page.n for page in pages]
+            self._options.saver.save(document, pages_to_save, path, sed_file)
             document = None
         finally:
             sed_file.close()
