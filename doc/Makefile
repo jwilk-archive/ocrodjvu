@@ -9,6 +9,7 @@ all: $(MAN_FILES)
 
 %.1: %.xml
 	$(XSLTPROC) $(XSL) $(<)
+	sed -i -e "s/\\\\'/\\\\[aq]/g" $(@)
 
 .PHONY: clean
 clean:
