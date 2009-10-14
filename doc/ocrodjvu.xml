@@ -145,6 +145,18 @@
             </listitem>
         </varlistentry>
         <varlistentry>
+            <term><option>--clear-text</option></term>
+            <listitem>
+                <para>Remove existing hidden text.</para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--ocr-only</option></term>
+            <listitem>
+                <para>Don't save pages that were not processed.</para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
             <term><option>-p</option></term>
             <term><option>--pages=<replaceable>page-range</replaceable></option></term>
             <listitem>
