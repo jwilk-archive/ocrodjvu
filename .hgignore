@@ -1,3 +1,6 @@
 syntax: glob
 *.py[co]
+MANIFEST
+build/
+dist/
 doc/*.1

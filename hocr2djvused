@@ -19,7 +19,8 @@ Usage:
 '''
 
 import sys
-import hocr
+
+from ocrodjvu import hocr
 
 def main():
     if len(sys.argv) > 1:

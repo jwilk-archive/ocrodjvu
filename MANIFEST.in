@@ -1,0 +1,5 @@
+include doc/Makefile
+include doc/*.1
+include doc/*.xml
+include doc/changelog
+include ocrodjvu.py
