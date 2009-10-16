@@ -18,47 +18,18 @@ import optparse
 import os.path
 import re
 import shutil
-import signal
-import subprocess
 import sys
 import tempfile
 
 import djvu.decode
 
 import hocr
+import ipc
 
 PIXEL_FORMAT = djvu.decode.PixelFormatPackedBits('>')
 PIXEL_FORMAT.rows_top_to_bottom = 1
 PIXEL_FORMAT.y_top_to_bottom = 1
 
-try:
-    from subprocess import CalledProcessError
-except ImportError:
-    class CalledProcessError(Exception):
-        def __init__(self, return_code, command):
-            Exception.__init__(self, command, return_code)
-        def __str__(self):
-            return 'Command %r returned non-zero exit status %d' % self.args
-    subprocess.CalledProcessError = CalledProcessError
-del CalledProcessError
-
-_signame_pattern = re.compile('^SIG[A-Z0-9]*$')
-
-class CalledProcessInterrupted(subprocess.CalledProcessError):
-
-    _signal_names = dict(
-        (getattr(signal, name), name)
-        for name in dir(signal)
-        if _signame_pattern.match(name)
-    )
-
-    def __init__(self, signal_id, command):
-        Exception.__init__(self, command, signal_id)
-    def __str__(self):
-        signal_name = self._signal_names.get(self.args[1], self.args[1])
-        return 'Command %r was interrputed by signal %s' % (self.args[0], signal_name)
-
-subprocess.CalledProcessInterrupted = CalledProcessInterrupted
 
 class SecurityConcern(Exception):
 
@@ -122,7 +93,7 @@ class InPlaceSaver(Saver):
     in_place = True
 
     def save(self, document, pages, djvu_path, sed_file):
-        djvused = Subprocess([
+        djvused = ipc.Subprocess([
             'djvused', '-s', '-f',
             os.path.abspath(sed_file.name),
             os.path.abspath(djvu_path)
@@ -220,21 +191,6 @@ def validate_file_id(id):
         raise SecurityConcern()
     return id
 
-class Subprocess(subprocess.Popen):
-
-    def __init__(self, *args, **kwargs):
-        subprocess.Popen.__init__(self, *args, **kwargs)
-        try:
-            self.__command = kwargs['args'][0]
-        except KeyError:
-            self.__command = args[0][0]
-
-    def wait(self):
-        return_code = subprocess.Popen.wait(self)
-        if return_code > 0:
-            raise subprocess.CalledProcessError(return_code, self.__command)
-        if return_code < 0:
-            raise subprocess.CalledProcessInterrupted(-return_code, self.__command)
 
 class Context(djvu.decode.Context):
 
@@ -270,7 +226,7 @@ class Context(djvu.decode.Context):
             )
             pfile.write(data)
             pfile.flush()
-            ocropus = Subprocess(['ocroscript', 'rec-tess', pfile.name], stdout=subprocess.PIPE)
+            ocropus = ipc.Subprocess(['ocroscript', 'rec-tess', pfile.name], stdout=ipc.PIPE)
             html_file = None
             try:
                 if self._debug:
