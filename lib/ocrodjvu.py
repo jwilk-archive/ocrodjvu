@@ -13,14 +13,14 @@
 
 __version__ = '0.2.0'
 
-import re
 import inspect
+import optparse
+import os.path
+import re
+import shutil
+import subprocess
 import sys
 import tempfile
-import subprocess
-import shutil
-import os.path
-import optparse
 
 import djvu.decode
 
