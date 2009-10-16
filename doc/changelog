@@ -1,8 +1,10 @@
 ocrodjvu (0.2.1) UNRELEASED; urgency=low
 
   * Give a clearer error message if OCRopus were interrupted by a signal.
+  * Add the --language option.
+  * Add the --list-languages options.
 
- -- Jakub Wilk <ubanus@users.sf.net>  Fri, 16 Oct 2009 13:29:51 +0200
+ -- Jakub Wilk <ubanus@users.sf.net>  Fri, 16 Oct 2009 17:06:11 +0200
 
 ocrodjvu (0.2.0) unstable; urgency=low
 

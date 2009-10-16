@@ -25,6 +25,7 @@ import djvu.decode
 
 import hocr
 import ipc
+import tesseract
 
 PIXEL_FORMAT = djvu.decode.PixelFormatPackedBits('>')
 PIXEL_FORMAT.rows_top_to_bottom = 1
@@ -141,9 +142,21 @@ class OptionParser(optparse.OptionParser):
             )
         self.add_option('--ocr-only', dest='ocr_only', action='store_true', default=False, help='''don't save pages without OCR''')
         self.add_option('--clear-text', dest='clear_text', action='store_true', default=False, help='remove exisiting hidden text')
+        self.add_option('--language', dest='language', help='set recognition language')
+        self.add_option('--list-languages', action='callback', callback=self.list_languages, help='print list of supported languages')
         self.add_option('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
         self.add_option('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
-    
+
+    @staticmethod
+    def list_languages(option, opt_str, value, parser):
+        try:
+            for language in tesseract.get_languages():
+                print language
+        except tesseract.UnknownLanguageList:
+            print >>sys.stderr, 'Unable to determine list of supported languages'
+            sys.exit(1)
+        sys.exit(0)
+
     @staticmethod
     def set_output(option, opt_str, value, parser, *args):
         [saver_type] = args
@@ -247,6 +260,8 @@ class Context(djvu.decode.Context):
 
     def process(self, path, pages=None):
         print >>sys.stderr, 'Processing %r:' % path
+        if self._options.language is not None:
+            os.putenv('tesslanguage', self._options.language)
         document = self.new_document(djvu.decode.FileURI(path))
         document.decoding_job.wait()
         if pages is None:
