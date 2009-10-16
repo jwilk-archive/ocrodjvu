@@ -18,6 +18,7 @@ import optparse
 import os.path
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
@@ -40,6 +41,24 @@ except ImportError:
             return 'Command %r returned non-zero exit status %d' % self.args
     subprocess.CalledProcessError = CalledProcessError
 del CalledProcessError
+
+_signame_pattern = re.compile('^SIG[A-Z0-9]*$')
+
+class CalledProcessInterrupted(subprocess.CalledProcessError):
+
+    _signal_names = dict(
+        (getattr(signal, name), name)
+        for name in dir(signal)
+        if _signame_pattern.match(name)
+    )
+
+    def __init__(self, signal_id, command):
+        Exception.__init__(self, command, signal_id)
+    def __str__(self):
+        signal_name = self._signal_names.get(self.args[1], self.args[1])
+        return 'Command %r was interrputed by signal %s' % (self.args[0], signal_name)
+
+subprocess.CalledProcessInterrupted = CalledProcessInterrupted
 
 class SecurityConcern(Exception):
 
@@ -212,8 +231,10 @@ class Subprocess(subprocess.Popen):
 
     def wait(self):
         return_code = subprocess.Popen.wait(self)
-        if return_code != 0:
+        if return_code > 0:
             raise subprocess.CalledProcessError(return_code, self.__command)
+        if return_code < 0:
+            raise subprocess.CalledProcessInterrupted(-return_code, self.__command)
 
 class Context(djvu.decode.Context):
 

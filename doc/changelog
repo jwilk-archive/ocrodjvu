@@ -1,3 +1,9 @@
+ocrodjvu (0.2.1) UNRELEASED; urgency=low
+
+  * Give a clearer error message if OCRopus were interrupted by a signal.
+
+ -- Jakub Wilk <ubanus@users.sf.net>  Fri, 16 Oct 2009 13:29:51 +0200
+
 ocrodjvu (0.2.0) unstable; urgency=low
 
   * Provide a manual page.
