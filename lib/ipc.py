@@ -55,8 +55,8 @@ class Subprocess(subprocess.Popen):
     def wait(self):
         return_code = subprocess.Popen.wait(self)
         if return_code > 0:
-            raise subprocess.CalledProcessError(return_code, self.__command)
+            raise CalledProcessError(return_code, self.__command)
         if return_code < 0:
-            raise subprocess.CalledProcessInterrupted(-return_code, self.__command)
+            raise CalledProcessInterrupted(-return_code, self.__command)
 
 # vim:ts=4 sw=4 noet
