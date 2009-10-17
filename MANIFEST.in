@@ -1,3 +1,4 @@
+include COPYING
 include doc/Makefile
 include doc/*.1
 include doc/*.xml
