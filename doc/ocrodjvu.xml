@@ -169,6 +169,10 @@
                     Set recognition language. <replaceable>language-id</replaceable> is typically a ISO 639-2
                     three-letter code.
                 </para>
+                <para>
+                    The default is ‘<literal>eng</literal>’ (English), unless the <varname>tesslanguage</varname>
+                    environment variable is set.
+                </para>
             </listitem>
         </varlistentry>
         <varlistentry>
