@@ -34,7 +34,7 @@ from distutils.core import setup
 
 setup(
     name = 'ocrodjvu',
-    version = '0.2.0',
+    version = '0.2.1',
     license = 'GNU GPL 2',
     description = 'OCRopus for DjVu',
     long_description = __doc__.strip(),
