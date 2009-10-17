@@ -163,6 +163,23 @@
             </listitem>
         </varlistentry>
         <varlistentry>
+            <term><option>--language=<replaceable>language-id</replaceable></option></term>
+            <listitem>
+                <para>
+                    Set recognition language. <replaceable>language-id</replaceable> is typically a ISO 639-2
+                    three-letter code.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--list-languages</option></term>
+            <listitem>
+                <para>
+                    Print list of supported languages.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
             <term><option>-p</option></term>
             <term><option>--pages=<replaceable>page-range</replaceable></option></term>
             <listitem>
