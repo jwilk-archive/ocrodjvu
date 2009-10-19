@@ -1,0 +1,7 @@
+#!/bin/sh
+version=${1:?"no version number provided"}
+set -e
+set -x
+dch -v "$version" -c doc/changelog
+sed -i -r -e "s/^(__version__) = '[0-9.]+'$/\1 = '$version'/" lib/ocrodjvu.py
+sed -i -r -e "s/<(!ENTITY version) '[0-9.]+'>/<\1 '$version'>/" doc/*.xml
