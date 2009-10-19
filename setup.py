@@ -31,10 +31,11 @@ Topic :: Multimedia :: Graphics\
 '''.split('\n')
 
 from distutils.core import setup
+from lib.ocrodjvu import __version__
 
 setup(
     name = 'ocrodjvu',
-    version = '0.2.1',
+    version = __version__,
     license = 'GNU GPL 2',
     description = 'OCRopus for DjVu',
     long_description = __doc__.strip(),
