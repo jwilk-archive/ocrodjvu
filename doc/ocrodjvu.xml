@@ -92,7 +92,7 @@
         &p; is a wrapper for OCRopus, an OCR system, that allows you to perform OCR on DjVu files.
     </para>
     <para>
-        Internally, &p; calls <command>ocroscript</command>'s <command>rec-tess</command> command, so that eventually
+        Internally, &p; calls <command>ocroscript</command>'s <command>rec-tess</command> command, so that ultimately
         Tesseract acts as the OCR backend.
     </para>
 </refsection>
