@@ -154,7 +154,9 @@
         <varlistentry>
             <term><option>--clear-text</option></term>
             <listitem>
-                <para>Remove existing hidden text.</para>
+                <para>
+                    Remove existing hidden text if present in the pages not selected for OCR.
+                </para>
                 <para>
                     (Use this option to retain compatibility with &p; &lt; 2.0.)
                 </para>
