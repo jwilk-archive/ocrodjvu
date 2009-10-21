@@ -179,7 +179,7 @@
             <term><option>--list-languages</option></term>
             <listitem>
                 <para>
-                    Print list of supported languages.
+                    Print list of available languages.
                 </para>
             </listitem>
         </varlistentry>
