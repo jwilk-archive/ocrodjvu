@@ -141,7 +141,7 @@ class OptionParser(optparse.OptionParser):
                 )
             )
         self.add_option('--ocr-only', dest='ocr_only', action='store_true', default=False, help='''don't save pages without OCR''')
-        self.add_option('--clear-text', dest='clear_text', action='store_true', default=False, help='remove exisiting hidden text')
+        self.add_option('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
         self.add_option('--language', dest='language', help='set recognition language')
         self.add_option('--list-languages', action='callback', callback=self.list_languages, help='print list of available languages')
         self.add_option('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
