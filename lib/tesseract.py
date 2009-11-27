@@ -12,9 +12,10 @@
 # General Public License for more details.
 
 import glob
-import ipc
-import os.path
+import os
 import re
+
+import ipc
 
 class UnknownLanguageList(Exception):
     pass
