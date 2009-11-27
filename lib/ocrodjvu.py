@@ -11,8 +11,11 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+from __future__ import with_statement
+
 __version__ = '0.3.0'
 
+import contextlib
 import inspect
 import optparse
 import os.path
@@ -23,6 +26,7 @@ import tempfile
 
 import djvu.decode
 
+import errors
 import hocr
 import ipc
 import tesseract
@@ -110,9 +114,61 @@ class DryRunSaver(Saver):
     def save(self, document, pages, djvu_path, sed_file):
         pass
 
+class OcrEngine(object):
+
+    pass
+
+class Ocropus(OcrEngine):
+
+    name = 'ocropus'
+    has_charboxes = False
+    script_name = None
+
+    def __init__(self):
+        # Determine:
+        # - if OCRopus is installed and
+        # - which version we are dealing with
+        for script_name in 'recognize', 'rec_test':
+            try:
+                ocropus = ipc.Subprocess(['ocroscriptx', script_name],
+                    stdout=ipc.PIPE,
+                    env=dict(LC_ALL='C', LANG='C')
+                )
+            except OSError:
+                raise errors.EngineNotFound(self.name)
+            try:
+                found = ocropus.stdout.read(7) == 'Usage: '
+            finally:
+                try:
+                    ocropus.wait()
+                except ipc.CalledProcessError:
+                    pass
+            self.script_name = script_name
+            break
+        else:
+            raise errors.EngineNotFound(self.name)
+        if script_name == 'recognize':
+            # OCRopus ≥ 0.3
+            self.has_charboxes = True
+
+    @staticmethod
+    def list_languages():
+        for language in tesseract.get_languages():
+            yield language
+
+    @contextlib.contextmanager
+    def recognize(self, pbm_file):
+        ocropus = ipc.Subprocess(['ocroscript', self.script_name, pbm_file.name], stdout=ipc.PIPE)
+        try:
+            yield ocropus.stdout
+        finally:
+            ocropus.wait()
+
 class OptionParser(optparse.OptionParser):
 
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
+    engines = Ocropus,
+    default_engine = Ocropus
 
     def __init__(self):
         usage = '%prog [options] <djvu-file>'
@@ -140,6 +196,8 @@ class OptionParser(optparse.OptionParser):
                     help=saver_type.__doc__
                 )
             )
+        self.add_option('--engine', dest='engine', type='string', nargs=1, action='callback', callback=self.set_engine, default=self.default_engine, help='set OCR engine')
+        self.add_option('--list-engines', action='callback', callback=self.list_engines, help='print list of available OCR engines')
         self.add_option('--ocr-only', dest='ocr_only', action='store_true', default=False, help='''don't save pages without OCR''')
         self.add_option('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
         self.add_option('--language', dest='language', help='set recognition language')
@@ -148,14 +206,39 @@ class OptionParser(optparse.OptionParser):
         self.add_option('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
 
     @staticmethod
+    def set_engine(option, opt_str, value, parser):
+        for engine in parser.engines:
+            if engine.name != value:
+                continue
+            parser.values.engine = engine
+            break
+        else:
+            parser.error('Invalid OCR engine name')
+
+    @staticmethod
+    def list_engines(option, opt_str, value, parser):
+        for engine in parser.engines:
+            try:
+                engine = engine()
+            except errors.EngineNotFound:
+                pass
+            else:
+                print engine.name
+        sys.exit(0)
+
+    @staticmethod
     def list_languages(option, opt_str, value, parser):
         try:
-            for language in tesseract.get_languages():
+            for language in parser.values.engine().list_languages():
                 print language
-        except tesseract.UnknownLanguageList:
-            print >>sys.stderr, 'Unable to determine list of available languages'
+        except errors.EngineNotFound, ex:
+            print >>sys.stderr, ex
             sys.exit(1)
-        sys.exit(0)
+        except errors.UnknownLanguageList:
+            print >>sys.stderr, ex
+            sys.exit(1)
+        else:
+            sys.exit(0)
 
     @staticmethod
     def set_output(option, opt_str, value, parser, *args):
@@ -239,26 +322,30 @@ class Context(djvu.decode.Context):
             )
             pfile.write(data)
             pfile.flush()
-            ocropus = ipc.Subprocess(['ocroscript', 'rec-tess', pfile.name], stdout=ipc.PIPE)
             html_file = None
-            try:
-                if self._debug:
-                    html_file = self._temp_file('%06d.html' % page.n)
-                    html = ocropus.stdout.read()
-                    html_file.write(html)
-                    html_file.seek(0)
-                else:
-                    html_file = ocropus.stdout
-                text, = hocr.extract_text(html_file, page.rotation)
-                return text
-            finally:
-                if html_file is not None:
-                    html_file.close()
-                ocropus.wait()
+            with self._engine.recognize(pfile) as result:
+                try:
+                    if self._debug:
+                        html_file = self._temp_file('%06d.html' % page.n)
+                        html = result.read()
+                        html_file.write(html)
+                        html_file.seek(0)
+                    else:
+                        html_file = result
+                    text, = hocr.extract_text(html_file, page.rotation)
+                    return text
+                finally:
+                    if html_file is not None:
+                        html_file.close()
         finally:
             pfile.close()
 
     def process(self, path, pages=None):
+        try:
+            self._engine = self._options.engine()
+        except errors.EngineNotFound, ex:
+            print >>sys.stderr, ex
+            sys.exit(1)
         print >>sys.stderr, 'Processing %r:' % path
         if self._options.language is not None:
             os.putenv('tesslanguage', self._options.language)

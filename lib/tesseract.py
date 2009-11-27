@@ -15,10 +15,8 @@ import glob
 import os
 import re
 
+import errors
 import ipc
-
-class UnknownLanguageList(Exception):
-    pass
 
 _pattern = re.compile(r"^Unable to load unicharset file (/.*)/[.]unicharset\n$", re.DOTALL)
 
@@ -30,22 +28,22 @@ def get_languages():
             env=dict(LC_ALL='C', LANG='C')
         )
     except OSError:
-        raise UnknownLanguageList
+        raise errors.UnknownLanguageList
     try:
         line = tesseract.stderr.read()
         match = _pattern.match(line)
         if match is None:
-            raise UnknownLanguageList
+            raise errors.UnknownLanguageList
         directory = match.group(1)
         if not os.path.isdir(directory):
-            raise UnknownLanguageList
+            raise errors.UnknownLanguageList
     finally:
         try:
             tesseract.wait()
         except ipc.CalledProcessError, ex:
             pass
         else:
-            raise UnknownLanguageList
+            raise errors.UnknownLanguageList
     for filename in glob.glob(os.path.join(directory, '*.unicharset')):
         filename = os.path.basename(filename)
         language = os.path.splitext(filename)[0]
