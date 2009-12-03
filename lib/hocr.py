@@ -148,7 +148,7 @@ def _scan(node, buffer, parent_bbox, page_size=None, rotation=0):
             return
         if page_size is None:
             raise Exception('Unable to determine page size')
-        if (rotation / 90) & 1:
+        if (rotation // 90) & 1:
             page_width, page_height = page_size
             xform = decode.AffineTransform((0, 0, page_height, page_width), (0, 0) + page_size)
         else:
