@@ -130,7 +130,7 @@ class Ocropus(OcrEngine):
         # - which version we are dealing with
         for script_name in 'recognize', 'rec_test':
             try:
-                ocropus = ipc.Subprocess(['ocroscriptx', script_name],
+                ocropus = ipc.Subprocess(['ocroscript', script_name],
                     stdout=ipc.PIPE,
                     env=dict(LC_ALL='C', LANG='C')
                 )
