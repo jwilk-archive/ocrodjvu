@@ -119,54 +119,53 @@ def _scan(node, buffer, parent_bbox, page_size=None, rotation=0):
         djvu_class = hocr_class_to_djvu(hocr_class)
         if djvu_class:
             break
-    if djvu_class:
-        title = node.get('title') or ''
-        m = BBOX_RE.search(title)
-        if m is None:
-            bbox = BBox()
-        else:
-            bbox = BBox(*(int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')))
-            parent_bbox.update(bbox)
-    if djvu_class:
-        if djvu_class is const.TEXT_ZONE_PAGE:
-            if not bbox:
-                m = IMAGE_RE.search(title)
-                if m is None:
-                    raise Exception("Cannot determine page's bbox")
-                page_size = get_image_size(m.group('file_name'))
-                page_width, page_height = page_size
-                bbox = BBox(0, 0, page_width - 1, page_height - 1)
-                parent_bbox.update(bbox)
-            else:
-                if (bbox.x0, bbox.y0) != (0, 0):
-                    raise Exception("Page's bbox should start with (0, 0)")
-                page_size = bbox.x1, bbox.y1
-        result = [sexpr.Symbol(djvu_class)]
-        result += [None] * 4
-        look_down(result, bbox)
-        if not bbox and not len(node):
-            return
-        if page_size is None:
-            raise Exception('Unable to determine page size')
-        if (rotation // 90) & 1:
-            page_width, page_height = page_size
-            xform = decode.AffineTransform((0, 0, page_height, page_width), (0, 0) + page_size)
-        else:
-            xform = decode.AffineTransform((0, 0) + page_size, (0, 0) + page_size)
-        xform.mirror_y()
-        xform.rotate(rotation)
-        x0, y0, x1, y1 = bbox
-        x0, y0 = xform.inverse((x0, y0))
-        x1, y1 = xform.inverse((x1, y1))
-        result[1] = x0
-        result[2] = y0
-        result[3] = x1
-        result[4] = y1
-        if len(result) == 5:
-            result.append('')
-        buffer.append(result)
     else:
         look_down(buffer, parent_bbox)
+        return
+    title = node.get('title') or ''
+    m = BBOX_RE.search(title)
+    if m is None:
+        bbox = BBox()
+    else:
+        bbox = BBox(*(int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')))
+        parent_bbox.update(bbox)
+    if djvu_class is const.TEXT_ZONE_PAGE:
+        if not bbox:
+            m = IMAGE_RE.search(title)
+            if m is None:
+                raise Exception("Cannot determine page's bbox")
+            page_size = get_image_size(m.group('file_name'))
+            page_width, page_height = page_size
+            bbox = BBox(0, 0, page_width - 1, page_height - 1)
+            parent_bbox.update(bbox)
+        else:
+            if (bbox.x0, bbox.y0) != (0, 0):
+                raise Exception("Page's bbox should start with (0, 0)")
+            page_size = bbox.x1, bbox.y1
+    result = [sexpr.Symbol(djvu_class)]
+    result += [None] * 4
+    look_down(result, bbox)
+    if not bbox and not len(node):
+        return
+    if page_size is None:
+        raise Exception('Unable to determine page size')
+    if (rotation // 90) & 1:
+        page_width, page_height = page_size
+        xform = decode.AffineTransform((0, 0, page_height, page_width), (0, 0) + page_size)
+    else:
+        xform = decode.AffineTransform((0, 0) + page_size, (0, 0) + page_size)
+    xform.mirror_y()
+    xform.rotate(rotation)
+    x0, y0, x1, y1 = bbox
+    x0, y0 = xform.inverse((x0, y0))
+    x1, y1 = xform.inverse((x1, y1))
+    result[1] = x0
+    result[2] = y0
+    result[3] = x1
+    result[4] = y1
+    if len(result) == 5:
+        result.append('')
+    buffer.append(result)
 
 def scan(node, rotation=0):
     buffer = []
