@@ -1,0 +1,42 @@
+
+
+
+creator=Jakub Wilk <ubanus@users.sf.net>
+
+
+
+
+
+
+severity=serious
+
+
+
+
+
+
+status=open
+
+
+
+
+
+
+summary=hocr._scan() should not throw Exception
+
+
+
+
+
+
+target=0.3
+
+
+
+
+
+
+time=Thu, 03 Dec 2009 19:26:18 +0000
+
+
+
