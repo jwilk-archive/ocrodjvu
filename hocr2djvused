@@ -39,6 +39,8 @@ class OptionParser(optparse.OptionParser):
         options, arguments = optparse.OptionParser.parse_args(self)
         if arguments:
             self.error('Invalid number of arguments')
+        if options.rotation % 90 != 0:
+            self.error('Rotation is not a multiple of 90 degrees')
         try:
             options.details = self._details_map[options.details]
         except KeyError:
