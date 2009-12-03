@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # encoding=UTF-8
-# Copyright © 2008 Jakub Wilk <ubanus@users.sf.net>
+# Copyright © 2008, 2009 Jakub Wilk <ubanus@users.sf.net>
 #
 # This package is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -11,22 +11,43 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
-__doc__ = '''\
-Usage:
-
-  hocr2djvused < ocr_file.html | djvused -s ocr_file.djvu
-\
-'''
-
 import sys
+import optparse
 
 from ocrodjvu import hocr
+from ocrodjvu import version
+
+__version__ = version.__version__
+
+class OptionParser(optparse.OptionParser):
+
+    _details_map = dict(
+        lines=hocr.TEXT_DETAILS_LINE,
+        words=hocr.TEXT_DETAILS_WORD,
+        characters=hocr.TEXT_DETAILS_CHARACTER,
+        chars=hocr.TEXT_DETAILS_CHARACTER,
+    )
+
+    def __init__(self):
+        usage = '%prog < <hocr-file> | djvused -s <djvu-file>'
+        version = '%%prog %s' % __version__
+        optparse.OptionParser.__init__(self, usage=usage, version=version)
+        self.add_option('-r', '--rotation', dest='rotation', action='store', type='int', default=0, help='page rotation (in degrees)')
+        self.add_option('-t', '--details', dest='details', action='store', default='words', help='amount of text details to extract (lines, words, characters)')
+
+    def parse_args(self):
+        options, arguments = optparse.OptionParser.parse_args(self)
+        if arguments:
+            self.error('Invalid number of arguments')
+        try:
+            options.details = self._details_map[options.details]
+        except KeyError:
+            self.error('Invalid value for --details')
+        return options
 
 def main():
-    if len(sys.argv) > 1:
-        print >>sys.stderr, __doc__
-        sys.exit(1)
-    for i, text in enumerate(hocr.extract_text(sys.stdin)):
+    options = OptionParser().parse_args()
+    for i, text in enumerate(hocr.extract_text(sys.stdin, rotation=options.rotation, details=options.details)):
         sys.stdout.write('select %d\nremove-txt\nset-txt\n' % (i + 1))
         text.print_into(sys.stdout, 80)
         sys.stdout.write('\n.\n\n')
