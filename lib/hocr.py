@@ -22,7 +22,7 @@ import re
 try:
     import lxml.etree as ET
 except ImportError, ex:
-    ex.args = '%s; please install the python-lxml package <http://codespeak.net/lxml/>' % str(ex),
+    ex.args = '%s; please install the lxml package <http://codespeak.net/lxml/>' % str(ex),
     raise
 
 try:
@@ -30,7 +30,7 @@ try:
     from djvu import const
     from djvu import decode
 except ImportError, ex:
-    ex.args = '%s; please install the python-djvulibre package' % str(ex),
+    ex.args = '%s; please install the python-djvulibre package <http://jwilk.net/software/python-djvulibre.html>' % str(ex),
     raise
 
 from image_size import get_image_size
