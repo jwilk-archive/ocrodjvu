@@ -157,8 +157,14 @@ class Ocropus(OcrEngine):
             yield language
 
     @contextlib.contextmanager
-    def recognize(self, pbm_file):
-        ocropus = ipc.Subprocess(['ocroscript', self.script_name, pbm_file.name], stdout=ipc.PIPE)
+    def recognize(self, pbm_file, details=hocr.TEXT_DETAILS_WORD):
+        def get_command_line():
+            yield 'ocroscript'
+            yield self.script_name
+            if self.has_charboxes and details > hocr.TEXT_DETAILS_LINE:
+                yield '--charboxes'
+            yield pbm_file.name
+        ocropus = ipc.Subprocess(list(get_command_line()), stdout=ipc.PIPE)
         try:
             yield ocropus.stdout
         finally:
@@ -169,6 +175,13 @@ class OptionParser(optparse.OptionParser):
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
     engines = Ocropus,
     default_engine = Ocropus
+
+    _details_map = dict(
+        lines=hocr.TEXT_DETAILS_LINE,
+        words=hocr.TEXT_DETAILS_WORD,
+        characters=hocr.TEXT_DETAILS_CHARACTER,
+        chars=hocr.TEXT_DETAILS_CHARACTER,
+    )
 
     def __init__(self):
         usage = '%prog [options] <djvu-file>'
@@ -203,6 +216,7 @@ class OptionParser(optparse.OptionParser):
         self.add_option('--language', dest='language', help='set recognition language')
         self.add_option('--list-languages', action='callback', callback=self.list_languages, help='print list of available languages')
         self.add_option('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
+        self.add_option('-t', '--details', dest='details', action='store', default='words', help='amount of text details to extract (lines, words, characters)')
         self.add_option('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
 
     @staticmethod
@@ -271,6 +285,10 @@ class OptionParser(optparse.OptionParser):
                 options.pages = pages
         except (TypeError, ValueError):
             self.error('Unable to parse page numbers')
+        try:
+            options.details = self._details_map[options.details]
+        except KeyError:
+            self.error('Invalid value for --details')
         try:
             saver = options.saver
         except AttributeError:
