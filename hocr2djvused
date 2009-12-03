@@ -32,7 +32,7 @@ class OptionParser(optparse.OptionParser):
         usage = '%prog < <hocr-file> | djvused -s <djvu-file>'
         version = '%%prog %s' % __version__
         optparse.OptionParser.__init__(self, usage=usage, version=version)
-        self.add_option('-r', '--rotation', dest='rotation', action='store', type='int', default=0, help='page rotation (in degrees)')
+        self.add_option('--rotation', dest='rotation', action='store', type='int', default=0, help='page rotation (in degrees)')
         self.add_option('-t', '--details', dest='details', action='store', default='words', help='amount of text details to extract (lines, words, characters)')
 
     def parse_args(self):
