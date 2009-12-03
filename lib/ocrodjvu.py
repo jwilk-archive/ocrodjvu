@@ -156,7 +156,7 @@ class Ocropus(OcrEngine):
         def get_command_line():
             yield 'ocroscript'
             yield self.script_name
-            if self.has_charboxes and details > hocr.TEXT_DETAILS_LINE:
+            if self.has_charboxes and details < hocr.TEXT_DETAILS_LINE:
                 yield '--charboxes'
             yield pbm_file.name
         ocropus = ipc.Subprocess(list(get_command_line()), stdout=ipc.PIPE)
@@ -345,7 +345,7 @@ class Context(djvu.decode.Context):
                         html_file.seek(0)
                     else:
                         html_file = result
-                    text, = hocr.extract_text(html_file, page.rotation)
+                    text, = hocr.extract_text(html_file, page.rotation, self._options.details)
                     return text
                 finally:
                     if html_file is not None:

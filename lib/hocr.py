@@ -37,7 +37,9 @@ from image_size import get_image_size
 
 __all__ = 'extract_text', 'TEXT_DETAILS_LINE', 'TEXT_DETAILS_WORD', 'TEXT_DETAILS_CHARACTER'
 
-from djvu.decode import TEXT_DETAILS_LINE, TEXT_DETAILS_WORD, TEXT_DETAILS_CHARACTER
+TEXT_DETAILS_LINE = const.TEXT_ZONE_LINE
+TEXT_DETAILS_WORD = const.TEXT_ZONE_WORD
+TEXT_DETAILS_CHARACTER = const.TEXT_ZONE_CHARACTER
 
 hocr_class_to_djvu = \
 dict(
@@ -63,6 +65,13 @@ BBOX_RE = re.compile(
         (?P<y0> \d+) \s+
         (?P<x1> \d+) \s+
         (?P<y1> \d+)
+    ''', re.VERBOSE)
+
+BBOXES_RE = re.compile(
+    r'''
+        bboxes \s+
+        (         (?: \d+ \s+ \d+ \s+ \d+ \s+ \d+)
+        (?: , \s* (?: \d+ \s+ \d+ \s+ \d+ \s+ \d+) )* )
     ''', re.VERBOSE)
 
 class BBox(object):
@@ -103,10 +112,85 @@ class BBox(object):
             elif i > 1 and bbox[i] is not None and self[i] < bbox[i]:
                 self._coordinates[i] = bbox[i]
 
-def _scan(node, buffer, parent_bbox, page_size=None, rotation=0):
+def _replace_text(djvu_class, title, details, text):
+    if djvu_class <= const.TEXT_ZONE_LINE:
+        text = text.rstrip('\n')
+    if details >= djvu_class:
+        return text,
+    m = BBOXES_RE.search(title)
+    if not m:
+        return text,
+    coordinates = [map(int, bbox.strip().split()) for bbox in m.group(1).split(',')]
+    if len(coordinates) == len(text):
+        pass # OK
+    elif len(coordinates) == len(text) + 1:
+        # FIXME: This is not OK, user should be warned.
+        # Continue anyway.
+        del coordinates[-1]
+        pass
+    else:
+        # FIXME: This is not OK, user should be warned.
+        return [text]
+    if djvu_class > const.TEXT_ZONE_WORD:
+        # Split words
+        last_word = [const.TEXT_ZONE_WORD]
+        last_word += (None,) * 4
+        last_bbox = BBox()
+        words = []
+        for (x0, y0, x1, y1), ch in zip(coordinates, text):
+            if ch.isspace():
+                if last_word:
+                    if details > const.TEXT_ZONE_CHARACTER:
+                        last_word[5:] = ''.join(last_word[5:]),
+                    last_word[1:5] = last_bbox
+                    words += last_word,
+                    last_word = [const.TEXT_ZONE_WORD]
+                    last_word += (None,) * 4
+                    last_bbox = BBox()
+            else:
+                if details <= const.TEXT_ZONE_CHARACTER:
+                    last_word += [const.TEXT_ZONE_CHARACTER, x0, y0, x1, y1, ch],
+                else:
+                    last_word += ch,
+                last_bbox.update(BBox(x0, y0, x1, y1))
+        return words
+    else:
+        # Split characters
+        return [
+            (const.TEXT_ZONE_CHARACTER, x0, y0, x1, y1, ch)
+            for (x0, y0, x1, y1), ch in zip(coordinates, text)
+        ]
+    return text,
+
+def _rotate(obj, rotation, xform=None):
+    if xform is None:
+        assert len(obj) >= 5
+        assert obj[0] == const.TEXT_ZONE_PAGE
+        assert obj[1] == obj[2] == 0
+        page_width, page_height = page_size = (obj[3], obj[4])
+        if (rotation // 90) & 1:
+             page_width, page_height = page_size
+             xform = decode.AffineTransform((0, 0, page_height, page_width), (0, 0) + page_size)
+        else:
+            xform = decode.AffineTransform((0, 0) + page_size, (0, 0) + page_size)
+        xform.mirror_y()
+        xform.rotate(rotation)
+    x0, y0, x1, y1 = obj[1:5]
+    x0, y0 = xform.inverse((x0, y0))
+    x1, y1 = xform.inverse((x1, y1))
+    obj[1:5] = x0, y0, x1, y1
+    for child in obj:
+        if isinstance(child, list):
+            _rotate(child, rotation, xform)
+        elif isinstance(child, (sexpr.Symbol, int, basestring)):
+            pass
+        else:
+            raise TypeError('%r in not in: list, int, basestring, Symbol' % type(child).__name__)
+
+def _scan(node, buffer, parent_bbox, page_size=None, details=TEXT_DETAILS_WORD):
     def look_down(buffer, parent_bbox):
         for child in node.iterchildren():
-            _scan(child, buffer, parent_bbox, page_size, rotation)
+            _scan(child, buffer, parent_bbox, page_size, details)
             if node.tail and node.tail.strip():
                 buffer.append(node.tail)
         if node.text and node.text.strip():
@@ -145,31 +229,22 @@ def _scan(node, buffer, parent_bbox, page_size=None, rotation=0):
     result = [sexpr.Symbol(djvu_class)]
     result += [None] * 4
     look_down(result, bbox)
+    if isinstance(result[-1], basestring):
+        result[-1:] = _replace_text(djvu_class, title, details, result[-1])
     if not bbox and not len(node):
         return
     if page_size is None:
         raise Exception('Unable to determine page size')
-    if (rotation // 90) & 1:
-        page_width, page_height = page_size
-        xform = decode.AffineTransform((0, 0, page_height, page_width), (0, 0) + page_size)
-    else:
-        xform = decode.AffineTransform((0, 0) + page_size, (0, 0) + page_size)
-    xform.mirror_y()
-    xform.rotate(rotation)
-    x0, y0, x1, y1 = bbox
-    x0, y0 = xform.inverse((x0, y0))
-    x1, y1 = xform.inverse((x1, y1))
-    result[1] = x0
-    result[2] = y0
-    result[3] = x1
-    result[4] = y1
+    result[1], result[2], result[3], result[4] = bbox
     if len(result) == 5:
         result.append('')
     buffer.append(result)
 
-def scan(node, rotation=0):
+def scan(node, rotation=0, details=TEXT_DETAILS_WORD):
     buffer = []
-    _scan(node, buffer, BBox(), rotation=rotation)
+    _scan(node, buffer, BBox(), details=details)
+    for obj in buffer:
+        _rotate(obj, rotation)
     return buffer
 
 def extract_text(stream, rotation=0, details=TEXT_DETAILS_WORD):
@@ -177,7 +252,7 @@ def extract_text(stream, rotation=0, details=TEXT_DETAILS_WORD):
     Extract DjVu text from an hOCR stream.
     '''
     doc = ET.parse(stream, ET.HTMLParser())
-    scan_result = scan(doc.find('/body'), rotation=rotation)
+    scan_result = scan(doc.find('/body'), rotation=rotation, details=details)
     return sexpr.Expression(scan_result)
 
 # vim:ts=4 sw=4 et
