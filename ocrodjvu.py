@@ -1,1 +1,1 @@
-from lib import hocr, image_size, ocrodjvu
+from lib import hocr, image_size, ocrodjvu, version

@@ -13,8 +13,6 @@
 
 from __future__ import with_statement
 
-__version__ = '0.3.0'
-
 import contextlib
 import inspect
 import optparse
@@ -30,6 +28,9 @@ import errors
 import hocr
 import ipc
 import tesseract
+import version
+
+__version__ = version.__version__
 
 PIXEL_FORMAT = djvu.decode.PixelFormatPackedBits('>')
 PIXEL_FORMAT.rows_top_to_bottom = 1
