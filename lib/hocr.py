@@ -35,7 +35,9 @@ except ImportError, ex:
 
 from image_size import get_image_size
 
-__all__ = 'extract_text'
+__all__ = 'extract_text', 'TEXT_DETAILS_LINE', 'TEXT_DETAILS_WORD', 'TEXT_DETAILS_CHARACTER'
+
+from djvu.decode import TEXT_DETAILS_LINE, TEXT_DETAILS_WORD, TEXT_DETAILS_CHARACTER
 
 hocr_class_to_djvu = \
 dict(
@@ -171,7 +173,7 @@ def scan(node, rotation=0):
     _scan(node, buffer, BBox(), rotation=rotation)
     return buffer
 
-def extract_text(stream, rotation=0):
+def extract_text(stream, rotation=0, details=TEXT_DETAILS_WORD):
     '''
     Extract DjVu text from an hOCR stream.
     '''
