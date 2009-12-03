@@ -20,4 +20,9 @@ class EngineNotFound(Exception):
     def __init__(self, name):
         Exception.__init__(self, 'OCR engine (%s) was not found' % name)
 
+class SecurityConcern(Exception):
+
+    def __init__(self):
+        Exception.__init__(self, 'I refuse to process this file due to security concerns')
+
 # vim:ts=4 sw=4 et

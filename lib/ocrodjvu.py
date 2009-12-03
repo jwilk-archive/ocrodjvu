@@ -36,12 +36,6 @@ PIXEL_FORMAT = djvu.decode.PixelFormatPackedBits('>')
 PIXEL_FORMAT.rows_top_to_bottom = 1
 PIXEL_FORMAT.y_top_to_bottom = 1
 
-
-class SecurityConcern(Exception):
-
-    def __init__(self):
-        Exception.__init__(self, 'I refuse to process this file due to security concerns')
-
 class Saver(object):
 
     in_place = False
@@ -303,7 +297,7 @@ class OptionParser(optparse.OptionParser):
 
 def validate_file_id(id):
     if re.compile(r'[/\\\s]').search(id):
-        raise SecurityConcern()
+        raise errors.SecurityConcern()
     return id
 
 
