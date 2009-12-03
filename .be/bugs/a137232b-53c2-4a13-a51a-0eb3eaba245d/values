@@ -1,0 +1,42 @@
+
+
+
+creator=Jakub Wilk <ubanus@users.sf.net>
+
+
+
+
+
+
+severity=minor
+
+
+
+
+
+
+status=open
+
+
+
+
+
+
+summary=Better error message when Tesseract language pack is not found
+
+
+
+
+
+
+target=0.3
+
+
+
+
+
+
+time=Thu, 03 Dec 2009 11:54:23 +0000
+
+
+
