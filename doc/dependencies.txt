@@ -1,0 +1,34 @@
+Dependencies
+============
+
+* OCRopus_ ≥ 0.2 (tested with 0.2 and 0.3.1) —
+  open source document analysis and OCR system
+
+* DjVuLibre_ ≥ 3.5.21 —
+  open source implementation of DjVu_
+
+* python-djvulibre_ ≥ 0.1.14 —
+  Python bindings for DjVuLibre_
+
+* lxml_ —
+  Python bindings for libxml2_
+
+* argparse_ —
+  Python command line parser
+
+.. _OCRopus:
+   http://code.google.com/p/ocropus/
+.. _DjVuLibre:
+   http://djvu.sourceforge.net/
+.. _DjVu:
+   http://djvu.org/
+.. _python-djvulibre:
+   http://jwilk.net/software/python-djvulibre.html
+.. _lxml:
+   http://codespeak.net/lxml/
+.. _libxml2:
+   http://xmlsoft.org/
+.. _argparse:
+   http://code.google.com/p/argparse/
+
+.. vim:ft=rst ts=3 sw=3 et tw=72
