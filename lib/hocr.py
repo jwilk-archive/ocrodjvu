@@ -34,6 +34,7 @@ except ImportError, ex:
     raise
 
 from image_size import get_image_size
+import errors
 
 __all__ = 'extract_text', 'TEXT_DETAILS_LINE', 'TEXT_DETAILS_WORD', 'TEXT_DETAILS_CHARACTER'
 
@@ -217,14 +218,14 @@ def _scan(node, buffer, parent_bbox, page_size=None, details=TEXT_DETAILS_WORD):
         if not bbox:
             m = IMAGE_RE.search(title)
             if m is None:
-                raise Exception("Cannot determine page's bbox")
+                raise errors.MalformedHocr("cannot determine page's bbox")
             page_size = get_image_size(m.group('file_name'))
             page_width, page_height = page_size
             bbox = BBox(0, 0, page_width - 1, page_height - 1)
             parent_bbox.update(bbox)
         else:
             if (bbox.x0, bbox.y0) != (0, 0):
-                raise Exception("Page's bbox should start with (0, 0)")
+                raise errors.MalformedHocr("page's bbox should start with (0, 0)")
             page_size = bbox.x1, bbox.y1
     result = [sexpr.Symbol(djvu_class)]
     result += [None] * 4
@@ -234,7 +235,7 @@ def _scan(node, buffer, parent_bbox, page_size=None, details=TEXT_DETAILS_WORD):
     if not bbox and not len(node):
         return
     if page_size is None:
-        raise Exception('Unable to determine page size')
+        raise errors.MalformedHocr('unable to determine page size')
     result[1], result[2], result[3], result[4] = bbox
     if len(result) == 5:
         result.append('')

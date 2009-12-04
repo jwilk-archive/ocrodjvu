@@ -25,4 +25,9 @@ class SecurityConcern(Exception):
     def __init__(self):
         Exception.__init__(self, 'I refuse to process this file due to security concerns')
 
+class MalformedHocr(Exception):
+
+    def __init__(self, message):
+        Exception.__init__(self, 'Malformed hOCR document: %s' % message)
+
 # vim:ts=4 sw=4 et
