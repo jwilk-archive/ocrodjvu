@@ -1,6 +1,7 @@
 ocrodjvu (0.3.0) UNRELEASED; urgency=low
 
   * Python ≥ 2.5 is now required.
+  * argparse module in now required.
   * Add support for OCRopus 0.3.1.
   * Add the --engine and --list-engines options.
 
