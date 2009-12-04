@@ -13,9 +13,9 @@
 
 from __future__ import with_statement
 
+import argparse
 import contextlib
 import inspect
-import optparse
 import os.path
 import re
 import shutil
@@ -165,7 +165,7 @@ class Ocropus(OcrEngine):
         finally:
             ocropus.wait()
 
-class OptionParser(optparse.OptionParser):
+class ArgumentParser(argparse.ArgumentParser):
 
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
     engines = Ocropus,
@@ -174,14 +174,14 @@ class OptionParser(optparse.OptionParser):
     _details_map = dict(
         lines=hocr.TEXT_DETAILS_LINE,
         words=hocr.TEXT_DETAILS_WORD,
-        characters=hocr.TEXT_DETAILS_CHARACTER,
         chars=hocr.TEXT_DETAILS_CHARACTER,
     )
 
     def __init__(self):
-        usage = '%prog [options] <djvu-file>'
-        version = '%%prog %s' % __version__
-        optparse.OptionParser.__init__(self, usage=usage, version=version)
+        usage = '%(prog)s [options] FILE'
+        version = '%(prog) ' + __version__
+        argparse.ArgumentParser.__init__(self, usage=usage, version=version)
+        saver_group = self.add_argument_group(title='arguments controlling output')
         for saver_type in self.savers:
             options = saver_type.options
             try:
@@ -189,85 +189,79 @@ class OptionParser(optparse.OptionParser):
                 n_args = len(init_args) - 1
             except TypeError:
                 n_args = 0
-            arg_type = None
             metavar = None
-            if n_args > 0:
-                arg_type = 'string'
             if n_args == 1:
                 metavar = 'FILE'
-            self.add_option(
+            saver_group.add_argument(
                 *options,
                 **dict(
-                    type=arg_type, metavar=metavar,
-                    action='callback', callback=self.set_output,
-                    callback_args=(saver_type,), nargs=n_args,
+                    metavar=metavar,
+                    action=self.set_output,
+                    saver_type=saver_type, nargs=n_args,
                     help=saver_type.__doc__
                 )
             )
-        self.add_option('--engine', dest='engine', type='string', nargs=1, action='callback', callback=self.set_engine, default=self.default_engine, help='set OCR engine')
-        self.add_option('--list-engines', action='callback', callback=self.list_engines, help='print list of available OCR engines')
-        self.add_option('--ocr-only', dest='ocr_only', action='store_true', default=False, help='''don't save pages without OCR''')
-        self.add_option('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
-        self.add_option('--language', dest='language', help='set recognition language')
-        self.add_option('--list-languages', action='callback', callback=self.list_languages, help='print list of available languages')
-        self.add_option('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
-        self.add_option('-t', '--details', dest='details', action='store', default='words', help='amount of text details to extract (lines, words, characters)')
-        self.add_option('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
+        self.add_argument('--engine', dest='engine', nargs=1, action=self.set_engine, default=self.default_engine, help=argparse.SUPPRESS or 'set OCR engine')
+        self.add_argument('--list-engines', action=self.list_engines, nargs=0, help=argparse.SUPPRESS or 'print list of available OCR engines')
+        self.add_argument('--ocr-only', dest='ocr_only', action='store_true', default=False, help='''don't save pages without OCR''')
+        self.add_argument('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
+        self.add_argument('--language', dest='language', help='set recognition language')
+        self.add_argument('--list-languages', action=self.list_languages, nargs=0, help='print list of available languages')
+        self.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
+        self.add_argument('-t', '--details', dest='details', choices=('lines', 'words', 'chars'), action='store', default='words', help='amount of text details to extract')
+        self.add_argument('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
+        self.add_argument('path', metavar='FILE', help='DjVu file to process')
 
-    @staticmethod
-    def set_engine(option, opt_str, value, parser):
-        for engine in parser.engines:
-            if engine.name != value:
-                continue
-            parser.values.engine = engine
-            break
-        else:
-            parser.error('Invalid OCR engine name')
-
-    @staticmethod
-    def list_engines(option, opt_str, value, parser):
-        for engine in parser.engines:
-            try:
-                engine = engine()
-            except errors.EngineNotFound:
-                pass
+    class set_engine(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            [value] = values
+            for engine in parser.engines:
+                if engine.name != value:
+                    continue
+                namespace.engine = engine
+                break
             else:
-                print engine.name
-        sys.exit(0)
+                parser.error('Invalid OCR engine name')
 
-    @staticmethod
-    def list_languages(option, opt_str, value, parser):
-        try:
-            for language in parser.values.engine().list_languages():
-                print language
-        except errors.EngineNotFound, ex:
-            print >>sys.stderr, ex
-            sys.exit(1)
-        except errors.UnknownLanguageList:
-            print >>sys.stderr, ex
-            sys.exit(1)
-        else:
+    class list_engines(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            for engine in parser.engines:
+                try:
+                    engine = engine()
+                except errors.EngineNotFound:
+                    pass
+                else:
+                    print engine.name
             sys.exit(0)
 
-    @staticmethod
-    def set_output(option, opt_str, value, parser, *args):
-        [saver_type] = args
-        try:
-            parser.values.saver
-        except AttributeError:
-            if value is None:
-                value = []
+    class list_languages(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            try:
+                for language in namespace.engine().list_languages():
+                    print language
+            except errors.EngineNotFound, ex:
+                print >>sys.stderr, ex
+                sys.exit(1)
+            except errors.UnknownLanguageList:
+                print >>sys.stderr, ex
+                sys.exit(1)
             else:
-                value = [value]
-            parser.values.saver = saver_type(*value)
-        else:
-            parser.values.saver = None
+                sys.exit(0)
+
+    class set_output(argparse.Action):
+        def __init__(self, **kwargs):
+            self.saver_type = kwargs.pop('saver_type')
+            argparse.Action.__init__(self, **kwargs)
+        def __call__(self, parser, namespace, values, option_string=None):
+            try:
+                namespace.saver
+            except AttributeError:
+                namespace.saver = self.saver_type(*values)
+            else:
+                namespace.saver = None
 
     def parse_args(self):
-        try:
-            options, [path] = optparse.OptionParser.parse_args(self)
-        except ValueError:
-            self.error('Invalid number of arguments')
+        options = argparse.ArgumentParser.parse_args(self)
         try:
             if options.pages is not None:
                 pages = []
@@ -280,10 +274,7 @@ class OptionParser(optparse.OptionParser):
                 options.pages = pages
         except (TypeError, ValueError):
             self.error('Unable to parse page numbers')
-        try:
-            options.details = self._details_map[options.details]
-        except KeyError:
-            self.error('Invalid value for --details')
+        options.details = self._details_map[options.details]
         try:
             saver = options.saver
         except AttributeError:
@@ -293,7 +284,7 @@ class OptionParser(optparse.OptionParser):
                 'You must use exactly one of the following options: %s' %
                 ', '.join('/'.join(saver.options) for saver in self.savers)
             )
-        return options, path
+        return options
 
 def validate_file_id(id):
     if re.compile(r'[/\\\s]').search(id):
@@ -399,12 +390,11 @@ class Context(djvu.decode.Context):
             shutil.rmtree(self._temp_dir)
 
 def main():
-    oparser = OptionParser()
-    options, path = oparser.parse_args()
+    options = ArgumentParser().parse_args()
     context = Context()
     context.init(options)
     try:
-        context.process(path, options.pages)
+        context.process(options.path, options.pages)
     finally:
         temp_dir = context.close()
         if temp_dir is not None:
