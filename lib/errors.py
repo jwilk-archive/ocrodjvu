@@ -15,6 +15,11 @@ class UnknownLanguageList(Exception):
     def __init__(self):
         Exception.__init__('Unable to determine list of available languages')
 
+class InvalidLanguageId(ValueError):
+
+    def __init__(self, name):
+        ValueError.__init__(self, 'Invalid language identifier: %s; language identifier is typically an ISO 639-2 three-letter code' % name)
+
 class EngineNotFound(Exception):
 
     def __init__(self, name):

@@ -18,9 +18,10 @@ import re
 import errors
 import ipc
 
-_pattern = re.compile(r"^Unable to load unicharset file (/.*)/[.]unicharset\n$", re.DOTALL)
+_language_pattern = re.compile('^[a-z]{3}(-[a-z]+)?$')
+_error_pattern = re.compile(r"^Unable to load unicharset file (/.*)/[.]unicharset\n$", re.DOTALL)
 
-def get_languages():
+def get_tesseract_data_directory():
     try:
         tesseract = ipc.Subprocess(['tesseract', '', '', '-l', ''],
             stdout=ipc.PIPE,
@@ -31,7 +32,7 @@ def get_languages():
         raise errors.UnknownLanguageList
     try:
         line = tesseract.stderr.read()
-        match = _pattern.match(line)
+        match = _error_pattern.match(line)
         if match is None:
             raise errors.UnknownLanguageList
         directory = match.group(1)
@@ -44,9 +45,20 @@ def get_languages():
             pass
         else:
             raise errors.UnknownLanguageList
+    return directory
+
+def get_languages():
+    directory = get_tesseract_data_directory()
     for filename in glob.glob(os.path.join(directory, '*.unicharset')):
         filename = os.path.basename(filename)
         language = os.path.splitext(filename)[0]
-        yield language
+        if _language_pattern.match(language):
+            yield language
+
+def has_language(language):
+    if not _language_pattern.match(language):
+        raise errors.InvalidLanguageId(language)
+    directory = get_tesseract_data_directory()
+    return os.path.exists(os.path.join(directory, '%s.unicharset' % language))
 
 # vim:ts=4 sw=4 et

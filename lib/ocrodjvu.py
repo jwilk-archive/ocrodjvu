@@ -147,6 +147,10 @@ class Ocropus(OcrEngine):
             self.has_charboxes = True
 
     @staticmethod
+    def has_language(language):
+        return tesseract.has_language(language)
+
+    @staticmethod
     def list_languages():
         for language in tesseract.get_languages():
             yield language
@@ -284,6 +288,18 @@ class ArgumentParser(argparse.ArgumentParser):
                 'You must use exactly one of the following options: %s' %
                 ', '.join('/'.join(saver.options) for saver in self.savers)
             )
+        # It might be temping to verify language name correctness at argument
+        # parse time (rather than after argument parsing). However, it's
+        # desirable to be able to specify a language *before* specifying an OCR
+        # engine.
+        try:
+            if not options.engine.has_language(options.language):
+                self.error('Language pack for the selected language (%s) is not available.' % options.language)
+        except errors.InvalidLanguageId, ex:
+            self.error(str(ex))
+        except errors.UnknownLanguageList:
+            # For now, let's assume the language pack is installed
+            pass
         return options
 
 def validate_file_id(id):
