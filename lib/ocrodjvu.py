@@ -352,7 +352,7 @@ class Context(djvu.decode.Context):
             pfile.write(data)
             pfile.flush()
             html_file = None
-            with self._engine.recognize(pfile, language=self._options.language) as result:
+            with self._engine.recognize(pfile, language=self._options.language, details=self._options.details) as result:
                 try:
                     if self._debug:
                         html_file = self._temp_file('%06d.html' % page.n)
