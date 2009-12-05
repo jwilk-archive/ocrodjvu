@@ -147,6 +147,10 @@ class Ocropus(OcrEngine):
             self.has_charboxes = True
 
     @staticmethod
+    def get_default_language():
+        return os.getenv('tesslanguage') or 'eng'
+
+    @staticmethod
     def has_language(language):
         return tesseract.has_language(language)
 
@@ -156,14 +160,17 @@ class Ocropus(OcrEngine):
             yield language
 
     @contextlib.contextmanager
-    def recognize(self, pbm_file, details=hocr.TEXT_DETAILS_WORD):
+    def recognize(self, pbm_file, language, details=hocr.TEXT_DETAILS_WORD):
         def get_command_line():
             yield 'ocroscript'
             yield self.script_name
             if self.has_charboxes and details < hocr.TEXT_DETAILS_LINE:
                 yield '--charboxes'
             yield pbm_file.name
-        ocropus = ipc.Subprocess(list(get_command_line()), stdout=ipc.PIPE)
+        ocropus = ipc.Subprocess(list(get_command_line()),
+            stdout=ipc.PIPE,
+            env=dict(tesslanguage=language)
+        )
         try:
             yield ocropus.stdout
         finally:
@@ -292,6 +299,8 @@ class ArgumentParser(argparse.ArgumentParser):
         # parse time (rather than after argument parsing). However, it's
         # desirable to be able to specify a language *before* specifying an OCR
         # engine.
+        if options.language is None:
+            options.language = options.engine.get_default_language()
         try:
             if not options.engine.has_language(options.language):
                 self.error('Language pack for the selected language (%s) is not available.' % options.language)
@@ -343,7 +352,7 @@ class Context(djvu.decode.Context):
             pfile.write(data)
             pfile.flush()
             html_file = None
-            with self._engine.recognize(pfile) as result:
+            with self._engine.recognize(pfile, language=self._options.language) as result:
                 try:
                     if self._debug:
                         html_file = self._temp_file('%06d.html' % page.n)
@@ -367,8 +376,6 @@ class Context(djvu.decode.Context):
             print >>sys.stderr, ex
             sys.exit(1)
         print >>sys.stderr, 'Processing %r:' % path
-        if self._options.language is not None:
-            os.putenv('tesslanguage', self._options.language)
         document = self.new_document(djvu.decode.FileURI(path))
         document.decoding_job.wait()
         if pages is None:
