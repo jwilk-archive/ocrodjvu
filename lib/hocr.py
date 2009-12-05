@@ -33,8 +33,8 @@ except ImportError, ex:
     ex.args = '%s; please install the python-djvulibre package <http://jwilk.net/software/python-djvulibre.html>' % str(ex),
     raise
 
-from image_size import get_image_size
-import errors
+from . import image_size
+from . import errors
 
 __all__ = 'extract_text', 'TEXT_DETAILS_LINE', 'TEXT_DETAILS_WORD', 'TEXT_DETAILS_CHARACTER'
 
@@ -219,7 +219,7 @@ def _scan(node, buffer, parent_bbox, page_size=None, details=TEXT_DETAILS_WORD):
             m = IMAGE_RE.search(title)
             if m is None:
                 raise errors.MalformedHocr("cannot determine page's bbox")
-            page_size = get_image_size(m.group('file_name'))
+            page_size = image_size.get_image_size(m.group('file_name'))
             page_width, page_height = page_size
             bbox = BBox(0, 0, page_width - 1, page_height - 1)
             parent_bbox.update(bbox)

@@ -15,8 +15,8 @@ import glob
 import os
 import re
 
-import errors
-import ipc
+from . import errors
+from . import ipc
 
 _language_pattern = re.compile('^[a-z]{3}(-[a-z]+)?$')
 _error_pattern = re.compile(r"^Unable to load unicharset file (/.*)/[.]unicharset\n$", re.DOTALL)

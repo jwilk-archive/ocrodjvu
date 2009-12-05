@@ -24,11 +24,11 @@ import tempfile
 
 import djvu.decode
 
-import errors
-import hocr
-import ipc
-import tesseract
-import version
+from . import errors
+from . import hocr
+from . import ipc
+from . import tesseract
+from . import version
 
 __version__ = version.__version__
 
