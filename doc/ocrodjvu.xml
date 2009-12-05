@@ -172,7 +172,7 @@
             <term><option>--language=<replaceable>language-id</replaceable></option></term>
             <listitem>
                 <para>
-                    Set recognition language. <replaceable>language-id</replaceable> is typically a ISO 639-2
+                    Set recognition language. <replaceable>language-id</replaceable> is typically an ISO 639-2
                     three-letter code.
                 </para>
                 <para>
