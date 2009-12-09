@@ -3,7 +3,6 @@ ocrodjvu (0.3.0) UNRELEASED; urgency=low
   * Python ≥ 2.5 is now required.
   * argparse module in now required.
   * Add support for OCRopus 0.3.1.
-  * Add the --engine and --list-engines options.
   * Give better error messages when Tesseract language pack cannot be found.
 
  -- Jakub Wilk <ubanus@users.sf.net>  Mon, 19 Oct 2009 09:15:11 +0200
