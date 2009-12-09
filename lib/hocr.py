@@ -113,7 +113,15 @@ class BBox(object):
             elif i > 1 and bbox[i] is not None and self[i] < bbox[i]:
                 self._coordinates[i] = bbox[i]
 
-def _replace_text(djvu_class, title, details, text):
+def get_icu():
+    try:
+        import PyICU
+    except ImportError, ex:
+        ex.args = '%s; please install the PyICU package <http://pyicu.osafoundation.org/>' % str(ex),
+        raise
+    return PyICU
+
+def _replace_text(djvu_class, title, text, details, uax29):
     if djvu_class <= const.TEXT_ZONE_LINE:
         text = text.rstrip('\n')
     if details >= djvu_class:
@@ -138,6 +146,32 @@ def _replace_text(djvu_class, title, details, text):
         last_word += (None,) * 4
         last_bbox = BBox()
         words = []
+        if uax29 is not None:
+            icu = get_icu()
+            break_iterator = icu.BreakIterator.createWordInstance(uax29)
+            icu_text = icu.UnicodeString(text)
+            break_iterator.setText(text)
+            i = 0
+            for j in break_iterator:
+                subtext = text[i:j]
+                if subtext.isspace():
+                    i = j
+                    continue
+                bbox = BBox()
+                for k in xrange(i, j):
+                    bbox.update(BBox(*coordinates[k]))
+                last_word = [details] + list(bbox)
+                words += last_word,
+                if details > const.TEXT_ZONE_CHARACTER:
+                    last_word += subtext,
+                else:
+                    last_word += [
+                        (const.TEXT_ZONE_CHARACTER, x0, y0, x1, y1, ch)
+                        for k in xrange(j, i)
+                        for (x0, y0, x1, y1), ch in [coordinates[k], text[k]]
+                    ]
+                i = j
+            return words
         for (x0, y0, x1, y1), ch in zip(coordinates, text):
             if ch.isspace():
                 if last_word:
@@ -188,10 +222,10 @@ def _rotate(obj, rotation, xform=None):
         else:
             raise TypeError('%r in not in: list, int, basestring, Symbol' % type(child).__name__)
 
-def _scan(node, buffer, parent_bbox, page_size=None, details=TEXT_DETAILS_WORD):
+def _scan(node, buffer, parent_bbox, page_size=None, details=TEXT_DETAILS_WORD, uax29=None):
     def look_down(buffer, parent_bbox):
         for child in node.iterchildren():
-            _scan(child, buffer, parent_bbox, page_size, details)
+            _scan(child, buffer, parent_bbox, page_size, details, uax29)
             if node.tail and node.tail.strip():
                 buffer.append(node.tail)
         if node.text and node.text.strip():
@@ -231,7 +265,7 @@ def _scan(node, buffer, parent_bbox, page_size=None, details=TEXT_DETAILS_WORD):
     result += [None] * 4
     look_down(result, bbox)
     if isinstance(result[-1], basestring):
-        result[-1:] = _replace_text(djvu_class, title, details, result[-1])
+        result[-1:] = _replace_text(djvu_class, title, result[-1], details, uax29)
     if not bbox and not len(node):
         return
     if page_size is None:
@@ -241,19 +275,29 @@ def _scan(node, buffer, parent_bbox, page_size=None, details=TEXT_DETAILS_WORD):
         result.append('')
     buffer.append(result)
 
-def scan(node, rotation=0, details=TEXT_DETAILS_WORD):
+def scan(node, rotation=0, details=TEXT_DETAILS_WORD, uax29=None):
     buffer = []
-    _scan(node, buffer, BBox(), details=details)
+    _scan(node, buffer, BBox(), details=details, uax29=uax29)
     for obj in buffer:
         _rotate(obj, rotation)
     return buffer
 
-def extract_text(stream, rotation=0, details=TEXT_DETAILS_WORD):
+def extract_text(stream, rotation=0, details=TEXT_DETAILS_WORD, uax29=None):
     '''
     Extract DjVu text from an hOCR stream.
+
+    details: TEXT_DETAILS_LINES or TEXT_DETAILS_WORD or TEXT_DETAILS_CHAR
+    uax29: None or a PyICU locale
     '''
+    if uax29 is not None:
+        icu = get_icu()
+        if uax29 is True:
+            uax29 = icu.Locale()
+        else:
+            uax29 = icu.Locale(uax29)
+    import sys
     doc = ET.parse(stream, ET.HTMLParser())
-    scan_result = scan(doc.find('/body'), rotation=rotation, details=details)
+    scan_result = scan(doc.find('/body'), rotation=rotation, details=details, uax29=uax29)
     return sexpr.Expression(scan_result)
 
 # vim:ts=4 sw=4 et

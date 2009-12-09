@@ -219,9 +219,11 @@ class ArgumentParser(argparse.ArgumentParser):
         self.add_argument('--language', dest='language', help='set recognition language')
         self.add_argument('--list-languages', action=self.list_languages, nargs=0, help='print list of available languages')
         self.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
-        self.add_argument('-t', '--details', dest='details', choices=('lines', 'words', 'chars'), action='store', default='words', help='amount of text details to extract')
         self.add_argument('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
         self.add_argument('path', metavar='FILE', help='DjVu file to process')
+        group = self.add_argument_group(title='text segmentation options')
+        group.add_argument('-t', '--details', dest='details', choices=('lines', 'words', 'chars'), action='store', default='words', help='amount of text details to extract')
+        group.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='space', help='word segmentation algorithm')
 
     class set_engine(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
@@ -286,6 +288,7 @@ class ArgumentParser(argparse.ArgumentParser):
         except (TypeError, ValueError):
             self.error('Unable to parse page numbers')
         options.details = self._details_map[options.details]
+        options.uax29 = options.word_segmentation == 'uax29' or None
         try:
             saver = options.saver
         except AttributeError:
@@ -361,7 +364,11 @@ class Context(djvu.decode.Context):
                         html_file.seek(0)
                     else:
                         html_file = result
-                    text, = hocr.extract_text(html_file, page.rotation, self._options.details)
+                    text, = hocr.extract_text(html_file,
+                        rotation=page.rotation,
+                        details=self._options.details,
+                        uax29=self._options.uax29
+                    )
                     return text
                 finally:
                     if html_file is not None:
