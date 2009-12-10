@@ -54,6 +54,15 @@ dict(
     ocrx_word = const.TEXT_ZONE_WORD
 ).get
 
+djvu_zone_to_hocr = {
+    const.TEXT_ZONE_PAGE: ('div', 'ocr_page'),
+    const.TEXT_ZONE_COLUMN: ('div', 'ocr_carea'),
+    const.TEXT_ZONE_PARAGRAPH: ('p', 'ocr_par'),
+    const.TEXT_ZONE_REGION: ('span', 'ocrx_block'),
+    const.TEXT_ZONE_LINE: ('span', 'ocrx_line'),
+    const.TEXT_ZONE_WORD: ('span', 'ocrx_word'),
+}.__getitem__
+
 IMAGE_RE = re.compile(
     r'''
         image \s+ (?P<file_name> \S+)
