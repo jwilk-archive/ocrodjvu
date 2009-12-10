@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from ocrodjvu import ocrodjvu
-ocrodjvu.main()
+from ocrodjvu import _ocrodjvu as _
+_.main()
 
 # vim:ts=4 sw=4 et
