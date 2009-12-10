@@ -288,7 +288,6 @@ class ArgumentParser(argparse.ArgumentParser):
         except (TypeError, ValueError):
             self.error('Unable to parse page numbers')
         options.details = self._details_map[options.details]
-        options.uax29 = options.word_segmentation == 'uax29' or None
         try:
             saver = options.saver
         except AttributeError:
@@ -312,6 +311,7 @@ class ArgumentParser(argparse.ArgumentParser):
         except errors.UnknownLanguageList:
             # For now, let's assume the language pack is installed
             pass
+        options.uax29 = options.language if options.word_segmentation == 'uax29' else None
         return options
 
 def validate_file_id(id):
