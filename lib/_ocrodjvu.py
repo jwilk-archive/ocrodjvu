@@ -28,6 +28,7 @@ from . import errors
 from . import hocr
 from . import ipc
 from . import tesseract
+from . import utils
 from . import version
 
 __version__ = version.__version__
@@ -276,15 +277,7 @@ class ArgumentParser(argparse.ArgumentParser):
     def parse_args(self):
         options = argparse.ArgumentParser.parse_args(self)
         try:
-            if options.pages is not None:
-                pages = []
-                for range in options.pages.split(','):
-                    if '-' in range:
-                        x, y = map(int, options.pages.split('-', 1))
-                        pages += xrange(x, y + 1)
-                    else:
-                        pages += int(range),
-                options.pages = pages
+            options.pages = utils.parse_page_numbers(options.pages)
         except (TypeError, ValueError):
             self.error('Unable to parse page numbers')
         options.details = self._details_map[options.details]
