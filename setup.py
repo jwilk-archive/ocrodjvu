@@ -45,7 +45,7 @@ setup(
     author_email = 'ubanus@users.sf.net',
     packages = ['ocrodjvu'],
     package_dir = dict(ocrodjvu = 'lib'),
-    scripts = ['ocrodjvu', 'hocr2djvused'],
+    scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr'],
 )
 
 # vim:ts=4 sw=4 et
