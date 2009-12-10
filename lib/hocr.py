@@ -295,7 +295,6 @@ def extract_text(stream, rotation=0, details=TEXT_DETAILS_WORD, uax29=None):
             uax29 = icu.Locale()
         else:
             uax29 = icu.Locale(uax29)
-    import sys
     doc = ET.parse(stream, ET.HTMLParser())
     scan_result = scan(doc.find('/body'), rotation=rotation, details=details, uax29=uax29)
     return sexpr.Expression(scan_result)
