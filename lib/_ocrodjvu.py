@@ -218,7 +218,7 @@ class ArgumentParser(argparse.ArgumentParser):
         self.add_argument('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
         self.add_argument('--language', dest='language', help='set recognition language')
         self.add_argument('--list-languages', action=self.list_languages, nargs=0, help='print list of available languages')
-        self.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
+        self.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to process')
         self.add_argument('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
         self.add_argument('path', metavar='FILE', help='DjVu file to process')
         group = self.add_argument_group(title='text segmentation options')
