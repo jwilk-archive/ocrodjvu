@@ -10,6 +10,9 @@ Dependencies
 * python-djvulibre_ ≥ 0.1.14 —
   Python bindings for DjVuLibre_
 
+* PyICU_ -
+  Python bindings for PyICU IBM's ICU_ C++ API.
+
 * lxml_ —
   Python bindings for libxml2_
 
@@ -24,6 +27,10 @@ Dependencies
    http://djvu.org/
 .. _python-djvulibre:
    http://jwilk.net/software/python-djvulibre.html
+.. _PyICU:
+   http://pyicu.osafoundation.org/
+.. _ICU:
+   http://www-306.ibm.com/software/globalization/icu/
 .. _lxml:
    http://codespeak.net/lxml/
 .. _libxml2:
