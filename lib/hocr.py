@@ -130,6 +130,34 @@ def get_icu():
         raise
     return PyICU
 
+def simple_word_break_iterator(text):
+    '''
+    Create an instance of simple space-to-space word break interator.
+    '''
+    if not text:
+        return
+    space = text[0].isspace()
+    for n, ch in enumerate(text):
+        if space != ch.isspace():
+            yield n
+            space = not space
+    yield len(text)
+
+def word_break_iterator(text, locale=None):
+    '''
+    Create an instance of word break interator.
+
+    text: unicode string
+    locale: ICU locale or None
+    '''
+    if locale is None:
+        return simple_word_break_iterator(text)
+    icu = get_icu()
+    break_iterator = icu.BreakIterator.createWordInstance(locale)
+    icu_text = icu.UnicodeString(text)
+    break_iterator.setText(text)
+    return break_iterator
+
 def _replace_text(djvu_class, title, text, details, uax29):
     if djvu_class <= const.TEXT_ZONE_LINE:
         text = text.rstrip('\n')
@@ -151,52 +179,28 @@ def _replace_text(djvu_class, title, text, details, uax29):
         return [text]
     if djvu_class > const.TEXT_ZONE_WORD:
         # Split words
-        last_word = [const.TEXT_ZONE_WORD]
-        last_word += (None,) * 4
-        last_bbox = BBox()
         words = []
-        if uax29 is not None:
-            icu = get_icu()
-            break_iterator = icu.BreakIterator.createWordInstance(uax29)
-            icu_text = icu.UnicodeString(text)
-            break_iterator.setText(text)
-            i = 0
-            for j in break_iterator:
-                subtext = text[i:j]
-                if subtext.isspace():
-                    i = j
-                    continue
-                bbox = BBox()
-                for k in xrange(i, j):
-                    bbox.update(BBox(*coordinates[k]))
-                last_word = [details] + list(bbox)
-                words += last_word,
-                if details > const.TEXT_ZONE_CHARACTER:
-                    last_word += subtext,
-                else:
-                    last_word += [
-                        (const.TEXT_ZONE_CHARACTER, x0, y0, x1, y1, ch)
-                        for k in xrange(j, i)
-                        for (x0, y0, x1, y1), ch in [coordinates[k], text[k]]
-                    ]
+        break_iterator = word_break_iterator(text, locale=uax29)
+        i = 0
+        for j in break_iterator:
+            subtext = text[i:j]
+            if subtext.isspace():
                 i = j
-            return words
-        for (x0, y0, x1, y1), ch in zip(coordinates, text):
-            if ch.isspace():
-                if last_word:
-                    if details > const.TEXT_ZONE_CHARACTER:
-                        last_word[5:] = ''.join(last_word[5:]),
-                    last_word[1:5] = last_bbox
-                    words += last_word,
-                    last_word = [const.TEXT_ZONE_WORD]
-                    last_word += (None,) * 4
-                    last_bbox = BBox()
+                continue
+            bbox = BBox()
+            for k in xrange(i, j):
+                bbox.update(BBox(*coordinates[k]))
+            last_word = [const.TEXT_ZONE_WORD] + list(bbox)
+            words += last_word,
+            if details > const.TEXT_ZONE_CHARACTER:
+                last_word += subtext,
             else:
-                if details <= const.TEXT_ZONE_CHARACTER:
-                    last_word += [const.TEXT_ZONE_CHARACTER, x0, y0, x1, y1, ch],
-                else:
-                    last_word += ch,
-                last_bbox.update(BBox(x0, y0, x1, y1))
+                last_word += [
+                    [const.TEXT_ZONE_CHARACTER, x0, y0, x1, y1, ch]
+                    for k in xrange(i, j)
+                    for (x0, y0, x1, y1), ch in [(coordinates[k], text[k])]
+                ]
+            i = j
         return words
     else:
         # Split characters
