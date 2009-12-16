@@ -31,7 +31,7 @@ Topic :: Multimedia :: Graphics\
 '''.split('\n')
 
 from distutils.core import setup
-from lib.ocrodjvu import version
+from lib import version
 
 setup(
     name = 'ocrodjvu',
