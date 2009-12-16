@@ -1,4 +1,4 @@
-ocrodjvu (0.3.0) UNRELEASED; urgency=low
+ocrodjvu (0.3.0) unstable; urgency=low
 
   * Python ≥ 2.5 is now required.
   * argparse module in now required.
