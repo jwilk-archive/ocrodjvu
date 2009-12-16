@@ -99,8 +99,11 @@
 
 <refsection>
     <title>Options</title>
-    <para>
-        <command>&p;</command> accepts the following options:
+    <refsection>
+        <title>Options controlling output</title>
+        <para>
+            It is mandatory to use exactly one of the following options:
+        </para>
         <variablelist>
         <varlistentry>
             <term><option>-o</option></term>
@@ -151,6 +154,11 @@
                 </para>
             </listitem>
         </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Other options</title>
+        <variablelist>
         <varlistentry>
             <term><option>--clear-text</option></term>
             <listitem>
@@ -224,7 +232,7 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </para>
+    </refsection>
 </refsection>
 
 <refsection>
