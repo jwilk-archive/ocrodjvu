@@ -46,7 +46,7 @@ class Saver(object):
 
 class BundledSaver(Saver):
 
-    '''save results as a bundled multi page-document'''
+    '''save results as a bundled multi-page document'''
 
     options = '-o', '--save-bundled'
 
@@ -63,7 +63,7 @@ class BundledSaver(Saver):
 
 class IndirectSaver(Saver):
 
-    '''save results as an indirect multi page-document'''
+    '''save results as an indirect multi-page document'''
 
     options = '-i', '--save-indirect'
 
