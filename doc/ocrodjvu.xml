@@ -82,6 +82,7 @@
             <arg choice='plain'><option>--version</option></arg>
             <arg choice='plain'><option>--help</option></arg>
             <arg choice='plain'><option>-h</option></arg>
+            <arg choice='plain'><option>--list-languages</option></arg>
         </group>
     </cmdsynopsis>
 </refsynopsisdiv>
