@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE refentry PUBLIC '-//OASIS//DTD DocBook XML V4.5//EN' 'http://www.docbook.org/xml/4.5/docbookx.dtd'
+[
+    <!ENTITY p 'hocr2djvused'>
+    <!ENTITY version '0.3.0'>
+]>
+
+<refentry>
+
+<refentryinfo>
+    <title>&p; manual</title>
+    <productname>&p;</productname>
+    <author>
+        <firstname>Jakub</firstname> <surname>Wilk</surname>
+        <affiliation>
+            <address>
+                <email>ubanus@users.sf.net</email>
+            </address>
+        </affiliation>
+    </author>
+    <copyright>
+        <year>2008</year>
+        <year>2009</year>
+        <holder>Jakub Wilk</holder>
+    </copyright>
+</refentryinfo>
+
+<refmeta>
+    <refentrytitle>&p;</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class='version'>&version;</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+    <refname>&p;</refname>
+    <refpurpose>hOCR to <command>djvused</command> script converter</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+    <cmdsynopsis>
+        <command>&p;</command>
+        <arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+    </cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+    <title>Description</title>
+    <para>
+        &p; reads a <ulink url='http://docs.google.com/View?docid=dfxcv4vc_67g844kf'>hOCR</ulink> file (as produced by
+        OCRopus) from the standard input and converts it to a <command>djvused</command> script.
+    </para>
+</refsection>
+
+<refsection>
+    <title>Options</title>
+    <refsection>
+        <title>Text segmentation options</title>
+        <variablelist>
+        <varlistentry>
+            <term><option>-t lines</option></term>
+            <term><option>--details lines</option></term>
+            <listitem>
+                <para>
+                    Record location of every line. Don't record locations of particular words or characters.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>-t words</option></term>
+            <term><option>--details=words</option></term>
+            <listitem>
+                <para>
+                    Record location of every line and every word. Don't record locations of particular characters.
+                </para>
+                <para>
+                    This is the default.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>-t chars</option></term>
+            <term><option>--details=chars</option></term>
+            <listitem>
+                <para>
+                    Record location of every line, every word and every character.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--word-segmentation=simple</option></term>
+            <listitem>
+                <para>
+                    Consider each non-empty sequence of non-whitespace characters a single word.
+                </para>
+                <para>
+                    This is the default, despite being linguistically incorrect.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--word-segmentation=uax29</option></term>
+            <listitem>
+                <para>
+                    Use the <ulink url='http://unicode.org/reports/tr29/'>Unicode Text Segmentation</ulink> algorithm
+                    to break lines into words.
+                </para>
+                <para>
+                    This options break assumptions of some DjVu tools that words are separated by spaces,
+                    and therefore is it not recommended.
+                </para>
+            </listitem>
+        </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Other options</title>
+        <variablelist>
+        <varlistentry>
+            <term><option>--rotation=<replaceable>n</replaceable></option></term>
+            <listitem>
+                <para>
+                    Assume that DjVu pages are rotated by <replaceable>n</replaceable> degress.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--version</option></term>
+            <listitem>
+                <para>Output version information and exit.</para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>-h</option></term>
+            <term><option>--help</option></term>
+            <listitem>
+                <para>Display help and exit.</para>
+            </listitem>
+        </varlistentry>
+        </variablelist>
+    </refsection>
+</refsection>
+
+<refsection>
+    <title>See also</title>
+    <para>
+        <citerefentry>
+            <refentrytitle>ocrodjvu</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>,
+        <citerefentry>
+            <refentrytitle>djvused</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>
+    </para>
+</refsection>
+
+</refentry>
+
+<!-- vim:set ts=4 sw=4 tw=120 et: -->
