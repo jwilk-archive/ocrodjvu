@@ -124,10 +124,11 @@ class Ocropus(OcrEngine):
         # Determine:
         # - if OCRopus is installed and
         # - which version we are dealing with
-        for script_name in 'recognize', 'rec_test':
+        for script_name in 'recognize', 'rec-tess':
             try:
                 ocropus = ipc.Subprocess(['ocroscript', script_name],
                     stdout=ipc.PIPE,
+                    stderr=ipc.PIPE,
                     env=dict(LC_ALL='C', LANG='C')
                 )
             except OSError:
@@ -139,8 +140,9 @@ class Ocropus(OcrEngine):
                     ocropus.wait()
                 except ipc.CalledProcessError:
                     pass
-            self.script_name = script_name
-            break
+            if found:
+                self.script_name = script_name
+                break
         else:
             raise errors.EngineNotFound(self.name)
         if script_name == 'recognize':
