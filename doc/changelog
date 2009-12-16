@@ -10,9 +10,11 @@ ocrodjvu (0.3.0) UNRELEASED; urgency=low
   * New options for hocr2djvused:
     + --rotation,
     + -t/--details,
-    + --word-segmentation.
+    + --word-segmentation,
+    + --language.
+  * New tool: djvu2hocr.
 
- -- Jakub Wilk <ubanus@users.sf.net>  Mon, 19 Oct 2009 09:15:11 +0200
+ -- Jakub Wilk <ubanus@users.sf.net>  Wed, 16 Dec 2009 18:42:21 +0100
 
 ocrodjvu (0.2.1) unstable; urgency=low
 
