@@ -33,14 +33,16 @@ class ArgumentParser(argparse.ArgumentParser):
         argparse.ArgumentParser.__init__(self, usage=usage, version=version)
         self.add_argument('--rotation', dest='rotation', action='store', type=int, default=0, help='page rotation (in degrees)')
         self.add_argument('-t', '--details', dest='details', choices=('lines', 'words', 'chars'), action='store', default='words', help='amount of text details to extract')
-        self.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='space', help='word segmentation algorithm')
+        group = self.add_argument_group(title='word segmentation options')
+        group.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='space', help='word segmentation algorithm')
+        group.add_argument('--language', dest='language', help='language for word segmentation', default='eng')
 
     def parse_args(self):
         options = argparse.ArgumentParser.parse_args(self)
         if options.rotation % 90 != 0:
             self.error('Rotation is not a multiple of 90 degrees')
         options.details = self._details_map[options.details]
-        options.uax29 = options.word_segmentation == 'uax29' or None
+        options.uax29 = options.language if options.word_segmentation == 'uax29' else None
         del options.word_segmentation
         return options
 
