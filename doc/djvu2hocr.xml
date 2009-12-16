@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE refentry PUBLIC '-//OASIS//DTD DocBook XML V4.5//EN' 'http://www.docbook.org/xml/4.5/docbookx.dtd'
+[
+    <!ENTITY p 'djvu2hocr'>
+    <!ENTITY version '0.3.0'>
+]>
+
+<refentry>
+
+<refentryinfo>
+    <title>&p; manual</title>
+    <productname>&p;</productname>
+    <author>
+        <firstname>Jakub</firstname> <surname>Wilk</surname>
+        <affiliation>
+            <address>
+                <email>ubanus@users.sf.net</email>
+            </address>
+        </affiliation>
+    </author>
+    <copyright>
+        <year>2009</year>
+        <holder>Jakub Wilk</holder>
+    </copyright>
+</refentryinfo>
+
+<refmeta>
+    <refentrytitle>&p;</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class='version'>&version;</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+    <refname>&p;</refname>
+    <refpurpose>DjVu to hOCR converter</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+    <cmdsynopsis>
+        <command>&p;</command>
+        <arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+        <arg choice='plain'><replaceable>djvu-file</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+        <command>&p;</command>
+        <group choice='req'>
+            <arg choice='plain'><option>--version</option></arg>
+            <arg choice='plain'><option>--help</option></arg>
+            <arg choice='plain'><option>-h</option></arg>
+        </group>
+    </cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+    <title>Description</title>
+    <para>
+        &p; converts hidden text from a DjVu file to the
+        <ulink url='http://docs.google.com/View?docid=dfxcv4vc_67g844kf'>hOCR</ulink> format.
+    </para>
+</refsection>
+
+<refsection>
+    <title>Options</title>
+    <refsection>
+        <title>Text segmentation options</title>
+        <variablelist>
+        <varlistentry>
+            <term><option>--word-segmentation=simple</option></term>
+            <listitem>
+                <para>
+                    Use the same word segmentation as found in the DjVu file.
+                </para>
+                <para>
+                    This is the default.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--word-segmentation=uax29</option></term>
+            <listitem>
+                <para>
+                    Use the <ulink url='http://unicode.org/reports/tr29/'>Unicode Text Segmentation</ulink> algorithm
+                    to break lines into words, possibly fixing word segmentation found in the DjVu file.
+                </para>
+            </listitem>
+        </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Other options</title>
+        <variablelist>
+        <varlistentry>
+            <term><option>--version</option></term>
+            <listitem>
+                <para>Output version information and exit.</para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>-h</option></term>
+            <term><option>--help</option></term>
+            <listitem>
+                <para>Display help and exit.</para>
+            </listitem>
+        </varlistentry>
+        </variablelist>
+    </refsection>
+</refsection>
+
+<refsection>
+    <title>See also</title>
+    <para>
+        <citerefentry>
+            <refentrytitle>djvu</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>
+    </para>
+</refsection>
+
+</refentry>
+
+<!-- vim:set ts=4 sw=4 tw=120 et: -->
