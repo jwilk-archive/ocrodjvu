@@ -59,4 +59,4 @@ class Subprocess(subprocess.Popen):
         if return_code < 0:
             raise CalledProcessInterrupted(-return_code, self.__command)
 
-# vim:ts=4 sw=4 noet
+# vim:ts=4 sw=4 et
