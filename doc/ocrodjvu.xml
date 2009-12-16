@@ -193,6 +193,26 @@
                 This option is ineffective with OCRopus 0.2.
             </para>
         </varlistentry>
+        <varlistentry>
+            <term><option>--word-segmentation=simple</option></term>
+            <para>
+                Consider each non-empty sequence of non-whitespace characters a single word.
+            </para>
+            <para>
+                This is the default, despite being linguistically incorrect.
+            </para>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--word-segmentation=uax29</option></term>
+            <para>
+                Use the <ulink url='http://unicode.org/reports/tr29/'>Unicode Text Segmentation</ulink> algorithm
+                to break lines into words.
+            </para>
+            <para>
+                This options break assumptions of some DjVu tools that words are separated by spaces,
+                and therefore is it not recommended.
+            </para>
+        </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
