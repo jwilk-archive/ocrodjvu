@@ -158,6 +158,44 @@
         </variablelist>
     </refsection>
     <refsection>
+        <title>Text segmentation options</title>
+        <variablelist>
+        <varlistentry>
+            <term><option>-t lines</option></term>
+            <term><option>--details lines</option></term>
+            <para>
+                Record location of every line. Don't record locations of particular words or characters.
+            </para>
+            <para>
+                This is the default for OCRopus 0.2.
+            </para>
+        </varlistentry>
+        <varlistentry>
+            <term><option>-t words</option></term>
+            <term><option>--details=words</option></term>
+            <para>
+                Record location of every line and every word. Don't record locations of particular characters.
+            </para>
+            <para>
+                This is the default for OCRopus ≥ 0.3.1.
+            </para>
+            <para>
+                This option is ineffective with OCRopus 0.2.
+            </para>
+        </varlistentry>
+        <varlistentry>
+            <term><option>-t chars</option></term>
+            <term><option>--details=chars</option></term>
+            <para>
+                Record location of every line, every word and every character.
+            </para>
+            <para>
+                This option is ineffective with OCRopus 0.2.
+            </para>
+        </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
         <title>Other options</title>
         <variablelist>
         <varlistentry>
