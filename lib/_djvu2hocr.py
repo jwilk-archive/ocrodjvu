@@ -37,7 +37,8 @@ class ArgumentParser(argparse.ArgumentParser):
         self.add_argument('path', metavar='FILE', help='DjVu file to process')
         group = self.add_argument_group(title='word segmentation options')
         group.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='space', help='word segmentation algorithm')
-        group.add_argument('--language', dest='language', help='language for word segmentation', default='eng')
+        group.add_argument('--language', dest='language', help=argparse.SUPPRESS or 'language for word segmentation', default='eng')
+        # This option is currently not very useful, as ICU don't have any specialisations for languages ocrodjvu supports
 
     def parse_args(self):
         options = argparse.ArgumentParser.parse_args(self)
