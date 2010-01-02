@@ -1,6 +1,6 @@
 ocrodjvu (0.3.1) UNRELEASED; urgency=low
 
-  * Don't crash if word segmentation didn't produce any words.
+  * djvu2hocr: fix broken UAX #29 segmentation.
 
  -- Jakub Wilk <ubanus@users.sf.net>  Sat, 02 Jan 2010 15:37:40 +0100
 
