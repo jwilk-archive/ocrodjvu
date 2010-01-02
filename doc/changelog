@@ -1,3 +1,9 @@
+ocrodjvu (0.3.1) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <ubanus@users.sf.net>  Sat, 02 Jan 2010 15:34:00 +0100
+
 ocrodjvu (0.3.0) unstable; urgency=low
 
   * Python ≥ 2.5 is now required.
