@@ -213,18 +213,20 @@ def process_zone(parent, parent_zone_type, zone, last, options):
                 break
     if character_level_details:
         # Do word segmentation by hand.
+        child = None
         for child in break_chars(zone.children, options):
             parent.append(child)
-        if zone_type == const.TEXT_ZONE_WORD and not last:
+        if child is not None and zone_type == const.TEXT_ZONE_WORD and not last:
             child.tail = ' '
         self = None
     elif isinstance(child_zone, unicode):
         text = child_zone
         if zone_type >= const.TEXT_ZONE_WORD and options.icu is not None and parent is not None:
             # Do word segmentation by hand.
+            child = None
             for child in break_plain_text(text, bbox, options):
                 parent.append(child)
-            if zone_type == const.TEXT_ZONE_WORD and not last:
+            if child is not None and zone_type == const.TEXT_ZONE_WORD and not last:
                 child.tail = ' '
             self = None
         else:
