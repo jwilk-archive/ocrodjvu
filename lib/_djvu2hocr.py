@@ -198,7 +198,10 @@ def process_zone(parent, parent_zone_type, zone, last, options):
         raise
     self = ET.Element(hocr_tag)
     self.set('class', hocr_class)
-    bbox = zone.bbox
+    if zone_type == const.TEXT_ZONE_PAGE:
+        bbox = options.page_bbox
+    else:
+        bbox = zone.bbox
     self.set('title', 'bbox ' + ' '.join(map(str, bbox)))
     n_children = zone.n_children
     character_level_details = False
@@ -263,11 +266,17 @@ def main():
     options = ArgumentParser().parse_args()
     print >>sys.stderr, 'Converting %r:' % options.path
     if options.pages is None:
-        sed_script = 'print-txt'
-        page_iterator = itertools.count(1)
-    else:
-        sed_script = ''.join('select %d; print-txt; ' % n for n in options.pages)
-        page_iterator = iter(options.pages)
+        djvused = ipc.Subprocess([
+            'djvused', '-e', 'n',
+            os.path.abspath(options.path)
+        ], stdout=ipc.PIPE)
+        try:
+            n_pages = int(djvused.stdout.readline())
+        finally:
+            djvused.wait()
+        options.pages = xrange(1, n_pages + 1)
+    page_iterator = iter(options.pages)
+    sed_script = ''.join('select %d; size; print-txt; ' % n for n in options.pages)
     djvused = ipc.Subprocess([
         'djvused', '-e', sed_script,
         os.path.abspath(options.path),
@@ -279,6 +288,11 @@ def main():
         except StopIteration:
             break
         try:
+            page_size = [
+                int(str(sexpr.Expression.from_stream(djvused.stdout).value).split('=')[1])
+                for i in xrange(2)
+            ]
+            options.page_bbox = hocr.BBox(0, 0, page_size[0], page_size[1])
             page_text = sexpr.Expression.from_stream(djvused.stdout)
         except sexpr.ExpressionSyntaxError:
             break
