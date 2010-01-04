@@ -71,10 +71,10 @@ IMAGE_RE = re.compile(
 BBOX_RE = re.compile(
     r'''
         bbox \s+
-        (?P<x0> \d+) \s+ 
-        (?P<y0> \d+) \s+
-        (?P<x1> \d+) \s+
-        (?P<y1> \d+)
+        (?P<x0> -?\d+) \s+
+        (?P<y0> -?\d+) \s+
+        (?P<x1> -?\d+) \s+
+        (?P<y1> -?\d+)
     ''', re.VERBOSE)
 
 BBOXES_RE = re.compile(
