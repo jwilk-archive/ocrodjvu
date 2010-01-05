@@ -181,7 +181,7 @@ def break_plain_text(text, bbox, options):
         )
         element = ET.Element('span')
         element.set('class', 'ocrx_word')
-        element.set('title', 'bbox ' + ' '.join(map(str, bbox)))
+        element.set('title', 'bbox ' + ' '.join(map(str, subbox)))
         set_text(element, subtext)
         yield element
         i = j
