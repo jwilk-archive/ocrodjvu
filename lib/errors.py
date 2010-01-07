@@ -13,7 +13,7 @@
 class UnknownLanguageList(Exception):
 
     def __init__(self):
-        Exception.__init__('Unable to determine list of available languages')
+        Exception.__init__(self, 'Unable to determine list of available languages')
 
 class InvalidLanguageId(ValueError):
 

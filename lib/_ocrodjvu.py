@@ -258,7 +258,7 @@ class ArgumentParser(argparse.ArgumentParser):
             except errors.EngineNotFound, ex:
                 print >>sys.stderr, ex
                 sys.exit(1)
-            except errors.UnknownLanguageList:
+            except errors.UnknownLanguageList, ex:
                 print >>sys.stderr, ex
                 sys.exit(1)
             else:
