@@ -1,10 +1,10 @@
-ocrodjvu (0.3.2) UNRELEASED; urgency=low
+ocrodjvu (0.3.2) unstable; urgency=low
 
   * Accept negative numbers in hOCR bounding boxes.
   * djvu2hocr: fix broken UAX #29 segmentation.
   * djvu2hocr: provide correct page bounding boxes.
 
- -- Jakub Wilk <ubanus@users.sf.net>  Tue, 05 Jan 2010 12:43:16 +0100
+ -- Jakub Wilk <ubanus@users.sf.net>  Fri, 08 Jan 2010 17:46:51 +0100
 
 ocrodjvu (0.3.1) unstable; urgency=low
 
