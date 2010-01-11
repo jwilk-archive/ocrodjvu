@@ -374,7 +374,7 @@ class Context(djvu.decode.Context):
         except errors.EngineNotFound, ex:
             print >>sys.stderr, ex
             sys.exit(1)
-        print >>sys.stderr, 'Processing %r:' % path
+        print >>sys.stderr, 'Processing %s:' % utils.smart_repr(path, system_encoding)
         document = self.new_document(djvu.decode.FileURI(path))
         document.decoding_job.wait()
         if pages is None:

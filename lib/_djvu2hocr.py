@@ -12,6 +12,7 @@
 
 import argparse
 import itertools
+import locale
 import os
 import re
 import sys
@@ -26,6 +27,8 @@ from .hocr import sexpr
 from .hocr import const
 
 __version__ = version.__version__
+
+system_encoding = locale.getpreferredencoding()
 
 class ArgumentParser(argparse.ArgumentParser):
 
@@ -264,7 +267,7 @@ hocr_footer = '''
 
 def main():
     options = ArgumentParser().parse_args()
-    print >>sys.stderr, 'Converting %r:' % options.path
+    print >>sys.stderr, 'Converting %s:' % utils.smart_repr(options.path, system_encoding)
     if options.pages is None:
         djvused = ipc.Subprocess([
             'djvused', '-e', 'n',

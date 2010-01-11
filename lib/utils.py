@@ -11,6 +11,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+import re
+
 def parse_page_numbers(pages):
     '''
     >>> parse_page_numbers(None)
@@ -40,5 +42,23 @@ def parse_page_numbers(pages):
         else:
             result += int(page_range, 10),
     return result
+
+_special_chars_replace = re.compile(ur'''[\x00-\x1f'"\x5c\x7f-\x9f]''', re.UNICODE).sub
+
+def _special_chars_escape(m):
+    ch = m.group(0)
+    if ch in ('"', "'"):
+        return '\\' + ch
+    else:
+        return repr(ch)[2:-1]
+
+def smart_repr(s, encoding=None):
+    if encoding is None:
+        return repr(s)
+    try:
+        u = s.decode(encoding)
+    except UnicodeDecodeError:
+        return repr(s)
+    return "'%s'" % _special_chars_replace(_special_chars_escape, u)
 
 # vim:ts=4 sw=4 et
