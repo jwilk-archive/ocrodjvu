@@ -1,3 +1,9 @@
+ocrodjvu (0.3.3) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <ubanus@users.sf.net>  Mon, 11 Jan 2010 10:34:30 +0100
+
 ocrodjvu (0.3.2) unstable; urgency=low
 
   * Accept negative numbers in hOCR bounding boxes.
