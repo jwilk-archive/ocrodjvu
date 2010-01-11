@@ -16,6 +16,7 @@ from __future__ import with_statement
 import argparse
 import contextlib
 import inspect
+import locale
 import os.path
 import re
 import shutil
@@ -36,6 +37,8 @@ __version__ = version.__version__
 PIXEL_FORMAT = djvu.decode.PixelFormatPackedBits('>')
 PIXEL_FORMAT.rows_top_to_bottom = 1
 PIXEL_FORMAT.y_top_to_bottom = 1
+
+system_encoding = locale.getpreferredencoding()
 
 class Saver(object):
 
@@ -309,12 +312,6 @@ class ArgumentParser(argparse.ArgumentParser):
         options.uax29 = options.language if options.word_segmentation == 'uax29' else None
         return options
 
-def validate_file_id(id):
-    if re.compile(r'[/\\\s]').search(id):
-        raise errors.SecurityConcern()
-    return id
-
-
 class Context(djvu.decode.Context):
 
     def init(self, options):
@@ -389,7 +386,8 @@ class Context(djvu.decode.Context):
             if self._options.clear_text:
                 sed_file.write('remove-txt\n')
             for page in pages:
-                sed_file.write('select %s\n' % validate_file_id(page.file.id))
+                file_id = page.file.id.encode(system_encoding)
+                sed_file.write('select \'%s\'\n' % file_id.replace('\\', '\\\\').replace("'", "\\'"))
                 sed_file.write('set-txt\n')
                 try:
                     self.process_page(page).print_into(sed_file)
