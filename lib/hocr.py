@@ -165,6 +165,56 @@ def word_break_iterator(text, locale=None):
     break_iterator.setText(text)
     return break_iterator
 
+class Zone(object):
+
+    def __init__(self, type, bbox=None, children=()):
+        self.type = type
+        self.bbox = bbox
+        self.children = list(children)
+
+    def set_bbox(self, bbox):
+        if bbox is None:
+            self._bbox = None
+        else:
+            self._bbox = tuple(bbox)
+
+    def get_bbox(self):
+        return self._bbox 
+
+    bbox = property(get_bbox, set_bbox)
+
+    @property
+    def sexpr(self):
+        return sexpr.Expression(
+            [self.type] +
+            list(self.bbox) +
+            [child.sexpr if isinstance(child, Zone) else child for child in self.children]
+        )
+
+    def __iter__(self):
+        return iter(self.children)
+
+    def __iadd__(self, new_children):
+        self.children += new_children
+        return self
+
+    def __getitem__(self, n):
+        return self.children[n]
+
+    def __setitem__(self, n, value):
+        self.children[n] = value
+
+    def __len__(self):
+        return len(self.children)
+
+    def __repr__(self):
+        return '%(name)s(type=%(type)r, bbox=%(bbox)r, children=%(children)r)' % dict(
+            name=type(self).__name__,
+            type=self.type,
+            bbox=self.bbox,
+            children=self.children,
+        )
+
 def _replace_text(djvu_class, title, text, settings):
     if djvu_class <= const.TEXT_ZONE_LINE:
         text = text.rstrip('\n')
@@ -197,13 +247,13 @@ def _replace_text(djvu_class, title, text, settings):
             bbox = BBox()
             for k in xrange(i, j):
                 bbox.update(BBox(*coordinates[k]))
-            last_word = [const.TEXT_ZONE_WORD] + list(bbox)
+            last_word = Zone(type=const.TEXT_ZONE_WORD, bbox=bbox)
             words += last_word,
             if settings.details > const.TEXT_ZONE_CHARACTER:
                 last_word += subtext,
             else:
                 last_word += [
-                    [const.TEXT_ZONE_CHARACTER, x0, y0, x1, y1, ch]
+                    Zone(type=const.TEXT_ZONE_CHARACTER, bbox=(x0, y0, x1, y1), children=[ch])
                     for k in xrange(i, j)
                     for (x0, y0, x1, y1), ch in [(coordinates[k], text[k])]
                 ]
@@ -212,44 +262,39 @@ def _replace_text(djvu_class, title, text, settings):
     else:
         # Split characters
         return [
-            (const.TEXT_ZONE_CHARACTER, x0, y0, x1, y1, ch)
+            Zone(type=const.TEXT_ZONE_CHARACTER, bbox=(x0, y0, x1, y1), children=[ch])
             for (x0, y0, x1, y1), ch in zip(coordinates, text)
         ]
     return text,
 
 def _rotate(obj, rotation, xform=None):
     if xform is None:
-        assert len(obj) >= 5
-        assert obj[0] == const.TEXT_ZONE_PAGE
-        assert obj[1] == obj[2] == 0
-        page_width, page_height = page_size = (obj[3], obj[4])
+        assert isinstance(obj, Zone)
+        assert obj.type == const.TEXT_ZONE_PAGE
+        assert obj.bbox[:2] == (0, 0)
+        page_size = obj.bbox[2:]
         if (rotation // 90) & 1:
-             page_width, page_height = page_size
-             xform = decode.AffineTransform((0, 0, page_height, page_width), (0, 0) + page_size)
+            xform = decode.AffineTransform((0, 0) + tuple(reversed(page_size)), (0, 0) + page_size)
         else:
             xform = decode.AffineTransform((0, 0) + page_size, (0, 0) + page_size)
         xform.mirror_y()
         xform.rotate(rotation)
-    x0, y0, x1, y1 = obj[1:5]
+    x0, y0, x1, y1 = obj.bbox
     x0, y0 = xform.inverse((x0, y0))
     x1, y1 = xform.inverse((x1, y1))
-    obj[1:5] = x0, y0, x1, y1
+    obj.bbox = x0, y0, x1, y1
     for child in obj:
-        if isinstance(child, list):
+        if isinstance(child, Zone):
             _rotate(child, rotation, xform)
-        elif isinstance(child, (sexpr.Symbol, int, basestring)):
-            pass
-        else:
-            raise TypeError('%r in not in: list, int, basestring, Symbol' % type(child).__name__)
 
 def _scan(node, buffer, parent_bbox, settings):
     def look_down(buffer, parent_bbox):
         for child in node.iterchildren():
             _scan(child, buffer, parent_bbox, settings)
             if node.tail and node.tail.strip():
-                buffer.append(node.tail)
+                buffer += node.tail,
         if node.text and node.text.strip():
-            buffer.append(node.text)
+            buffer += node.text,
     if not isinstance(node.tag, basestring):
         return
     if settings.cuneiform:
@@ -285,19 +330,18 @@ def _scan(node, buffer, parent_bbox, settings):
             if (bbox.x0, bbox.y0) != (0, 0):
                 raise errors.MalformedHocr("page's bbox should start with (0, 0)")
             settings.page_size = bbox.x1, bbox.y1
-    result = [sexpr.Symbol(djvu_class)]
-    result += [None] * 4
+    result = Zone(type=djvu_class)
     look_down(result, bbox)
-    if isinstance(result[-1], basestring):
+    if len(result) > 0 and isinstance(result[-1], basestring):
         result[-1:] = _replace_text(djvu_class, title, result[-1], settings)
     if not bbox and not len(node):
         return
     if settings.page_size is None:
         raise errors.MalformedHocr('unable to determine page size')
-    result[1], result[2], result[3], result[4] = bbox
+    result.bbox = bbox
     if len(result) == 5:
         result.append('')
-    buffer.append(result)
+    buffer += result,
 
 def scan(node, settings):
     buffer = []
@@ -334,6 +378,6 @@ def extract_text(stream, **kwargs):
         # Wild guess:
         settings.cuneiform = True
     scan_result = scan(doc.find('/body'), settings)
-    return sexpr.Expression(scan_result)
+    return [zone.sexpr for zone in scan_result]
 
 # vim:ts=4 sw=4 et
