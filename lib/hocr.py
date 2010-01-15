@@ -158,10 +158,10 @@ def word_break_iterator(text, locale=None):
     break_iterator.setText(text)
     return break_iterator
 
-def _replace_text(djvu_class, title, text, details, uax29):
+def _replace_text(djvu_class, title, text, settings):
     if djvu_class <= const.TEXT_ZONE_LINE:
         text = text.rstrip('\n')
-    if details >= djvu_class:
+    if settings.details >= djvu_class:
         return text,
     m = BBOXES_RE.search(title)
     if not m:
@@ -180,7 +180,7 @@ def _replace_text(djvu_class, title, text, details, uax29):
     if djvu_class > const.TEXT_ZONE_WORD:
         # Split words
         words = []
-        break_iterator = word_break_iterator(text, locale=uax29)
+        break_iterator = word_break_iterator(text, locale=settings.uax29)
         i = 0
         for j in break_iterator:
             subtext = text[i:j]
@@ -192,7 +192,7 @@ def _replace_text(djvu_class, title, text, details, uax29):
                 bbox.update(BBox(*coordinates[k]))
             last_word = [const.TEXT_ZONE_WORD] + list(bbox)
             words += last_word,
-            if details > const.TEXT_ZONE_CHARACTER:
+            if settings.details > const.TEXT_ZONE_CHARACTER:
                 last_word += subtext,
             else:
                 last_word += [
@@ -235,10 +235,10 @@ def _rotate(obj, rotation, xform=None):
         else:
             raise TypeError('%r in not in: list, int, basestring, Symbol' % type(child).__name__)
 
-def _scan(node, buffer, parent_bbox, page_size=None, details=TEXT_DETAILS_WORD, uax29=None):
+def _scan(node, buffer, parent_bbox, page_size, settings):
     def look_down(buffer, parent_bbox):
         for child in node.iterchildren():
-            _scan(child, buffer, parent_bbox, page_size, details, uax29)
+            _scan(child, buffer, parent_bbox, page_size, settings)
             if node.tail and node.tail.strip():
                 buffer.append(node.tail)
         if node.text and node.text.strip():
@@ -278,7 +278,7 @@ def _scan(node, buffer, parent_bbox, page_size=None, details=TEXT_DETAILS_WORD, 
     result += [None] * 4
     look_down(result, bbox)
     if isinstance(result[-1], basestring):
-        result[-1:] = _replace_text(djvu_class, title, result[-1], details, uax29)
+        result[-1:] = _replace_text(djvu_class, title, result[-1], settings)
     if not bbox and not len(node):
         return
     if page_size is None:
@@ -288,28 +288,36 @@ def _scan(node, buffer, parent_bbox, page_size=None, details=TEXT_DETAILS_WORD, 
         result.append('')
     buffer.append(result)
 
-def scan(node, rotation=0, details=TEXT_DETAILS_WORD, uax29=None):
+def scan(node, settings):
     buffer = []
-    _scan(node, buffer, BBox(), details=details, uax29=uax29)
+    _scan(node, buffer, BBox(), None, settings)
     for obj in buffer:
-        _rotate(obj, rotation)
+        _rotate(obj, settings.rotation)
     return buffer
 
-def extract_text(stream, rotation=0, details=TEXT_DETAILS_WORD, uax29=None):
+class ExtractSettings(object):
+
+    def __init__(self, rotation=0, details=TEXT_DETAILS_WORD, uax29=None):
+        self.rotation = rotation
+        self.details = details
+        if uax29 is not None:
+            icu = get_icu()
+            if uax29 is True:
+                uax29 = icu.Locale()
+            else:
+                uax29 = icu.Locale(uax29)
+        self.uax29 = uax29
+
+def extract_text(stream, **kwargs):
     '''
     Extract DjVu text from an hOCR stream.
 
     details: TEXT_DETAILS_LINES or TEXT_DETAILS_WORD or TEXT_DETAILS_CHAR
     uax29: None or a PyICU locale
     '''
-    if uax29 is not None:
-        icu = get_icu()
-        if uax29 is True:
-            uax29 = icu.Locale()
-        else:
-            uax29 = icu.Locale(uax29)
+    settings = ExtractSettings(**kwargs)
     doc = ET.parse(stream, ET.HTMLParser())
-    scan_result = scan(doc.find('/body'), rotation=rotation, details=details, uax29=uax29)
+    scan_result = scan(doc.find('/body'), settings)
     return sexpr.Expression(scan_result)
 
 # vim:ts=4 sw=4 et
