@@ -54,6 +54,13 @@ dict(
     ocrx_word = const.TEXT_ZONE_WORD
 ).get
 
+cuneiform_tag_to_djvu = \
+dict(
+    body = const.TEXT_ZONE_PAGE,
+    p = const.TEXT_ZONE_LINE,
+    span = const.TEXT_ZONE_CHARACTER,
+).get
+
 djvu_zone_to_hocr = {
     const.TEXT_ZONE_PAGE: ('div', 'ocr_page'),
     const.TEXT_ZONE_COLUMN: ('div', 'ocr_carea'),
@@ -235,23 +242,26 @@ def _rotate(obj, rotation, xform=None):
         else:
             raise TypeError('%r in not in: list, int, basestring, Symbol' % type(child).__name__)
 
-def _scan(node, buffer, parent_bbox, page_size, settings):
+def _scan(node, buffer, parent_bbox, settings):
     def look_down(buffer, parent_bbox):
         for child in node.iterchildren():
-            _scan(child, buffer, parent_bbox, page_size, settings)
+            _scan(child, buffer, parent_bbox, settings)
             if node.tail and node.tail.strip():
                 buffer.append(node.tail)
         if node.text and node.text.strip():
             buffer.append(node.text)
     if not isinstance(node.tag, basestring):
         return
-    hocr_classes = (node.get('class') or '').split()
-    djvu_class = None
-    for hocr_class in hocr_classes:
-        djvu_class = hocr_class_to_djvu(hocr_class)
-        if djvu_class:
-            break
+    if settings.cuneiform:
+        djvu_class = cuneiform_tag_to_djvu(node.tag)
     else:
+        hocr_classes = (node.get('class') or '').split()
+        djvu_class = None
+        for hocr_class in hocr_classes:
+            djvu_class = hocr_class_to_djvu(hocr_class)
+            if djvu_class:
+                break
+    if not djvu_class:
         look_down(buffer, parent_bbox)
         return
     title = node.get('title') or ''
@@ -263,17 +273,18 @@ def _scan(node, buffer, parent_bbox, page_size, settings):
         parent_bbox.update(bbox)
     if djvu_class is const.TEXT_ZONE_PAGE:
         if not bbox:
-            m = IMAGE_RE.search(title)
-            if m is None:
-                raise errors.MalformedHocr("cannot determine page's bbox")
-            page_size = image_size.get_image_size(m.group('file_name'))
-            page_width, page_height = page_size
+            if settings.page_size is None:
+                m = IMAGE_RE.search(title)
+                if m is None:
+                    raise errors.MalformedHocr("cannot determine page's bbox")
+                settings.page_size = image_size.get_image_size(m.group('file_name'))
+            page_width, page_height = settings.page_size
             bbox = BBox(0, 0, page_width - 1, page_height - 1)
             parent_bbox.update(bbox)
         else:
             if (bbox.x0, bbox.y0) != (0, 0):
                 raise errors.MalformedHocr("page's bbox should start with (0, 0)")
-            page_size = bbox.x1, bbox.y1
+            settings.page_size = bbox.x1, bbox.y1
     result = [sexpr.Symbol(djvu_class)]
     result += [None] * 4
     look_down(result, bbox)
@@ -281,7 +292,7 @@ def _scan(node, buffer, parent_bbox, page_size, settings):
         result[-1:] = _replace_text(djvu_class, title, result[-1], settings)
     if not bbox and not len(node):
         return
-    if page_size is None:
+    if settings.page_size is None:
         raise errors.MalformedHocr('unable to determine page size')
     result[1], result[2], result[3], result[4] = bbox
     if len(result) == 5:
@@ -290,14 +301,14 @@ def _scan(node, buffer, parent_bbox, page_size, settings):
 
 def scan(node, settings):
     buffer = []
-    _scan(node, buffer, BBox(), None, settings)
+    _scan(node, buffer, BBox(), settings)
     for obj in buffer:
         _rotate(obj, settings.rotation)
     return buffer
 
 class ExtractSettings(object):
 
-    def __init__(self, rotation=0, details=TEXT_DETAILS_WORD, uax29=None):
+    def __init__(self, rotation=0, details=TEXT_DETAILS_WORD, uax29=None, page_size=None, cuneiform=False):
         self.rotation = rotation
         self.details = details
         if uax29 is not None:
@@ -307,6 +318,8 @@ class ExtractSettings(object):
             else:
                 uax29 = icu.Locale(uax29)
         self.uax29 = uax29
+        self.page_size = page_size
+        self.cuneiform = cuneiform
 
 def extract_text(stream, **kwargs):
     '''
@@ -317,6 +330,9 @@ def extract_text(stream, **kwargs):
     '''
     settings = ExtractSettings(**kwargs)
     doc = ET.parse(stream, ET.HTMLParser())
+    if doc.find('/head/meta[@name="ocr-capabilities"]') is None:
+        # Wild guess:
+        settings.cuneiform = True
     scan_result = scan(doc.find('/body'), settings)
     return sexpr.Expression(scan_result)
 

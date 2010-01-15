@@ -32,6 +32,9 @@ class ArgumentParser(argparse.ArgumentParser):
         version = '%(prog) ' + __version__
         argparse.ArgumentParser.__init__(self, usage=usage, version=version)
         self.add_argument('--rotation', dest='rotation', action='store', type=int, default=0, help='page rotation (in degrees)')
+        def size(s):
+            return map(int, s.split('x', 1))
+        self.add_argument('--page-size', metavar='WxH', dest='page_size', action='store', type=size, default=None, help='page size')
         group = self.add_argument_group(title='word segmentation options')
         group.add_argument('-t', '--details', dest='details', choices=('lines', 'words', 'chars'), action='store', default='words', help='amount of text details to extract')
         group.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='space', help='word segmentation algorithm')
@@ -49,7 +52,13 @@ class ArgumentParser(argparse.ArgumentParser):
 
 def main():
     options = ArgumentParser().parse_args()
-    for i, text in enumerate(hocr.extract_text(sys.stdin, rotation=options.rotation, details=options.details, uax29=options.uax29)):
+    texts = hocr.extract_text(sys.stdin,
+        rotation=options.rotation,
+        details=options.details,
+        uax29=options.uax29,
+        page_size=options.page_size,
+    )
+    for i, text in enumerate(texts):
         sys.stdout.write('select %d\nremove-txt\nset-txt\n' % (i + 1))
         text.print_into(sys.stdout, 80)
         sys.stdout.write('\n.\n\n')
