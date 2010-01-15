@@ -1,0 +1,6 @@
+#!/bin/sh
+: "${hocr2djvused:=hocr2djvused}"
+test_file="${1:?}"
+html_file="${test_file%.test[0-9]}.html"
+options=`head -1 "$test_file" | cut -d '#' -f 2`
+( printf '#%s\n' "$options"; $hocr2djvused $options < $html_file ) | diff $test_file -
