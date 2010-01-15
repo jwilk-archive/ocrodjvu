@@ -282,6 +282,10 @@ def _rotate(obj, rotation, xform=None):
     x0, y0, x1, y1 = obj.bbox
     x0, y0 = xform.inverse((x0, y0))
     x1, y1 = xform.inverse((x1, y1))
+    if x0 > x1:
+        x0, x1 = x1, x0
+    if y0 > y1:
+        y0, y1 = y1, y0
     obj.bbox = x0, y0, x1, y1
     for child in obj:
         if isinstance(child, Zone):
