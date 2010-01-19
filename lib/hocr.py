@@ -344,7 +344,7 @@ def _scan(node, buffer, parent_bbox, settings):
         raise errors.MalformedHocr('unable to determine page size')
     result.bbox = bbox
     if len(result) == 5:
-        result.append('')
+        result += ['']
     buffer += result,
 
 def scan(node, settings):
