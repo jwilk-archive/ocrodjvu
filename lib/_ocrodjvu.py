@@ -22,6 +22,7 @@ import re
 import shutil
 import sys
 import tempfile
+import threading
 
 import djvu.decode
 
@@ -182,6 +183,17 @@ class Ocropus(OcrEngine):
         finally:
             ocropus.wait()
 
+def get_cpu_count():
+    try:
+        import multiprocessing
+        return multiprocessing.cpu_count()
+    except (ImportError, NotImplementedError):
+        pass
+    try:
+        return os.sysconf('SC_NPROCESSORS_ONLN')
+    except (ValueError, OSError, AttributeError):
+        return 1
+
 class ArgumentParser(argparse.ArgumentParser):
 
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
@@ -226,6 +238,7 @@ class ArgumentParser(argparse.ArgumentParser):
         self.add_argument('--list-languages', action=self.list_languages, nargs=0, help='print list of available languages')
         self.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to process')
         self.add_argument('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
+        self.add_argument('-j', '--jobs', dest='n_jobs', metavar='N', nargs='?', type=int, default=1, help='number of jobs to run simultaneously')
         self.add_argument('path', metavar='FILE', help='DjVu file to process')
         group = self.add_argument_group(title='text segmentation options')
         group.add_argument('-t', '--details', dest='details', choices=('lines', 'words', 'chars'), action='store', default='words', help='amount of text details to extract')
@@ -310,6 +323,8 @@ class ArgumentParser(argparse.ArgumentParser):
             # For now, let's assume the language pack is installed
             pass
         options.uax29 = options.language if options.word_segmentation == 'uax29' else None
+        if options.n_jobs is None:
+            options.n_jobs = get_cpu_count()
         return options
 
 class Context(djvu.decode.Context):
@@ -368,6 +383,30 @@ class Context(djvu.decode.Context):
         finally:
             pfile.close()
 
+    def page_thread(self, pages, results, condition):
+        for page in pages:
+            n = page.n
+            with condition:
+                result = results[n]
+                if result is not None:
+                    # The page is being processed or has been already processed.
+                    continue
+                # Mark the page as taken.
+                results[n] = True
+            try:
+                result = self.process_page(page)
+            except djvu.decode.NotAvailable:
+                print >>sys.stderr, 'No image suitable for OCR.'
+                result = False
+            except:
+                with condition:
+                    condition.notify()
+                raise
+            with condition:
+                assert results[n] is True
+                results[n] = result
+                condition.notify()
+
     def process(self, path, pages=None):
         try:
             self._engine = self._options.engine()
@@ -381,6 +420,10 @@ class Context(djvu.decode.Context):
             pages = list(document.pages)
         else:
             pages = [document.pages[i - 1] for i in pages]
+        results = dict((page.n, None) for page in pages)
+        condition = threading.Condition()
+        for i in xrange(self._options.n_jobs):
+            threading.Thread(target=self.page_thread, args=(pages, results, condition)).start()
         sed_file = self._temp_file('ocrodjvu.djvused')
         try:
             if self._options.clear_text:
@@ -389,10 +432,19 @@ class Context(djvu.decode.Context):
                 file_id = page.file.id.encode(system_encoding)
                 sed_file.write('select \'%s\'\n' % file_id.replace('\\', '\\\\').replace("'", "\\'"))
                 sed_file.write('set-txt\n')
-                try:
-                    self.process_page(page).print_into(sed_file)
-                except djvu.decode.NotAvailable:
-                    print >>sys.stderr, 'No image suitable for OCR.'
+                with condition:
+                    while 1:
+                        result = results[page.n]
+                        if result is None or result is True:
+                            # Result is not yet available.
+                            condition.wait()
+                        else:
+                            break
+                if result is False:
+                    # No image suitable for OCR.
+                    pass
+                else:
+                    result.print_into(sed_file)
                 sed_file.write('\n.\n\n')
             sed_file.flush()
             saver = self._options.saver
