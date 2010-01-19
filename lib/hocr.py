@@ -57,7 +57,7 @@ dict(
 cuneiform_tag_to_djvu = \
 dict(
     body = const.TEXT_ZONE_PAGE,
-    p = const.TEXT_ZONE_LINE,
+    p = const.TEXT_ZONE_PARAGRAPH,
     span = const.TEXT_ZONE_CHARACTER,
 ).get
 
@@ -165,6 +165,9 @@ def word_break_iterator(text, locale=None):
     break_iterator.setText(text)
     return break_iterator
 
+class Space(object):
+    pass
+
 class Zone(object):
 
     def __init__(self, type, bbox=None, children=()):
@@ -187,8 +190,11 @@ class Zone(object):
     def sexpr(self):
         return sexpr.Expression(
             [self.type] +
-            list(self.bbox) +
-            [child.sexpr if isinstance(child, Zone) else child for child in self.children]
+            list(self.bbox) + [
+                child.sexpr if isinstance(child, Zone) else child
+                for child in self.children
+                if not isinstance(child, Space)
+            ]
         )
 
     def __iter__(self):
@@ -214,6 +220,38 @@ class Zone(object):
             bbox=self.bbox,
             children=self.children,
         )
+
+def _replace_cuneiform_paragraph(paragraph, settings):
+    text = ''.join(
+        ' ' if isinstance(character, Space) else character[0]
+        for character in paragraph
+    )
+    if settings.details >= const.TEXT_ZONE_LINE:
+        return [text]
+    if len(text) != len(paragraph):
+        raise ValueError
+    break_iterator = word_break_iterator(text, locale=settings.uax29)
+    i = 0
+    words = Zone(type=const.TEXT_ZONE_PARAGRAPH)
+    paragraph_bbox = BBox()
+    for j in break_iterator:
+        subtext = text[i:j]
+        if subtext.isspace():
+            i = j
+            continue
+        word_bbox = BBox()
+        for k in xrange(i, j):
+            word_bbox.update(BBox(*paragraph[k].bbox))
+        paragraph_bbox.update(word_bbox)
+        last_word = Zone(type=const.TEXT_ZONE_WORD, bbox=word_bbox)
+        words += last_word,
+        if settings.details > const.TEXT_ZONE_CHARACTER:
+            last_word += subtext,
+        else:
+            last_word += paragraph[i:j]
+        i = j
+    words.bbox = paragraph_bbox
+    return words
 
 def _replace_text(djvu_class, title, text, settings):
     if djvu_class <= const.TEXT_ZONE_LINE:
@@ -295,8 +333,11 @@ def _scan(node, buffer, parent_bbox, settings):
     def look_down(buffer, parent_bbox):
         for child in node.iterchildren():
             _scan(child, buffer, parent_bbox, settings)
-            if node.tail and node.tail.strip():
-                buffer += node.tail,
+            if child.tail:
+                if child.tail.strip():
+                    buffer += child.tail,
+                else:
+                    buffer += Space(),
         if node.text and node.text.strip():
             buffer += node.text,
     if not isinstance(node.tag, basestring):
@@ -338,6 +379,8 @@ def _scan(node, buffer, parent_bbox, settings):
     look_down(result, bbox)
     if len(result) > 0 and isinstance(result[-1], basestring):
         result[-1:] = _replace_text(djvu_class, title, result[-1], settings)
+    elif settings.cuneiform and djvu_class is const.TEXT_ZONE_PARAGRAPH:
+        result[:] = _replace_cuneiform_paragraph(result[:], settings)
     if not bbox and not len(node):
         return
     if settings.page_size is None:
@@ -350,8 +393,10 @@ def _scan(node, buffer, parent_bbox, settings):
 def scan(node, settings):
     buffer = []
     _scan(node, buffer, BBox(), settings)
-    for obj in buffer:
-        _rotate(obj, settings.rotation)
+    # Buffer may contain also superfluous Space objects. Let's strip them.
+    buffer = [zone for zone in buffer if isinstance(zone, Zone)]
+    for zone in buffer:
+        _rotate(zone, settings.rotation)
     return buffer
 
 class ExtractSettings(object):
