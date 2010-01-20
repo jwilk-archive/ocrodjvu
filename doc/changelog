@@ -1,10 +1,14 @@
-ocrodjvu (0.3.3) UNRELEASED; urgency=low
-
+ocrodjvu (0.3.4) UNRELEASED; urgency=low
+  
+  * Add support for the Cuneiform OCR engine.
+    New options for ocrodjvu:
+    + --engine,
+    + --list-engines.
   * Don't crash on non-ASCII file names.
     Thanks to Jean-Christophe Heger for the bug report.
   * hocr2djvused: add the --page-size option.
 
- -- Jakub Wilk <ubanus@users.sf.net>  Tue, 19 Jan 2010 22:57:22 +0100
+ -- Jakub Wilk <ubanus@users.sf.net>  Thu, 21 Jan 2010 00:25:17 +0100
 
 ocrodjvu (0.3.2) unstable; urgency=low
 

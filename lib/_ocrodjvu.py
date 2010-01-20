@@ -26,6 +26,7 @@ import threading
 
 import djvu.decode
 
+from . import cuneiform
 from . import errors
 from . import hocr
 from . import ipc
@@ -159,7 +160,7 @@ class Ocropus(OcrEngine):
 
     @staticmethod
     def has_language(language):
-        return tesseract.has_language(language)
+        return cuneiform.has_language(language)
 
     @staticmethod
     def list_languages():
@@ -183,6 +184,31 @@ class Ocropus(OcrEngine):
         finally:
             ocropus.wait()
 
+class Cuneiform(OcrEngine):
+
+    name = 'cuneiform'
+
+    def __init__(self):
+        try:
+            cuneiform.get_languages()
+        except errors.UnknownLanguageList:
+            raise errors.EngineNotFound(self.name)
+
+    @staticmethod
+    def get_default_language():
+        return 'eng'
+
+    @staticmethod
+    def has_language(language):
+        return tesseract.has_language(language)
+
+    @staticmethod
+    def list_languages():
+        return iter(cuneiform.get_languages())
+
+    def recognize(self, pbm_file, language, details=hocr.TEXT_DETAILS_WORD):
+        return cuneiform.recognize(pbm_file, language)
+
 def get_cpu_count():
     try:
         import multiprocessing
@@ -197,7 +223,7 @@ def get_cpu_count():
 class ArgumentParser(argparse.ArgumentParser):
 
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
-    engines = Ocropus,
+    engines = Ocropus, Cuneiform
     default_engine = Ocropus
 
     _details_map = dict(
@@ -230,8 +256,8 @@ class ArgumentParser(argparse.ArgumentParser):
                     help=saver_type.__doc__
                 )
             )
-        self.add_argument('--engine', dest='engine', nargs=1, action=self.set_engine, default=self.default_engine, help=argparse.SUPPRESS or 'set OCR engine')
-        self.add_argument('--list-engines', action=self.list_engines, nargs=0, help=argparse.SUPPRESS or 'print list of available OCR engines')
+        self.add_argument('--engine', dest='engine', nargs=1, action=self.set_engine, default=self.default_engine, help='OCR engine to use')
+        self.add_argument('--list-engines', action=self.list_engines, nargs=0, help='print list of available OCR engines')
         self.add_argument('--ocr-only', dest='ocr_only', action='store_true', default=False, help='''don't save pages without OCR''')
         self.add_argument('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
         self.add_argument('--language', dest='language', help='set recognition language')
@@ -374,7 +400,8 @@ class Context(djvu.decode.Context):
                     text, = hocr.extract_text(html_file,
                         rotation=page.rotation,
                         details=self._options.details,
-                        uax29=self._options.uax29
+                        uax29=self._options.uax29,
+                        page_size=size
                     )
                     return text
                 finally:
