@@ -34,7 +34,7 @@
 
 <refnamediv>
     <refname>&p;</refname>
-    <refpurpose>OCRopus for DjVu files</refpurpose>
+    <refpurpose>OCR for DjVu files</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
@@ -83,6 +83,7 @@
             <arg choice='plain'><option>--version</option></arg>
             <arg choice='plain'><option>--help</option></arg>
             <arg choice='plain'><option>-h</option></arg>
+            <arg choice='plain'><option>--list-engines</option></arg>
             <arg choice='plain'><option>--list-languages</option></arg>
         </group>
     </cmdsynopsis>
@@ -91,16 +92,47 @@
 <refsection>
     <title>Description</title>
     <para>
-        &p; is a wrapper for OCRopus, an OCR system, that allows you to perform OCR on DjVu files.
+        &p; is a wrapper for OCR systems that allows you to perform OCR on DjVu files.
     </para>
     <para>
-        Internally, &p; calls <command>ocroscript</command>'s <command>recognize</command> (or
-        <command>rec-tess</command>) command, so that ultimately Tesseract acts as the OCR backend.
+        The following OCR engines are supported:
+        <itemizedlist>
+        <listitem>
+            <para><ulink url='http://ocropus.googlecode.com/'><application>OCRopus</application></ulink> (internally,
+                &p; calls <command>ocroscript</command>'s <command>recognize</command> (or <command>rec-tess</command>)
+                command, so that ultimately <application>Tesseract</application> acts as the OCR backend);
+            </para>
+        </listitem>
+        <listitem>
+            <para><ulink url='http://launchpad.net/cuneiform-linux'><application>Cuneiform for Linux</application></ulink>.</para>
+        </listitem>
+        </itemizedlist>
     </para>
 </refsection>
 
 <refsection>
     <title>Options</title>
+    <refsection>
+        <title>OCR engine options</title>
+        <variablelist>
+        <varlistentry>
+            <term><option>--engine=<replaceable>engine-id</replaceable></option></term>
+            <listitem>
+                <para>
+                    Use this OCR engine. The default is ‘<literal>ocropus</literal>’ (OCRopus).
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--list-engines</option></term>
+            <listitem>
+                <para>
+                    Print list of available OCR engines.
+                </para>
+            </listitem>
+        </varlistentry>
+        </variablelist>
+    </refsection>
     <refsection>
         <title>Options controlling output</title>
         <para>
@@ -181,7 +213,7 @@
                     Record location of every line and every word. Don't record locations of particular characters.
                 </para>
                 <para>
-                    This is the default for OCRopus ≥ 0.3.1.
+                    This is the default for OCRopus ≥ 0.3.1 and for Cuneiform.
                 </para>
                 <para>
                     This option is ineffective with OCRopus 0.2.
