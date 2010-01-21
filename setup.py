@@ -12,7 +12,7 @@
 # General Public License for more details.
 
 '''
-*ocrodjvu* is a wrapper for `OCRopus <http://ocropus.googlecode.com/>`_, an OCR system, that allows you to perform OCR on `DjVu <http://djvu.org/>`_ files.
+*ocrodjvu* is a wrapper for OCR systems that allows you to perform OCR on `DjVu <http://djvu.org/>`_ files.
 '''
 
 import os
@@ -37,7 +37,7 @@ setup(
     name = 'ocrodjvu',
     version = version.__version__,
     license = 'GNU GPL 2',
-    description = 'OCRopus for DjVu',
+    description = 'OCR for DjVu',
     long_description = __doc__.strip(),
     classifiers = classifiers,
     url = 'http://jwilk.net/software/ocrodjvu.html',
