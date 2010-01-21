@@ -425,7 +425,8 @@ class Context(djvu.decode.Context):
             except djvu.decode.NotAvailable:
                 print >>sys.stderr, 'No image suitable for OCR.'
                 result = False
-            except:
+            except Exception, ex:
+                results[n] = ex
                 with condition:
                     condition.notify()
                 raise
@@ -449,8 +450,12 @@ class Context(djvu.decode.Context):
             pages = [document.pages[i - 1] for i in pages]
         results = dict((page.n, None) for page in pages)
         condition = threading.Condition()
-        for i in xrange(self._options.n_jobs):
-            threading.Thread(target=self.page_thread, args=(pages, results, condition)).start()
+        threads = [
+            threading.Thread(target=self.page_thread, args=(pages, results, condition))
+            for i in xrange(self._options.n_jobs)
+        ]
+        for thread in threads:
+            thread.start()
         sed_file = self._temp_file('ocrodjvu.djvused')
         try:
             if self._options.clear_text:
@@ -465,6 +470,10 @@ class Context(djvu.decode.Context):
                         if result is None or result is True:
                             # Result is not yet available.
                             condition.wait()
+                        elif isinstance(result, Exception):
+                            for thread in threads:
+                                thread.join()
+                            sys.exit(1)
                         else:
                             break
                 if result is False:
