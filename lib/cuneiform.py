@@ -61,7 +61,7 @@ def get_languages():
 def has_language(language):
     if not _language_pattern.match(language):
         raise errors.InvalidLanguageId(language)
-    return cuneiform_to_iso(language) in (language_list or get_languages())
+    return cuneiform_to_iso(language) in get_languages()
 
 def recognize(pbm_file, language):
     hocr_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu.', suffix='.html')
