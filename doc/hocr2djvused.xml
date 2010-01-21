@@ -122,7 +122,7 @@
             <term><option>--rotation=<replaceable>n</replaceable></option></term>
             <listitem>
                 <para>
-                    Assume that DjVu pages are rotated by <replaceable>n</replaceable> degress.
+                    Assume that DjVu pages are rotated by <replaceable>n</replaceable> degrees.
                 </para>
             </listitem>
         </varlistentry>
