@@ -5,3 +5,7 @@ include doc/*.txt
 include doc/*.xml
 include doc/changelog
 include ocrodjvu.py
+include tests/Makefile
+include tests/run-test
+include tests/*.html
+include tests/*.test[0-9]
