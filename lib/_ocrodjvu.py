@@ -160,7 +160,7 @@ class Ocropus(OcrEngine):
 
     @staticmethod
     def has_language(language):
-        return cuneiform.has_language(language)
+        return tesseract.has_language(language)
 
     @staticmethod
     def list_languages():
@@ -200,7 +200,7 @@ class Cuneiform(OcrEngine):
 
     @staticmethod
     def has_language(language):
-        return tesseract.has_language(language)
+        return cuneiform.has_language(language)
 
     @staticmethod
     def list_languages():
