@@ -219,7 +219,7 @@
                     to break lines into words.
                 </para>
                 <para>
-                    This options break assumptions of some DjVu tools that words are separated by spaces,
+                    This option breaks assumptions of some DjVu tools that words are separated by spaces,
                     and therefore is it not recommended.
                 </para>
             </listitem>
