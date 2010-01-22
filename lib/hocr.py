@@ -254,8 +254,11 @@ def _replace_cuneiform_paragraph(paragraph, settings):
     return words
 
 def _replace_text(djvu_class, title, text, settings):
+    embedded_eol = False
     if djvu_class <= const.TEXT_ZONE_LINE:
-        text = text.rstrip('\n')
+        if text.endswith('\n'):
+            embedded_eol = True
+            text = text[:-1]
     if settings.details >= djvu_class:
         return text,
     m = BBOXES_RE.search(title)
@@ -264,14 +267,12 @@ def _replace_text(djvu_class, title, text, settings):
     coordinates = [map(int, bbox.strip().split()) for bbox in m.group(1).split(',')]
     if len(coordinates) == len(text):
         pass # OK
-    elif len(coordinates) == len(text) + 1:
-        # FIXME: This is not OK, user should be warned.
-        # Continue anyway.
-        del coordinates[-1]
-        pass
-    else:
-        # FIXME: This is not OK, user should be warned.
-        return [text]
+    elif len(coordinates) != len(text):
+        if not embedded_eol and len(coordinates) == len(text) + 1:
+            # Ocropus produces weird hOCR output if line ends with a hyphen
+            del coordinates[-1]
+        else:
+            raise errors.MalformedHocr("number of bboxes doesn't match text length")
     if djvu_class > const.TEXT_ZONE_WORD:
         # Split words
         words = []
