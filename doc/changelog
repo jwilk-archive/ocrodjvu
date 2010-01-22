@@ -1,8 +1,8 @@
-ocrodjvu (0.4.1) UNRELEASED; urgency=low
+ocrodjvu (0.4.1) unstable; urgency=low
 
   * Be stricter when reading hOCR produced by OCRopus 0.3.1.
 
- -- Jakub Wilk <ubanus@users.sf.net>  Fri, 22 Jan 2010 19:58:08 +0100
+ -- Jakub Wilk <ubanus@users.sf.net>  Fri, 22 Jan 2010 20:25:54 +0100
 
 ocrodjvu (0.4.0) unstable; urgency=low
   
