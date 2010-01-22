@@ -9,3 +9,4 @@ include tests/Makefile
 include tests/run-test
 include tests/*.html
 include tests/*.test[0-9]
+include tests/*.djvu
