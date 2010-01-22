@@ -314,6 +314,15 @@
             </listitem>
         </varlistentry>
         <varlistentry>
+            <term><option>-j</option></term>
+            <term><option>--jobs=<replaceable>n</replaceable></option></term>
+            <listitem>
+                <para>
+                    Start up to <replaceable>n</replaceable> OCR processes.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
             <term><option>-D</option></term>
             <term><option>--debug</option></term>
             <listitem>
