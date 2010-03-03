@@ -87,8 +87,8 @@ BBOX_RE = re.compile(
 BBOXES_RE = re.compile(
     r'''
         bboxes \s+
-        (         (?: \d+ \s+ \d+ \s+ \d+ \s+ \d+)
-        (?: , \s* (?: \d+ \s+ \d+ \s+ \d+ \s+ \d+) )* )
+        (          (?: -?\d+ \s+ -?\d+ \s+ -?\d+ \s+ -?\d+)
+        (?: ,? \s* (?: -?\d+ \s+ -?\d+ \s+ -?\d+ \s+ -?\d+) )* )
     ''', re.VERBOSE)
 
 class BBox(object):
@@ -269,7 +269,8 @@ def _replace_text(djvu_class, title, text, settings):
     m = BBOXES_RE.search(title)
     if not m:
         return text,
-    coordinates = [map(int, bbox.strip().split()) for bbox in m.group(1).split(',')]
+    coordinates = (int(x) for x in m.group(1).replace(',', ' ').split())
+    coordinates = zip(coordinates, coordinates, coordinates, coordinates)
     if len(coordinates) == len(text):
         pass # OK
     else:
