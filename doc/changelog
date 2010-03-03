@@ -5,8 +5,9 @@ ocrodjvu (0.4.2) UNRELEASED; urgency=low
     + --render=foreground,
     + --render=all.
   * Fix off-by-one error in text area coordinates.
+  * Add support for Cuneiform 0.9.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 03 Mar 2010 18:26:49 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 03 Mar 2010 21:14:19 +0100
 
 ocrodjvu (0.4.1) unstable; urgency=low
 
