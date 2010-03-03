@@ -1,4 +1,4 @@
-ocrodjvu (0.4.2) UNRELEASED; urgency=low
+ocrodjvu (0.4.2) unstable; urgency=low
 
   * New options for ocrodjvu:
     + --render=mask,
@@ -7,7 +7,7 @@ ocrodjvu (0.4.2) UNRELEASED; urgency=low
   * Fix off-by-one error in text area coordinates.
   * Add support for Cuneiform 0.9.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 03 Mar 2010 21:14:19 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 03 Mar 2010 21:27:15 +0100
 
 ocrodjvu (0.4.1) unstable; urgency=low
 
