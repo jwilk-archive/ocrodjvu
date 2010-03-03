@@ -227,6 +227,8 @@ def _replace_cuneiform08_paragraph(paragraph, settings):
         for character in paragraph
     )
     if settings.details >= const.TEXT_ZONE_LINE:
+        # Cuneiform tends to attach superfluous whitespace:
+        text = text.rstrip()
         return [text]
     if len(text) != len(paragraph):
         raise ValueError
@@ -259,6 +261,9 @@ def _replace_text(djvu_class, title, text, settings):
         if text.endswith('\n'):
             embedded_eol = True
             text = text[:-1]
+    if settings.cuneiform:
+        # Cuneiform tends to attach superfluous whitespace:
+        text = text.rstrip()
     if settings.details >= djvu_class:
         return text,
     m = BBOXES_RE.search(title)
