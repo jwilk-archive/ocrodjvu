@@ -300,6 +300,36 @@
             </listitem>
         </varlistentry>
         <varlistentry>
+            <term><option>--render=mask</option></term>
+            <listitem>
+                <para>
+                    Render only masks of page images.
+                </para>
+                <para>
+                    This is the default.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--render=foreground</option></term>
+            <listitem>
+                <para>
+                    Render only foreground layers of page images.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--render=all</option></term>
+            <listitem>
+                <para>
+                    Render all layers of page images.
+                </para>
+                <para>
+                    This option is necessary to OCR DjVu files with invalid foreground/background separation.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
             <term><option>-p</option></term>
             <term><option>--pages=<replaceable>page-range</replaceable></option></term>
             <listitem>

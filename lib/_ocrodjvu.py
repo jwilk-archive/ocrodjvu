@@ -36,9 +36,13 @@ from . import version
 
 __version__ = version.__version__
 
-PIXEL_FORMAT = djvu.decode.PixelFormatPackedBits('>')
-PIXEL_FORMAT.rows_top_to_bottom = 1
-PIXEL_FORMAT.y_top_to_bottom = 1
+bitonal_pixel_format = djvu.decode.PixelFormatPackedBits('>')
+bitonal_pixel_format.rows_top_to_bottom = 1
+bitonal_pixel_format.y_top_to_bottom = 1
+
+rgb_pixel_format = djvu.decode.PixelFormatRgb()
+rgb_pixel_format.rows_top_to_bottom = 1
+rgb_pixel_format.y_top_to_bottom = 1
 
 system_encoding = locale.getpreferredencoding()
 
@@ -232,6 +236,12 @@ class ArgumentParser(argparse.ArgumentParser):
         chars=hocr.TEXT_DETAILS_CHARACTER,
     )
 
+    _render_map = dict(
+        mask=djvu.decode.RENDER_MASK_ONLY,
+        foreground=djvu.decode.RENDER_FOREGROUND,
+        all=djvu.decode.RENDER_COLOR,
+    )
+
     def __init__(self):
         usage = '%(prog)s [options] FILE'
         version = '%(prog) ' + __version__
@@ -262,6 +272,7 @@ class ArgumentParser(argparse.ArgumentParser):
         self.add_argument('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
         self.add_argument('--language', dest='language', help='set recognition language')
         self.add_argument('--list-languages', action=self.list_languages, nargs=0, help='print list of available languages')
+        self.add_argument('--render', dest='render_layers', choices=self._render_map.keys(), action='store', default='mask', help='image layers to render')
         self.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to process')
         self.add_argument('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
         self.add_argument('-j', '--jobs', dest='n_jobs', metavar='N', nargs='?', type=int, default=1, help='number of jobs to run simultaneously')
@@ -325,6 +336,7 @@ class ArgumentParser(argparse.ArgumentParser):
         except (TypeError, ValueError):
             self.error('Unable to parse page numbers')
         options.details = self._details_map[options.details]
+        options.render_layers = self._render_map[options.render_layers]
         try:
             saver = options.saver
         except AttributeError:
@@ -359,6 +371,10 @@ class Context(djvu.decode.Context):
         self._temp_dir = tempfile.mkdtemp(prefix='ocrodjvu.')
         self._debug = options.debug
         self._options = options
+        if self._options.render_layers == djvu.decode.RENDER_MASK_ONLY:
+            self._pixel_format = bitonal_pixel_format
+        else:
+            self._pixel_format = rgb_pixel_format
 
     def _temp_file(self, name):
         path = os.path.join(self._temp_dir, name)
@@ -377,13 +393,16 @@ class Context(djvu.decode.Context):
         page_job = page.decode(wait=True)
         size = page_job.size
         rect = (0, 0) + size
-        pfile = self._temp_file('%06d.pbm' % page.n)
+        pfile = self._temp_file('%06d.pnm' % page.n)
         try:
-            pfile.write('P4 %d %d\n' % size) # PBM header
+            if self._pixel_format.bpp == 1:
+                pfile.write('P4 %d %d\n' % size) # PBM header
+            else:
+                pfile.write('P6 %d %d 255\n' % size) # PPM header
             data = page_job.render(
-                djvu.decode.RENDER_MASK_ONLY,
+                self._options.render_layers,
                 rect, rect,
-                PIXEL_FORMAT
+                self._pixel_format
             )
             pfile.write(data)
             pfile.flush()

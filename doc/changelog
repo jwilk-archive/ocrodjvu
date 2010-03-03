@@ -1,3 +1,12 @@
+ocrodjvu (0.4.2) UNRELEASED; urgency=low
+
+  * New options for ocrodjvu:
+    + --render=mask,
+    + --render=foreground,
+    + --render=all.
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 03 Mar 2010 17:09:35 +0100
+
 ocrodjvu (0.4.1) unstable; urgency=low
 
   * Be stricter when reading hOCR produced by OCRopus 0.3.1.
