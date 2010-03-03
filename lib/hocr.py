@@ -274,7 +274,7 @@ def _replace_text(djvu_class, title, text, settings):
         pass # OK
     else:
         if not embedded_eol and len(coordinates) == len(text) + 1:
-            # Ocropus produces weird hOCR output if line ends with a hyphen
+            # OCRopus produces weird hOCR output if line ends with a hyphen
             del coordinates[-1]
         else:
             raise errors.MalformedHocr("number of bboxes doesn't match text length")
