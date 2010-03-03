@@ -1,5 +1,5 @@
 # encoding=UTF-8
-# Copyright © 2008, 2009, 2010 Jakub Wilk <ubanus@users.sf.net>
+# Copyright © 2008, 2009, 2010 Jakub Wilk <jwilk@jwilk.net>
 #
 # This package is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

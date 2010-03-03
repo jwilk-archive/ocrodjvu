@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # encoding=UTF-8
-# Copyright © 2009 Jakub Wilk <ubanus@users.sf.net>
+# Copyright © 2009 Jakub Wilk <jwilk@jwilk.net>
 #
 # This package is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ setup(
     classifiers = classifiers,
     url = 'http://jwilk.net/software/ocrodjvu.html',
     author = 'Jakub Wilk',
-    author_email = 'ubanus@users.sf.net',
+    author_email = 'jwilk@jwilk.net',
     packages = ['ocrodjvu'],
     package_dir = dict(ocrodjvu = 'lib'),
     scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr'],
