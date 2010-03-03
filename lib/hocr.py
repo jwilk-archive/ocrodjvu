@@ -267,7 +267,7 @@ def _replace_text(djvu_class, title, text, settings):
     coordinates = [map(int, bbox.strip().split()) for bbox in m.group(1).split(',')]
     if len(coordinates) == len(text):
         pass # OK
-    elif len(coordinates) != len(text):
+    else:
         if not embedded_eol and len(coordinates) == len(text) + 1:
             # Ocropus produces weird hOCR output if line ends with a hyphen
             del coordinates[-1]
