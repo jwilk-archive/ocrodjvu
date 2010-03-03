@@ -286,8 +286,9 @@
                     three-letter code.
                 </para>
                 <para>
-                    The default is ‘<literal>eng</literal>’ (English), unless the <varname>tesslanguage</varname>
-                    environment variable is set.
+                    For OCRopus, the default is ‘<literal>eng</literal>’ (English), unless the
+                    <varname>tesslanguage</varname> environment variable is set.
+                    For other OCR engines, the default is always ‘<literal>eng</literal>’.
                 </para>
             </listitem>
         </varlistentry>
