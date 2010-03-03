@@ -370,7 +370,7 @@ def _scan(node, buffer, parent_bbox, settings):
                     raise errors.MalformedHocr("cannot determine page's bbox")
                 settings.page_size = image_size.get_image_size(m.group('file_name'))
             page_width, page_height = settings.page_size
-            bbox = BBox(0, 0, page_width - 1, page_height - 1)
+            bbox = BBox(0, 0, page_width, page_height)
             parent_bbox.update(bbox)
         else:
             if (bbox.x0, bbox.y0) != (0, 0):
