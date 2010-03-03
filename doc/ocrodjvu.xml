@@ -295,7 +295,7 @@
             <term><option>--list-languages</option></term>
             <listitem>
                 <para>
-                    Print list of available languages.
+                    Print list of available languages for the currently selected OCR engine.
                 </para>
             </listitem>
         </varlistentry>
