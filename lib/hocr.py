@@ -20,7 +20,7 @@ http://docs.google.com/Doc?id=dfxcv4vc_67g844kf
 import re
 
 try:
-    import lxml.etree as ET
+    from lxml import etree
 except ImportError, ex:
     ex.args = '%s; please install the lxml package <http://codespeak.net/lxml/>' % str(ex),
     raise
@@ -70,12 +70,12 @@ djvu_zone_to_hocr = {
     const.TEXT_ZONE_WORD: ('span', 'ocrx_word'),
 }.__getitem__
 
-IMAGE_RE = re.compile(
+image_re = re.compile(
     r'''
         image \s+ (?P<file_name> \S+)
     ''', re.VERBOSE)
 
-BBOX_RE = re.compile(
+bbox_re = re.compile(
     r'''
         bbox \s+
         (?P<x0> -?\d+) \s+
@@ -84,7 +84,7 @@ BBOX_RE = re.compile(
         (?P<y1> -?\d+)
     ''', re.VERBOSE)
 
-BBOXES_RE = re.compile(
+bboxes_re = re.compile(
     r'''
         bboxes \s+
         (          (?: -?\d+ \s+ -?\d+ \s+ -?\d+ \s+ -?\d+)
@@ -266,7 +266,7 @@ def _replace_text(djvu_class, title, text, settings):
         text = text.rstrip()
     if settings.details >= djvu_class:
         return text,
-    m = BBOXES_RE.search(title)
+    m = bboxes_re.search(title)
     if not m:
         return text,
     coordinates = (int(x) for x in m.group(1).replace(',', ' ').split())
@@ -367,7 +367,7 @@ def _scan(node, buffer, parent_bbox, settings):
         look_down(buffer, parent_bbox)
         return
     title = node.get('title') or ''
-    m = BBOX_RE.search(title)
+    m = bbox_re.search(title)
     if m is None:
         bbox = BBox()
     else:
@@ -379,7 +379,7 @@ def _scan(node, buffer, parent_bbox, settings):
     if djvu_class is const.TEXT_ZONE_PAGE:
         if not bbox:
             if settings.page_size is None:
-                m = IMAGE_RE.search(title)
+                m = image_re.search(title)
                 if m is None:
                     raise errors.MalformedHocr("cannot determine page's bbox")
                 settings.page_size = image_size.get_image_size(m.group('file_name'))
@@ -446,7 +446,7 @@ def extract_text(stream, **kwargs):
     uax29: None or a PyICU locale
     '''
     settings = ExtractSettings(**kwargs)
-    doc = ET.parse(stream, ET.HTMLParser())
+    doc = etree.parse(stream, etree.HTMLParser())
     if doc.find('/head/meta[@name="ocr-capabilities"]') is None:
         ocr_system = doc.find('/head/meta[@name="ocr-system"]')
         if ocr_system is not None and ocr_system.get('content') == 'openocr':

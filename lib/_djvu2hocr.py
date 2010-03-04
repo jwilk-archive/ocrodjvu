@@ -22,7 +22,7 @@ from . import ipc
 from . import utils
 from . import version
 
-from .hocr import ET
+from .hocr import etree
 from .hocr import sexpr
 from .hocr import const
 
@@ -117,7 +117,7 @@ def set_text(element, text):
             else:
                 last.tail = match.group(1)
         if match.group(2):
-            last = ET.Element('span')
+            last = etree.Element('span')
             last.set('class', 'djvu_char')
             last.set('title', '#x%02x' % ord(match.group(2)))
             last.text = ' '
@@ -153,7 +153,7 @@ def break_chars(char_zone_list, options):
         bbox = hocr.BBox()
         for k in xrange(i, j):
             bbox.update(bbox_list[k])
-        element = ET.Element('span')
+        element = etree.Element('span')
         element.set('class', 'ocrx_word')
         element.set('title', 'bbox %(bbox)s; bboxes %(bboxes)s' % dict(
             bbox=' '.join(map(str, bbox)),
@@ -182,7 +182,7 @@ def break_plain_text(text, bbox, options):
             int(bbox.x0 + (bbox.x1 - bbox.x0) * 1.0 * j / len(text) + 0.5),
             bbox.y1,
         )
-        element = ET.Element('span')
+        element = etree.Element('span')
         element.set('class', 'ocrx_word')
         element.set('title', 'bbox ' + ' '.join(map(str, subbox)))
         set_text(element, subtext)
@@ -199,7 +199,7 @@ def process_zone(parent, parent_zone_type, zone, last, options):
         if ex[0] == const.TEXT_ZONE_CHARACTER:
             raise CharacterLevelDetails
         raise
-    self = ET.Element(hocr_tag)
+    self = etree.Element(hocr_tag)
     self.set('class', hocr_class)
     if zone_type == const.TEXT_ZONE_PAGE:
         bbox = options.page_bbox
@@ -247,7 +247,7 @@ def process_zone(parent, parent_zone_type, zone, last, options):
 
 def process_page(page_text, options):
     result = process_zone(None, None, page_text, last=True, options=options)
-    tree = ET.ElementTree(result)
+    tree = etree.ElementTree(result)
     tree.write(sys.stdout, encoding='UTF-8')
 
 hocr_header = '''\
