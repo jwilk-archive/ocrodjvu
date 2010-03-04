@@ -231,7 +231,7 @@ def _replace_cuneiform08_paragraph(paragraph, settings):
         text = text.rstrip()
         return [text]
     if len(text) != len(paragraph):
-        raise ValueError
+        raise errors.MalformedHocr("number of bboxes doesn't match text length")
     break_iterator = word_break_iterator(text, locale=settings.uax29)
     i = 0
     words = Zone(type=const.TEXT_ZONE_PARAGRAPH)
