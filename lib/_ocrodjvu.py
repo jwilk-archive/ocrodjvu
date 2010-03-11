@@ -244,8 +244,9 @@ class ArgumentParser(argparse.ArgumentParser):
 
     def __init__(self):
         usage = '%(prog)s [options] FILE'
-        version = '%(prog) ' + __version__
-        argparse.ArgumentParser.__init__(self, usage=usage, version=version)
+        version = '%(prog)s ' + __version__
+        argparse.ArgumentParser.__init__(self, usage=usage)
+        self.add_argument('-v', '--version', action='version', version=version, help='show version information and exit')
         saver_group = self.add_argument_group(title='options controlling output')
         for saver_type in self.savers:
             options = saver_type.options
