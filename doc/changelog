@@ -10,6 +10,7 @@ ocrodjvu (0.4.2) unstable; urgency=low
     + --render=mask,
     + --render=foreground,
     + --render=all.
+    http://bugs.debian.org/572081
   * Fix off-by-one error in text area coordinates.
   * Add support for Cuneiform 0.9.
 
