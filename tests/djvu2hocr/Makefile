@@ -1,5 +1,5 @@
-export djvu2hocr = ./djvu2hocr
+export djvu2hocr = ../../djvu2hocr
 
-include ../Makefile.common
+include ../common/Makefile
 
 # vim:ts=4 sw=4 noet

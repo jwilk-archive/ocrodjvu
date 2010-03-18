@@ -1,5 +1,5 @@
-export hocr2djvused = ./hocr2djvused
+export hocr2djvused = ../../hocr2djvused
 
-include ../Makefile.common
+include ../common/Makefile
 
 # vim:ts=4 sw=4 noet

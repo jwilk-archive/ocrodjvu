@@ -3,7 +3,7 @@
 tmp_dir=`mktemp -d -t 'ocrodjvu-test.XXXXXX'`
 test_file="${1:?}"
 djvused_file="${test_file%.test[0-9]}.djvused"
-cp ../djvu/empty.djvu "$tmp_dir/djvu"
+cp ../common/empty.djvu "$tmp_dir/djvu"
 djvused -f "$djvused_file" -s "$tmp_dir/djvu"
 options=`head -1 "$test_file" | cut -d '#' -f 2`
 ( printf '#%s\n' "$options"; $djvu2hocr $options "$tmp_dir/djvu" | xmllint --format -) | diff -u $test_file -
