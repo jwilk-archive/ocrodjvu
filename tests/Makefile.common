@@ -9,9 +9,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
-hocr2djvused = ../hocr2djvused
-export hocr2djvused
-
 TESTS = $(wildcard *.test[0-9])
 TEST_STAMPS = $(TESTS:=.stamp)
 
