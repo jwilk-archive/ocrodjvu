@@ -1,0 +1,4 @@
+select 1
+set-txt
+(page 0 0 100 100 "eggs\007spam")
+.
