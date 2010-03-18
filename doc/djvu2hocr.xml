@@ -108,6 +108,15 @@
 </refsection>
 
 <refsection>
+    <title>Portability</title>
+    <para>
+        &p; uses a custom extension to hOCR to retain characters which cannot be directly represented in an HTML/XML
+        document. For example, control character BEL (^G, U+0007), is converted into the following HTML chunk:
+        <computeroutput><![CDATA[<span class="djvu_char" title="#x07"> </span>]]></computeroutput>
+    </para>
+</refsection>
+
+<refsection>
     <title>See also</title>
     <para>
         <citerefentry>
