@@ -5,8 +5,8 @@ include doc/*.txt
 include doc/*.xml
 include doc/changelog
 include ocrodjvu.py
-include tests/Makefile
-include tests/run-test
-include tests/*.html
-include tests/*.test[0-9]
-include tests/*.djvu
+recursive-include tests/ Makefile*
+recursive-include tests/ run-test
+recursive-include tests/ *.html
+recursive-include tests/ *.test[0-9]
+recursive-include tests/ *.djvu
