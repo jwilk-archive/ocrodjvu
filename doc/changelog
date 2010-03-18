@@ -1,6 +1,10 @@
 ocrodjvu (0.4.3) UNRELEASED; urgency=low
 
-  * 
+  * Don't crash on --version.
+    http://bugs.debian.org/573496
+  * Give more meaningful error messages on a malformed hOCR produced by
+    Cuneiform.
+    http://bugs.debian.org/572522
 
  -- Jakub Wilk <jwilk@jwilk.net>  Thu, 11 Mar 2010 23:12:55 +0100
 
