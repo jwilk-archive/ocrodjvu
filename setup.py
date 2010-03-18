@@ -40,7 +40,7 @@ setup(
     description = 'OCR for DjVu',
     long_description = __doc__.strip(),
     classifiers = classifiers,
-    url = 'http://jwilk.net/software/ocrodjvu.html',
+    url = 'http://jwilk.net/software/ocrodjvu',
     author = 'Jakub Wilk',
     author_email = 'jwilk@jwilk.net',
     packages = ['ocrodjvu'],
