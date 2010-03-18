@@ -4,4 +4,4 @@ MANIFEST
 build/
 dist/
 doc/*.1
-tests/*.stamp
+tests/*/*.stamp
