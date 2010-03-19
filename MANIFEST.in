@@ -8,5 +8,6 @@ include ocrodjvu.py
 recursive-include tests/ Makefile*
 recursive-include tests/ run-test
 recursive-include tests/ *.html
+recursive-include tests/ *.djvused
 recursive-include tests/ *.test[0-9]
 recursive-include tests/ *.djvu
