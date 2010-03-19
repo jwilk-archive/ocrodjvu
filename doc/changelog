@@ -1,4 +1,4 @@
-ocrodjvu (0.4.3) UNRELEASED; urgency=low
+ocrodjvu (0.4.3) unstable; urgency=low
 
   * Don't crash on --version.
     http://bugs.debian.org/573496
@@ -7,7 +7,7 @@ ocrodjvu (0.4.3) UNRELEASED; urgency=low
     http://bugs.debian.org/572522
   * Document how djvu2hocr deals with non-XML characters.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 11 Mar 2010 23:12:55 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 19 Mar 2010 01:22:54 +0100
 
 ocrodjvu (0.4.2) unstable; urgency=low
 
