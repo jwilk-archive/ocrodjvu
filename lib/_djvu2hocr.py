@@ -270,10 +270,11 @@ def main():
     options = ArgumentParser().parse_args()
     print >>sys.stderr, 'Converting %s:' % utils.smart_repr(options.path, system_encoding)
     if options.pages is None:
-        djvused = ipc.Subprocess([
-            'djvused', '-e', 'n',
-            os.path.abspath(options.path)
-        ], stdout=ipc.PIPE)
+        djvused = ipc.Subprocess(
+            ['djvused', '-e', 'n', os.path.abspath(options.path)],
+            stdout=ipc.PIPE,
+            env=None, # preserve locale settings
+        )
         try:
             n_pages = int(djvused.stdout.readline())
         finally:
@@ -281,10 +282,11 @@ def main():
         options.pages = xrange(1, n_pages + 1)
     page_iterator = iter(options.pages)
     sed_script = ''.join('select %d; size; print-txt; ' % n for n in options.pages)
-    djvused = ipc.Subprocess([
-        'djvused', '-e', sed_script,
-        os.path.abspath(options.path),
-    ], stdout=ipc.PIPE)
+    djvused = ipc.Subprocess(
+        ['djvused', '-e', sed_script, os.path.abspath(options.path)],
+        stdout=ipc.PIPE,
+        env=None, # preserve locale settings
+    )
     sys.stdout.write(hocr_header)
     while 1:
         try:
