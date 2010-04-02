@@ -1,11 +1,11 @@
-ocrodjvu (0.4.5) UNRELEASED; urgency=low
+ocrodjvu (0.4.4) unstable; urgency=low
 
   * Document that ocrodjvu honours TMPDIR environment variable.
     http://bugs.debian.org/575488
   * Don't remove temporary directory if ocrodjvu crashed.
     http://bugs.debian.org/575487
 
- -- Jakub Wilk <jwilk@debian.org>  Thu, 01 Apr 2010 23:23:40 +0200
+ -- Jakub Wilk <jwilk@debian.org>  Fri, 02 Apr 2010 12:00:11 +0200
 
 ocrodjvu (0.4.3) unstable; urgency=low
 
