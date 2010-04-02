@@ -103,11 +103,11 @@ class InPlaceSaver(Saver):
     in_place = True
 
     def save(self, document, pages, djvu_path, sed_file):
-        djvused = ipc.Subprocess([
-            'djvused', '-s', '-f',
-            os.path.abspath(sed_file.name),
-            os.path.abspath(djvu_path),
-        ], env=None, # preserve locale settings
+        sed_file_name = os.path.abspath(sed_file.name)
+        djvu_path = os.path.abspath(djvu_path)
+        djvused = ipc.Subprocess(
+            ['djvused', '-s', '-f', sed_file_name, djvu_path],
+            env=None, # preserve locale settings
         )
         djvused.wait()
 
