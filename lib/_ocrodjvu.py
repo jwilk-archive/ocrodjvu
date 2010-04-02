@@ -378,10 +378,10 @@ class Context(djvu.decode.Context):
         else:
             self._pixel_format = rgb_pixel_format
 
-    def _temp_file(self, name):
+    def _temp_file(self, name, auto_remove=True):
         path = os.path.join(self._temp_dir, name)
         file = open(path, 'w+b')
-        if not self._debug:
+        if not self._debug and auto_remove:
             file = tempfile._TemporaryFileWrapper(file, file.name)
         return file
 
@@ -456,7 +456,7 @@ class Context(djvu.decode.Context):
                 results[n] = result
                 condition.notify()
 
-    def process(self, path, pages=None):
+    def _process(self, path, pages=None):
         try:
             self._engine = self._options.engine()
         except errors.EngineNotFound, ex:
@@ -477,7 +477,7 @@ class Context(djvu.decode.Context):
         ]
         for thread in threads:
             thread.start()
-        sed_file = self._temp_file('ocrodjvu.djvused')
+        sed_file = self._temp_file('ocrodjvu.djvused', auto_remove=False)
         try:
             if self._options.clear_text:
                 sed_file.write('remove-txt\n')
@@ -494,6 +494,7 @@ class Context(djvu.decode.Context):
                         elif isinstance(result, Exception):
                             for thread in threads:
                                 thread.join()
+                            self._debug = True
                             sys.exit(1)
                         else:
                             break
@@ -514,6 +515,15 @@ class Context(djvu.decode.Context):
             document = None
         finally:
             sed_file.close()
+
+    def process(self, *args, **kwargs):
+        try:
+            self._process(*args, **kwargs)
+        except:
+            # The djvused script can be valuable and should not be lost in case
+            # of crash.
+            self._debug = True
+            raise
 
     def close(self):
         if self._debug:
