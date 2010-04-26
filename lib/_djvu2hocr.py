@@ -257,6 +257,8 @@ hocr_header = '''\
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="ocr-system" content="%(ocr_system)s" />
+  <meta name="ocr-capabilites" content="%(ocr_capabilities)s" />
   <title>DjVu hidden text layer</title>
 </head>
 <body>
@@ -287,7 +289,11 @@ def main():
         stdout=ipc.PIPE,
         env=None, # preserve locale settings
     )
-    sys.stdout.write(hocr_header)
+    sys.stdout.write(
+        hocr_header % dict(
+            ocr_system='djvu2hocr %s' % __version__,
+            ocr_capabilities=' '.join(hocr.djvu2hocr_capabilities)
+    ))
     while 1:
         try:
             n = page_iterator.next()

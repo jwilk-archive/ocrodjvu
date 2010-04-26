@@ -61,14 +61,17 @@ dict(
     span = const.TEXT_ZONE_CHARACTER,
 ).get
 
-djvu_zone_to_hocr = {
+_djvu_zone_to_hocr = {
     const.TEXT_ZONE_PAGE: ('div', 'ocr_page'),
     const.TEXT_ZONE_COLUMN: ('div', 'ocr_carea'),
     const.TEXT_ZONE_PARAGRAPH: ('p', 'ocr_par'),
     const.TEXT_ZONE_REGION: ('span', 'ocrx_block'),
     const.TEXT_ZONE_LINE: ('span', 'ocrx_line'),
     const.TEXT_ZONE_WORD: ('span', 'ocrx_word'),
-}.__getitem__
+}
+djvu2hocr_capabilities = list(sorted(cls for tag, cls in _djvu_zone_to_hocr.itervalues()))
+djvu_zone_to_hocr = _djvu_zone_to_hocr.__getitem__
+del _djvu_zone_to_hocr
 
 image_re = re.compile(
     r'''
