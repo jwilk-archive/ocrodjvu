@@ -59,14 +59,15 @@ def get_languages():
     raise error.UnknownLanguageList
 
 def has_language(language):
+    language = cuneiform_to_iso(language)
     if not _language_pattern.match(language):
         raise errors.InvalidLanguageId(language)
-    return cuneiform_to_iso(language) in get_languages()
+    return language in get_languages()
 
 def recognize(pbm_file, language):
     hocr_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu.', suffix='.html')
     worker = ipc.Subprocess(
-        ['cuneiform', '-l', language, '-f', 'hocr', '-o', hocr_file.name, pbm_file.name],
+        ['cuneiform', '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file.name, pbm_file.name],
         stdout=ipc.PIPE,
         env={}, # locale=POSIX
     )
