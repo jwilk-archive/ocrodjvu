@@ -294,6 +294,8 @@ def _replace_text(djvu_class, title, text, settings):
                 continue
             bbox = BBox()
             for k in xrange(i, j):
+                if settings.cuneiform and coordinates[k] == (-1, -1, -1, -1):
+                    raise errors.MalformedHocr("missing bbox for non-whitespace character")
                 bbox.update(BBox(*coordinates[k]))
             last_word = Zone(type=const.TEXT_ZONE_WORD, bbox=bbox)
             words += last_word,
@@ -341,6 +343,8 @@ def _rotate(obj, rotation, xform=None):
 
 def _scan(node, buffer, parent_bbox, settings):
     def look_down(buffer, parent_bbox):
+        if node.text and node.text.strip():
+            buffer += node.text,
         for child in node.iterchildren():
             _scan(child, buffer, parent_bbox, settings)
             if child.tail:
@@ -348,8 +352,6 @@ def _scan(node, buffer, parent_bbox, settings):
                     buffer += child.tail,
                 else:
                     buffer += Space(),
-        if node.text and node.text.strip():
-            buffer += node.text,
     if not isinstance(node.tag, basestring):
         return
     if settings.cuneiform and settings.cuneiform <= (0, 8):
