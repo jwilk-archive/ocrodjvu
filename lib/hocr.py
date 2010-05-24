@@ -405,7 +405,7 @@ def _scan(node, buffer, parent_bbox, settings):
             bboxes_node = node.find('span[@class="ocr_cinfo"]')
             if bboxes_node is not None and len(bboxes_node) == 0 and bboxes_node.text is None:
                 title = bboxes_node.get('title') or ''
-        result[-1:] = _replace_text(djvu_class, title, result[-1], settings)
+        result[:] = _replace_text(djvu_class, title, ''.join(result), settings)
     elif settings.cuneiform and settings.cuneiform <= (0, 8) and djvu_class is const.TEXT_ZONE_PARAGRAPH:
         result[:] = _replace_cuneiform08_paragraph(result[:], settings)
     if not bbox and not len(node):

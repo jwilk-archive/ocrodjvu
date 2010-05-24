@@ -3,8 +3,10 @@ ocrodjvu (0.4.5) UNRELEASED; urgency=low
   * djvu2hocr: add ocr-system and ocr-capabilities meta information.
   * Fix handling of ‘deu’ and ‘rus-eng’ languages. Thanks to Kyrill Detinov
     for the bug report.
+  * Properly handle hOCR with inline formatting. Thanks to Kyrill Detinov for
+    the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 24 May 2010 09:57:32 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 24 May 2010 19:52:29 +0200
 
 ocrodjvu (0.4.4) unstable; urgency=low
 
