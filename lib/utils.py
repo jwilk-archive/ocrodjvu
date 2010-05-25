@@ -61,4 +61,28 @@ def smart_repr(s, encoding=None):
         return repr(s)
     return "'%s'" % _special_chars_replace(_special_chars_escape, u)
 
+def sanitize_utf8(text):
+    r'''
+    Replace invalid UTF-8 sequences and control characters (except CR, LF, TAB
+    and space) with Unicode replacement characters.
+
+    >>> s = ''.join(map(chr, xrange(32)))
+    >>> sanitize_utf8(s).decode('UTF-8')
+    u'\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\t\n\ufffd\ufffd\r\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd'
+
+    >>> s = 'The quick brown fox jumps over the lazy dog'
+    >>> sanitize_utf8(s) == s
+    True
+
+    >>> s = 'Je\xc5\xbcu kl\xc4\x85tw, sp\xc5\x82\xc3\xb3d\xc5\xba Finom cz\xc4\x99\xc5\x9b\xc4\x87 gry ha\xc5\x84b!'
+    >>> sanitize_utf8(s) == s
+    True
+    '''
+    text = text.decode('UTF-8', 'replace')
+    for ch in map(unichr, xrange(32)):
+        if ch in u'\n\r\t':
+            continue
+        text = text.replace(ch, u'\N{REPLACEMENT CHARACTER}')
+    return text.encode('UTF-8')
+
 # vim:ts=4 sw=4 et
