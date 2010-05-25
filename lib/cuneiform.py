@@ -14,9 +14,11 @@
 import contextlib
 import re
 import tempfile
+from cStringIO import StringIO
 
 from . import errors
 from . import ipc
+from . import utils
 
 _language_pattern = re.compile('^[a-z]{3}(-[a-z]+)?$')
 _language_info_pattern = re.compile(r"^Supported languages: (.*)[.]$")
@@ -72,6 +74,11 @@ def recognize(pbm_file, language):
         env={}, # locale=POSIX
     )
     worker.wait()
-    return hocr_file
+    # Sometimes Cuneiform returns files with broken encoding or with control
+    # characters: https://bugs.launchpad.net/cuneiform-linux/+bug/585418
+    # Let's fix it.
+    contents = hocr_file.read()
+    contents = utils.sanitize_utf8(contents)
+    return contextlib.closing(StringIO(contents))
 
 # vim:ts=4 sw=4 et
