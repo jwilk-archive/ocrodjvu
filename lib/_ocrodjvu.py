@@ -107,7 +107,7 @@ class InPlaceSaver(Saver):
         djvu_path = os.path.abspath(djvu_path)
         djvused = ipc.Subprocess(
             ['djvused', '-s', '-f', sed_file_name, djvu_path],
-            env=None, # preserve locale settings
+            env=None,  # preserve locale settings
         )
         djvused.wait()
 
@@ -139,7 +139,7 @@ class Ocropus(OcrEngine):
                 ocropus = ipc.Subprocess(['ocroscript', script_name],
                     stdout=ipc.PIPE,
                     stderr=ipc.PIPE,
-                    env={}, # locale=POSIX
+                    env={},  # locale=POSIX
                 )
             except OSError:
                 raise errors.EngineNotFound(self.name)
@@ -182,7 +182,7 @@ class Ocropus(OcrEngine):
             yield pbm_file.name
         ocropus = ipc.Subprocess(list(get_command_line()),
             stdout=ipc.PIPE,
-            env=dict(tesslanguage=language) # locale=POSIX
+            env=dict(tesslanguage=language)  # locale=POSIX
         )
         try:
             yield ocropus.stdout
@@ -398,9 +398,9 @@ class Context(djvu.decode.Context):
         pfile = self._temp_file('%06d.pnm' % page.n)
         try:
             if self._pixel_format.bpp == 1:
-                pfile.write('P4 %d %d\n' % size) # PBM header
+                pfile.write('P4 %d %d\n' % size)  # PBM header
             else:
-                pfile.write('P6 %d %d 255\n' % size) # PPM header
+                pfile.write('P6 %d %d 255\n' % size)  # PPM header
             data = page_job.render(
                 self._options.render_layers,
                 rect, rect,

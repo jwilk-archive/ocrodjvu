@@ -26,7 +26,7 @@ def get_tesseract_data_directory():
         tesseract = ipc.Subprocess(['tesseract', '', '', '-l', ''],
             stdout=ipc.PIPE,
             stderr=ipc.PIPE,
-            env={}, # locale=POSIX
+            env={},  # locale=POSIX
         )
     except OSError:
         raise errors.UnknownLanguageList

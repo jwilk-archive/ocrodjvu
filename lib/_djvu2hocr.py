@@ -275,7 +275,7 @@ def main():
         djvused = ipc.Subprocess(
             ['djvused', '-e', 'n', os.path.abspath(options.path)],
             stdout=ipc.PIPE,
-            env=None, # preserve locale settings
+            env=None,  # preserve locale settings
         )
         try:
             n_pages = int(djvused.stdout.readline())
@@ -287,7 +287,7 @@ def main():
     djvused = ipc.Subprocess(
         ['djvused', '-e', sed_script, os.path.abspath(options.path)],
         stdout=ipc.PIPE,
-        env=None, # preserve locale settings
+        env=None,  # preserve locale settings
     )
     sys.stdout.write(
         hocr_header % dict(

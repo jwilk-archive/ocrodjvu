@@ -96,22 +96,22 @@ def get_tiff_size(stream):
     offset, = struct.unpack(endian + 'L', stream.read(4))
     stream.seek(offset, 0)
     n_tags, = struct.unpack(endian + 'H', stream.read(2))
-    
+
     tag = type = 0
     x = y = None
     for i in xrange(n_tags):
         ifd = stream.read(12)
         tag, = struct.unpack(endian + 'H', ifd[:2])
-        type, = struct.unpack(endian + 'H', ifd[2 : 2 + 2])
+        type, = struct.unpack(endian + 'H', ifd[2:4])
         if type > len(pack_spec) or pack_spec[type] is None:
             continue
         if tag == 0x0100:
-            x, = struct.unpack(pack_spec[type], ifd[8 : 4 + 8])
+            x, = struct.unpack(pack_spec[type], ifd[8:12])
         elif tag == 0x0101:
-            y, = struct.unpack(pack_spec[type], ifd[8 : 4 + 8])
+            y, = struct.unpack(pack_spec[type], ifd[8:12])
         if x and y:
             break
-    
+
     errors = []
     if not x:
         errors += 'Could not determine image width.',

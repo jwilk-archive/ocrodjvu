@@ -25,7 +25,7 @@ _language_info_pattern = re.compile(r"^Supported languages: (.*)[.]$")
 
 _cuneiform_to_iso = dict(
     ger='deu',
-    ruseng='rus-eng', # mixed Russian-English
+    ruseng='rus-eng',  # mixed Russian-English
 )
 
 _iso_to_cuneiform = dict((y, x) for x, y in _cuneiform_to_iso.iteritems())
@@ -41,7 +41,7 @@ def get_languages():
         cuneiform = ipc.Subprocess(['cuneiform', '-l'],
             stdout=ipc.PIPE,
             stderr=ipc.PIPE,
-            env={}, # locale=POSIX
+            env={},  # locale=POSIX
         )
     except OSError:
         raise errors.UnknownLanguageList
@@ -71,7 +71,7 @@ def recognize(pbm_file, language):
     worker = ipc.Subprocess(
         ['cuneiform', '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file.name, pbm_file.name],
         stdout=ipc.PIPE,
-        env={}, # locale=POSIX
+        env={},  # locale=POSIX
     )
     worker.wait()
     # Sometimes Cuneiform returns files with broken encoding or with control

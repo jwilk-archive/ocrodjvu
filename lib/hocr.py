@@ -44,21 +44,21 @@ TEXT_DETAILS_CHARACTER = const.TEXT_ZONE_CHARACTER
 
 hocr_class_to_djvu = \
 dict(
-    ocr_page = const.TEXT_ZONE_PAGE,
-    ocr_column = const.TEXT_ZONE_COLUMN,
-    ocr_carea = const.TEXT_ZONE_COLUMN,
-    ocr_par = const.TEXT_ZONE_PARAGRAPH,
-    ocr_line = const.TEXT_ZONE_LINE,
-    ocrx_block = const.TEXT_ZONE_REGION,
-    ocrx_line = const.TEXT_ZONE_LINE,
-    ocrx_word = const.TEXT_ZONE_WORD
+    ocr_page=const.TEXT_ZONE_PAGE,
+    ocr_column=const.TEXT_ZONE_COLUMN,
+    ocr_carea=const.TEXT_ZONE_COLUMN,
+    ocr_par=const.TEXT_ZONE_PARAGRAPH,
+    ocr_line=const.TEXT_ZONE_LINE,
+    ocrx_block=const.TEXT_ZONE_REGION,
+    ocrx_line=const.TEXT_ZONE_LINE,
+    ocrx_word=const.TEXT_ZONE_WORD
 ).get
 
 cuneiform_tag_to_djvu = \
 dict(
-    body = const.TEXT_ZONE_PAGE,
-    p = const.TEXT_ZONE_PARAGRAPH,
-    span = const.TEXT_ZONE_CHARACTER,
+    body=const.TEXT_ZONE_PAGE,
+    p=const.TEXT_ZONE_PARAGRAPH,
+    span=const.TEXT_ZONE_CHARACTER,
 ).get
 
 _djvu_zone_to_hocr = {
@@ -98,18 +98,22 @@ class BBox(object):
 
     def __init__(self, x0=None, y0=None, x1=None, y1=None):
         self._coordinates = [x0, y0, x1, y1]
-    
-    @property
-    def x0(self): return self[0]
 
     @property
-    def y0(self): return self[1]
+    def x0(self):
+        return self[0]
 
     @property
-    def x1(self): return self[2]
+    def y0(self):
+        return self[1]
 
     @property
-    def y1(self): return self[3]
+    def x1(self):
+        return self[2]
+
+    @property
+    def y1(self):
+        return self[3]
 
     def __getitem__(self, item):
         return self._coordinates[item]
@@ -119,7 +123,7 @@ class BBox(object):
             if value is None:
                 return False
         return True
-    
+
     def __repr__(self):
         return '%s(%r, %r, %r, %r)' % ((self.__class__.__name__,) + tuple(self._coordinates))
 
@@ -185,7 +189,7 @@ class Zone(object):
             self._bbox = tuple(bbox)
 
     def get_bbox(self):
-        return self._bbox 
+        return self._bbox
 
     bbox = property(get_bbox, set_bbox)
 
@@ -275,7 +279,7 @@ def _replace_text(djvu_class, title, text, settings):
     coordinates = (int(x) for x in m.group(1).replace(',', ' ').split())
     coordinates = zip(coordinates, coordinates, coordinates, coordinates)
     if len(coordinates) == len(text):
-        pass # OK
+        pass  # OK
     else:
         if not embedded_eol and len(coordinates) == len(text) + 1:
             # OCRopus produces weird hOCR output if line ends with a hyphen
