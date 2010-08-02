@@ -16,6 +16,7 @@ import locale
 import os
 import re
 import sys
+import tempfile
 
 from . import hocr
 from . import ipc
@@ -283,9 +284,12 @@ def main():
             djvused.wait()
         options.pages = xrange(1, n_pages + 1)
     page_iterator = iter(options.pages)
-    sed_script = ''.join('select %d; size; print-txt; ' % n for n in options.pages)
+    sed_script = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='.djvused')
+    for n in options.pages:
+        print >>sed_script, 'select %d; size; print-txt' % n
+    sed_script.flush()
     djvused = ipc.Subprocess(
-        ['djvused', '-e', sed_script, os.path.abspath(options.path)],
+        ['djvused', '-f', sed_script.name, os.path.abspath(options.path)],
         stdout=ipc.PIPE,
         env=None,  # preserve locale settings
     )
