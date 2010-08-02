@@ -138,7 +138,15 @@ class BBox(object):
 
 def get_icu():
     try:
-        import PyICU
+        # For PyICU ≥ 1.0
+        import icu
+        return icu
+    except ImportError:
+        pass
+    try:
+        # For PyICU < 1.0
+        import PyICU as icu
+        return icu
     except ImportError, ex:
         ex.args = '%s; please install the PyICU package <http://pyicu.osafoundation.org/>' % str(ex),
         raise

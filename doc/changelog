@@ -1,8 +1,9 @@
 ocrodjvu (0.4.6) UNRELEASED; urgency=low
 
-  * 
+  * Avoid deprecation warnings with PyICU ≥ 1.0.
+    http://bugs.debian.org/589027
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 24 May 2010 21:52:18 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 02 Aug 2010 17:59:52 +0200
 
 ocrodjvu (0.4.5) unstable; urgency=low
 
