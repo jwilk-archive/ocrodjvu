@@ -1,3 +1,9 @@
+ocrodjvu (0.4.7) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 03 Aug 2010 20:52:28 +0200
+
 ocrodjvu (0.4.6) unstable; urgency=low
 
   * Avoid deprecation warnings with PyICU ≥ 1.0.
