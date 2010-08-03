@@ -6,6 +6,8 @@ ocrodjvu (0.4.7) UNRELEASED; urgency=low
 
 ocrodjvu (0.4.6) unstable; urgency=low
 
+  * Implement work around for Cuneiform returning files with control
+    characters. Thanks to Kyrill Detinov for the bug report.
   * Avoid deprecation warnings with PyICU ≥ 1.0.
     http://bugs.debian.org/589027
   * djvu2hocr: don't crash on very long documents.
