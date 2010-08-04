@@ -150,7 +150,6 @@ def get_icu():
     except ImportError, ex:
         ex.args = '%s; please install the PyICU package <http://pyicu.osafoundation.org/>' % str(ex),
         raise
-    return PyICU
 
 def simple_word_break_iterator(text):
     '''
