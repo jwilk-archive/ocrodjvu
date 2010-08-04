@@ -18,7 +18,6 @@ import contextlib
 import inspect
 import locale
 import os.path
-import re
 import shutil
 import sys
 import tempfile
