@@ -17,7 +17,6 @@ Recognize image file formats and size based on their first few bytes.
 # Roughly based on Python code provided by Jigloo <phus@live.com>:
 # <http://mail.python.org/pipermail/python-list/2007-June/445432.html>.
 
-from cStringIO import StringIO
 import struct
 
 __all__ = 'UnknownSize', 'get_image_size'
