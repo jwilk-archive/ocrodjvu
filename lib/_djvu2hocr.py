@@ -11,7 +11,6 @@
 # General Public License for more details.
 
 import argparse
-import itertools
 import locale
 import os
 import re
