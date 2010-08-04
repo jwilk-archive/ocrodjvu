@@ -175,7 +175,6 @@ def word_break_iterator(text, locale=None):
         return simple_word_break_iterator(text)
     icu = get_icu()
     break_iterator = icu.BreakIterator.createWordInstance(locale)
-    icu_text = icu.UnicodeString(text)
     break_iterator.setText(text)
     return break_iterator
 
