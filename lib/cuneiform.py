@@ -54,7 +54,7 @@ def get_languages():
     finally:
         try:
             cuneiform.wait()
-        except ipc.CalledProcessError, ex:
+        except ipc.CalledProcessError:
             pass
         else:
             raise error.UnknownLanguageList
