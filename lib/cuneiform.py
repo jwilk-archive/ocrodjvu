@@ -57,8 +57,8 @@ def get_languages():
         except ipc.CalledProcessError:
             pass
         else:
-            raise error.UnknownLanguageList
-    raise error.UnknownLanguageList
+            raise errors.UnknownLanguageList
+    raise errors.UnknownLanguageList
 
 def has_language(language):
     language = cuneiform_to_iso(language)
