@@ -41,7 +41,7 @@ def get_tesseract_data_directory():
     finally:
         try:
             tesseract.wait()
-        except ipc.CalledProcessError, ex:
+        except ipc.CalledProcessError:
             pass
         else:
             raise errors.UnknownLanguageList
