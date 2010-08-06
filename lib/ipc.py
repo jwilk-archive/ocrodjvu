@@ -17,14 +17,7 @@ import subprocess
 
 PIPE = subprocess.PIPE
 
-try:
-    from subprocess import CalledProcessError
-except ImportError:
-    class CalledProcessError(Exception):
-        def __init__(self, return_code, command):
-            Exception.__init__(self, command, return_code)
-        def __str__(self):
-            return 'Command %r returned non-zero exit status %d' % self.args
+from subprocess import CalledProcessError
 
 _signame_pattern = re.compile('^SIG[A-Z0-9]*$')
 
