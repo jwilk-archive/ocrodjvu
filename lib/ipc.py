@@ -10,6 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+import os
 import re
 import signal
 import subprocess
@@ -47,6 +48,8 @@ class Subprocess(subprocess.Popen):
 
     def __init__(self, *args, **kwargs):
         subprocess.Popen.__init__(self, *args, **kwargs)
+        if os.name == 'posix':
+            kwargs.update(close_fds=True)
         try:
             self.__command = kwargs['args'][0]
         except KeyError:
