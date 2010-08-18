@@ -19,15 +19,28 @@ PIPE = subprocess.PIPE
 
 from subprocess import CalledProcessError
 
-_signame_pattern = re.compile('^SIG[A-Z0-9]*$')
-
-class CalledProcessInterrupted(CalledProcessError):
-
-    _signal_names = dict(
-        (getattr(signal, name), name)
+def get_signal_names():
+    _signame_pattern = re.compile('^SIG[A-Z0-9]*$')
+    data = dict(
+        (name, getattr(signal, name))
         for name in dir(signal)
         if _signame_pattern.match(name)
     )
+    try:
+        if data['SIGABRT'] == data['SIGIOT']:
+            del data['SIGIOT']
+    except KeyError:
+        pass
+    try:
+        if data['SIGCHLD'] == data['SIGCLD']:
+            del data['SIGCLD']
+    except KeyError:
+        pass
+    return dict((no, name) for name, no in data.iteritems())
+
+class CalledProcessInterrupted(CalledProcessError):
+
+    _signal_names = get_signal_names()
 
     def __init__(self, signal_id, command):
         Exception.__init__(self, command, signal_id)
@@ -35,7 +48,7 @@ class CalledProcessInterrupted(CalledProcessError):
         signal_name = self._signal_names.get(self.args[1], self.args[1])
         return 'Command %r was interrputed by signal %s' % (self.args[0], signal_name)
 
-del _signame_pattern
+del get_signal_names
 
 class Subprocess(subprocess.Popen):
 
