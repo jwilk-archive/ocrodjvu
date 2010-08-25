@@ -53,6 +53,19 @@ del get_signal_names
 class Subprocess(subprocess.Popen):
 
     def __init__(self, *args, **kwargs):
+        env_override = kwargs.pop('env', {})
+        if env_override.get('LC_ALL', '') is None:
+            # Reset all locale variables
+            env = dict(
+                (k, v)
+                for k, v in os.environ.iteritems()
+                if not (k.startswith('LC_') or k in ('LANG', 'LANGUAGES'))
+            )
+            del env_override['LC_ALL']
+        else:
+            env = dict(os.environ)
+        env.update(env_override)
+        kwargs['env'] = env
         subprocess.Popen.__init__(self, *args, **kwargs)
         if os.name == 'posix':
             kwargs.update(close_fds=True)
