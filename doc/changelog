@@ -1,9 +1,9 @@
-ocrodjvu (0.4.7) UNRELEASED; urgency=low
+ocrodjvu (0.4.7) unstable; urgency=low
 
   * Preserve as much environment as possible when calling external programs.
     Thanks to Heinrich Schwietering for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 25 Aug 2010 19:59:53 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 25 Aug 2010 20:27:17 +0200
 
 ocrodjvu (0.4.6) unstable; urgency=low
 
