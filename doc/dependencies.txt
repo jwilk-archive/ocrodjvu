@@ -1,6 +1,8 @@
 Dependencies
 ============
 
+* Python ≥ 2.5
+
 * OCRopus_ ≥ 0.2 (tested with 0.2 and 0.3.1) —
   document analysis and OCR system
 
