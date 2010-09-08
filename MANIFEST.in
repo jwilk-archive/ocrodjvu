@@ -1,3 +1,4 @@
+include MANIFEST.in
 include COPYING
 include doc/Makefile
 include doc/*.1
