@@ -1,3 +1,9 @@
+ocrodjvu (0.4.8) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 08 Sep 2010 22:43:55 +0200
+
 ocrodjvu (0.4.7) unstable; urgency=low
 
   * Preserve as much environment as possible when calling external programs.
