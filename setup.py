@@ -15,9 +15,6 @@
 *ocrodjvu* is a wrapper for OCR systems that allows you to perform OCR on `DjVu <http://djvu.org/>`_ files.
 '''
 
-import os
-os.putenv('TAR_OPTIONS', '--owner root --group root --mode a+rX')
-
 classifiers = '''\
 Development Status :: 4 - Beta
 Environment :: Console
@@ -30,10 +27,13 @@ Topic :: Text Processing
 Topic :: Multimedia :: Graphics\
 '''.split('\n')
 
-from distutils.core import setup
+import distutils.core
+import os
+
 from lib import version
 
-setup(
+os.putenv('TAR_OPTIONS', '--owner root --group root --mode a+rX')
+distutils.core.setup(
     name = 'ocrodjvu',
     version = version.__version__,
     license = 'GNU GPL 2',
