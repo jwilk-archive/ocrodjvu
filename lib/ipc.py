@@ -19,6 +19,9 @@ PIPE = subprocess.PIPE
 
 from subprocess import CalledProcessError
 
+# Protect from scanadf[0] and possibly other brain-dead software that set
+# SIGCHLD to SIG_IGN.
+# [0] http://bugs.debian.org/596232
 signal.signal(signal.SIGCHLD, signal.SIG_DFL)
 
 def get_signal_names():
