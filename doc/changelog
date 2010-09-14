@@ -1,4 +1,4 @@
-ocrodjvu (0.5.0) UNRELEASED; urgency=low
+ocrodjvu (0.5.0) unstable; urgency=low
 
   * Add support for the Ocrad OCR engine.
   * Add support for the GOCR engine.
@@ -11,7 +11,7 @@ ocrodjvu (0.5.0) UNRELEASED; urgency=low
   * Let the setup.py script install manual pages. Thanks to Kyrill Detinov and
     Heinrich Schwietering for bug reports.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 14 Sep 2010 19:35:28 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 14 Sep 2010 23:00:35 +0200
 
 ocrodjvu (0.4.7) unstable; urgency=low
 
