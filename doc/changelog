@@ -1,8 +1,8 @@
-ocrodjvu (0.4.8) UNRELEASED; urgency=low
+ocrodjvu (0.5.0) UNRELEASED; urgency=low
 
-  * 
+  * Add support for the Ocrad OCR engine.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 08 Sep 2010 22:43:55 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 14 Sep 2010 15:16:11 +0200
 
 ocrodjvu (0.4.7) unstable; urgency=low
 
