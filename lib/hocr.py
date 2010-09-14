@@ -35,6 +35,7 @@ except ImportError, ex:
 
 from . import image_size
 from . import errors
+from . import unicode_support
 
 __all__ = 'extract_text', 'TEXT_DETAILS_LINE', 'TEXT_DETAILS_WORD', 'TEXT_DETAILS_CHARACTER'
 
@@ -136,48 +137,6 @@ class BBox(object):
             elif i > 1 and bbox[i] is not None and self[i] < bbox[i]:
                 self._coordinates[i] = bbox[i]
 
-def get_icu():
-    try:
-        # For PyICU ≥ 1.0
-        import icu
-        return icu
-    except ImportError:
-        pass
-    try:
-        # For PyICU < 1.0
-        import PyICU as icu
-        return icu
-    except ImportError, ex:
-        ex.args = '%s; please install the PyICU package <http://pyicu.osafoundation.org/>' % str(ex),
-        raise
-
-def simple_word_break_iterator(text):
-    '''
-    Create an instance of simple space-to-space word break interator.
-    '''
-    if not text:
-        return
-    space = text[0].isspace()
-    for n, ch in enumerate(text):
-        if space != ch.isspace():
-            yield n
-            space = not space
-    yield len(text)
-
-def word_break_iterator(text, locale=None):
-    '''
-    Create an instance of word break interator.
-
-    text: unicode string
-    locale: ICU locale or None
-    '''
-    if locale is None:
-        return simple_word_break_iterator(text)
-    icu = get_icu()
-    break_iterator = icu.BreakIterator.createWordInstance(locale)
-    break_iterator.setText(text)
-    return break_iterator
-
 class Space(object):
     pass
 
@@ -245,7 +204,7 @@ def _replace_cuneiform08_paragraph(paragraph, settings):
         return [text]
     if len(text) != len(paragraph):
         raise errors.MalformedHocr("number of bboxes doesn't match text length")
-    break_iterator = word_break_iterator(text, locale=settings.uax29)
+    break_iterator = unicode_support.word_break_iterator(text, locale=settings.uax29)
     i = 0
     words = Zone(type=const.TEXT_ZONE_PARAGRAPH)
     paragraph_bbox = BBox()
@@ -295,7 +254,7 @@ def _replace_text(djvu_class, title, text, settings):
     if djvu_class > const.TEXT_ZONE_WORD:
         # Split words
         words = []
-        break_iterator = word_break_iterator(text, locale=settings.uax29)
+        break_iterator = unicode_support.word_break_iterator(text, locale=settings.uax29)
         i = 0
         for j in break_iterator:
             subtext = text[i:j]
@@ -444,7 +403,7 @@ class ExtractSettings(object):
         self.rotation = rotation
         self.details = details
         if uax29 is not None:
-            icu = get_icu()
+            icu = unicode_support.get_icu()
             if uax29 is True:
                 uax29 = icu.Locale()
             else:

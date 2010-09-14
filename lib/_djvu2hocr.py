@@ -19,6 +19,7 @@ import tempfile
 
 from . import hocr
 from . import ipc
+from . import unicode_support
 from . import utils
 from . import version
 
@@ -51,7 +52,7 @@ class ArgumentParser(argparse.ArgumentParser):
         except (TypeError, ValueError):
             self.error('Unable to parse page numbers')
         if options.word_segmentation == 'uax29':
-            options.icu = icu = hocr.get_icu()
+            options.icu = icu = unicode_support.get_icu()
             options.locale = icu.Locale(options.language)
         else:
             options.icu = None
@@ -142,7 +143,7 @@ def break_chars(char_zone_list, options):
             bbox_list += subbox,
         text += char_text,
     text = ''.join(text)
-    break_iterator = hocr.word_break_iterator(text, options.locale)
+    break_iterator = unicode_support.word_break_iterator(text, options.locale)
     element = None
     for j in break_iterator:
         subtext = text[i:j]
