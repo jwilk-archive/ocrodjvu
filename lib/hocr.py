@@ -30,7 +30,7 @@ try:
     from djvu import const
     from djvu import decode
 except ImportError, ex:
-    ex.args = '%s; please install the python-djvulibre package <http://jwilk.net/software/python-djvulibre.html>' % str(ex),
+    ex.args = '%s; please install the python-djvulibre package <http://jwilk.net/software/python-djvulibre>' % str(ex),
     raise
 
 from . import image_size
