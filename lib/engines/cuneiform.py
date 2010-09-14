@@ -92,8 +92,10 @@ class Engine(object):
         hocr_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu.', suffix='.html')
         worker = ipc.Subprocess(
             ['cuneiform', '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file.name, pbm_file.name],
+            stdin=ipc.PIPE,
             stdout=ipc.PIPE,
         )
+        worker.stdin.close()
         worker.wait()
         # Sometimes Cuneiform returns files with broken encoding or with control
         # characters: https://bugs.launchpad.net/cuneiform-linux/+bug/585418
