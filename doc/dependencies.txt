@@ -14,7 +14,7 @@ Dependencies
   + Ocrad_ (tested with 0.17) —
     document analysis and OCR system
 
-  + gocr_ ≥ 0.40 (tested with 0.48) —
+  + GOCR_ ≥ 0.40 (tested with 0.48) —
     document analysis and OCR system
 
 * DjVuLibre_ ≥ 3.5.21 —
@@ -38,7 +38,7 @@ Dependencies
    http://launchpad.net/cuneiform-linux
 .. _Ocrad:
    http://www.gnu.org/software/ocrad/
-.. _gocr:
+.. _GOCR:
    http://jocr.sourceforge.net/
 .. _DjVuLibre:
    http://djvu.sourceforge.net/
