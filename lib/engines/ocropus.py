@@ -21,7 +21,8 @@ from .. import ipc
 class Engine(object):
 
     name = 'ocropus'
-    format = 'html'
+    image_format = 'ppm'
+    output_format = 'html'
     has_charboxes = False
     script_name = None
 

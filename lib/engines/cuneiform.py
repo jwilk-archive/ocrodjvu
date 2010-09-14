@@ -63,7 +63,8 @@ def get_languages():
 class Engine(object):
 
     name = 'cuneiform'
-    format = 'html'
+    image_format = 'bmp'
+    output_format = 'html'
 
     def __init__(self):
         try:

@@ -2,6 +2,7 @@ ocrodjvu (0.5.0) UNRELEASED; urgency=low
 
   * Add support for the Ocrad OCR engine.
   * Add support for the GOCR engine.
+  * Cuneiform is no longer required to be linked with ImageMagick.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Tue, 14 Sep 2010 15:17:21 +0200
 

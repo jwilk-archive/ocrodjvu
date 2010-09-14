@@ -161,7 +161,8 @@ def scan(stream, settings):
 class Engine(object):
 
     name = 'ocrad'
-    format = 'orf'
+    image_format = 'ppm'
+    output_format = 'orf'
 
     def __init__(self):
         try:

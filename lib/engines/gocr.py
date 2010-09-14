@@ -181,7 +181,8 @@ def scan(stream, settings):
 class Engine(object):
 
     name = 'gocr'
-    format = 'gocr.xml'
+    image_format = 'ppm'
+    output_format = 'gocr.xml'
 
     def __init__(self):
         check_version()

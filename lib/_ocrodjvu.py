@@ -18,6 +18,7 @@ import inspect
 import locale
 import os.path
 import shutil
+import struct
 import sys
 import tempfile
 import threading
@@ -279,6 +280,8 @@ class Context(djvu.decode.Context):
             self._pixel_format = bitonal_pixel_format
         else:
             self._pixel_format = rgb_pixel_format
+        if self._options.engine.image_format == 'bmp':
+            self._pixel_format.rows_top_to_bottom = 0
 
     def _temp_file(self, name, auto_remove=True):
         path = os.path.join(self._temp_dir, name)
@@ -292,29 +295,74 @@ class Context(djvu.decode.Context):
             print >>sys.stderr, message
             sys.exit(1)
 
+    @contextlib.contextmanager
+    def get_output_image(self, nth, page_job):
+        size = page_job.size
+        rect = (0, 0) + size
+        output_format = self._engine.image_format
+        file = self._temp_file('%06d.%s' % (nth, output_format))
+        try:
+            if output_format == 'ppm':
+                if self._pixel_format.bpp == 1:
+                    file.write('P4 %d %d\n' % size)  # PBM header
+                else:
+                    file.write('P6 %d %d 255\n' % size)  # PPM header
+                data = page_job.render(
+                    self._options.render_layers,
+                    rect, rect,
+                    self._pixel_format
+                )
+                file.write(data)
+                file.flush()
+            elif output_format == 'bmp':
+                dpm = int(page_job.dpi * 39.37 + 0.5)
+                data = page_job.render(
+                    self._options.render_layers,
+                    rect, rect,
+                    self._pixel_format,
+                    row_alignment=4,
+                )
+                n_palette_colors = 2 * (self._pixel_format.bpp == 1)
+                headers_size = 54 + 4 * n_palette_colors
+                file.write(struct.pack('<ccIHHI',
+                    'B', 'M', # magic
+                    len(data) + headers_size, # whole file size
+                    0, 0, # identification magic
+                    headers_size # offset to pixel data
+                ))
+                file.write(struct.pack('<IIIHHIIIIII',
+                    40, # size of this header
+                    size[0], size[1], # image size in pixels
+                    1, # number of color planes
+                    self._pixel_format.bpp, # number of bits per pixel
+                    0, # compression method
+                    len(data), # size of pixel data
+                    dpm, dpm, # resolution in pixels/meter
+                    n_palette_colors, # number of colors in the color pallete
+                    n_palette_colors # number of important colors
+                ))
+                if self._pixel_format.bpp == 1:
+                    # palette:
+                    file.write(struct.pack('<BBBB', 0, 0, 0, 0))
+                    file.write(struct.pack('<BBBB', 0xff, 0xff, 0xff, 0))
+                file.write(data)
+                file.flush()
+            else:
+                raise NotImplementedError('Unknown image format: %s' % output_format)
+            yield file
+        finally:
+            file.close()
+
     def process_page(self, page):
         print >>sys.stderr, '- Page #%d' % (page.n + 1)
         page_job = page.decode(wait=True)
         size = page_job.size
-        rect = (0, 0) + size
-        pfile = self._temp_file('%06d.pnm' % page.n)
-        try:
-            if self._pixel_format.bpp == 1:
-                pfile.write('P4 %d %d\n' % size)  # PBM header
-            else:
-                pfile.write('P6 %d %d 255\n' % size)  # PPM header
-            data = page_job.render(
-                self._options.render_layers,
-                rect, rect,
-                self._pixel_format
-            )
-            pfile.write(data)
-            pfile.flush()
+        with self.get_output_image(page.n, page_job) as pfile:
             result_file = None
             with self._engine.recognize(pfile, language=self._options.language, details=self._options.details) as result:
                 try:
                     if self._debug:
-                        result_file = self._temp_file('%06d.%s' % (page.n, self._engine.format))
+                        result_file = self._temp_file('%06d.%s' % (page.n, self._engine.output_format))
                         result_data = result.read()
                         result_file.write(result_data)
                         result_file.seek(0)
@@ -330,8 +378,6 @@ class Context(djvu.decode.Context):
                 finally:
                     if result_file is not None:
                         result_file.close()
-        finally:
-            pfile.close()
 
     def page_thread(self, pages, results, condition):
         for page in pages:
