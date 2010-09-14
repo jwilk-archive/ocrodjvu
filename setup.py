@@ -43,8 +43,8 @@ distutils.core.setup(
     url = 'http://jwilk.net/software/ocrodjvu',
     author = 'Jakub Wilk',
     author_email = 'jwilk@jwilk.net',
-    packages = ['ocrodjvu'],
-    package_dir = dict(ocrodjvu = 'lib'),
+    packages = ['ocrodjvu', 'ocrodjvu.engines'],
+    package_dir = dict(ocrodjvu='lib'),
     scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr'],
 )
 

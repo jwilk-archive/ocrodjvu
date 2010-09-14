@@ -15,8 +15,8 @@ import glob
 import os
 import re
 
-from . import errors
-from . import ipc
+from .. import errors
+from .. import ipc
 
 _language_pattern = re.compile('^[a-z]{3}(-[a-z]+)?$')
 _error_pattern = re.compile(r"^Unable to load unicharset file (/.*)/[.]unicharset\n$", re.DOTALL)
@@ -59,5 +59,8 @@ def has_language(language):
         raise errors.InvalidLanguageId(language)
     directory = get_tesseract_data_directory()
     return os.path.exists(os.path.join(directory, '%s.unicharset' % language))
+
+def get_default_language():
+    return os.getenv('tesslanguage') or 'eng'
 
 # vim:ts=4 sw=4 et

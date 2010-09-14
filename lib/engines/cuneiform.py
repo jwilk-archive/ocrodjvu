@@ -16,10 +16,12 @@ import re
 import tempfile
 from cStringIO import StringIO
 
-from . import errors
-from . import ipc
-from . import utils
+from .. import errors
+from .. import hocr
+from .. import ipc
+from .. import utils
 
+_default_language = 'eng'
 _language_pattern = re.compile('^[a-z]{3}(-[a-z]+)?$')
 _language_info_pattern = re.compile(r"^Supported languages: (.*)[.]$")
 
@@ -59,24 +61,47 @@ def get_languages():
             raise errors.UnknownLanguageList
     raise errors.UnknownLanguageList
 
-def has_language(language):
-    language = cuneiform_to_iso(language)
-    if not _language_pattern.match(language):
-        raise errors.InvalidLanguageId(language)
-    return language in get_languages()
+class Engine(object):
 
-def recognize(pbm_file, language):
-    hocr_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu.', suffix='.html')
-    worker = ipc.Subprocess(
-        ['cuneiform', '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file.name, pbm_file.name],
-        stdout=ipc.PIPE,
-    )
-    worker.wait()
-    # Sometimes Cuneiform returns files with broken encoding or with control
-    # characters: https://bugs.launchpad.net/cuneiform-linux/+bug/585418
-    # Let's fix it.
-    contents = hocr_file.read()
-    contents = utils.sanitize_utf8(contents)
-    return contextlib.closing(StringIO(contents))
+    name = 'cuneiform'
+    format = 'html'
+
+    def __init__(self):
+        try:
+            get_languages()
+        except errors.UnknownLanguageList:
+            raise errors.EngineNotFound(self.name)
+
+    @staticmethod
+    def get_default_language():
+        return _default_language
+
+    @staticmethod
+    def has_language(language):
+        language = cuneiform_to_iso(language)
+        if not _language_pattern.match(language):
+            raise errors.InvalidLanguageId(language)
+        return language in get_languages()
+
+    @staticmethod
+    def list_languages():
+        return iter(get_languages())
+
+    @staticmethod
+    def recognize(pbm_file, language, *args, **kwargs):
+        hocr_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu.', suffix='.html')
+        worker = ipc.Subprocess(
+            ['cuneiform', '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file.name, pbm_file.name],
+            stdout=ipc.PIPE,
+        )
+        worker.wait()
+        # Sometimes Cuneiform returns files with broken encoding or with control
+        # characters: https://bugs.launchpad.net/cuneiform-linux/+bug/585418
+        # Let's fix it.
+        contents = hocr_file.read()
+        contents = utils.sanitize_utf8(contents)
+        return contextlib.closing(StringIO(contents))
+
+    extract_text = staticmethod(hocr.extract_text)
 
 # vim:ts=4 sw=4 et

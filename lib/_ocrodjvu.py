@@ -25,11 +25,12 @@ import threading
 
 import djvu.decode
 
-from . import cuneiform
+from .engines import cuneiform
+from .engines import ocropus
+
 from . import errors
 from . import hocr
 from . import ipc
-from . import tesseract
 from . import utils
 from . import version
 
@@ -118,106 +119,6 @@ class DryRunSaver(Saver):
     def save(self, document, pages, djvu_path, sed_file):
         pass
 
-
-class OcrEngine(object):
-
-    pass
-
-class Ocropus(OcrEngine):
-
-    name = 'ocropus'
-    format = 'html'
-    has_charboxes = False
-    script_name = None
-
-    def __init__(self):
-        # Determine:
-        # - if OCRopus is installed and
-        # - which version we are dealing with
-        for script_name in 'recognize', 'rec-tess':
-            try:
-                ocropus = ipc.Subprocess(['ocroscript', script_name],
-                    stdout=ipc.PIPE,
-                    stderr=ipc.PIPE,
-                )
-            except OSError:
-                raise errors.EngineNotFound(self.name)
-            try:
-                found = ocropus.stdout.read(7) == 'Usage: '
-            finally:
-                try:
-                    ocropus.wait()
-                except ipc.CalledProcessError:
-                    pass
-            if found:
-                self.script_name = script_name
-                break
-        else:
-            raise errors.EngineNotFound(self.name)
-        if script_name == 'recognize':
-            # OCRopus ≥ 0.3
-            self.has_charboxes = True
-
-    @staticmethod
-    def get_default_language():
-        return os.getenv('tesslanguage') or 'eng'
-
-    @staticmethod
-    def has_language(language):
-        return tesseract.has_language(language)
-
-    @staticmethod
-    def list_languages():
-        for language in tesseract.get_languages():
-            yield language
-
-    @contextlib.contextmanager
-    def recognize(self, pbm_file, language, details=hocr.TEXT_DETAILS_WORD):
-        def get_command_line():
-            yield 'ocroscript'
-            yield self.script_name
-            if self.has_charboxes and details < hocr.TEXT_DETAILS_LINE:
-                yield '--charboxes'
-            yield pbm_file.name
-        ocropus = ipc.Subprocess(list(get_command_line()),
-            stdout=ipc.PIPE,
-            env=dict(tesslanguage=language),
-        )
-        try:
-            yield ocropus.stdout
-        finally:
-            ocropus.wait()
-
-    extract_text = staticmethod(hocr.extract_text)
-
-class Cuneiform(OcrEngine):
-
-    name = 'cuneiform'
-    format = 'html'
-
-    def __init__(self):
-        try:
-            cuneiform.get_languages()
-        except errors.UnknownLanguageList:
-            raise errors.EngineNotFound(self.name)
-
-    @staticmethod
-    def get_default_language():
-        return 'eng'
-
-    @staticmethod
-    def has_language(language):
-        return cuneiform.has_language(language)
-
-    @staticmethod
-    def list_languages():
-        return iter(cuneiform.get_languages())
-
-    def recognize(self, pbm_file, language, details=hocr.TEXT_DETAILS_WORD):
-        return cuneiform.recognize(pbm_file, language)
-
-    extract_text = staticmethod(hocr.extract_text)
-
 def get_cpu_count():
     try:
         import multiprocessing
@@ -232,8 +133,8 @@ def get_cpu_count():
 class ArgumentParser(argparse.ArgumentParser):
 
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
-    engines = Ocropus, Cuneiform
-    default_engine = Ocropus
+    engines = ocropus.Engine, cuneiform.Engine
+    default_engine = engines[0]
 
     _details_map = dict(
         lines=hocr.TEXT_DETAILS_LINE,
