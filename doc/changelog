@@ -3,8 +3,13 @@ ocrodjvu (0.5.0) UNRELEASED; urgency=low
   * Add support for the Ocrad OCR engine.
   * Add support for the GOCR engine.
   * Cuneiform is no longer required to be linked with ImageMagick.
+  * Prevent Cuneiform from asking interactive questions. Thanks to Heinrich
+    Schwietering for the bug report.
+  * Make sure that signals are handled in a sane way. Thanks to Heinrich
+    Schwietering for the bug report.
+  * Drop support for guessing page size from image (scan) contents.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 14 Sep 2010 15:17:21 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 14 Sep 2010 19:23:35 +0200
 
 ocrodjvu (0.4.7) unstable; urgency=low
 
