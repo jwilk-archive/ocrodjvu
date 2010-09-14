@@ -106,7 +106,6 @@ class InPlaceSaver(Saver):
         djvu_path = os.path.abspath(djvu_path)
         djvused = ipc.Subprocess(
             ['djvused', '-s', '-f', sed_file_name, djvu_path],
-            env={},  # preserve locale settings
         )
         djvused.wait()
 
@@ -140,7 +139,6 @@ class Ocropus(OcrEngine):
                 ocropus = ipc.Subprocess(['ocroscript', script_name],
                     stdout=ipc.PIPE,
                     stderr=ipc.PIPE,
-                    env=dict(LC_ALL=None),  # locale=POSIX
                 )
             except OSError:
                 raise errors.EngineNotFound(self.name)
@@ -183,7 +181,7 @@ class Ocropus(OcrEngine):
             yield pbm_file.name
         ocropus = ipc.Subprocess(list(get_command_line()),
             stdout=ipc.PIPE,
-            env=dict(tesslanguage=language, LC_ALL=None),  # locale=POSIX
+            env=dict(tesslanguage=language),
         )
         try:
             yield ocropus.stdout
