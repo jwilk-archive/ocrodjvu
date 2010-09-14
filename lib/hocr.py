@@ -26,7 +26,6 @@ except ImportError, ex:
     raise
 
 from . import errors
-from . import image_size
 from . import text_zones
 from . import unicode_support
 
@@ -226,10 +225,7 @@ def _scan(node, buffer, parent_bbox, settings):
     if djvu_class is const.TEXT_ZONE_PAGE:
         if not bbox:
             if settings.page_size is None:
-                m = image_re.search(title)
-                if m is None:
-                    raise errors.MalformedHocr("cannot determine page's bbox")
-                settings.page_size = image_size.get_image_size(m.group('file_name'))
+                raise errors.MalformedHocr("cannot determine page's bbox")
             page_width, page_height = settings.page_size
             bbox = text_zones.BBox(0, 0, page_width, page_height)
             parent_bbox.update(bbox)
