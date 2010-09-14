@@ -25,17 +25,12 @@ except ImportError, ex:
     ex.args = '%s; please install the lxml package <http://codespeak.net/lxml/>' % str(ex),
     raise
 
-try:
-    from djvu import const
-    from djvu import decode
-    from djvu import sexpr
-except ImportError, ex:
-    ex.args = '%s; please install the python-djvulibre package <http://jwilk.net/software/python-djvulibre>' % str(ex),
-    raise
-
 from . import errors
 from . import image_size
+from . import text_zones
 from . import unicode_support
+
+const = text_zones.const
 
 __all__ = 'extract_text', 'TEXT_DETAILS_LINE', 'TEXT_DETAILS_WORD', 'TEXT_DETAILS_CHARACTER'
 
@@ -95,130 +90,9 @@ bboxes_re = re.compile(
         (?: ,? \s* (?: -?\d+ \s+ -?\d+ \s+ -?\d+ \s+ -?\d+) )* )
     ''', re.VERBOSE)
 
-class BBox(object):
-
-    def __init__(self, x0=None, y0=None, x1=None, y1=None):
-        self._coordinates = [x0, y0, x1, y1]
-
-    @property
-    def x0(self):
-        return self[0]
-
-    @property
-    def y0(self):
-        return self[1]
-
-    @property
-    def x1(self):
-        return self[2]
-
-    @property
-    def y1(self):
-        return self[3]
-
-    def __getitem__(self, item):
-        return self._coordinates[item]
-
-    def __nonzero__(self):
-        for value in self._coordinates:
-            if value is None:
-                return False
-        return True
-
-    def __repr__(self):
-        return '%s(%r, %r, %r, %r)' % ((self.__class__.__name__,) + tuple(self._coordinates))
-
-    def update(self, bbox):
-        for i, self_i in enumerate(self._coordinates):
-            if self_i is None:
-                self._coordinates[i] = bbox[i]
-            elif i < 2 and bbox[i] is not None and self[i] > bbox[i]:
-                self._coordinates[i] = bbox[i]
-            elif i > 1 and bbox[i] is not None and self[i] < bbox[i]:
-                self._coordinates[i] = bbox[i]
-
-class Space(object):
-    pass
-
-class Zone(object):
-
-    def __init__(self, type, bbox=None, children=()):
-        self.type = type
-        self.bbox = bbox
-        self.children = list(children)
-
-    def set_bbox(self, bbox):
-        if bbox is None:
-            self._bbox = None
-        else:
-            self._bbox = tuple(bbox)
-
-    def get_bbox(self):
-        return self._bbox
-
-    bbox = property(get_bbox, set_bbox)
-
-    @property
-    def sexpr(self):
-        return sexpr.Expression(
-            [self.type] +
-            list(self.bbox) + [
-                child.sexpr if isinstance(child, Zone) else child
-                for child in self.children
-                if not isinstance(child, Space)
-            ]
-        )
-
-    def __iter__(self):
-        return iter(self.children)
-
-    def __iadd__(self, new_children):
-        self.children += new_children
-        return self
-
-    def __getitem__(self, n):
-        return self.children[n]
-
-    def __setitem__(self, n, value):
-        self.children[n] = value
-
-    def __len__(self):
-        return len(self.children)
-
-    def __repr__(self):
-        return '%(name)s(type=%(type)r, bbox=%(bbox)r, children=%(children)r)' % dict(
-            name=type(self).__name__,
-            type=self.type,
-            bbox=self.bbox,
-            children=self.children,
-        )
-
-    def rotate(obj, rotation, xform=None):
-        if xform is None:
-            assert obj.type == const.TEXT_ZONE_PAGE
-            assert obj.bbox[:2] == (0, 0)
-            page_size = obj.bbox[2:]
-            if (rotation // 90) & 1:
-                xform = decode.AffineTransform((0, 0) + tuple(reversed(page_size)), (0, 0) + page_size)
-            else:
-                xform = decode.AffineTransform((0, 0) + page_size, (0, 0) + page_size)
-            xform.mirror_y()
-            xform.rotate(rotation)
-        x0, y0, x1, y1 = obj.bbox
-        x0, y0 = xform.inverse((x0, y0))
-        x1, y1 = xform.inverse((x1, y1))
-        if x0 > x1:
-            x0, x1 = x1, x0
-        if y0 > y1:
-            y0, y1 = y1, y0
-        obj.bbox = x0, y0, x1, y1
-        for child in obj:
-            if isinstance(child, Zone):
-                child.rotate(rotation, xform)
-
 def _replace_cuneiform08_paragraph(paragraph, settings):
     text = ''.join(
-        ' ' if isinstance(character, Space) else character[0]
+        ' ' if isinstance(character, text_zones.Space) else character[0]
         for character in paragraph
     )
     if settings.details >= const.TEXT_ZONE_LINE:
@@ -229,18 +103,18 @@ def _replace_cuneiform08_paragraph(paragraph, settings):
         raise errors.MalformedHocr("number of bboxes doesn't match text length")
     break_iterator = unicode_support.word_break_iterator(text, locale=settings.uax29)
     i = 0
-    words = Zone(type=const.TEXT_ZONE_PARAGRAPH)
-    paragraph_bbox = BBox()
+    words = text_zones.Zone(type=const.TEXT_ZONE_PARAGRAPH)
+    paragraph_bbox = text_zones.BBox()
     for j in break_iterator:
         subtext = text[i:j]
         if subtext.isspace():
             i = j
             continue
-        word_bbox = BBox()
+        word_bbox = text_zones.BBox()
         for k in xrange(i, j):
-            word_bbox.update(BBox(*paragraph[k].bbox))
+            word_bbox.update(text_zones.BBox(*paragraph[k].bbox))
         paragraph_bbox.update(word_bbox)
-        last_word = Zone(type=const.TEXT_ZONE_WORD, bbox=word_bbox)
+        last_word = text_zones.Zone(type=const.TEXT_ZONE_WORD, bbox=word_bbox)
         words += last_word,
         if settings.details > const.TEXT_ZONE_CHARACTER:
             last_word += subtext,
@@ -284,18 +158,18 @@ def _replace_text(djvu_class, title, text, settings):
             if subtext.isspace():
                 i = j
                 continue
-            bbox = BBox()
+            bbox = text_zones.BBox()
             for k in xrange(i, j):
                 if settings.cuneiform and coordinates[k] == (-1, -1, -1, -1):
                     raise errors.MalformedHocr("missing bbox for non-whitespace character")
-                bbox.update(BBox(*coordinates[k]))
-            last_word = Zone(type=const.TEXT_ZONE_WORD, bbox=bbox)
+                bbox.update(text_zones.BBox(*coordinates[k]))
+            last_word = text_zones.Zone(type=const.TEXT_ZONE_WORD, bbox=bbox)
             words += last_word,
             if settings.details > const.TEXT_ZONE_CHARACTER:
                 last_word += subtext,
             else:
                 last_word += [
-                    Zone(type=const.TEXT_ZONE_CHARACTER, bbox=(x0, y0, x1, y1), children=[ch])
+                    text_zones.Zone(type=const.TEXT_ZONE_CHARACTER, bbox=(x0, y0, x1, y1), children=[ch])
                     for k in xrange(i, j)
                     for (x0, y0, x1, y1), ch in [(coordinates[k], text[k])]
                 ]
@@ -304,7 +178,7 @@ def _replace_text(djvu_class, title, text, settings):
     else:
         # Split characters
         return [
-            Zone(type=const.TEXT_ZONE_CHARACTER, bbox=(x0, y0, x1, y1), children=[ch])
+            text_zones.Zone(type=const.TEXT_ZONE_CHARACTER, bbox=(x0, y0, x1, y1), children=[ch])
             for (x0, y0, x1, y1), ch in zip(coordinates, text)
         ]
     return text,
@@ -319,7 +193,7 @@ def _scan(node, buffer, parent_bbox, settings):
                 if child.tail.strip():
                     buffer += child.tail,
                 else:
-                    buffer += Space(),
+                    buffer += text_zones.Space(),
     if not isinstance(node.tag, basestring):
         return
     if settings.cuneiform and settings.cuneiform <= (0, 8):
@@ -342,9 +216,9 @@ def _scan(node, buffer, parent_bbox, settings):
     title = node.get('title') or ''
     m = bbox_re.search(title)
     if m is None:
-        bbox = BBox()
+        bbox = text_zones.BBox()
     else:
-        bbox = BBox(*(int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')))
+        bbox = text_zones.BBox(*(int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')))
         parent_bbox.update(bbox)
     if bbox.x0 == bbox.y0 == bbox.x1 == bbox.y1 == 0:
         # Skip empty fragments generated by Cuneiform 0.9:
@@ -357,13 +231,13 @@ def _scan(node, buffer, parent_bbox, settings):
                     raise errors.MalformedHocr("cannot determine page's bbox")
                 settings.page_size = image_size.get_image_size(m.group('file_name'))
             page_width, page_height = settings.page_size
-            bbox = BBox(0, 0, page_width, page_height)
+            bbox = text_zones.BBox(0, 0, page_width, page_height)
             parent_bbox.update(bbox)
         else:
             if (bbox.x0, bbox.y0) != (0, 0):
                 raise errors.MalformedHocr("page's bbox should start with (0, 0)")
             settings.page_size = bbox.x1, bbox.y1
-    result = Zone(type=djvu_class)
+    result = text_zones.Zone(type=djvu_class)
     look_down(result, bbox)
     if bbox.x0 == bbox.y0 == bbox.x1 == bbox.y1 == 0:
         # Skip empty fragments generated by Cuneiform 0.9:
@@ -389,9 +263,9 @@ def _scan(node, buffer, parent_bbox, settings):
 
 def scan(node, settings):
     buffer = []
-    _scan(node, buffer, BBox(), settings)
+    _scan(node, buffer, text_zones.BBox(), settings)
     # Buffer may contain also superfluous Space objects. Let's strip them.
-    buffer = [zone for zone in buffer if isinstance(zone, Zone)]
+    buffer = [zone for zone in buffer if isinstance(zone, text_zones.Zone)]
     for zone in buffer:
         zone.rotate(settings.rotation)
     return buffer

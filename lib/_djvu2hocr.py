@@ -19,13 +19,14 @@ import tempfile
 
 from . import hocr
 from . import ipc
+from . import text_zones
 from . import unicode_support
 from . import utils
 from . import version
 
-from .hocr import const
 from .hocr import etree
-from .hocr import sexpr
+from .text_zones import const
+from .text_zones import sexpr
 
 __version__ = version.__version__
 
@@ -73,7 +74,7 @@ class Zone(object):
 
     @property
     def bbox(self):
-        return hocr.BBox(*(self._sexpr[i].value for i in xrange(1, 5)))
+        return text_zones.BBox(*(self._sexpr[i].value for i in xrange(1, 5)))
 
     @property
     def text(self):
@@ -134,7 +135,7 @@ def break_chars(char_zone_list, options):
         if not char_text:
             continue
         for i, char in enumerate(char_text):
-            subbox = hocr.BBox(
+            subbox = text_zones.BBox(
                 int(bbox.x0 + (bbox.x1 - bbox.x0) * 1.0 * i / len(char_text) + 0.5),
                 bbox.y0,
                 int(bbox.x0 + (bbox.x1 - bbox.x0) * 1.0 * (i + 1) / len(char_text) + 0.5),
@@ -152,7 +153,7 @@ def break_chars(char_zone_list, options):
                 element.tail = ' '
             i = j
             continue
-        bbox = hocr.BBox()
+        bbox = text_zones.BBox()
         for k in xrange(i, j):
             bbox.update(bbox_list[k])
         element = etree.Element('span')
@@ -178,7 +179,7 @@ def break_plain_text(text, bbox, options):
                 element.tail = ' '
             i = j
             continue
-        subbox = hocr.BBox(
+        subbox = text_zones.BBox(
             int(bbox.x0 + (bbox.x1 - bbox.x0) * 1.0 * i / len(text) + 0.5),
             bbox.y0,
             int(bbox.x0 + (bbox.x1 - bbox.x0) * 1.0 * j / len(text) + 0.5),
@@ -308,7 +309,7 @@ def main():
                 int(str(sexpr.Expression.from_stream(djvused.stdout).value).split('=')[1])
                 for i in xrange(2)
             ]
-            options.page_bbox = hocr.BBox(0, 0, page_size[0], page_size[1])
+            options.page_bbox = text_zones.BBox(0, 0, page_size[0], page_size[1])
             page_text = sexpr.Expression.from_stream(djvused.stdout)
         except sexpr.ExpressionSyntaxError:
             break
