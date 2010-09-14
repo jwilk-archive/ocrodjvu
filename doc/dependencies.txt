@@ -3,11 +3,13 @@ Dependencies
 
 * Python ≥ 2.5
 
-* OCRopus_ ≥ 0.2 (tested with 0.2 and 0.3.1) —
-  document analysis and OCR system
+* An OCR engine:
 
-* Cuneiform_ ≥ 0.7 (tested with 0.7, 0.8, 0.9, 1.0) —
-  document analysis and OCR system
+  + OCRopus_ ≥ 0.2 (tested with 0.2 and 0.3.1) —
+    document analysis and OCR system
+
+  + Cuneiform_ ≥ 0.7 (tested with 0.7, 0.8, 0.9, 1.0) —
+    document analysis and OCR system
 
 * DjVuLibre_ ≥ 3.5.21 —
   library for the DjVu_ file format
