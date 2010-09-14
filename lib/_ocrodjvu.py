@@ -24,9 +24,7 @@ import threading
 
 import djvu.decode
 
-from .engines import cuneiform
-from .engines import ocropus
-
+from . import engines
 from . import errors
 from . import hocr
 from . import ipc
@@ -132,8 +130,8 @@ def get_cpu_count():
 class ArgumentParser(argparse.ArgumentParser):
 
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
-    engines = ocropus.Engine, cuneiform.Engine
-    default_engine = engines[0]
+    engines = list(engines.get_engines())
+    [default_engine] = [engine for engine in engines if engine.name == 'ocropus']
 
     _details_map = dict(
         lines=hocr.TEXT_DETAILS_LINE,
