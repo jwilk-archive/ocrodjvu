@@ -8,8 +8,10 @@ ocrodjvu (0.5.0) UNRELEASED; urgency=low
   * Make sure that signals are handled in a sane way. Thanks to Heinrich
     Schwietering for the bug report.
   * Drop support for guessing page size from image (scan) contents.
+  * Let the setup.py script install manual pages. Thanks to Kyrill Detinov and
+    Heinrich Schwietering for bug reports.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 14 Sep 2010 19:23:35 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 14 Sep 2010 19:35:28 +0200
 
 ocrodjvu (0.4.7) unstable; urgency=low
 

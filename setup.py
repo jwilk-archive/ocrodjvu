@@ -28,6 +28,7 @@ Topic :: Multimedia :: Graphics\
 '''.split('\n')
 
 import distutils.core
+import glob
 import os
 
 from lib import version
@@ -46,6 +47,7 @@ distutils.core.setup(
     packages = ['ocrodjvu', 'ocrodjvu.engines'],
     package_dir = dict(ocrodjvu='lib'),
     scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr'],
+    data_files = [('share/man/man1', glob.glob('doc/*.1'))],
 )
 
 # vim:ts=4 sw=4 et
