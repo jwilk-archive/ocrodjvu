@@ -193,6 +193,29 @@ class Zone(object):
             children=self.children,
         )
 
+    def rotate(obj, rotation, xform=None):
+        if xform is None:
+            assert obj.type == const.TEXT_ZONE_PAGE
+            assert obj.bbox[:2] == (0, 0)
+            page_size = obj.bbox[2:]
+            if (rotation // 90) & 1:
+                xform = decode.AffineTransform((0, 0) + tuple(reversed(page_size)), (0, 0) + page_size)
+            else:
+                xform = decode.AffineTransform((0, 0) + page_size, (0, 0) + page_size)
+            xform.mirror_y()
+            xform.rotate(rotation)
+        x0, y0, x1, y1 = obj.bbox
+        x0, y0 = xform.inverse((x0, y0))
+        x1, y1 = xform.inverse((x1, y1))
+        if x0 > x1:
+            x0, x1 = x1, x0
+        if y0 > y1:
+            y0, y1 = y1, y0
+        obj.bbox = x0, y0, x1, y1
+        for child in obj:
+            if isinstance(child, Zone):
+                child.rotate(rotation, xform)
+
 def _replace_cuneiform08_paragraph(paragraph, settings):
     text = ''.join(
         ' ' if isinstance(character, Space) else character[0]
@@ -286,30 +309,6 @@ def _replace_text(djvu_class, title, text, settings):
         ]
     return text,
 
-def _rotate(obj, rotation, xform=None):
-    if xform is None:
-        assert isinstance(obj, Zone)
-        assert obj.type == const.TEXT_ZONE_PAGE
-        assert obj.bbox[:2] == (0, 0)
-        page_size = obj.bbox[2:]
-        if (rotation // 90) & 1:
-            xform = decode.AffineTransform((0, 0) + tuple(reversed(page_size)), (0, 0) + page_size)
-        else:
-            xform = decode.AffineTransform((0, 0) + page_size, (0, 0) + page_size)
-        xform.mirror_y()
-        xform.rotate(rotation)
-    x0, y0, x1, y1 = obj.bbox
-    x0, y0 = xform.inverse((x0, y0))
-    x1, y1 = xform.inverse((x1, y1))
-    if x0 > x1:
-        x0, x1 = x1, x0
-    if y0 > y1:
-        y0, y1 = y1, y0
-    obj.bbox = x0, y0, x1, y1
-    for child in obj:
-        if isinstance(child, Zone):
-            _rotate(child, rotation, xform)
-
 def _scan(node, buffer, parent_bbox, settings):
     def look_down(buffer, parent_bbox):
         if node.text and node.text.strip():
@@ -394,7 +393,7 @@ def scan(node, settings):
     # Buffer may contain also superfluous Space objects. Let's strip them.
     buffer = [zone for zone in buffer if isinstance(zone, Zone)]
     for zone in buffer:
-        _rotate(zone, settings.rotation)
+        zone.rotate(settings.rotation)
     return buffer
 
 class ExtractSettings(object):
