@@ -11,6 +11,9 @@ Dependencies
   + Cuneiform_ ≥ 0.7 (tested with 0.7, 0.8, 0.9, 1.0) —
     document analysis and OCR system
 
+  + Ocrad_ (tested with 0.17) —
+    document analysis and OCR system
+
 * DjVuLibre_ ≥ 3.5.21 —
   library for the DjVu_ file format
 
@@ -30,6 +33,8 @@ Dependencies
    http://code.google.com/p/ocropus/
 .. _Cuneiform:
    http://launchpad.net/cuneiform-linux
+.. _Ocrad:
+   http://www.gnu.org/software/ocrad/
 .. _DjVuLibre:
    http://djvu.sourceforge.net/
 .. _DjVu:
