@@ -119,6 +119,7 @@ class DryRunSaver(Saver):
     def save(self, document, pages, djvu_path, sed_file):
         pass
 
+
 class OcrEngine(object):
 
     pass
@@ -126,6 +127,7 @@ class OcrEngine(object):
 class Ocropus(OcrEngine):
 
     name = 'ocropus'
+    format = 'html'
     has_charboxes = False
     script_name = None
 
@@ -188,9 +190,12 @@ class Ocropus(OcrEngine):
         finally:
             ocropus.wait()
 
+    extract_text = staticmethod(hocr.extract_text)
+
 class Cuneiform(OcrEngine):
 
     name = 'cuneiform'
+    format = 'html'
 
     def __init__(self):
         try:
@@ -212,6 +217,8 @@ class Cuneiform(OcrEngine):
 
     def recognize(self, pbm_file, language, details=hocr.TEXT_DETAILS_WORD):
         return cuneiform.recognize(pbm_file, language)
+
+    extract_text = staticmethod(hocr.extract_text)
 
 def get_cpu_count():
     try:
@@ -407,17 +414,17 @@ class Context(djvu.decode.Context):
             )
             pfile.write(data)
             pfile.flush()
-            html_file = None
+            result_file = None
             with self._engine.recognize(pfile, language=self._options.language, details=self._options.details) as result:
                 try:
                     if self._debug:
-                        html_file = self._temp_file('%06d.html' % page.n)
-                        html = result.read()
-                        html_file.write(html)
-                        html_file.seek(0)
+                        result_file = self._temp_file('%06d.%s' % (page.n, self._engine.format))
+                        result_data = result.read()
+                        result_file.write(result_data)
+                        result_file.seek(0)
                     else:
-                        html_file = result
-                    text, = hocr.extract_text(html_file,
+                        result_file = result
+                    text, = self._engine.extract_text(result_file,
                         rotation=page.rotation,
                         details=self._options.details,
                         uax29=self._options.uax29,
@@ -425,8 +432,8 @@ class Context(djvu.decode.Context):
                     )
                     return text
                 finally:
-                    if html_file is not None:
-                        html_file.close()
+                    if result_file is not None:
+                        result_file.close()
         finally:
             pfile.close()
 
