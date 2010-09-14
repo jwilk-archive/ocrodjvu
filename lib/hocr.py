@@ -26,15 +26,15 @@ except ImportError, ex:
     raise
 
 try:
-    from djvu import sexpr
     from djvu import const
     from djvu import decode
+    from djvu import sexpr
 except ImportError, ex:
     ex.args = '%s; please install the python-djvulibre package <http://jwilk.net/software/python-djvulibre>' % str(ex),
     raise
 
-from . import image_size
 from . import errors
+from . import image_size
 from . import unicode_support
 
 __all__ = 'extract_text', 'TEXT_DETAILS_LINE', 'TEXT_DETAILS_WORD', 'TEXT_DETAILS_CHARACTER'

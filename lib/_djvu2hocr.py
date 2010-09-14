@@ -23,9 +23,9 @@ from . import unicode_support
 from . import utils
 from . import version
 
+from .hocr import const
 from .hocr import etree
 from .hocr import sexpr
-from .hocr import const
 
 __version__ = version.__version__
 
