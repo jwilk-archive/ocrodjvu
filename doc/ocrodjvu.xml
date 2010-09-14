@@ -109,6 +109,9 @@
         <listitem>
             <para><ulink url='http://www.gnu.org/software/ocrad/'><application>Ocrad</application></ulink>.</para>
         </listitem>
+        <listitem>
+            <para><ulink url='http://jocr.sourceforge.net/'><application>GOCR</application></ulink>.</para>
+        </listitem>
         </itemizedlist>
     </para>
 </refsection>
