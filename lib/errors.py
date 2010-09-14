@@ -30,7 +30,12 @@ class SecurityConcern(Exception):
     def __init__(self):
         Exception.__init__(self, 'I refuse to process this file due to security concerns')
 
-class MalformedHocr(Exception):
+class MalformedOcrOutput(Exception):
+
+    def __init__(self, message):
+        Exception.__init__(self, 'Malformed OCR output: %s' % message)
+
+class MalformedHocr(MalformedOcrOutput):
 
     def __init__(self, message):
         Exception.__init__(self, 'Malformed hOCR document: %s' % message)
