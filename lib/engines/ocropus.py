@@ -11,7 +11,6 @@
 # General Public License for more details.
 
 import contextlib
-import os
 
 from . import tesseract
 from .. import errors
