@@ -345,8 +345,8 @@ class Context(djvu.decode.Context):
                 ))
                 if self._pixel_format.bpp == 1:
                     # palette:
-                    file.write(struct.pack('<BBBB', 0, 0, 0, 0))
                     file.write(struct.pack('<BBBB', 0xff, 0xff, 0xff, 0))
+                    file.write(struct.pack('<BBBB', 0, 0, 0, 0))
                 file.write(data)
                 file.flush()
             else:

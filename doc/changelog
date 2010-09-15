@@ -1,8 +1,8 @@
 ocrodjvu (0.5.2) UNRELEASED; urgency=low
 
-  * 
+  * Fix Cuneiform support (a regression introduced in 0.5).
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 15 Sep 2010 21:15:00 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 15 Sep 2010 21:43:52 +0200
 
 ocrodjvu (0.5.1) unstable; urgency=low
 
