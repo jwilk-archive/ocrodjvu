@@ -23,14 +23,16 @@ import sys
 import tempfile
 import threading
 
-import djvu.decode
-
 from . import engines
 from . import errors
-from . import hocr
 from . import ipc
+from . import text_zones
 from . import utils
 from . import version
+
+# Import this after local modules, so that they can take care of a showing
+# a nice ImportError message.
+import djvu.decode
 
 __version__ = version.__version__
 
@@ -135,9 +137,9 @@ class ArgumentParser(argparse.ArgumentParser):
     [default_engine] = [engine for engine in engines if engine.name == 'ocropus']
 
     _details_map = dict(
-        lines=hocr.TEXT_DETAILS_LINE,
-        words=hocr.TEXT_DETAILS_WORD,
-        chars=hocr.TEXT_DETAILS_CHARACTER,
+        lines=text_zones.TEXT_DETAILS_LINE,
+        words=text_zones.TEXT_DETAILS_WORD,
+        chars=text_zones.TEXT_DETAILS_CHARACTER,
     )
 
     _render_map = dict(

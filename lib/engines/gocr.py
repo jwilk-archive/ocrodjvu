@@ -27,8 +27,6 @@ from .. import unicode_support
 
 const = text_zones.const
 
-from ..hocr import TEXT_DETAILS_LINE, TEXT_DETAILS_WORD, TEXT_DETAILS_CHARACTER
-
 _default_language = 'eng'
 _version_re = re.compile(r'\bgocr ([0-9]+).([0-9]+)\b')
 
@@ -66,7 +64,7 @@ def recognize(pbm_file, language, details=None):
 
 class ExtractSettings(object):
 
-    def __init__(self, rotation=0, details=TEXT_DETAILS_WORD, uax29=None, page_size=None):
+    def __init__(self, rotation=0, details=text_zones.TEXT_DETAILS_WORD, uax29=None, page_size=None):
         self.rotation = rotation
         self.details = details
         if uax29 is not None:
@@ -80,7 +78,7 @@ class ExtractSettings(object):
 
 def group_words(children, settings):
     text = ''.join(child[0] for child in children)
-    if settings.details > const.TEXT_ZONE_WORD:
+    if settings.details > text_zones.TEXT_DETAILS_WORD:
         # One zone per line
         children = [text]
     else:
@@ -113,7 +111,7 @@ def group_words(children, settings):
                 bbox.update(children[k].bbox)
             last_word = text_zones.Zone(type=const.TEXT_ZONE_WORD, bbox=bbox)
             words += last_word,
-            if settings.details > const.TEXT_ZONE_CHARACTER:
+            if settings.details > text_zones.TEXT_DETAILS_CHARACTER:
                 last_word += subtext,
             else:
                 last_word += [

@@ -14,7 +14,6 @@ import contextlib
 
 from . import tesseract
 from .. import errors
-from .. import hocr
 from .. import ipc
 
 class Engine(object):
@@ -52,13 +51,20 @@ class Engine(object):
         if script_name == 'recognize':
             # OCRopus ≥ 0.3
             self.has_charboxes = True
+        # Import hocr late, so that importing lxml is not triggered if Ocropus
+        # is not used.
+        from .. import hocr
+        self._hocr = hocr
 
     get_default_language = staticmethod(tesseract.get_default_language)
     has_language = staticmethod(tesseract.has_language)
     list_languages = staticmethod(tesseract.get_languages)
 
     @contextlib.contextmanager
-    def recognize(self, pbm_file, language, details=hocr.TEXT_DETAILS_WORD):
+    def recognize(self, pbm_file, language, details=None):
+        hocr = self._hocr
+        if details is None:
+            details = hocr.TEXT_DETAILS_WORD
         def get_command_line():
             yield 'ocroscript'
             assert self.script_name is not None
@@ -75,6 +81,7 @@ class Engine(object):
         finally:
             ocropus.wait()
 
-    extract_text = staticmethod(hocr.extract_text)
+    def extract_text(self, *args, **kwargs):
+        return self._hocr.extract_text(*args, **kwargs)
 
 # vim:ts=4 sw=4 et

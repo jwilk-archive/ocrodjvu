@@ -16,7 +16,6 @@ import tempfile
 from cStringIO import StringIO
 
 from .. import errors
-from .. import hocr
 from .. import ipc
 from .. import utils
 
@@ -71,6 +70,10 @@ class Engine(object):
             get_languages()
         except errors.UnknownLanguageList:
             raise errors.EngineNotFound(self.name)
+        # Import hocr late, so that importing lxml is not triggered if
+        # Cuneiform is not used.
+        from .. import hocr
+        self._hocr = hocr
 
     @staticmethod
     def get_default_language():
@@ -104,6 +107,7 @@ class Engine(object):
         contents = utils.sanitize_utf8(contents)
         return contextlib.closing(StringIO(contents))
 
-    extract_text = staticmethod(hocr.extract_text)
+    def extract_text(self, *args, **kwargs):
+        return self._hocr.extract_text(*args, **kwargs)
 
 # vim:ts=4 sw=4 et

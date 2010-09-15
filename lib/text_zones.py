@@ -18,6 +18,10 @@ except ImportError, ex:
     ex.args = '%s; please install the python-djvulibre package <http://jwilk.net/software/python-djvulibre>' % str(ex),
     raise
 
+TEXT_DETAILS_LINE = const.TEXT_ZONE_LINE
+TEXT_DETAILS_WORD = const.TEXT_ZONE_WORD
+TEXT_DETAILS_CHARACTER = const.TEXT_ZONE_CHARACTER
+
 class BBox(object):
 
     def __init__(self, x0=None, y0=None, x1=None, y1=None):

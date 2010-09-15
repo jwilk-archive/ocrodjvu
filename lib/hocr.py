@@ -31,8 +31,6 @@ from . import unicode_support
 
 const = text_zones.const
 
-__all__ = 'extract_text', 'TEXT_DETAILS_LINE', 'TEXT_DETAILS_WORD', 'TEXT_DETAILS_CHARACTER'
-
 TEXT_DETAILS_LINE = const.TEXT_ZONE_LINE
 TEXT_DETAILS_WORD = const.TEXT_ZONE_WORD
 TEXT_DETAILS_CHARACTER = const.TEXT_ZONE_CHARACTER
@@ -94,7 +92,7 @@ def _replace_cuneiform08_paragraph(paragraph, settings):
         ' ' if isinstance(character, text_zones.Space) else character[0]
         for character in paragraph
     )
-    if settings.details >= const.TEXT_ZONE_LINE:
+    if settings.details >= TEXT_DETAILS_LINE:
         # Cuneiform tends to attach superfluous whitespace:
         text = text.rstrip()
         return [text]
@@ -115,7 +113,7 @@ def _replace_cuneiform08_paragraph(paragraph, settings):
         paragraph_bbox.update(word_bbox)
         last_word = text_zones.Zone(type=const.TEXT_ZONE_WORD, bbox=word_bbox)
         words += last_word,
-        if settings.details > const.TEXT_ZONE_CHARACTER:
+        if settings.details > TEXT_DETAILS_CHARACTER:
             last_word += subtext,
         else:
             last_word += paragraph[i:j]
@@ -164,7 +162,7 @@ def _replace_text(djvu_class, title, text, settings):
                 bbox.update(text_zones.BBox(*coordinates[k]))
             last_word = text_zones.Zone(type=const.TEXT_ZONE_WORD, bbox=bbox)
             words += last_word,
-            if settings.details > const.TEXT_ZONE_CHARACTER:
+            if settings.details > TEXT_DETAILS_CHARACTER:
                 last_word += subtext,
             else:
                 last_word += [
@@ -299,5 +297,10 @@ def extract_text(stream, **kwargs):
             settings.cuneiform = (0, 8)
     scan_result = scan(doc.find('/body'), settings)
     return [zone.sexpr for zone in scan_result]
+
+__all__ = [
+    'extract_text',
+    'TEXT_DETAILS_LINE', 'TEXT_DETAILS_WORD', 'TEXT_DETAILS_CHARACTER'
+]
 
 # vim:ts=4 sw=4 et
