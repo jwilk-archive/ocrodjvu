@@ -1,8 +1,9 @@
 ocrodjvu (0.5.1) UNRELEASED; urgency=low
 
-  * 
+  * Fix crash when listing engines/languages if Ocropus is not found.
+    Thanks to Kyrill Detinov for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 15 Sep 2010 13:08:34 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 15 Sep 2010 13:09:29 +0200
 
 ocrodjvu (0.5.0) unstable; urgency=low
 

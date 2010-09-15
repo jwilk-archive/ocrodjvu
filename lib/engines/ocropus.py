@@ -36,7 +36,7 @@ class Engine(object):
                     stderr=ipc.PIPE,
                 )
             except OSError:
-                raise errors.EngineNotFound(name)
+                raise errors.EngineNotFound(self.name)
             try:
                 found = ocropus.stdout.read(7) == 'Usage: '
             finally:
@@ -48,7 +48,7 @@ class Engine(object):
                 self.script_name = script_name
                 break
         else:
-            raise errors.EngineNotFound(name)
+            raise errors.EngineNotFound(self.name)
         if script_name == 'recognize':
             # OCRopus ≥ 0.3
             self.has_charboxes = True
