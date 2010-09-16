@@ -112,6 +112,9 @@
         <listitem>
             <para><ulink url='http://jocr.sourceforge.net/'><application>GOCR</application></ulink>.</para>
         </listitem>
+        <listitem>
+            <para>Stand-alone <ulink url='http://code.google.com/p/tesseract-ocr/'><application>Tesseract</application></ulink>.</para>
+        </listitem>
         </itemizedlist>
     </para>
 </refsection>
@@ -208,6 +211,7 @@
                 </para>
                 <para>
                     This is the default for OCRopus 0.2.
+                    The option is ineffective with stand-alone Tesseract.
                 </para>
             </listitem>
         </varlistentry>
@@ -219,10 +223,10 @@
                     Record location of every line and every word. Don't record locations of particular characters.
                 </para>
                 <para>
-                    This is the default for OCRopus ≥ 0.3.1 and for Cuneiform.
+                    This is the default for OCRopus ≥ 0.3.1 and other OCR engines (except stand-alone Tesseract).
                 </para>
                 <para>
-                    This option is ineffective with OCRopus 0.2.
+                    This option is ineffective with OCRopus 0.2 and stand-alone Tesseract.
                 </para>
             </listitem>
         </varlistentry>
@@ -234,7 +238,7 @@
                     Record location of every line, every word and every character.
                 </para>
                 <para>
-                    This option is ineffective with OCRopus 0.2.
+                    This option is ineffective with OCRopus 0.2 and stand-alone Tesseract.
                 </para>
             </listitem>
         </varlistentry>
