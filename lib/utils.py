@@ -11,6 +11,7 @@
 # General Public License for more details.
 
 import re
+import warnings
 
 def parse_page_numbers(pages):
     '''
@@ -83,5 +84,33 @@ def sanitize_utf8(text):
             continue
         text = text.replace(ch, u'\N{REPLACEMENT CHARACTER}')
     return text.encode('UTF-8')
+
+class NotOverriddenWarning(UserWarning):
+    pass
+
+def not_overridden(f):
+    r'''
+    >>> warnings.filterwarnings('error', category=NotOverriddenWarning)
+    >>> class B(object):
+    ...   @not_overridden
+    ...   def f(self, x, y): pass
+    >>> class C(B):
+    ...   def f(self, x, y): return x * y
+    >>> B().f(6, 7) # doctest: +ELLIPSIS
+    Traceback (most recent call last):
+    ...
+    NotOverriddenWarning: ...B.f() is not overriden
+    >>> C().f(6, 7)
+    42
+    '''
+    def new_f(self, *args, **kwargs):
+        cls = type(self)
+        warnings.warn(
+            '%s.%s.%s() is not overriden' % (cls.__module__, cls.__name__, f.__name__),
+            category = NotOverriddenWarning,
+            stacklevel = 2
+        )
+        return f(self, *args, **kwargs)
+    return new_f
 
 # vim:ts=4 sw=4 et

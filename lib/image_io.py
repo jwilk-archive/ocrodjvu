@@ -18,6 +18,8 @@ except ImportError, ex:
     ex.args = '%s; please install the python-djvulibre package <http://jwilk.net/software/python-djvulibre>' % str(ex),
     raise
 
+from . import utils
+
 class ImageFormat(object):
 
     extension = None
@@ -35,6 +37,7 @@ class ImageFormat(object):
             raise NotImplementedError('Cannot output %d-bpp images' % bpp)
         self._pixel_format = pixel_format
 
+    @utils.not_overridden
     def write_image(self, page_job, render_layers, file):
         raise NotImplementedError
 

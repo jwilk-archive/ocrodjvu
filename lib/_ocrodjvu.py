@@ -41,6 +41,7 @@ class Saver(object):
 
     in_place = False
 
+    @utils.not_overridden
     def save(self, document, pages, djvu_path, sed_file):
         raise NotImplementedError
 
