@@ -262,7 +262,7 @@
                 </para>
                 <para>
                     This option breaks assumptions of some DjVu tools that words are separated by spaces,
-                    and therefore is it not recommended.
+                    and therefore it is not recommended.
                 </para>
             </listitem>
         </varlistentry>
