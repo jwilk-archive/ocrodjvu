@@ -40,7 +40,12 @@ class ImageFormat(object):
 
 class PNM(ImageFormat):
 
-    '''Binary PBM or PPM.'''
+    '''
+    Raw PBM[0] or raw PPM[1].
+
+    [0] http://netpbm.sourceforge.net/doc/ppm.html
+    [1] http://netpbm.sourceforge.net/doc/pbm.html
+    '''
 
     extension = 'pnm'
 
@@ -68,7 +73,11 @@ class PNM(ImageFormat):
 
 class BMP(ImageFormat):
 
-    '''Uncompressed Windows BMP.'''
+    '''
+    Uncompressed Windows Bitmap.
+
+    http://www.fileformat.info/format/bmp/egff.htm
+    '''
 
     extension = 'bmp'
 
