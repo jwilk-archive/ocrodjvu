@@ -16,6 +16,7 @@ import tempfile
 from cStringIO import StringIO
 
 from .. import errors
+from .. import image_io
 from .. import ipc
 from .. import utils
 
@@ -62,7 +63,7 @@ def get_languages():
 class Engine(object):
 
     name = 'cuneiform'
-    image_format = 'bmp'
+    image_format = image_io.BMP
     output_format = 'html'
 
     def __init__(self):

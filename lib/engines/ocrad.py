@@ -14,6 +14,7 @@ import contextlib
 import re
 
 from .. import errors
+from .. import image_io
 from .. import ipc
 from .. import text_zones
 from .. import unicode_support
@@ -159,7 +160,7 @@ def scan(stream, settings):
 class Engine(object):
 
     name = 'ocrad'
-    image_format = 'ppm'
+    image_format = image_io.PNM
     output_format = 'orf'
 
     def __init__(self):

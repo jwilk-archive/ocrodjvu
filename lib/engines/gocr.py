@@ -21,6 +21,7 @@ except ImportError:
     from xml.etree import cElementTree as etree
 
 from .. import errors
+from .. import image_io
 from .. import ipc
 from .. import text_zones
 from .. import unicode_support
@@ -179,7 +180,7 @@ def scan(stream, settings):
 class Engine(object):
 
     name = 'gocr'
-    image_format = 'ppm'
+    image_format = image_io.PNM
     output_format = 'gocr.xml'
 
     def __init__(self):

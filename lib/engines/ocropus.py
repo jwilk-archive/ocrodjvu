@@ -14,12 +14,13 @@ import contextlib
 
 from . import tesseract
 from .. import errors
+from .. import image_io
 from .. import ipc
 
 class Engine(object):
 
     name = 'ocropus'
-    image_format = 'ppm'
+    image_format = image_io.PNM
     output_format = 'html'
     has_charboxes = False
     script_name = None
