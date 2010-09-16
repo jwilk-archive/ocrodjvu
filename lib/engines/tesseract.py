@@ -95,7 +95,7 @@ class Engine(object):
 
     def __init__(self):
         try:
-            get_languages()
+            list(get_languages())
         except errors.UnknownLanguageList:
             raise errors.EngineNotFound(self.name)
 

@@ -1,8 +1,8 @@
 ocrodjvu (0.6.1) UNRELEASED; urgency=low
 
-  * 
+  * Improve detection of Tesseract.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 16 Sep 2010 21:32:10 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 17 Sep 2010 00:07:33 +0200
 
 ocrodjvu (0.6.0) unstable; urgency=low
 
