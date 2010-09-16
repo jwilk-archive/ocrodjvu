@@ -1,7 +1,8 @@
 ocrodjvu (0.5.2) UNRELEASED; urgency=low
 
   * Add support for the Tesseract OCR engine.
-  * Fix Cuneiform support (a regression introduced in 0.5).
+  * Fix Cuneiform support (a regression introduced in 0.5). Thanks to Kyrill
+    Detinov for the bug report.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Thu, 16 Sep 2010 18:13:09 +0200
 
