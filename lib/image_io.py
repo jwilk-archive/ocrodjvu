@@ -123,4 +123,58 @@ class BMP(ImageFormat):
             file.write(struct.pack('<BBBB', 0, 0, 0, 0))
         file.write(data)
 
+class TIFF(ImageFormat):
+
+    '''
+    Uncompressed TIFF.
+
+    http://www.fileformat.info/format/tiff/corion.htm
+    '''
+
+    extension = 'tif'
+    # Ideally it should be 'tiff', but tesseract is not happy with such an
+    # extension
+
+    def write_image(self, page_job, render_layers, file):
+        size = page_job.size
+        rect = (0, 0) + size
+        data = page_job.render(
+            render_layers,
+            rect, rect,
+            self._pixel_format
+        )
+        if self._pixel_format.bpp == 1:
+            interp = 0
+            spp = 1
+        elif self._pixel_format.bpp == 24:
+            interp = 2
+            spp = 3
+        else:
+            raise NotImplementedError
+        n_tags = 9
+        data_offset = 28 + n_tags * 12
+        header = []
+        header += struct.pack('<ccHI', 'I', 'I', 42, 22), # main header
+        header += struct.pack('<HHH', 8, 8, 8), # bits per sample
+        header += struct.pack('<II', page_job.dpi, 1), # resolution
+        header += struct.pack('<H', n_tags), # number of tags
+        header += struct.pack('<HHII', 0x100, 4, 1, size[0]), # ImageWidth
+        header += struct.pack('<HHII', 0x101, 4, 1, size[1]), # ImageLength
+        if interp > 0:
+            header += struct.pack('<HHII', 0x102, 3, 3, 8), # BitsPerSample
+        else:
+            header += struct.pack('<HHII', 0x102, 3, 1, 1), # BitsPerSample
+        header += struct.pack('<HHIHxx', 0x106, 3, 1, interp), # PhotometicInterpretation
+        header += struct.pack('<HHII', 0x111, 4, 1, data_offset), # StripOffsets
+        header += struct.pack('<HHIHxx', 0x115, 3, 1, spp), # SamplesPerPixel
+        header += struct.pack('<HHII', 0x117, 4, 1, len(data)), # StripByteCounts
+        header += struct.pack('<HHII', 0x11A, 5, 1, 14), # XResolution
+        header += struct.pack('<HHII', 0x11B, 5, 1, 14), # YResolution
+        header += struct.pack('<I', 0), # offset to next IFD
+        assert len(header) == n_tags + 5
+        header = ''.join(header)
+        assert len(header) == data_offset
+        file.write(header)
+        file.write(data)
+
 # vim:ts=4 sw=4 et
