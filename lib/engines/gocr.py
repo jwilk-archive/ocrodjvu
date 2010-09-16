@@ -175,7 +175,7 @@ def scan(stream, settings):
             stack[-1] += [zone]
         else:
             raise errors.MalformedOcrOutput('unexpected <%s>' % element.tag.encode('ASCII', 'unicode-escape'))
-    return text_zones.Zone(const.TEXT_ZONE_PAGE, text_zones.BBox(1, 1, 1, 1)) # XXX
+    raise errors.MalformedOcrOutput('<page> not found')
 
 class Engine(object):
 
