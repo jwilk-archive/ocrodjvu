@@ -16,6 +16,8 @@ Dependencies
 
   + GOCR_ ≥ 0.40 (tested with 0.48) —
     document analysis and OCR system
+  + Tesseract_ (tested with 2.04) —
+    an OCR system
 
 * DjVuLibre_ ≥ 3.5.21 —
   library for the DjVu_ file format
@@ -40,6 +42,8 @@ Dependencies
    http://www.gnu.org/software/ocrad/
 .. _GOCR:
    http://jocr.sourceforge.net/
+.. _Tesseract:
+   http://code.google.com/p/tesseract-ocr/
 .. _DjVuLibre:
    http://djvu.sourceforge.net/
 .. _DjVu:
