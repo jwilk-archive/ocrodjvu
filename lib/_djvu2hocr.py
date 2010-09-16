@@ -15,10 +15,10 @@ import locale
 import os
 import re
 import sys
-import tempfile
 
 from . import hocr
 from . import ipc
+from . import temporary
 from . import text_zones
 from . import unicode_support
 from . import utils
@@ -284,7 +284,7 @@ def main():
             djvused.wait()
         options.pages = xrange(1, n_pages + 1)
     page_iterator = iter(options.pages)
-    sed_script = tempfile.NamedTemporaryFile(prefix='ocrodjvu', suffix='.djvused')
+    sed_script = temporary.file(suffix='.djvused')
     for n in options.pages:
         print >>sed_script, 'select %d; size; print-txt' % n
     sed_script.flush()

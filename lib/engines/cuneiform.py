@@ -12,12 +12,12 @@
 
 import contextlib
 import re
-import tempfile
 from cStringIO import StringIO
 
 from .. import errors
 from .. import image_io
 from .. import ipc
+from .. import temporary
 from .. import utils
 
 _default_language = 'eng'
@@ -93,7 +93,7 @@ class Engine(object):
 
     @staticmethod
     def recognize(pbm_file, language, *args, **kwargs):
-        hocr_file = tempfile.NamedTemporaryFile(prefix='ocrodjvu.', suffix='.html')
+        hocr_file = temporary.file(suffix='.html')
         worker = ipc.Subprocess(
             ['cuneiform', '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file.name, pbm_file.name],
             stdin=ipc.PIPE,

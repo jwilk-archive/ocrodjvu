@@ -10,16 +10,18 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+from __future__ import with_statement
+
 import contextlib
 import glob
 import os
 import re
 import shutil
-import tempfile
 
 from .. import errors
 from .. import image_io
 from .. import ipc
+from .. import temporary
 from .. import text_zones
 
 const = text_zones.const
@@ -71,16 +73,13 @@ def get_default_language():
 
 @contextlib.contextmanager
 def recognize(image_file, language, details=None):
-    output_dir = tempfile.mkdtemp(prefix='ocrodjvu.')
-    try:
+    with temporary.directory() as output_dir:
         worker = ipc.Subprocess(
             ['tesseract', image_file.name, os.path.join(output_dir, 'tmp'), '-l', language],
             stderr=ipc.PIPE,
         )
         worker.wait()
         yield open(os.path.join(output_dir, 'tmp.txt'), 'rt')
-    finally:
-        shutil.rmtree(output_dir)
 
 class ExtractSettings(object):
 

@@ -19,12 +19,12 @@ import locale
 import os.path
 import shutil
 import sys
-import tempfile
 import threading
 
 from . import engines
 from . import errors
 from . import ipc
+from . import temporary
 from . import text_zones
 from . import utils
 from . import version
@@ -267,7 +267,7 @@ class ArgumentParser(argparse.ArgumentParser):
 class Context(djvu.decode.Context):
 
     def init(self, options):
-        self._temp_dir = tempfile.mkdtemp(prefix='ocrodjvu.')
+        self._temp_dir = temporary.raw.mkdtemp(prefix='ocrodjvu.')
         self._debug = options.debug
         self._options = options
         bpp = 24 if self._options.render_layers != djvu.decode.RENDER_MASK_ONLY else 1
@@ -277,7 +277,7 @@ class Context(djvu.decode.Context):
         path = os.path.join(self._temp_dir, name)
         file = open(path, 'w+b')
         if not self._debug and auto_remove:
-            file = tempfile._TemporaryFileWrapper(file, file.name)
+            file = temporary.wrapper(file, file.name)
         return file
 
     def handle_message(self, message):
