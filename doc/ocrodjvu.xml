@@ -410,7 +410,8 @@
             -->
             <listitem>
                 <para>
-                    Directory for temporary files. The default is <filename>/tmp</filename>.
+                    <command>&p;</command> makes havy use of temporary files. It will store them in a directory
+                    specified by this variable. The default is <filename>/tmp</filename>.
                 </para>
             </listitem>
         </varlistentry>
