@@ -143,4 +143,49 @@ class Zone(object):
             if isinstance(child, Zone):
                 child.rotate(rotation, xform)
 
+def group_words(zones, details, word_break_iterator):
+    text = ''.join(z[0] for z in zones)
+    if details > TEXT_DETAILS_WORD:
+        # One zone per line
+        return [text]
+    # One zone per word
+    split_zones = []
+    for zone in zones:
+        zone_text = zone[0]
+        if len(zone_text) == 1:
+            split_zones += [zone]
+            continue
+        x0, y0, x1, y1 = zone.bbox
+        w = x1 - x0
+        m = len(zone_text)
+        split_zones += [
+            Zone(zone.type, BBox(x0 + w * n / m, y0, x0 + w * (n + 1) / m, y1))
+            for n, ch in enumerate(zone_text)
+        ]
+    zones = split_zones
+    del split_zones
+    assert len(text) == len(zones)
+    words = []
+    i = 0
+    for j in word_break_iterator(text):
+        subtext = text[i:j]
+        if subtext.isspace():
+            i = j
+            continue
+        bbox = BBox()
+        for k in xrange(i, j):
+            bbox.update(zones[k].bbox)
+        last_word = Zone(type=const.TEXT_ZONE_WORD, bbox=bbox)
+        words += last_word,
+        if details > TEXT_DETAILS_CHARACTER:
+            last_word += [subtext]
+        else:
+            last_word += [
+                Zone(type=const.TEXT_ZONE_CHARACTER, bbox=(x0, y0, x1, y1), children=[ch])
+                for k in xrange(i, j)
+                for (x0, y0, x1, y1), ch in [(zones[k].bbox, text[k])]
+            ]
+        i = j
+    return words
+
 # vim:ts=4 sw=4 et

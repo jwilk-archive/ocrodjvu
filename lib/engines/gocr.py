@@ -13,6 +13,7 @@
 from __future__ import division
 
 import contextlib
+import functools
 import re
 
 try:
@@ -77,54 +78,8 @@ class ExtractSettings(object):
         self.uax29 = uax29
         self.page_size = page_size
 
-def group_words(children, settings):
-    text = ''.join(child[0] for child in children)
-    if settings.details > text_zones.TEXT_DETAILS_WORD:
-        # One zone per line
-        children = [text]
-    else:
-        # One zone per word
-        split_children = []
-        for child in children:
-            child_text = child[0]
-            if len(child_text) == 1:
-                split_children += [child]
-                continue
-            x0, y0, x1, y1 = child.bbox
-            w = x1 - x0
-            m = len(child_text)
-            split_children += [
-                text_zones.Zone(child.type, text_zones.BBox(x0 + w * n/m, y0, x0 + w * (n + 1)/m, y1))
-                for n, ch in enumerate(child_text)
-            ]
-        children = split_children
-        assert len(text) == len(children)
-        words = []
-        break_iterator = unicode_support.word_break_iterator(text, locale=settings.uax29)
-        i = 0
-        for j in break_iterator:
-            subtext = text[i:j]
-            if subtext.isspace():
-                i = j
-                continue
-            bbox = text_zones.BBox()
-            for k in xrange(i, j):
-                bbox.update(children[k].bbox)
-            last_word = text_zones.Zone(type=const.TEXT_ZONE_WORD, bbox=bbox)
-            words += last_word,
-            if settings.details > text_zones.TEXT_DETAILS_CHARACTER:
-                last_word += subtext,
-            else:
-                last_word += [
-                    text_zones.Zone(type=const.TEXT_ZONE_CHARACTER, bbox=(x0, y0, x1, y1), children=[ch])
-                    for k in xrange(i, j)
-                    for (x0, y0, x1, y1), ch in [(children[k].bbox, text[k])]
-                ]
-            i = j
-        children = words
-    return children
-
 def scan(stream, settings):
+    word_break_iterator = functools.partial(unicode_support.word_break_iterator, locale=settings.uax29)
     stack = [[], [], []]
     for _, element in stream:
         if element.tag in ('barcode', 'img'):
@@ -157,7 +112,7 @@ def scan(stream, settings):
             bbox = text_zones.BBox()
             for child in children:
                 bbox.update(child.bbox)
-            children = group_words(children, settings)
+            children = text_zones.group_words(children, settings.details, word_break_iterator)
             zone = text_zones.Zone(const.TEXT_ZONE_LINE, bbox, children)
             stack[-1] += [zone]
         elif element.tag in ('box', 'space'):
