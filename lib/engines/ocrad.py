@@ -150,10 +150,16 @@ def scan(stream, settings):
             coords, line = line.split('; ', 1)
             x, y, w, h = map(int, coords.split())
             bbox = text_zones.BBox(x, y, x + w, y + h)
-            m = _character_re.match(line)
-            if not m:
-                raise errors.MalformedOcrOutput('bad character description: %r' % line)
-            return text_zones.Zone(const.TEXT_ZONE_CHARACTER, bbox, m.groups())
+            if line[0] == '0':
+                # No interpretations has been proposed for this particular character.
+                text = u'\N{REPLACEMENT CHARACTER}'
+                # TODO: Let user to choose another replacement text.
+            else:
+                m = _character_re.match(line)
+                if not m:
+                    raise errors.MalformedOcrOutput('bad character description: %r' % line)
+                [text] = m.groups()
+            return text_zones.Zone(const.TEXT_ZONE_CHARACTER, bbox, [text])
         raise errors.MalformedOcrOutput('unexpected line: %r' % line)
     raise errors.MalformedOcrOutput('unexpected line at EOF: %r' % line)
 
