@@ -1,10 +1,10 @@
 ocrodjvu (0.6.1) UNRELEASED; urgency=low
 
   * Improve detection of Tesseract.
-  * Deal with unrecognized and non-ASCII characters in Ocard ORF output.
+  * Correctly handle unrecognized and non-ASCII characters in Ocrad ORF output.
     Thanks to Heinrich Schwietering for the bug report.
-  * Deal with text closer than 100 pixels from the left edge in Ocrad ORF
-    output. Thanks to Heinrich Schwietering for the test case.
+  * Correct handle text that is closer than 100 pixels from the left edge in
+    Ocrad ORF output. Thanks to Heinrich Schwietering for the test case.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Wed, 22 Sep 2010 18:04:11 +0200
 
@@ -20,8 +20,8 @@ ocrodjvu (0.5.1) unstable; urgency=low
 
   * Fix crash when listing engines/languages if Ocropus is not found.
     Thanks to Kyrill Detinov for the bug report.
-  * lxml is no longer for OCR engines that are not using hOCR as output
-    format.
+  * lxml is no longer required for OCR engines that are not using hOCR as
+    output format.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Wed, 15 Sep 2010 18:38:00 +0200
 
