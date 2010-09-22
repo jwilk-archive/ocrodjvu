@@ -3,8 +3,10 @@ ocrodjvu (0.6.1) UNRELEASED; urgency=low
   * Improve detection of Tesseract.
   * Deal with unrecognized and non-ASCII characters in Ocard ORF output.
     Thanks to Heinrich Schwietering for the bug report.
+  * Deal with text closer than 100 pixels from the left edge in Ocrad ORF
+    output. Thanks to Heinrich Schwietering for the test case.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 22 Sep 2010 18:01:30 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 22 Sep 2010 18:04:11 +0200
 
 ocrodjvu (0.6.0) unstable; urgency=low
 

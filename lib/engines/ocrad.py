@@ -146,6 +146,7 @@ def scan(stream, settings):
                     i = j
                 children = words
             return text_zones.Zone(const.TEXT_ZONE_LINE, bbox, children)
+        line = line.lstrip()
         if line[0].isdigit():
             coords, line = line.split('; ', 1)
             x, y, w, h = map(int, coords.split())
