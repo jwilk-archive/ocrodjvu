@@ -159,6 +159,7 @@ def scan(stream, settings):
                 if not m:
                     raise errors.MalformedOcrOutput('bad character description: %r' % line)
                 [text] = m.groups()
+                text = text.decode('UTF-8')
             return text_zones.Zone(const.TEXT_ZONE_CHARACTER, bbox, [text])
         raise errors.MalformedOcrOutput('unexpected line: %r' % line)
     raise errors.MalformedOcrOutput('unexpected line at EOF: %r' % line)
