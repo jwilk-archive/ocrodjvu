@@ -11,6 +11,7 @@
 # General Public License for more details.
 
 import contextlib
+import functools
 import re
 
 from .. import errors
@@ -83,6 +84,7 @@ class ExtractSettings(object):
 _character_re = re.compile(r"^[0-9]+, '('|[^']*)'[0-9]+")
 
 def scan(stream, settings):
+    word_break_iterator = functools.partial(unicode_support.word_break_iterator, locale=settings.uax29)
     for line in stream:
         if line.startswith('#'):
             continue
@@ -114,37 +116,7 @@ def scan(stream, settings):
             bbox = text_zones.BBox()
             for child in children:
                 bbox.update(child.bbox)
-            text = ''.join(child[0] for child in children)
-            if settings.details > text_zones.TEXT_DETAILS_WORD:
-                # One zone per line
-                children = [text]
-            else:
-                # One zone per word
-                if len(text) != len(children):
-                    raise errors.MalformedOcrOutput("number of characters (%d) doesn't match text length (%d)" % (len(children), len(text)))
-                words = []
-                break_iterator = unicode_support.word_break_iterator(text, locale=settings.uax29)
-                i = 0
-                for j in break_iterator:
-                    subtext = text[i:j]
-                    if subtext.isspace():
-                        i = j
-                        continue
-                    word_bbox = text_zones.BBox()
-                    for k in xrange(i, j):
-                        word_bbox.update(children[k].bbox)
-                    last_word = text_zones.Zone(type=const.TEXT_ZONE_WORD, bbox=word_bbox)
-                    words += last_word,
-                    if settings.details > text_zones.TEXT_DETAILS_CHARACTER:
-                        last_word += subtext,
-                    else:
-                        last_word += [
-                            text_zones.Zone(type=const.TEXT_ZONE_CHARACTER, bbox=(x0, y0, x1, y1), children=[ch])
-                            for k in xrange(i, j)
-                            for (x0, y0, x1, y1), ch in [(children[k].bbox, text[k])]
-                        ]
-                    i = j
-                children = words
+            children = text_zones.group_words(children, settings.details, word_break_iterator)
             return text_zones.Zone(const.TEXT_ZONE_LINE, bbox, children)
         line = line.lstrip()
         if line[0].isdigit():
