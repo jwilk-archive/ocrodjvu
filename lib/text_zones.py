@@ -121,6 +121,8 @@ class Zone(object):
         )
 
     def rotate(obj, rotation, xform=None):
+        for x in obj.bbox:
+            assert x is not None
         if xform is None:
             assert obj.type == const.TEXT_ZONE_PAGE
             assert obj.bbox[:2] == (0, 0)
