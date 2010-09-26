@@ -66,11 +66,6 @@ djvu2hocr_capabilities = list(sorted(cls for tag, cls in _djvu_zone_to_hocr.iter
 djvu_zone_to_hocr = _djvu_zone_to_hocr.__getitem__
 del _djvu_zone_to_hocr
 
-image_re = re.compile(
-    r'''
-        image \s+ (?P<file_name> \S+)
-    ''', re.VERBOSE)
-
 bbox_re = re.compile(
     r'''
         bbox \s+
