@@ -1,4 +1,4 @@
-ocrodjvu (0.6.1) UNRELEASED; urgency=high
+ocrodjvu (0.6.1) unstable; urgency=high
 
   * Improve detection of Tesseract.
   * Correctly handle unrecognized and non-ASCII characters in Ocrad ORF output.
@@ -9,7 +9,7 @@ ocrodjvu (0.6.1) UNRELEASED; urgency=high
     bug report.
   * Fix insecure use of temporary files when using Cuneiform.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sun, 26 Sep 2010 14:08:31 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 26 Sep 2010 15:01:51 +0200
 
 ocrodjvu (0.6.0) unstable; urgency=low
 
