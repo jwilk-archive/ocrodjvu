@@ -10,7 +10,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+from __future__ import with_statement
+
 import contextlib
+import os
 import re
 from cStringIO import StringIO
 
@@ -93,18 +96,22 @@ class Engine(object):
 
     @staticmethod
     def recognize(pbm_file, language, *args, **kwargs):
-        hocr_file = temporary.file(suffix='.html')
-        worker = ipc.Subprocess(
-            ['cuneiform', '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file.name, pbm_file.name],
-            stdin=ipc.PIPE,
-            stdout=ipc.PIPE,
-        )
-        worker.stdin.close()
-        worker.wait()
+        with temporary.directory() as hocr_directory:
+            # A separate non-world-writable directory is needed, as Cuneiform
+            # can create additional files, e.g. images.
+            hocr_file_name = os.path.join(hocr_directory, 'ocr.html')
+            worker = ipc.Subprocess(
+                ['cuneiform', '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file_name, pbm_file.name],
+                stdin=ipc.PIPE,
+                stdout=ipc.PIPE,
+            )
+            worker.stdin.close()
+            worker.wait()
+            with open(hocr_file_name, 'r') as hocr_file:
+                contents = hocr_file.read()
         # Sometimes Cuneiform returns files with broken encoding or with control
         # characters: https://bugs.launchpad.net/cuneiform-linux/+bug/585418
         # Let's fix it.
-        contents = hocr_file.read()
         contents = utils.sanitize_utf8(contents)
         return contextlib.closing(StringIO(contents))
 
