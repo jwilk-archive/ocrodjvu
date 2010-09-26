@@ -241,7 +241,18 @@ def _scan(node, buffer, parent_bbox, settings):
         result[:] = _replace_text(djvu_class, title, ''.join(result), settings)
     elif settings.cuneiform and settings.cuneiform <= (0, 8) and djvu_class is const.TEXT_ZONE_PARAGRAPH:
         result[:] = _replace_cuneiform08_paragraph(result[:], settings)
-    if not bbox and not len(node):
+    if not bbox:
+        if len(node) == 0:
+            # Ocropus 0.2 does't always provide necessary bounding box
+            # information. We have no other choice than to drop such a broken
+            # zone silently.
+            # FIXME: This work-around is ugly and should be dropped at some point.
+            return
+        # If a bbox is undetermined, it's either because of:
+        # - malformed hOCR (but that should be noticed earlier/later), or
+        # - a zone with no children (which we're skipping here).
+        # We skip the zone even if the HTML element is not empty, i.e. len(node) > 0.
+        assert len(result) == 0
         return
     if settings.page_size is None:
         raise errors.MalformedHocr('unable to determine page size')

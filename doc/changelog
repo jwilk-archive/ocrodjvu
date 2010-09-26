@@ -5,8 +5,10 @@ ocrodjvu (0.6.1) UNRELEASED; urgency=low
     Thanks to Heinrich Schwietering for the bug report.
   * Correct handle text that is closer than 100 pixels from the left edge in
     Ocrad ORF output. Thanks to Heinrich Schwietering for the test case.
+  * Fix crash on hOCR with image elements. Thanks to Alexey Shipunov for the
+    bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 22 Sep 2010 18:04:11 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 26 Sep 2010 13:29:37 +0200
 
 ocrodjvu (0.6.0) unstable; urgency=low
 
