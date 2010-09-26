@@ -67,7 +67,7 @@ class Subprocess(subprocess.Popen):
         env = dict(
                 (k, v)
                 for k, v in env.iteritems()
-                if not (k.startswith('LC_') or k in ('LANG', 'LANGUAGES'))
+                if not (k.startswith('LC_') or k in ('LANG', 'LANGUAGE'))
         )
         if lc_ctype:
             env['LC_CTYPE'] = lc_ctype
