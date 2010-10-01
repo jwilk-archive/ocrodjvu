@@ -38,8 +38,8 @@ class ArgumentParser(argparse.ArgumentParser):
         group = self.add_argument_group(title='word segmentation options')
         group.add_argument('-t', '--details', dest='details', choices=('lines', 'words', 'chars'), action='store', default='words', help='amount of text details to extract')
         group.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='space', help='word segmentation algorithm')
+        # --language is currently not very useful, as ICU don't have any specialisations for languages ocrodjvu supports:
         group.add_argument('--language', dest='language', help=argparse.SUPPRESS or 'language for word segmentation', default='eng')
-        # This option is currently not very useful, as ICU don't have any specialisations for languages ocrodjvu supports
 
     def parse_args(self):
         options = argparse.ArgumentParser.parse_args(self)
