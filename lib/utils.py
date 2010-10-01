@@ -99,14 +99,14 @@ def not_overridden(f):
     >>> B().f(6, 7) # doctest: +ELLIPSIS
     Traceback (most recent call last):
     ...
-    NotOverriddenWarning: ...B.f() is not overriden
+    NotOverriddenWarning: ...B.f() is not overridden
     >>> C().f(6, 7)
     42
     '''
     def new_f(self, *args, **kwargs):
         cls = type(self)
         warnings.warn(
-            '%s.%s.%s() is not overriden' % (cls.__module__, cls.__name__, f.__name__),
+            '%s.%s.%s() is not overridden' % (cls.__module__, cls.__name__, f.__name__),
             category=NotOverriddenWarning,
             stacklevel=2
         )
