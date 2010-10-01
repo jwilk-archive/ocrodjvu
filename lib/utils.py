@@ -107,8 +107,8 @@ def not_overridden(f):
         cls = type(self)
         warnings.warn(
             '%s.%s.%s() is not overriden' % (cls.__module__, cls.__name__, f.__name__),
-            category = NotOverriddenWarning,
-            stacklevel = 2
+            category=NotOverriddenWarning,
+            stacklevel=2
         )
         return f(self, *args, **kwargs)
     return new_f
