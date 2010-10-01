@@ -163,7 +163,7 @@ def group_words(zones, details, word_break_iterator):
         w = x1 - x0
         m = len(zone_text)
         split_zones += [
-            Zone(zone.type, BBox(x0 + w * n / m, y0, x0 + w * (n + 1) / m, y1))
+            Zone(zone.type, BBox(x0 + w * n // m, y0, x0 + w * (n + 1) // m, y1))
             for n, ch in enumerate(zone_text)
         ]
     zones = split_zones
