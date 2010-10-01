@@ -79,9 +79,9 @@ class Zone(object):
     @property
     def text(self):
         if len(self._sexpr) != 6:
-            raise TypeError
+            raise TypeError('List of %d (!= 6) elements' % len(self._sexpr))
         if not isinstance(self._sexpr[5], sexpr.StringExpression):
-            raise TypeError
+            raise TypeError('Last element is not a string')
         return unicode(self._sexpr[5].value, 'UTF-8', 'replace')
 
     @property
@@ -97,7 +97,7 @@ class Zone(object):
     def n_children(self):
         n = len(self._sexpr) - 5
         if n <= 0:
-            raise TypeError
+            raise TypeError('List of %d (< 6) elements' % len(self._sexpr))
         return n
 
     def __repr__(self):

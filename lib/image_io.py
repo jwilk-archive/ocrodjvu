@@ -39,7 +39,7 @@ class ImageFormat(object):
 
     @utils.not_overridden
     def write_image(self, page_job, render_layers, file):
-        raise NotImplementedError
+        raise NotImplementedError('Cannot output images in this format')
 
 class PNM(ImageFormat):
 
@@ -150,7 +150,7 @@ class TIFF(ImageFormat):
             interp = 2
             spp = 3
         else:
-            raise NotImplementedError
+            raise NotImplementedError('Cannot output %d-bpp images' % bpp)
         n_tags = 9
         data_offset = 28 + n_tags * 12
         header = []

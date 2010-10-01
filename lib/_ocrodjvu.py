@@ -43,7 +43,7 @@ class Saver(object):
 
     @utils.not_overridden
     def save(self, document, pages, djvu_path, sed_file):
-        raise NotImplementedError
+        raise NotImplementedError('Cannot save results in this format')
 
 class BundledSaver(Saver):
 
