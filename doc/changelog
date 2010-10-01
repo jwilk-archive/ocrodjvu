@@ -1,8 +1,8 @@
 ocrodjvu (0.6.3) UNRELEASED; urgency=low
 
-  * 
+  * Correctly handle empty pages recognized by Cuneiform and Ocrad.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 27 Sep 2010 00:46:43 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 01 Oct 2010 20:28:55 +0200
 
 ocrodjvu (0.6.1) unstable; urgency=high
 

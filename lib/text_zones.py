@@ -87,13 +87,15 @@ class Zone(object):
 
     @property
     def sexpr(self):
+        children = [
+            child.sexpr if isinstance(child, Zone) else child
+            for child in self.children
+            if not isinstance(child, Space)
+        ] or ['']
         return sexpr.Expression(
             [self.type] +
-            list(self.bbox) + [
-                child.sexpr if isinstance(child, Zone) else child
-                for child in self.children
-                if not isinstance(child, Space)
-            ]
+            list(self.bbox) +
+            children
         )
 
     def __iter__(self):

@@ -319,6 +319,8 @@ class Context(djvu.decode.Context):
                         uax29=self._options.uax29,
                         page_size=size
                     )
+                    # It should be: (page 0 0 <width> <height> …):
+                    assert len(text) > 5
                     return text
                 finally:
                     if result_file is not None:
