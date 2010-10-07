@@ -1,6 +1,7 @@
 ocrodjvu (0.6.2) UNRELEASED; urgency=low
 
-  * Correctly handle empty pages recognized by Cuneiform and Ocrad.
+  * Correctly handle empty pages recognized by Cuneiform and Ocrad. Thanks to
+    Alexey Shipunov for the bug report.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Fri, 01 Oct 2010 20:31:31 +0200
 
@@ -13,7 +14,9 @@ ocrodjvu (0.6.1) unstable; urgency=high
     Ocrad ORF output. Thanks to Heinrich Schwietering for the test case.
   * Fix crash on hOCR with image elements. Thanks to Alexey Shipunov for the
     bug report.
+    http://bugs.debian.org/598139
   * Fix insecure use of temporary files when using Cuneiform.
+    http://bugs.debian.org/598134
 
  -- Jakub Wilk <jwilk@jwilk.net>  Sun, 26 Sep 2010 15:01:51 +0200
 
