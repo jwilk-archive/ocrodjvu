@@ -125,6 +125,7 @@
         <title>OCR engine options</title>
         <variablelist>
         <varlistentry>
+            <term><option>-e</option></term>
             <term><option>--engine=<replaceable>engine-id</replaceable></option></term>
             <listitem>
                 <para>
@@ -289,6 +290,7 @@
             </listitem>
         </varlistentry>
         <varlistentry>
+            <term><option>-l</option></term>
             <term><option>--language=<replaceable>language-id</replaceable></option></term>
             <listitem>
                 <para>

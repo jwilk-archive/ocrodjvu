@@ -4,8 +4,10 @@ ocrodjvu (0.6.2) UNRELEASED; urgency=low
     Alexey Shipunov for the bug report.
   * Fix crash on Cuneiform-generated hOCR with bounding boxes for whitespace
     characters. Thanks to Alexey Shipunov for the bug report.
+  * ocrodjvu: make ‘-e’ an alias for ‘--engine’.
+  * ocrodjvu: make ‘-l’ an alias for ‘--language’.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sun, 10 Oct 2010 19:28:11 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 10 Oct 2010 20:37:39 +0200
 
 ocrodjvu (0.6.1) unstable; urgency=high
 

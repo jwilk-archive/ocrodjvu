@@ -165,11 +165,11 @@ class ArgumentParser(argparse.ArgumentParser):
                     help=saver_type.__doc__
                 )
             )
-        self.add_argument('--engine', dest='engine', nargs=1, action=self.set_engine, default=self.default_engine, help='OCR engine to use')
+        self.add_argument('-e', '--engine', dest='engine', nargs=1, action=self.set_engine, default=self.default_engine, help='OCR engine to use')
         self.add_argument('--list-engines', action=self.list_engines, nargs=0, help='print list of available OCR engines')
         self.add_argument('--ocr-only', dest='ocr_only', action='store_true', default=False, help='''don't save pages without OCR''')
         self.add_argument('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
-        self.add_argument('--language', dest='language', help='set recognition language')
+        self.add_argument('-l', '--language', dest='language', help='set recognition language')
         self.add_argument('--list-languages', action=self.list_languages, nargs=0, help='print list of available languages')
         self.add_argument('--render', dest='render_layers', choices=self._render_map.keys(), action='store', default='mask', help='image layers to render')
         self.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to process')
