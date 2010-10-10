@@ -189,7 +189,7 @@ def _scan(node, buffer, parent_bbox, settings):
     if not isinstance(node.tag, basestring):
         return
     if settings.cuneiform and settings.cuneiform <= (0, 8):
-        # Cuneiform ≤ 0.8 don't mark OCR elements in a hOCR way:
+        # Cuneiform ≤ 0.8 don't mark OCR elements in an hOCR way:
         djvu_class = cuneiform_tag_to_djvu(node.tag)
     else:
         hocr_classes = (node.get('class') or '').split()
@@ -200,7 +200,7 @@ def _scan(node, buffer, parent_bbox, settings):
                 break
         else:
             if node.tag == 'p':
-                # Cuneiform ≥ 0.9 don't mark paragraphs in a hOCR way:
+                # Cuneiform ≥ 0.9 don't mark paragraphs in an hOCR way:
                 djvu_class = cuneiform_tag_to_djvu(node.tag)
     if not djvu_class:
         look_down(buffer, parent_bbox)
@@ -243,7 +243,7 @@ def _scan(node, buffer, parent_bbox, settings):
         result[:] = _replace_cuneiform08_paragraph(result[:], settings)
     if not bbox:
         if len(node) == 0:
-            # Ocropus 0.2 does't always provide necessary bounding box
+            # Ocropus 0.2 doesn't always provide necessary bounding box
             # information. We have no other choice than to drop such a broken
             # zone silently.
             # FIXME: This work-around is ugly and should be dropped at some point.
