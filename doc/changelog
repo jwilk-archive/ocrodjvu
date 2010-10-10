@@ -2,8 +2,10 @@ ocrodjvu (0.6.2) UNRELEASED; urgency=low
 
   * Correctly handle empty pages recognized by Cuneiform and Ocrad. Thanks to
     Alexey Shipunov for the bug report.
+  * Fix crash on Cuneiform-generated hOCR with bounding boxes for whitespace
+    characters. Thanks to Alexey Shipunov for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 01 Oct 2010 20:31:31 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 10 Oct 2010 19:28:11 +0200
 
 ocrodjvu (0.6.1) unstable; urgency=high
 

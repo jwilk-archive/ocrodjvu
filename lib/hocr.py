@@ -258,7 +258,11 @@ def _scan(node, buffer, parent_bbox, settings):
         raise errors.MalformedHocr('unable to determine page size')
     result.bbox = bbox
     if len(result) == 0:
-        result += '',
+        if settings.cuneiform <= (0, 8) and djvu_class is const.TEXT_ZONE_CHARACTER:
+            # Cuneiform ≤ 0.8 provides bounding boxes for some whitespace characters.
+            result += [' ']
+        else:
+            result += ['']
     buffer += result,
 
 def scan(node, settings):
