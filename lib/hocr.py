@@ -124,7 +124,10 @@ def _replace_text(djvu_class, title, text, settings):
             text = text[:-1]
     if settings.cuneiform:
         # Cuneiform tends to attach superfluous whitespace:
-        text = text.rstrip()
+        new_text = text.rstrip()
+        trailing_whitespace_len = len(text) - len(new_text)
+        text = new_text
+        del new_text
     if settings.details >= djvu_class:
         return text,
     m = bboxes_re.search(title)
@@ -135,11 +138,15 @@ def _replace_text(djvu_class, title, text, settings):
     if len(coordinates) == len(text):
         pass  # OK
     else:
-        if not embedded_eol and len(coordinates) == len(text) + 1:
-            # OCRopus produces weird hOCR output if line ends with a hyphen
+        if settings.cuneiform and 0 < len(coordinates) - len(text) <= trailing_whitespace_len:
+            # Cuneiform ≥ 0.9 provides bounding boxes for some whitespace characters.
+            del coordinates[len(text):]
+        elif not settings.cuneiform and not embedded_eol and len(coordinates) == len(text) + 1:
+            # OCRopus produces weird hOCR output if line ends with a hyphen.
             del coordinates[-1]
         else:
             raise errors.MalformedHocr("number of bboxes doesn't match text length")
+    assert len(coordinates) == len(text)
     if djvu_class > const.TEXT_ZONE_WORD:
         # Split words
         words = []
