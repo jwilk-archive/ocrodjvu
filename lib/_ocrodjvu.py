@@ -20,6 +20,7 @@ import os.path
 import shutil
 import sys
 import threading
+import traceback
 
 from . import engines
 from . import errors
@@ -174,6 +175,8 @@ class ArgumentParser(argparse.ArgumentParser):
         self.add_argument('--render', dest='render_layers', choices=self._render_map.keys(), action='store', default='mask', help='image layers to render')
         self.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to process')
         self.add_argument('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
+        self.add_argument('--on-error', choices=('abort', 'resume'), default='abort', help='error handling strategy' or argparse.SUPPRESS)
+        # --on-error=resume should not be used by anobody. No, really.
         self.add_argument('-j', '--jobs', dest='n_jobs', metavar='N', nargs='?', type=int, default=1, help='number of jobs to run simultaneously')
         self.add_argument('path', metavar='FILE', help='DjVu file to process')
         group = self.add_argument_group(title='text segmentation options')
@@ -236,6 +239,7 @@ class ArgumentParser(argparse.ArgumentParser):
             self.error('Unable to parse page numbers')
         options.details = self._details_map[options.details]
         options.render_layers = self._render_map[options.render_layers]
+        options.resume_on_error = options.on_error == 'resume'
         try:
             saver = options.saver
         except AttributeError:
@@ -341,11 +345,23 @@ class Context(djvu.decode.Context):
             except djvu.decode.NotAvailable:
                 print >>sys.stderr, 'No image suitable for OCR.'
                 result = False
-            except Exception, ex:
-                results[n] = ex
+            except (SystemExit, KeyboardInterrupt), ex:
                 with condition:
                     condition.notify()
                 raise
+            except Exception, ex:
+                try:
+                    if self._options.resume_on_error:
+                        # As requested by user, don't abort on error and pretend that nothing happened.
+                        results[n] = None
+                        continue
+                    else:
+                        # The main thread will take care of aborting the application.
+                        results[n] = ex
+                        return
+                finally:
+                    with condition:
+                        condition.notify()
             with condition:
                 assert results[n] is True
                 results[n] = result
