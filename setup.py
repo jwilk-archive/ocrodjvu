@@ -15,7 +15,7 @@
 *ocrodjvu* is a wrapper for OCR systems that allows you to perform OCR on `DjVu <http://djvu.org/>`_ files.
 '''
 
-classifiers = '''\
+classifiers = '''
 Development Status :: 4 - Beta
 Environment :: Console
 Intended Audience :: End Users/Desktop
@@ -24,8 +24,8 @@ Operating System :: OS Independent
 Programming Language :: Python
 Programming Language :: Python :: 2
 Topic :: Text Processing
-Topic :: Multimedia :: Graphics\
-'''.split('\n')
+Topic :: Multimedia :: Graphics
+'''.strip().split('\n')
 
 import distutils.core
 import glob
