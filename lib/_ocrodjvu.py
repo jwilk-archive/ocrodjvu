@@ -351,9 +351,11 @@ class Context(djvu.decode.Context):
                 raise
             except Exception, ex:
                 try:
+                    message = 'Exception while processing page %d:\n%s' % (n + 1, traceback.format_exc())
+                    print >>sys.stderr, message.rstrip()
                     if self._options.resume_on_error:
                         # As requested by user, don't abort on error and pretend that nothing happened.
-                        results[n] = None
+                        results[n] = False
                         continue
                     else:
                         # The main thread will take care of aborting the application.
