@@ -16,7 +16,7 @@ Dependencies
 
   + GOCR_ ≥ 0.40 (tested with 0.48) —
     document analysis and OCR system
-  + Tesseract_ (tested with 2.04) —
+  + Tesseract_ ≥ 2.00 (tested with 2.04) —
     an OCR system
 
 * DjVuLibre_ ≥ 3.5.21 —
