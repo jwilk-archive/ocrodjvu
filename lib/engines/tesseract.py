@@ -27,9 +27,9 @@ from .. import text_zones
 const = text_zones.const
 
 _language_pattern = re.compile('^[a-z]{3}(-[a-z]+)?$')
-_error_pattern = re.compile(r"^Unable to load unicharset file (/.*)/[.]unicharset\n$", re.DOTALL)
+_error_pattern = re.compile(r"^(Error openn?ing data|Unable to load unicharset) file (?P<dir>/.*)/[.](?P<ext>[a-z]+)\n$", re.DOTALL)
 
-def get_tesseract_data_directory():
+def get_tesseract_info():
     try:
         tesseract = ipc.Subprocess(['tesseract', '', '', '-l', ''],
             stdout=ipc.PIPE,
@@ -42,7 +42,8 @@ def get_tesseract_data_directory():
         match = _error_pattern.match(line)
         if match is None:
             raise errors.UnknownLanguageList
-        directory = match.group(1)
+        directory = match.group('dir')
+        extension = match.group('ext')
         if not os.path.isdir(directory):
             raise errors.UnknownLanguageList
     finally:
@@ -52,11 +53,11 @@ def get_tesseract_data_directory():
             pass
         else:
             raise errors.UnknownLanguageList
-    return directory
+    return directory, extension
 
 def get_languages():
-    directory = get_tesseract_data_directory()
-    for filename in glob.glob(os.path.join(directory, '*.unicharset')):
+    directory, extension = get_tesseract_info()
+    for filename in glob.glob(os.path.join(directory, '*.%s' % extension)):
         filename = os.path.basename(filename)
         language = os.path.splitext(filename)[0]
         if _language_pattern.match(language):
@@ -65,8 +66,8 @@ def get_languages():
 def has_language(language):
     if not _language_pattern.match(language):
         raise errors.InvalidLanguageId(language)
-    directory = get_tesseract_data_directory()
-    return os.path.exists(os.path.join(directory, '%s.unicharset' % language))
+    directory, extension = get_tesseract_info()
+    return os.path.exists(os.path.join(directory, '%s.%s' % (language, extension)))
 
 def get_default_language():
     return os.getenv('tesslanguage') or 'eng'
