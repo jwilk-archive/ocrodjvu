@@ -14,24 +14,9 @@
 Helper module that allows to use command-line tools without installing them.
 '''
 
-class cli(object):
+import sys
+import lib
 
-    @classmethod
-    def main(cls, *args, **kwargs):
-        name = cls.__name__
-        module = __import__('lib', fromlist=[name])
-        module = getattr(module, name)
-        return module.main(*args, **kwargs)
-
-class _ocrodjvu(cli):
-    pass
-
-class _hocr2djvused(cli):
-    pass
-
-class _djvu2hocr(cli):
-    pass
-
-del cli
+sys.modules['ocrodjvu'] = lib
 
 # vim:ts=4 sw=4 et

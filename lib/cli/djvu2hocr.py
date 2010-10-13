@@ -16,17 +16,17 @@ import os
 import re
 import sys
 
-from . import hocr
-from . import ipc
-from . import temporary
-from . import text_zones
-from . import unicode_support
-from . import utils
-from . import version
+from .. import hocr
+from .. import ipc
+from .. import temporary
+from .. import text_zones
+from .. import unicode_support
+from .. import utils
+from .. import version
 
-from .hocr import etree
-from .text_zones import const
-from .text_zones import sexpr
+from ..hocr import etree
+from ..text_zones import const
+from ..text_zones import sexpr
 
 __version__ = version.__version__
 

@@ -13,8 +13,8 @@
 import argparse
 import sys
 
-from . import hocr
-from . import version
+from .. import hocr
+from .. import version
 
 __version__ = version.__version__
 

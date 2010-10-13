@@ -22,13 +22,13 @@ import sys
 import threading
 import traceback
 
-from . import engines
-from . import errors
-from . import ipc
-from . import temporary
-from . import text_zones
-from . import utils
-from . import version
+from .. import engines
+from .. import errors
+from .. import ipc
+from .. import temporary
+from .. import text_zones
+from .. import utils
+from .. import version
 
 # Import this after local modules, so that they can take care of a showing
 # a nice ImportError message.

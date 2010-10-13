@@ -44,7 +44,7 @@ distutils.core.setup(
     url = 'http://jwilk.net/software/ocrodjvu',
     author = 'Jakub Wilk',
     author_email = 'jwilk@jwilk.net',
-    packages = ['ocrodjvu', 'ocrodjvu.engines'],
+    packages = ['ocrodjvu', 'ocrodjvu.engines', 'ocrodjvu.cli']
     package_dir = dict(ocrodjvu='lib'),
     scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr'],
     data_files = [('share/man/man1', glob.glob('doc/*.1'))],
