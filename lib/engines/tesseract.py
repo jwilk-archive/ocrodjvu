@@ -91,7 +91,7 @@ def _wait_for_worker(worker):
         sys.stderr.write(line)
 
 @contextlib.contextmanager
-def recognize(image_file, language, details=None):
+def recognize_plain_text(image_file, language, details=None):
     with temporary.directory() as output_dir:
         worker = ipc.Subprocess(
             ['tesseract', image_file.name, os.path.join(output_dir, 'tmp'), '-l', language],
@@ -99,6 +99,21 @@ def recognize(image_file, language, details=None):
         )
         _wait_for_worker(worker)
         yield open(os.path.join(output_dir, 'tmp.txt'), 'rt')
+
+@contextlib.contextmanager
+def recognize_hocr(image_file, language, details=None):
+    with temporary.directory() as output_dir:
+        tessconf_path = os.path.join(output_dir, 'tessconf')
+        with file(tessconf_path, 'wt') as tessconf:
+            # Tesseract 3.00 doesn't come with any config file to enable hOCR
+            # output. Let's create our own one.
+            print >>tessconf, 'tessedit_create_hocr T'
+        worker = ipc.Subprocess(
+            ['tesseract', image_file.name, os.path.join(output_dir, 'tmp'), '-l', language, tessconf_path],
+            stderr=ipc.PIPE,
+        )
+        _wait_for_worker(worker)
+        yield open(os.path.join(output_dir, 'tmp.html'), 'r')
 
 class ExtractSettings(object):
 
@@ -110,21 +125,36 @@ class Engine(object):
 
     name = 'tesseract'
     image_format = image_io.TIFF
-    output_format = 'txt'
 
     def __init__(self):
         try:
-            list(get_languages())
+            _, extension = get_tesseract_info()
         except errors.UnknownLanguageList:
             raise errors.EngineNotFound(self.name)
+        if extension == 'traineddata':
+            # Import hocr late, so that importing lxml is not triggered if hOCR
+            # output is not used.
+            from .. import hocr
+            self._hocr = hocr
+            self.output_format = 'html'
+        else:
+            self._hocr = None
+            self.output_format = 'txt'
 
     get_default_language = staticmethod(get_default_language)
     has_language = staticmethod(has_language)
     list_languages = staticmethod(get_languages)
-    recognize = staticmethod(recognize)
 
-    @staticmethod
-    def extract_text(stream, **kwargs):
+    def recognize(self, image_file, language, details=None):
+        if self._hocr is None:
+            f = recognize_plain_text
+        else:
+            f = recognize_hocr
+        return f(image_file, language, details)
+
+    def extract_text(self, stream, **kwargs):
+        if self._hocr is not None:
+            return self._hocr.extract_text(stream, **kwargs)
         settings = ExtractSettings(**kwargs)
         bbox = text_zones.BBox(*((0, 0) + settings.page_size))
         text = stream.read()
