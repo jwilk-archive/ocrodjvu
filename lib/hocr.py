@@ -234,7 +234,9 @@ def _scan(node, settings):
             return []
 
     if djvu_class <= const.TEXT_ZONE_WORD:
-        if has_string:
+        if has_zone:
+            return children
+        elif has_string:
             if not bbox:
                 raise errors.MalformedHocr("zone without bounding box information")
             text = ''.join(children)
@@ -242,8 +244,6 @@ def _scan(node, settings):
             # We return TEXT_ZONE_CHARACTER even it was a word according to hOCR.
             # Words need to be regrouped anyway.
             return [result]
-        elif has_zone:
-            return children
         else:
             # Should not happen.
             assert 0 
