@@ -17,6 +17,7 @@ The hOCR format specification:
 http://docs.google.com/Doc?id=dfxcv4vc_67g844kf
 '''
 
+import functools
 import re
 
 try:
@@ -42,6 +43,7 @@ dict(
     ocr_carea=const.TEXT_ZONE_COLUMN,
     ocr_par=const.TEXT_ZONE_PARAGRAPH,
     ocr_line=const.TEXT_ZONE_LINE,
+    ocr_word=const.TEXT_ZONE_WORD,
     ocrx_block=const.TEXT_ZONE_REGION,
     ocrx_line=const.TEXT_ZONE_LINE,
     ocrx_word=const.TEXT_ZONE_WORD
@@ -82,64 +84,30 @@ bboxes_re = re.compile(
         (?: ,? \s* (?: -?\d+ \s+ -?\d+ \s+ -?\d+ \s+ -?\d+) )* )
     ''', re.VERBOSE)
 
-def _replace_cuneiform08_paragraph(paragraph, settings):
-    text = ''.join(
-        ' ' if isinstance(character, text_zones.Space) else character[0]
-        for character in paragraph
-    )
-    if settings.details >= TEXT_DETAILS_LINE:
-        # Cuneiform tends to attach superfluous whitespace:
-        text = text.rstrip()
-        return [text]
-    if len(text) != len(paragraph):
-        raise errors.MalformedHocr("number of bboxes doesn't match text length")
-    break_iterator = unicode_support.word_break_iterator(text, locale=settings.uax29)
-    i = 0
-    words = text_zones.Zone(type=const.TEXT_ZONE_PARAGRAPH)
-    paragraph_bbox = text_zones.BBox()
-    for j in break_iterator:
-        subtext = text[i:j]
-        if subtext.isspace():
-            i = j
-            continue
-        word_bbox = text_zones.BBox()
-        for k in xrange(i, j):
-            word_bbox.update(text_zones.BBox(*paragraph[k].bbox))
-        paragraph_bbox.update(word_bbox)
-        last_word = text_zones.Zone(type=const.TEXT_ZONE_WORD, bbox=word_bbox)
-        words += last_word,
-        if settings.details > TEXT_DETAILS_CHARACTER:
-            last_word += subtext,
-        else:
-            last_word += paragraph[i:j]
-        i = j
-    words.bbox = paragraph_bbox
-    return words
-
-def _replace_text(djvu_class, title, text, settings):
+def _apply_bboxes(djvu_class, title, text, settings):
     embedded_eol = False
     if djvu_class <= const.TEXT_ZONE_LINE:
         if text.endswith('\n'):
             embedded_eol = True
-            text = text[:-1]
-    if settings.cuneiform:
-        # Cuneiform tends to attach superfluous whitespace:
-        new_text = text.rstrip()
-        trailing_whitespace_len = len(text) - len(new_text)
-        text = new_text
-        del new_text
+    # Cuneiform tends to attach superfluous whitespace.
+    # Also, a newline character can appear at the end of line.
+    new_text = text.rstrip()
+    trailing_whitespace_len = len(text) - len(new_text)
+    text = new_text
+    del new_text
     if settings.details >= djvu_class:
-        return text,
+        return [text]
     m = bboxes_re.search(title)
     if not m:
-        return text,
+        return [text]
     coordinates = (int(x) for x in m.group(1).replace(',', ' ').split())
     coordinates = zip(coordinates, coordinates, coordinates, coordinates)
     if len(coordinates) == len(text):
         pass  # OK
     else:
-        if settings.cuneiform and 0 < len(coordinates) - len(text) <= trailing_whitespace_len:
+        if 0 < len(coordinates) - len(text) <= trailing_whitespace_len:
             # Cuneiform ≥ 0.9 provides bounding boxes for some whitespace characters.
+            # Also, a newline character can appear at the end of line.
             del coordinates[len(text):]
         elif not settings.cuneiform and not embedded_eol and len(coordinates) == len(text) + 1:
             # OCRopus produces weird hOCR output if line ends with a hyphen.
@@ -182,21 +150,23 @@ def _replace_text(djvu_class, title, text, settings):
         ]
     return text,
 
-def _scan(node, buffer, parent_bbox, settings):
-    def look_down(buffer, parent_bbox):
-        if node.text and node.text.strip():
-            buffer += node.text,
+def _scan(node, settings):
+
+    def get_children(node):
+        result = []
+        if node.text:
+            result += [node.text]
         for child in node.iterchildren():
-            _scan(child, buffer, parent_bbox, settings)
+            result += _scan(child, settings)
             if child.tail:
-                if child.tail.strip():
-                    buffer += child.tail,
-                else:
-                    buffer += text_zones.Space(),
+                result += [child.tail]
+        return result
+
     if not isinstance(node.tag, basestring):
+        # Ignore non-elements.
         return
     if settings.cuneiform and settings.cuneiform <= (0, 8):
-        # Cuneiform ≤ 0.8 don't mark OCR elements in an hOCR way:
+        # Cuneiform ≤ 0.8 don't mark OCR elements in an hOCR way.
         djvu_class = cuneiform_tag_to_djvu(node.tag)
     else:
         hocr_classes = (node.get('class') or '').split()
@@ -207,79 +177,150 @@ def _scan(node, buffer, parent_bbox, settings):
                 break
         else:
             if node.tag == 'p':
-                # Cuneiform ≥ 0.9 don't mark paragraphs in an hOCR way:
+                # Cuneiform ≥ 0.9 don't mark paragraphs in an hOCR way.
                 djvu_class = cuneiform_tag_to_djvu(node.tag)
+
     if not djvu_class:
-        look_down(buffer, parent_bbox)
-        return
+        # Just process our children.
+        return get_children(node)
     title = node.get('title') or ''
     m = bbox_re.search(title)
     if m is None:
         bbox = text_zones.BBox()
     else:
         bbox = text_zones.BBox(*(int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')))
-        parent_bbox.update(bbox)
-    if bbox.x0 == bbox.y0 == bbox.x1 == bbox.y1 == 0:
-        # Skip empty fragments generated by Cuneiform 0.9:
-        return
+
     if djvu_class is const.TEXT_ZONE_PAGE:
         if not bbox:
             if settings.page_size is None:
-                raise errors.MalformedHocr("cannot determine page's bbox")
+                raise errors.MalformedHocr("page without bounding box information")
             page_width, page_height = settings.page_size
             bbox = text_zones.BBox(0, 0, page_width, page_height)
-            parent_bbox.update(bbox)
         else:
             if (bbox.x0, bbox.y0) != (0, 0):
-                raise errors.MalformedHocr("page's bbox should start with (0, 0)")
+                raise errors.MalformedHocr("page's bounding box should start with (0, 0)")
             settings.page_size = bbox.x1, bbox.y1
-    result = text_zones.Zone(type=djvu_class)
-    look_down(result, bbox)
-    if bbox.x0 == bbox.y0 == bbox.x1 == bbox.y1 == 0:
-        # Skip empty fragments generated by Cuneiform 0.9:
-        return
-    if len(result) > 0 and isinstance(result[-1], basestring):
+
+    has_string = has_nonempty_string = False
+    has_zone = has_char_zone = has_nonchar_zone = False
+    children = get_children(node)
+    if len(children) == 0:
+        return []
+
+    for child in children:
+        if isinstance(child, basestring):
+            has_string = True
+            if child and not child.isspace():
+                has_nonempty_string = True
+        elif isinstance(child, text_zones.Zone):
+            has_zone = True
+            if child.type == const.TEXT_ZONE_CHARACTER:
+                has_char_zone = True
+            else:
+                has_nonchar_zone = True
+        else:
+            raise TypeError('Unexpected %s object; expected a string or a text zone' % type(child).__name__)
+
+    if has_zone:
+        # Catch obvious inconsistencies early.
+        if has_nonempty_string:
+            raise errors.MalformedHocr("plain text intermixed with structural elements")
+        if has_char_zone and has_nonchar_zone:
+            raise errors.MalformedHocr("character zones intermixed with non-character zones")
+        for child in children:
+            if isinstance(child, text_zones.Zone):
+                bbox.update(child.bbox)
+        if len(children) == 0:
+            return []
+
+    if djvu_class <= const.TEXT_ZONE_WORD:
+        if has_string:
+            if not bbox:
+                raise errors.MalformedHocr("zone without bounding box information")
+            text = ''.join(children)
+            result = text_zones.Zone(type=const.TEXT_ZONE_CHARACTER, bbox=bbox, children=[text])
+            # We return TEXT_ZONE_CHARACTER even it was a word according to hOCR.
+            # Words need to be regrouped anyway.
+            return [result]
+        elif has_zone:
+            return children
+        else:
+            # Should not happen.
+            assert 0 
+
+    if not has_zone:
+        assert has_string
         if settings.cuneiform and settings.cuneiform == (0, 9):
-            # hOCR produced by Cuneiform 0.9 is really awkward, let's work
+            # hOCR produced by Cuneiform ≥ 0.9 is really awkward, let's work
             # around this.
             bboxes_node = node.find('span[@class="ocr_cinfo"]')
             if bboxes_node is not None and len(bboxes_node) == 0 and bboxes_node.text is None:
                 title = bboxes_node.get('title') or ''
-        result[:] = _replace_text(djvu_class, title, ''.join(result), settings)
-    elif settings.cuneiform and settings.cuneiform <= (0, 8) and djvu_class is const.TEXT_ZONE_PARAGRAPH:
-        result[:] = _replace_cuneiform08_paragraph(result[:], settings)
+        text = ''.join(children)
+        children = _apply_bboxes(djvu_class, title, text, settings)
+        if len(children) == 0:
+            return []
+        if isinstance(children[0], basestring):
+            # Get rid of e.g. trailing newlines.
+            children[0] = children[0].rstrip()
+            has_zone = has_nonchar_zone = has_char_zone = False
+            has_string = True
+        else:
+            assert all(
+                isinstance(child, text_zones.Zone) and
+                child.type == const.TEXT_ZONE_WORD
+                for child in children
+            )
+            has_zone = has_nonchar_zone = True
+            has_string = has_char_zone = False
+
+    if has_char_zone:
+        break_iterator = functools.partial(unicode_support.word_break_iterator, locale=settings.uax29)
+        children = text_zones.group_words(children, settings.details, break_iterator)
+        has_string = False
+        if len(children) == 0:
+            return []
+
+    if has_zone and has_string:
+        assert not has_nonempty_string
+        children = [child for child in children if not isinstance(child, basestring)]
+        if len(children) == 0:
+            return []
+
+    assert len(children) > 0
+    
     if not bbox:
         if len(node) == 0:
             # Ocropus 0.2 doesn't always provide necessary bounding box
             # information. We have no other choice than to drop such a broken
             # zone silently.
             # FIXME: This work-around is ugly and should be dropped at some point.
-            return
-        # If a bbox is undetermined, it's either because of:
-        # - malformed hOCR (but that should be noticed earlier/later), or
-        # - a zone with no children (which we're skipping here).
-        # We skip the zone even if the HTML element is not empty, i.e. len(node) > 0.
-        assert len(result) == 0
-        return
+            return []
+        if len(children) == 1:
+            [child] = children
+            if isinstance(child, basestring) and (child == '' or child.isspace()):
+                return []
+        raise errors.MalformedHocr("text zone without bounding box information")
+
     if settings.page_size is None:
+        # At this point page size should be already known.
         raise errors.MalformedHocr('unable to determine page size')
-    result.bbox = bbox
-    if len(result) == 0:
-        if settings.cuneiform <= (0, 8) and djvu_class is const.TEXT_ZONE_CHARACTER:
-            # Cuneiform ≤ 0.8 provides bounding boxes for some whitespace characters.
-            result += [' ']
-        else:
-            result += ['']
-    buffer += result,
+
+    return [text_zones.Zone(type=djvu_class, bbox=bbox, children=children)]
 
 def scan(node, settings):
-    buffer = []
-    _scan(node, buffer, text_zones.BBox(), settings)
-    # Buffer may contain also superfluous Space objects. Let's strip them.
-    buffer = [zone for zone in buffer if isinstance(zone, text_zones.Zone)]
-    for zone in buffer:
+    result = []
+    for zone in _scan(node, settings):
+        if isinstance(zone, basestring):
+            if zone == '' or zone.isspace():
+                continue
+            else:
+                raise errors.MalformedHocr("plain text intermixed with structural elements")
+        if not isinstance(zone, text_zones.Zone):
+            raise TypeError('Unexpected %s object; expected a text zone' % type(zone).__name__)
+        result += [zone]
         zone.rotate(settings.rotation)
-    return buffer
+    return result
 
 class ExtractSettings(object):
 
@@ -309,8 +350,9 @@ def extract_text(stream, **kwargs):
         ocr_system = doc.find('/head/meta[@name="ocr-system"]')
         if ocr_system is not None and ocr_system.get('content') == 'openocr':
             settings.cuneiform = (0, 9)
-        else:
-            # Wild guess:
+        elif ocr_system is None:
+            # This is wild guess. However, since ocr-system is a required meta
+            # tag, the hOCR we are processing is broken anyway.
             settings.cuneiform = (0, 8)
     scan_result = scan(doc.find('/body'), settings)
     return [zone.sexpr for zone in scan_result]

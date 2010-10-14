@@ -1,0 +1,93 @@
+# --details=lines
+select 1
+remove-txt
+set-txt
+(page 0 0 2488 3507 
+  (column 470 2921 1383 2980 
+    (para 470 2922 1383 2979 (line 470 2922 1383 2979 "1 Down the Rabbit-Hole")) ) 
+  (column 449 703 2077 2856 
+    (para 462 2626 2076 2856 
+      (line 464 2803 2074 2856 
+        "Alice was beginning to get very tired of sitting by her sister on the bank," ) 
+      (line 464 2744 2076 2796 
+        "and of having nothing to do: once or twice she had peeped into the book her" ) 
+      (line 463 2684 2075 2734 
+        "sister was reading, but it had no pictures or conversations in it, \342\200\230and what is" ) 
+      (line 462 2626 1915 2675 
+        "the use of a book,\342\200\231 thought Alice \342\200\230without pictures or conversation?" ) ) 
+    (para 536 2564 2074 2616 
+      (line 536 2564 2074 2616 
+        "So she was considering in her own mind (as well as she could, for the hot" ) ) 
+    (para 461 2383 2076 2556 
+      (line 462 2503 2076 2556 
+        "day made her feel very sleepy and stupid), whether the pleasure of making a" ) 
+      (line 462 2443 2072 2496 
+        "daisy-chain would be worth the trouble of getting up and picking the daisies," ) 
+      (line 461 2383 1816 2435 
+        "when suddenly a White Rabbit with pink eyes ran close by her." ) ) 
+    (para 534 2325 2074 2374 
+      (line 534 2325 2074 2374 
+        "There was nothing so VERY remarkable in that; nor did Alice think it so" ) ) 
+    (para 455 1785 2074 2315 
+      (line 461 2263 2074 2315 
+        "VERY much out of the way to hear the Rabbit say to itself, \342\200\230Oh dear! Oh" ) 
+      (line 460 2205 2073 2255 
+        "dear! I shall be latel\342\200\231 (when she thought it over afterwards, it occurred to" ) 
+      (line 460 2147 2073 2196 
+        "her that she ought to have wondered at this, but at the time it all seemed" ) 
+      (line 459 2085 2072 2138 
+        "quite natural); but when the Rabbit actually TOOK A WATCH OUT OF" ) 
+      (line 459 2024 2071 2076 
+        "ITS WAISTOOAT- POCKET, and looked at it, and then hurried on, Alice" ) 
+      (line 459 1970 2071 2014 
+        "started to her feet, for it flashed across her mind that she had never before" ) 
+      (line 459 1903 2072 1955 
+        "seen a rabbit with either a waistcoat-pocket, or a watch to take out of it, and" ) 
+      (line 458 1844 2070 1895 
+        "burning with curiosity, she ran across the field after it, and fortunately was" ) 
+      (line 455 1785 1894 1836 
+        "just in time to see it pop down a large rabbit-hole under the hedge." ) ) 
+    (para 531 1724 2071 1777 
+      (line 531 1724 2071 1777 
+        "In another moment down went Alice after it, never once considering how" ) ) 
+    (para 458 1669 1259 1717 
+      (line 458 1669 1259 1717 "in the world she was to get out again.") ) 
+    (para 530 1605 2069 1657 
+      (line 530 1605 2069 1657 
+        "The rabbit-hole went straight on like a tunnel for some way, and then" ) ) 
+    (para 457 1485 2069 1597 
+      (line 457 1549 2069 1597 
+        "dipped suddenly down, so suddenly that Alice had not a moment to think" ) 
+      (line 457 1485 2066 1538 
+        "about stopping herself before she found herself falling down a very deep well." ) ) 
+    (para 530 1424 2069 1477 
+      (line 530 1424 2069 1477 
+        "Either the well was very deep, or she fell very slowly, for she had plenty" ) ) 
+    (para 453 889 2069 1418 
+      (line 456 1365 2069 1418 
+        "of time as she went down to look about her and to wonder what was going" ) 
+      (line 455 1312 2068 1357 
+        "to happen next. First, she tried to look down and make out what she was" ) 
+      (line 455 1248 2068 1297 
+        "coming to, but it was too dark to see anything; then she looked at the sides" ) 
+      (line 454 1187 2067 1239 
+        "of the well, and noticed that they were filled with cupboards and book-" ) 
+      (line 454 1126 2067 1178 
+        "shelves; here and there she saw maps and pictures hung upon pegs. She took" ) 
+      (line 454 1068 2066 1118 
+        "down a jar from one of the shelves as she passed; it was labelled \342\200\230ORANGE" ) 
+      (line 454 1006 2065 1058 
+        "MARMALADE\342\200\231, but to her great disappointment it was empty: she did not" ) 
+      (line 453 945 2066 997 
+        "like to drop the jar for fear of killing somebody, so managed to put it into" ) 
+      (line 453 889 1286 936 "one of the cupboards as she fell past it.") ) 
+    (para 528 827 2065 877 
+      (line 528 827 2065 877 
+        "\342\200\230Well!\342\200\231 thought Alice to herself, \342\200\230after such a fall as this, I shall think" ) ) 
+    (para 451 707 2063 817 
+      (line 453 767 2062 817 
+        "nothing of tumbling down stairs! How brave they\342\200\231ll all think me at home!" ) 
+      (line 451 707 2063 757 
+        "Why, I wouldn\342\200\231t say anything about it, even if I fell off the top of the housel\342\200\231" ) ) ) )
+.
+
