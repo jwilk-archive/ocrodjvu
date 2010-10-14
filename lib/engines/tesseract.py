@@ -17,6 +17,7 @@ import glob
 import os
 import re
 import shutil
+import sys
 
 from .. import errors
 from .. import image_io
@@ -72,6 +73,23 @@ def has_language(language):
 def get_default_language():
     return os.getenv('tesslanguage') or 'eng'
 
+def _wait_for_worker(worker):
+    stderr = worker.stderr.readlines()
+    try:
+        worker.wait()
+    except Exception:
+        for line in stderr:
+            sys.stderr.write(line)
+        raise
+    if len(stderr) == 1:
+        [line] = stderr
+        if line.startswith('Tesseract Open Source OCR Engine'):
+            # Annoyingly, Tesseract prints its own name on standard error even
+            # if nothing went wrong. Filter out such an unhelpful message.
+            return
+    for line in stderr:
+        sys.stderr.write(line)
+
 @contextlib.contextmanager
 def recognize(image_file, language, details=None):
     with temporary.directory() as output_dir:
@@ -79,7 +97,7 @@ def recognize(image_file, language, details=None):
             ['tesseract', image_file.name, os.path.join(output_dir, 'tmp'), '-l', language],
             stderr=ipc.PIPE,
         )
-        worker.wait()
+        _wait_for_worker(worker)
         yield open(os.path.join(output_dir, 'tmp.txt'), 'rt')
 
 class ExtractSettings(object):
