@@ -260,7 +260,7 @@ hocr_header = '''\
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="ocr-system" content="%(ocr_system)s" />
-  <meta name="ocr-capabilites" content="%(ocr_capabilities)s" />
+  <meta name="ocr-capabilities" content="%(ocr_capabilities)s" />
   <title>DjVu hidden text layer</title>
 </head>
 <body>

@@ -7,8 +7,10 @@ ocrodjvu (0.7.0) UNRELEASED; urgency=low
   * ocrodjvu: make ‘-e’ an alias for ‘--engine’.
   * ocrodjvu: make ‘-l’ an alias for ‘--language’.
   * Fix compatibility with Tesseract 3.0.
+  * djvu2hocr: fix a typo, which prevented hocr2djvused from correctly parsing
+    files produced by it.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 14 Oct 2010 18:22:52 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 17 Oct 2010 15:00:24 +0200
 
 ocrodjvu (0.6.1) unstable; urgency=high
 
