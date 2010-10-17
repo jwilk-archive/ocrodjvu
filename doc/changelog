@@ -4,9 +4,9 @@ ocrodjvu (0.7.0) UNRELEASED; urgency=low
     Alexey Shipunov for the bug report.
   * Fix crash on Cuneiform-generated hOCR with bounding boxes for whitespace
     characters. Thanks to Alexey Shipunov for the bug report.
+  * Fix compatibility with Tesseract 3.0.
   * ocrodjvu: make ‘-e’ an alias for ‘--engine’.
   * ocrodjvu: make ‘-l’ an alias for ‘--language’.
-  * Fix compatibility with Tesseract 3.0.
   * djvu2hocr: fix a typo, which prevented hocr2djvused from correctly parsing
     files produced by it.
 
