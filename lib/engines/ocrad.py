@@ -91,7 +91,7 @@ def scan(stream, settings):
         if line.startswith('source '):
             continue
         if line.startswith('total text blocks '):
-            n, = line.split()[3:]
+            [n] = line.split()[3:]
             n = int(n)
             bbox = text_zones.BBox(*((0, 0) + settings.page_size))
             children = filter(None, (scan(stream, settings) for i in xrange(n)))
@@ -104,7 +104,7 @@ def scan(stream, settings):
             [children] = [scan(stream, settings) for i in xrange(n)]
             return text_zones.Zone(const.TEXT_ZONE_REGION, bbox, children)
         if line.startswith('lines '):
-            n, = line.split()[1:]
+            [n] = line.split()[1:]
             n = int(n)
             return filter(None, (scan(stream, settings) for i in xrange(n)))
         if line.startswith('line '):

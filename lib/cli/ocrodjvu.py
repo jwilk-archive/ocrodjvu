@@ -317,7 +317,7 @@ class Context(djvu.decode.Context):
                         result_file.seek(0)
                     else:
                         result_file = result
-                    text, = self._engine.extract_text(result_file,
+                    [text] = self._engine.extract_text(result_file,
                         rotation=page.rotation,
                         details=self._options.details,
                         uax29=self._options.uax29,
