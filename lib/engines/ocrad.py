@@ -54,12 +54,12 @@ def has_language(language):
     return language in get_languages()
 
 @contextlib.contextmanager
-def recognize(pbm_file, language, details=None):
+def recognize(image, language, details=None):
     charset = 'iso-8859-15'
     if language == 'tur':
         charset = 'iso-8859-9'
     worker = ipc.Subprocess(
-        ['ocrad', '--charset', charset, '--format=utf8', '-x', '-', pbm_file.name],
+        ['ocrad', '--charset', charset, '--format=utf8', '-x', '-', image.name],
         stdout=ipc.PIPE,
     )
     try:

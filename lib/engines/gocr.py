@@ -54,9 +54,9 @@ def check_version():
         gocr.wait()
 
 @contextlib.contextmanager
-def recognize(pbm_file, language, details=None):
+def recognize(image, language, details=None):
     worker = ipc.Subprocess(
-        ['gocr', '-i', pbm_file.name, '-f', 'XML'],
+        ['gocr', '-i', image.name, '-f', 'XML'],
         stdout=ipc.PIPE,
     )
     try:

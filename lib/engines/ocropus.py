@@ -62,7 +62,7 @@ class Engine(object):
     list_languages = staticmethod(tesseract.get_languages)
 
     @contextlib.contextmanager
-    def recognize(self, pbm_file, language, details=None):
+    def recognize(self, image, language, details=None):
         hocr = self._hocr
         if details is None:
             details = hocr.TEXT_DETAILS_WORD
@@ -72,7 +72,7 @@ class Engine(object):
             yield self.script_name
             if self.has_charboxes and details < hocr.TEXT_DETAILS_LINE:
                 yield '--charboxes'
-            yield pbm_file.name
+            yield image.name
         ocropus = ipc.Subprocess(list(get_command_line()),
             stdout=ipc.PIPE,
             env=dict(tesslanguage=language),

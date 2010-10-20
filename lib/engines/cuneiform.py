@@ -95,13 +95,13 @@ class Engine(object):
         return iter(get_languages())
 
     @staticmethod
-    def recognize(pbm_file, language, *args, **kwargs):
+    def recognize(image, language, *args, **kwargs):
         with temporary.directory() as hocr_directory:
             # A separate non-world-writable directory is needed, as Cuneiform
             # can create additional files, e.g. images.
             hocr_file_name = os.path.join(hocr_directory, 'ocr.html')
             worker = ipc.Subprocess(
-                ['cuneiform', '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file_name, pbm_file.name],
+                ['cuneiform', '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file_name, image.name],
                 stdin=ipc.PIPE,
                 stdout=ipc.PIPE,
             )

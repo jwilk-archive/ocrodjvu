@@ -91,17 +91,17 @@ def _wait_for_worker(worker):
         sys.stderr.write(line)
 
 @contextlib.contextmanager
-def recognize_plain_text(image_file, language, details=None):
+def recognize_plain_text(image, language, details=None):
     with temporary.directory() as output_dir:
         worker = ipc.Subprocess(
-            ['tesseract', image_file.name, os.path.join(output_dir, 'tmp'), '-l', language],
+            ['tesseract', image.name, os.path.join(output_dir, 'tmp'), '-l', language],
             stderr=ipc.PIPE,
         )
         _wait_for_worker(worker)
         yield open(os.path.join(output_dir, 'tmp.txt'), 'rt')
 
 @contextlib.contextmanager
-def recognize_hocr(image_file, language, details=None):
+def recognize_hocr(image, language, details=None):
     with temporary.directory() as output_dir:
         tessconf_path = os.path.join(output_dir, 'tessconf')
         with file(tessconf_path, 'wt') as tessconf:
@@ -109,7 +109,7 @@ def recognize_hocr(image_file, language, details=None):
             # output. Let's create our own one.
             print >>tessconf, 'tessedit_create_hocr T'
         worker = ipc.Subprocess(
-            ['tesseract', image_file.name, os.path.join(output_dir, 'tmp'), '-l', language, tessconf_path],
+            ['tesseract', image.name, os.path.join(output_dir, 'tmp'), '-l', language, tessconf_path],
             stderr=ipc.PIPE,
         )
         _wait_for_worker(worker)
@@ -145,12 +145,12 @@ class Engine(object):
     has_language = staticmethod(has_language)
     list_languages = staticmethod(get_languages)
 
-    def recognize(self, image_file, language, details=None):
+    def recognize(self, image, language, details=None):
         if self._hocr is None:
             f = recognize_plain_text
         else:
             f = recognize_hocr
-        return f(image_file, language, details)
+        return f(image, language, details)
 
     def extract_text(self, stream, **kwargs):
         if self._hocr is not None:
