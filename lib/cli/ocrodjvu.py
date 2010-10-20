@@ -175,7 +175,7 @@ class ArgumentParser(argparse.ArgumentParser):
         self.add_argument('--render', dest='render_layers', choices=self._render_map.keys(), action='store', default='mask', help='image layers to render')
         self.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to process')
         self.add_argument('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
-        self.add_argument('--on-error', choices=('abort', 'resume'), default='abort', help='error handling strategy' or argparse.SUPPRESS)
+        self.add_argument('--on-error', choices=('abort', 'resume'), default='abort', help='error handling strategy' and argparse.SUPPRESS)
         # --on-error=resume should not be used by anobody. No, really.
         self.add_argument('-j', '--jobs', dest='n_jobs', metavar='N', nargs='?', type=int, default=1, help='number of jobs to run simultaneously')
         self.add_argument('path', metavar='FILE', help='DjVu file to process')
