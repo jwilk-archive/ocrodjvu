@@ -98,7 +98,8 @@ def recognize_plain_text(image, language, details=None):
             stderr=ipc.PIPE,
         )
         _wait_for_worker(worker)
-        yield open(os.path.join(output_dir, 'tmp.txt'), 'rt')
+        with open(os.path.join(output_dir, 'tmp.txt'), 'rt') as file:
+            yield file
 
 @contextlib.contextmanager
 def recognize_hocr(image, language, details=None):
@@ -113,7 +114,8 @@ def recognize_hocr(image, language, details=None):
             stderr=ipc.PIPE,
         )
         _wait_for_worker(worker)
-        yield open(os.path.join(output_dir, 'tmp.html'), 'r')
+        with open(os.path.join(output_dir, 'tmp.html'), 'r') as file:
+            yield file
 
 class ExtractSettings(object):
 

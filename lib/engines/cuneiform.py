@@ -95,6 +95,7 @@ class Engine(object):
         return iter(get_languages())
 
     @staticmethod
+    @contextlib.contextmanager
     def recognize(image, language, *args, **kwargs):
         with temporary.directory() as hocr_directory:
             # A separate non-world-writable directory is needed, as Cuneiform
@@ -114,7 +115,8 @@ class Engine(object):
         # Let's fix it.
         # FIXME: This work-around is ugly and should be dropped at some point.
         contents = utils.sanitize_utf8(contents)
-        return contextlib.closing(StringIO(contents))
+        with contextlib.closing(StringIO(contents)) as hocr_file:
+            yield hocr_file
 
     def extract_text(self, *args, **kwargs):
         return self._hocr.extract_text(*args, **kwargs)
