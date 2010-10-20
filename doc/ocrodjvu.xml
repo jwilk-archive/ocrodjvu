@@ -212,7 +212,7 @@
                 </para>
                 <para>
                     This is the default for OCRopus 0.2.
-                    The option is ineffective with stand-alone Tesseract.
+                    The option is ineffective with stand-alone Tesseract 2.0.
                 </para>
             </listitem>
         </varlistentry>
@@ -224,10 +224,10 @@
                     Record location of every line and every word. Don't record locations of particular characters.
                 </para>
                 <para>
-                    This is the default for OCRopus ≥ 0.3.1 and other OCR engines (except stand-alone Tesseract).
+                    This is the default for most OCR engines.
                 </para>
                 <para>
-                    This option is ineffective with OCRopus 0.2 and stand-alone Tesseract.
+                    This option is ineffective with OCRopus 0.2 and stand-alone Tesseract 2.0.
                 </para>
             </listitem>
         </varlistentry>
@@ -239,7 +239,7 @@
                     Record location of every line, every word and every character.
                 </para>
                 <para>
-                    This option is ineffective with OCRopus 0.2 and stand-alone Tesseract.
+                    This option is ineffective with OCRopus 0.2 and stand-alone Tesseract 2.0.
                 </para>
             </listitem>
         </varlistentry>
