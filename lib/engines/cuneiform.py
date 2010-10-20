@@ -112,6 +112,7 @@ class Engine(object):
         # Sometimes Cuneiform returns files with broken encoding or with control
         # characters: https://bugs.launchpad.net/cuneiform-linux/+bug/585418
         # Let's fix it.
+        # FIXME: This work-around is ugly and should be dropped at some point.
         contents = utils.sanitize_utf8(contents)
         return contextlib.closing(StringIO(contents))
 
