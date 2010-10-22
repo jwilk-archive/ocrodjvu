@@ -249,7 +249,7 @@ class ArgumentParser(argparse.ArgumentParser):
                 'You must use exactly one of the following options: %s' %
                 ', '.join('/'.join(saver.options) for saver in self.savers)
             )
-        # It might be temping to verify language name correctness at argument
+        # It might be tempting to verify language name correctness at argument
         # parse time (rather than after argument parsing). However, it's
         # desirable to be able to specify a language *before* specifying an OCR
         # engine.
