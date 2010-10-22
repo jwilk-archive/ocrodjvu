@@ -12,6 +12,7 @@
 
 import functools
 import re
+import sys
 import warnings
 
 def parse_page_numbers(pages):
@@ -114,5 +115,10 @@ def not_overridden(f):
         )
         return f(self, *args, **kwargs)
     return new_f
+
+def str_as_unicode(s, encoding=sys.getdefaultencoding()):
+    if isinstance(s, unicode):
+        return s
+    return s.decode(encoding, 'replace')
 
 # vim:ts=4 sw=4 et
