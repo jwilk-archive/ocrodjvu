@@ -256,12 +256,16 @@ class ArgumentParser(argparse.ArgumentParser):
         if options.language is None:
             options.language = options.engine.get_default_language()
         try:
+            options.engine = options.engine()
+        except errors.EngineNotFound, ex:
+            self.error(str(ex))
+        try:
             if not options.engine.has_language(options.language):
                 self.error('Language pack for the selected language (%s) is not available.' % options.language)
         except errors.InvalidLanguageId, ex:
             self.error(str(ex))
         except errors.UnknownLanguageList:
-            # For now, let's assume the language pack is installed
+            # For now, let's assume the language pack is installed.
             pass
         options.uax29 = options.language if options.word_segmentation == 'uax29' else None
         if options.n_jobs is None:
@@ -370,11 +374,7 @@ class Context(djvu.decode.Context):
                 condition.notify()
 
     def _process(self, path, pages=None):
-        try:
-            self._engine = self._options.engine()
-        except errors.EngineNotFound, ex:
-            print >>sys.stderr, ex
-            sys.exit(1)
+        self._engine = self._options.engine
         print >>sys.stderr, 'Processing %s:' % utils.smart_repr(path, system_encoding)
         document = self.new_document(djvu.decode.FileURI(path))
         document.decoding_job.wait()

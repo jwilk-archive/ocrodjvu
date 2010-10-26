@@ -17,6 +17,8 @@ def get_engines():
         thismodule = __import__('', globals=globals(), fromlist=(name,), level=1)
         try:
             engine = getattr(thismodule, name).Engine
+            if engine.name is None:
+                continue
         except AttributeError:
             continue
         else:

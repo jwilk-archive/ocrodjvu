@@ -13,59 +13,20 @@
 import contextlib
 import functools
 import re
+import shlex
 
+from . import common
 from .. import errors
 from .. import image_io
 from .. import ipc
 from .. import text_zones
 from .. import unicode_support
+from .. import utils
 
 const = text_zones.const
 
 _default_language = 'eng'
 _language_pattern = re.compile('^[a-z]{3}$')
-
-def get_languages():
-    result = [_default_language]
-    try:
-        ocrad = ipc.Subprocess(['ocrad', '--charset=help'],
-            stdout=ipc.PIPE,
-            stderr=ipc.PIPE,
-        )
-    except OSError:
-        raise errors.UnknownLanguageList
-    try:
-        line = ocrad.stderr.read()
-        charsets = set(line.split()[1:])
-        if 'iso-8859-9' in charsets:
-            result += 'tur',
-    finally:
-        try:
-            ocrad.wait()
-        except ipc.CalledProcessError:
-            pass
-        else:
-            raise errors.UnknownLanguageList
-    return result
-
-def has_language(language):
-    if not _language_pattern.match(language):
-        raise errors.InvalidLanguageId(language)
-    return language in get_languages()
-
-@contextlib.contextmanager
-def recognize(image, language, details=None):
-    charset = 'iso-8859-15'
-    if language == 'tur':
-        charset = 'iso-8859-9'
-    worker = ipc.Subprocess(
-        ['ocrad', '--charset', charset, '--format=utf8', '-x', '-', image.name],
-        stdout=ipc.PIPE,
-    )
-    try:
-        yield worker.stdout
-    finally:
-        worker.wait()
 
 class ExtractSettings(object):
 
@@ -125,7 +86,7 @@ def scan(stream, settings):
             bbox = text_zones.BBox(x, y, x + w, y + h)
             if line[0] == '0':
                 # No interpretations has been proposed for this particular character.
-                text = u'\N{REPLACEMENT CHARACTER}'
+                text = settings.replacement_character
                 # TODO: Let user to choose another replacement text.
             else:
                 m = _character_re.match(line)
@@ -137,29 +98,76 @@ def scan(stream, settings):
         raise errors.MalformedOcrOutput('unexpected line: %r' % line)
     raise errors.MalformedOcrOutput('unexpected line at EOF: %r' % line)
 
-class Engine(object):
+class Engine(common.Engine):
 
     name = 'ocrad'
     image_format = image_io.PNM
     output_format = 'orf'
 
-    def __init__(self):
+    executable = utils.property('ocrad')
+    extra_args = utils.property([], shlex.split)
+    replacement_character = utils.property(u'\N{REPLACEMENT CHARACTER}', utils.str_as_unicode)
+
+    def __init__(self, *args, **kwargs):
+        assert args == ()
+        common.Engine.__init__(self, **kwargs)
         try:
-            get_languages()
+            self._languages = self._get_languages()
         except errors.UnknownLanguageList:
             raise errors.EngineNotFound(self.name)
 
-    @staticmethod
-    def get_default_language():
+    def _get_languages(self):
+        result = [_default_language]
+        try:
+            ocrad = ipc.Subprocess([self.executable, '--charset=help'],
+                stdout=ipc.PIPE,
+                stderr=ipc.PIPE,
+            )
+        except OSError:
+            raise errors.UnknownLanguageList
+        try:
+            line = ocrad.stderr.read()
+            charsets = set(line.split()[1:])
+            if 'iso-8859-9' in charsets:
+                result += 'tur',
+        finally:
+            try:
+                ocrad.wait()
+            except ipc.CalledProcessError:
+                pass
+            else:
+                raise errors.UnknownLanguageList
+        return result
+
+    def has_language(self, language):
+        if not _language_pattern.match(language):
+            raise errors.InvalidLanguageId(language)
+        return language in self._languages
+
+    @classmethod
+    def get_default_language(cls):
         return _default_language
 
-    has_language = staticmethod(has_language)
-    list_languages = staticmethod(get_languages)
-    recognize = staticmethod(recognize)
+    def list_languages(self):
+        return iter(self._languages)
 
-    @staticmethod
-    def extract_text(stream, **kwargs):
+    @contextlib.contextmanager
+    def recognize(self, image, language, details=None):
+        charset = 'iso-8859-15'
+        if language == 'tur':
+            charset = 'iso-8859-9'
+        worker = ipc.Subprocess(
+            [self.executable, '--charset', charset, '--format=utf8', '-x'] + self.extra_args + ['-', image.name],
+            stdout=ipc.PIPE,
+        )
+        try:
+            yield worker.stdout
+        finally:
+            worker.wait()
+
+    def extract_text(self, stream, **kwargs):
         settings = ExtractSettings(**kwargs)
+        settings.replacement_character = self.replacement_character
         scan_result = scan(stream, settings)
         return [scan_result.sexpr]
 

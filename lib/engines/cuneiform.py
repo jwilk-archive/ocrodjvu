@@ -15,8 +15,10 @@ from __future__ import with_statement
 import contextlib
 import os
 import re
+import shlex
 from cStringIO import StringIO
 
+from . import common
 from .. import errors
 from .. import image_io
 from .. import ipc
@@ -40,38 +42,21 @@ def cuneiform_to_iso(language):
 def iso_to_cuneiform(language):
     return _iso_to_cuneiform.get(language, language)
 
-def get_languages():
-    try:
-        cuneiform = ipc.Subprocess(['cuneiform', '-l'],
-            stdout=ipc.PIPE,
-            stderr=ipc.PIPE,
-        )
-    except OSError:
-        raise errors.UnknownLanguageList
-    try:
-        for line in cuneiform.stdout:
-            m = _language_info_pattern.match(line)
-            if m is None:
-                continue
-            return map(cuneiform_to_iso, m.group(1).split())
-    finally:
-        try:
-            cuneiform.wait()
-        except ipc.CalledProcessError:
-            pass
-        else:
-            raise errors.UnknownLanguageList
-    raise errors.UnknownLanguageList
-
-class Engine(object):
+class Engine(common.Engine):
 
     name = 'cuneiform'
     image_format = image_io.BMP
     output_format = 'html'
 
-    def __init__(self):
+    executable = utils.property('cuneiform')
+    extra_args = utils.property([], shlex.split)
+    fix_html = utils.property(0, int)
+
+    def __init__(self, *args, **kwargs):
+        assert args == ()
+        common.Engine.__init__(self, *args, **kwargs)
         try:
-            get_languages()
+            self._languages = list(self._get_languages())
         except errors.UnknownLanguageList:
             raise errors.EngineNotFound(self.name)
         # Import hocr late, so that importing lxml is not triggered if
@@ -79,36 +64,59 @@ class Engine(object):
         from .. import hocr
         self._hocr = hocr
 
-    @staticmethod
-    def get_default_language():
+    def _get_languages(self):
+        try:
+            cuneiform = ipc.Subprocess([self.executable, '-l'],
+                stdout=ipc.PIPE,
+                stderr=ipc.PIPE,
+            )
+        except OSError:
+            raise errors.UnknownLanguageList
+        try:
+            for line in cuneiform.stdout:
+                m = _language_info_pattern.match(line)
+                if m is None:
+                    continue
+                return map(cuneiform_to_iso, m.group(1).split())
+        finally:
+            try:
+                cuneiform.wait()
+            except ipc.CalledProcessError:
+                pass
+            else:
+                raise errors.UnknownLanguageList
+        raise errors.UnknownLanguageList
+
+    @classmethod
+    def get_default_language(cls):
         return _default_language
 
-    @staticmethod
-    def has_language(language):
+    def has_language(self, language):
         language = cuneiform_to_iso(language)
         if not _language_pattern.match(language):
             raise errors.InvalidLanguageId(language)
-        return language in get_languages()
+        return language in self._languages
 
-    @staticmethod
-    def list_languages():
-        return iter(get_languages())
+    def list_languages(self):
+        return iter(self._languages)
 
-    @staticmethod
     @contextlib.contextmanager
-    def recognize(image, language, *args, **kwargs):
+    def recognize(self, image, language, *args, **kwargs):
         with temporary.directory() as hocr_directory:
             # A separate non-world-writable directory is needed, as Cuneiform
             # can create additional files, e.g. images.
             hocr_file_name = os.path.join(hocr_directory, 'ocr.html')
             worker = ipc.Subprocess(
-                ['cuneiform', '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file_name, image.name],
+                [self.executable, '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file_name] + self.extra_args + [image.name],
                 stdin=ipc.PIPE,
                 stdout=ipc.PIPE,
             )
             worker.stdin.close()
             worker.wait()
             with open(hocr_file_name, 'r') as hocr_file:
+                if not self.fix_html:
+                    yield hocr_file
+                    return
                 contents = hocr_file.read()
         # Sometimes Cuneiform returns files with broken encoding or with control
         # characters: https://bugs.launchpad.net/cuneiform-linux/+bug/585418

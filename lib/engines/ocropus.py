@@ -11,25 +11,39 @@
 # General Public License for more details.
 
 import contextlib
+import shlex
 
+from . import common
 from . import tesseract
 from .. import errors
 from .. import image_io
 from .. import ipc
+from .. import utils
 
-class Engine(object):
+class Engine(common.Engine):
 
     name = 'ocropus'
     image_format = image_io.PNM
     output_format = 'html'
-    has_charboxes = False
-    script_name = None
 
-    def __init__(self):
+    executable = utils.property('ocroscript')
+    tesseract_executable = utils.property('tesseract')
+    extra_args = utils.property([], shlex.split)
+    script_name = utils.property()
+    has_charboxes = utils.property()
+
+    def __init__(self, *args, **kwargs):
+        assert args == ()
+        common.Engine.__init__(self, **kwargs)
+        self.tesseract = tesseract.Engine(executable=self.tesseract_executable)
         # Determine:
         # - if OCRopus is installed and
         # - which version we are dealing with
-        for script_name in 'recognize', 'rec-tess':
+        if self.script_name is None:
+            script_names = ['recognize', 'rec-tess']
+        else:
+            script_names = [self._script_name]
+        for script_name in script_names:
             try:
                 ocropus = ipc.Subprocess(['ocroscript', script_name],
                     stdout=ipc.PIPE,
@@ -49,7 +63,7 @@ class Engine(object):
                 break
         else:
             raise errors.EngineNotFound(self.name)
-        if script_name == 'recognize':
+        if self.has_charboxes is None and script_name == 'recognize':
             # OCRopus ≥ 0.3
             self.has_charboxes = True
         # Import hocr late, so that importing lxml is not triggered if Ocropus
@@ -57,9 +71,15 @@ class Engine(object):
         from .. import hocr
         self._hocr = hocr
 
-    get_default_language = staticmethod(tesseract.get_default_language)
-    has_language = staticmethod(tesseract.has_language)
-    list_languages = staticmethod(tesseract.get_languages)
+    @classmethod
+    def get_default_language(cls):
+        return tesseract.Engine.get_default_language()
+
+    def has_language(self, language):
+        return self.tesseract.has_language(language)
+
+    def list_languages(self):
+        return self.tesseract.list_languages()
 
     @contextlib.contextmanager
     def recognize(self, image, language, details=None):
@@ -67,11 +87,13 @@ class Engine(object):
         if details is None:
             details = hocr.TEXT_DETAILS_WORD
         def get_command_line():
-            yield 'ocroscript'
+            yield self.executable
             assert self.script_name is not None
             yield self.script_name
             if self.has_charboxes and details < hocr.TEXT_DETAILS_LINE:
                 yield '--charboxes'
+            for arg in self.extra_args:
+                yield arg
             yield image.name
         ocropus = ipc.Subprocess(list(get_command_line()),
             stdout=ipc.PIPE,

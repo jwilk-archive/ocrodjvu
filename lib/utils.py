@@ -121,4 +121,29 @@ def str_as_unicode(s, encoding=sys.getdefaultencoding()):
         return s
     return s.decode(encoding, 'replace')
 
+def identity(x):
+    '''
+    >>> o = object()
+    >>> identity(o) is o
+    True
+    '''
+    return x
+
+class property(object):
+
+    def __init__(self, default_value=None, filter=identity):
+        self._private_name = '__%s__%d' % (self.__module__, id(self))
+        self._filter = filter
+        self._default_value = default_value
+
+    def __get__(self, instance, cls):
+        if instance is None:
+            return self
+        return getattr(instance, self._private_name, self._default_value)
+
+    def __set__(self, instance, value):
+        setattr(instance, self._private_name, self._filter(value))
+        self._default_value = None
+        return
+
 # vim:ts=4 sw=4 et

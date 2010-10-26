@@ -15,54 +15,25 @@ from __future__ import division
 import contextlib
 import functools
 import re
+import shlex
 
 try:
     from lxml import etree
 except ImportError:
     from xml.etree import cElementTree as etree
 
+from . import common
 from .. import errors
 from .. import image_io
 from .. import ipc
 from .. import text_zones
 from .. import unicode_support
+from .. import utils
 
 const = text_zones.const
 
 _default_language = 'eng'
 _version_re = re.compile(r'\bgocr ([0-9]+).([0-9]+)\b')
-
-def check_version():
-    try:
-        gocr = ipc.Subprocess(['gocr'],
-            stdout=ipc.PIPE,
-            stderr=ipc.PIPE,
-        )
-    except OSError:
-        raise errors.EngineNotFound(Engine.name)
-    try:
-        line = gocr.stderr.read()
-        m = _version_re.search(line)
-        if not m:
-            raise errors.EngineNotFound(Engine.name)
-        version = tuple(map(int, m.groups()))
-        if version >= (0, 40):
-            return
-        else:
-            raise errors.EngineNotFound(Engine.name)
-    finally:
-        gocr.wait()
-
-@contextlib.contextmanager
-def recognize(image, language, details=None):
-    worker = ipc.Subprocess(
-        ['gocr', '-i', image.name, '-f', 'XML'],
-        stdout=ipc.PIPE,
-    )
-    try:
-        yield worker.stdout
-    finally:
-        worker.wait()
 
 class ExtractSettings(object):
 
@@ -132,31 +103,63 @@ def scan(stream, settings):
             raise errors.MalformedOcrOutput('unexpected <%s>' % element.tag.encode('ASCII', 'unicode-escape'))
     raise errors.MalformedOcrOutput('<page> not found')
 
-class Engine(object):
+class Engine(common.Engine):
 
     name = 'gocr'
     image_format = image_io.PNM
     output_format = 'gocr.xml'
 
-    def __init__(self):
-        check_version()
+    executable = utils.property('gocr')
+    extra_args = utils.property([], shlex.split)
 
-    @staticmethod
-    def get_default_language():
+    def __init__(self, *args, **kwargs):
+        assert args == ()
+        common.Engine.__init__(self, *args, **kwargs)
+        self._check_version(self.executable)
+
+    def _check_version(self, executable):
+        try:
+            gocr = ipc.Subprocess([self.executable],
+                stdout=ipc.PIPE,
+                stderr=ipc.PIPE,
+            )
+        except OSError:
+            raise errors.EngineNotFound(Engine.name)
+        try:
+            line = gocr.stderr.read()
+            m = _version_re.search(line)
+            if not m:
+                raise errors.EngineNotFound(Engine.name)
+            version = tuple(map(int, m.groups()))
+            if version >= (0, 40):
+                return
+            else:
+                raise errors.EngineNotFound(Engine.name)
+        finally:
+            gocr.wait()
+
+    @classmethod
+    def get_default_language(cls):
         return _default_language
 
-    @staticmethod
-    def has_language(language):
+    def has_language(self, language):
         return language == _default_language
 
-    @staticmethod
-    def list_languages():
+    def list_languages(self):
         yield _default_language
 
-    recognize = staticmethod(recognize)
+    @contextlib.contextmanager
+    def recognize(self, image, language, details=None):
+        worker = ipc.Subprocess(
+            [self.executable, '-i', image.name, '-f', 'XML'] + self.extra_args,
+            stdout=ipc.PIPE,
+        )
+        try:
+            yield worker.stdout
+        finally:
+            worker.wait()
 
-    @staticmethod
-    def extract_text(stream, **kwargs):
+    def extract_text(self, stream, **kwargs):
         settings = ExtractSettings(**kwargs)
         stream = etree.iterparse(stream)
         scan_result = scan(stream, settings)
