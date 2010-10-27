@@ -1,6 +1,9 @@
 #!/usr/bin/python
 
+import sys
+
 from ocrodjvu.cli import hocr2djvused as _
-_.main()
+
+_.main(sys.argv, sys.stdin, sys.stdout)
 
 # vim:ts=4 sw=4 et

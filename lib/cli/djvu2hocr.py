@@ -46,8 +46,8 @@ class ArgumentParser(argparse.ArgumentParser):
         # -l/--language is currently not very useful, as ICU don't have any specialisations for languages ocrodjvu supports:
         group.add_argument('-l', '--language', dest='language', help=argparse.SUPPRESS or 'language for word segmentation', default='eng')
 
-    def parse_args(self):
-        options = argparse.ArgumentParser.parse_args(self)
+    def parse_args(self, args=None):
+        options = argparse.ArgumentParser.parse_args(self, args)
         try:
             options.pages = utils.parse_page_numbers(options.pages)
         except (TypeError, ValueError):
@@ -248,10 +248,10 @@ def process_zone(parent, parent_zone_type, zone, last, options):
         parent.append(self)
     return self
 
-def process_page(page_text, options):
+def process_page(page_text, options, stdout):
     result = process_zone(None, None, page_text, last=True, options=options)
     tree = etree.ElementTree(result)
-    tree.write(sys.stdout, encoding='UTF-8')
+    tree.write(stdout, encoding='UTF-8')
 
 hocr_header = '''\
 <?xml version="1.0" encoding="UTF-8"?>
@@ -270,9 +270,9 @@ hocr_footer = '''
 </html>
 '''
 
-def main():
-    options = ArgumentParser().parse_args()
-    print >>sys.stderr, 'Converting %s:' % utils.smart_repr(options.path, system_encoding)
+def main(argv, stdout, stderr):
+    options = ArgumentParser().parse_args(argv[1:])
+    print >>stderr, 'Converting %s:' % utils.smart_repr(options.path, system_encoding)
     if options.pages is None:
         djvused = ipc.Subprocess(
             ['djvused', '-e', 'n', os.path.abspath(options.path)],
@@ -292,7 +292,7 @@ def main():
         ['djvused', '-f', sed_script.name, os.path.abspath(options.path)],
         stdout=ipc.PIPE,
     )
-    sys.stdout.write(
+    stdout.write(
         hocr_header % dict(
             ocr_system='djvu2hocr %s' % __version__,
             ocr_capabilities=' '.join(hocr.djvu2hocr_capabilities)
@@ -311,9 +311,9 @@ def main():
             page_text = sexpr.Expression.from_stream(djvused.stdout)
         except sexpr.ExpressionSyntaxError:
             break
-        print >>sys.stderr, '- Page #%d' % n
-        process_page(Zone(page_text), options)
-    sys.stdout.write(hocr_footer)
+        print >>stderr, '- Page #%d' % n
+        process_page(Zone(page_text), options, stdout)
+    stdout.write(hocr_footer)
     djvused.wait()
 
 # vim:ts=4 sw=4 et
