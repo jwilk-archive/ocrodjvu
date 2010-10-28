@@ -87,7 +87,6 @@ def scan(stream, settings):
             if line[0] == '0':
                 # No interpretations has been proposed for this particular character.
                 text = settings.replacement_character
-                # TODO: Let user to choose another replacement text.
             else:
                 m = _character_re.match(line)
                 if not m:
