@@ -19,6 +19,8 @@ from ocrodjvu.cli import ocrodjvu
 
 from tests.common import *
 
+engines = None
+
 def test_help():
     stdout = StringIO()
     stderr = StringIO()
@@ -27,5 +29,29 @@ def test_help():
     assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
     assert_not_equal(stdout.getvalue(), '')
+
+def test_list_engines():
+    global engines
+    stdout = StringIO()
+    stderr = StringIO()
+    with interim(sys, stdout=stdout, stderr=stderr):
+        rc = try_run(ocrodjvu.main, ['', '--list-engines'])
+    assert_equal(rc, 0)
+    assert_equal(stderr.getvalue(), '')
+    engines = stdout.getvalue().splitlines()
+
+def _test_list_languages(engine):
+    stdout = StringIO()
+    stderr = StringIO()
+    with interim(sys, stdout=stdout, stderr=stderr):
+        rc = try_run(ocrodjvu.main, ['', '--ocr-engine', engine, '--list-languages'])
+    assert_equal(rc, 0)
+    assert_equal(stderr.getvalue(), '')
+    assert_not_equal(stdout.getvalue(), '')
+
+def test_list_languages():
+    assert_true(engines is not None)
+    for engine in engines:
+        yield _test_list_languages, engine
 
 # vim:ts=4 sw=4 et
