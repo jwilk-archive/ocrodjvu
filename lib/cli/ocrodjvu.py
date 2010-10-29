@@ -231,8 +231,8 @@ class ArgumentParser(argparse.ArgumentParser):
             else:
                 namespace.saver = None
 
-    def parse_args(self):
-        options = argparse.ArgumentParser.parse_args(self)
+    def parse_args(self, args=None):
+        options = argparse.ArgumentParser.parse_args(self, args)
         try:
             options.pages = utils.parse_page_numbers(options.pages)
         except (TypeError, ValueError):
@@ -444,8 +444,8 @@ class Context(djvu.decode.Context):
         else:
             shutil.rmtree(self._temp_dir)
 
-def main():
-    options = ArgumentParser().parse_args()
+def main(argv):
+    options = ArgumentParser().parse_args(argv[1:])
     context = Context()
     context.init(options)
     try:

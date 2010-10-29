@@ -248,10 +248,10 @@ def process_zone(parent, parent_zone_type, zone, last, options):
         parent.append(self)
     return self
 
-def process_page(page_text, options, stdout):
+def process_page(page_text, options):
     result = process_zone(None, None, page_text, last=True, options=options)
     tree = etree.ElementTree(result)
-    tree.write(stdout, encoding='UTF-8')
+    tree.write(sys.stdout, encoding='UTF-8')
 
 hocr_header = '''\
 <?xml version="1.0" encoding="UTF-8"?>
@@ -270,9 +270,9 @@ hocr_footer = '''
 </html>
 '''
 
-def main(argv, stdout, stderr):
+def main(argv):
     options = ArgumentParser().parse_args(argv[1:])
-    print >>stderr, 'Converting %s:' % utils.smart_repr(options.path, system_encoding)
+    print >>sys.stderr, 'Converting %s:' % utils.smart_repr(options.path, system_encoding)
     if options.pages is None:
         djvused = ipc.Subprocess(
             ['djvused', '-e', 'n', os.path.abspath(options.path)],
@@ -292,7 +292,7 @@ def main(argv, stdout, stderr):
         ['djvused', '-f', sed_script.name, os.path.abspath(options.path)],
         stdout=ipc.PIPE,
     )
-    stdout.write(
+    sys.stdout.write(
         hocr_header % dict(
             ocr_system='djvu2hocr %s' % __version__,
             ocr_capabilities=' '.join(hocr.djvu2hocr_capabilities)
@@ -311,9 +311,9 @@ def main(argv, stdout, stderr):
             page_text = sexpr.Expression.from_stream(djvused.stdout)
         except sexpr.ExpressionSyntaxError:
             break
-        print >>stderr, '- Page #%d' % n
-        process_page(Zone(page_text), options, stdout)
-    stdout.write(hocr_footer)
+        print >>sys.stderr, '- Page #%d' % n
+        process_page(Zone(page_text), options)
+    sys.stdout.write(hocr_footer)
     djvused.wait()
 
 # vim:ts=4 sw=4 et

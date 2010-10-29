@@ -17,6 +17,7 @@ import os
 import re
 import shlex
 import shutil
+import sys
 
 from ocrodjvu.cli import djvu2hocr
 from ocrodjvu import temporary
@@ -42,7 +43,8 @@ def do(test_filename, djvused_filename, index):
             xmllint = ipc.Subprocess(['xmllint', '--format', '-'], stdin=ipc.PIPE, stdout=xml_file)
             try:
                 with open(os.devnull, 'w') as null:
-                    djvu2hocr.main(args, stdout=xmllint.stdin, stderr=null)
+                    with interim(sys, stdout=xmllint.stdin, stderr=null):
+                        djvu2hocr.main(args)
             finally:
                 xmllint.stdin.close()
                 try:

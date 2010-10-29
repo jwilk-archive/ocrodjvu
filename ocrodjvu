@@ -1,6 +1,9 @@
 #!/usr/bin/python
 
+import sys
+
 from ocrodjvu.cli import ocrodjvu as _
-_.main()
+
+_.main(sys.argv)
 
 # vim:ts=4 sw=4 et

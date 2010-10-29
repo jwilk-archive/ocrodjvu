@@ -17,6 +17,7 @@ import glob
 import os
 import re
 import shlex
+import sys
 from cStringIO import StringIO
 
 from ocrodjvu.cli import hocr2djvused
@@ -31,7 +32,8 @@ def do(test_filename, html_filename, index):
     assert args[0] == '#'
     with contextlib.closing(StringIO()) as output_file:
         with open(html_filename, 'rb') as html_file:
-            hocr2djvused.main(args, html_file, output_file)
+            with interim(sys, stdin=html_file, stdout=output_file):
+                hocr2djvused.main(args)
         output = output_file.getvalue()
     assert_ml_equal(output, expected_output)
 

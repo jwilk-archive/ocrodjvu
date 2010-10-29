@@ -50,17 +50,17 @@ class ArgumentParser(argparse.ArgumentParser):
         del options.word_segmentation
         return options
 
-def main(argv, stdin, stdout):
+def main(argv):
     options = ArgumentParser().parse_args(argv[1:])
-    texts = hocr.extract_text(stdin,
+    texts = hocr.extract_text(sys.stdin,
         rotation=options.rotation,
         details=options.details,
         uax29=options.uax29,
         page_size=options.page_size,
     )
     for i, text in enumerate(texts):
-        stdout.write('select %d\nremove-txt\nset-txt\n' % (i + 1))
-        text.print_into(stdout, 80)
-        stdout.write('\n.\n\n')
+        sys.stdout.write('select %d\nremove-txt\nset-txt\n' % (i + 1))
+        text.print_into(sys.stdout, 80)
+        sys.stdout.write('\n.\n\n')
 
 # vim:ts=4 sw=4 et

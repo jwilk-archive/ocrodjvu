@@ -10,6 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+import contextlib
 import difflib
 
 from nose.tools import __all__
@@ -26,6 +27,17 @@ def assert_ml_equal(first, second, msg='Strings differ'):
     diff = '\n' + ''.join(difflib.unified_diff(first, second))
     raise AssertionError(msg + diff)
 
-__all__ = list(__all__) + ['assert_ml_equal']
+@contextlib.contextmanager
+def interim(obj, **override):
+    copy = dict((key, getattr(obj, key)) for key in override)
+    for key, value in override.iteritems():
+        setattr(obj, key, value)
+    try:
+        yield
+    finally:
+        for key, value in copy.iteritems():
+            setattr(obj, key, value)
+
+__all__ = list(__all__) + ['assert_ml_equal', 'interim']
 
 # vim:ts=4 sw=4 et

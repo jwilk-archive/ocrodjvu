@@ -4,6 +4,6 @@ import sys
 
 from ocrodjvu.cli import djvu2hocr as _
 
-_.main(sys.argv, sys.stdout, sys.stderr)
+_.main(sys.argv)
 
 # vim:ts=4 sw=4 et
