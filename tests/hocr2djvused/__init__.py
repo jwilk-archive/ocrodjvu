@@ -24,6 +24,8 @@ from ocrodjvu.cli import hocr2djvused
 
 from tests.common import *
 
+here = os.path.relpath(os.path.dirname(__file__))
+
 def test_help():
     stdout = StringIO()
     stderr = StringIO()
@@ -33,7 +35,10 @@ def test_help():
     assert_equal(stderr.getvalue(), '')
     assert_not_equal(stdout.getvalue(), '')
 
-def _test_from_file(test_filename, html_filename, index):
+def _test_from_file(base_filename, index):
+    base_filename = os.path.join(here, base_filename)
+    test_filename = '%s.test%d' % (base_filename, index)
+    html_filename = '%s.html' % (base_filename,)
     with open(test_filename, 'rb') as file:
         commandline = file.readline()
         expected_output = file.read()
@@ -47,19 +52,10 @@ def _test_from_file(test_filename, html_filename, index):
         output = output_file.getvalue()
     assert_ml_equal(output, expected_output)
 
-def list_tests():
-    for test_filename in glob.glob(os.path.join(os.path.dirname(__file__), '*.test[0-9]')):
+def test_from_file():
+    for test_filename in glob.glob(os.path.join(here, '*.test[0-9]')):
         index = int(test_filename[-1])
-        base_filename = test_filename[:-6]
-        html_filename = base_filename + '.html'
-        func_name = 'test_%s_t%d' % (re.sub(r'\W+', '_', os.path.basename(base_filename)), index)
-        def func(test_filename=test_filename, html_filename=html_filename, index=index):
-            _test_from_file(test_filename, html_filename, index)
-        func.__name__ = func_name
-        yield func_name, func
-
-globals().update(dict(list_tests()))
-
-del list_tests
+        base_filename = os.path.basename(test_filename[:-6])
+        yield _test_from_file, base_filename, index
 
 # vim:ts=4 sw=4 et
