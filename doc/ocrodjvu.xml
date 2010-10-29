@@ -435,6 +435,18 @@
         <citerefentry>
             <refentrytitle>tesseract</refentrytitle>
             <manvolnum>1</manvolnum>
+        </citerefentry>,
+        <citerefentry>
+            <refentrytitle>cuneiform</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>,
+        <citerefentry>
+            <refentrytitle>ocrad</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>,
+        <citerefentry>
+            <refentrytitle>gocr</refentrytitle>
+            <manvolnum>1</manvolnum>
         </citerefentry>
     </para>
 </refsection>
