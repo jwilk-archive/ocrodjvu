@@ -143,7 +143,6 @@ class property(object):
 
     def __set__(self, instance, value):
         setattr(instance, self._private_name, self._filter(value))
-        self._default_value = None
         return
 
 # vim:ts=4 sw=4 et
