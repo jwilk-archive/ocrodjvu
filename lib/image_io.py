@@ -73,7 +73,6 @@ class PNM(ImageFormat):
         )
         file.write(data)
 
-
 class BMP(ImageFormat):
 
     '''
