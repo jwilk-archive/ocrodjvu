@@ -24,6 +24,8 @@ class ImageFormat(object):
 
     extension = None
 
+    _rgb = 'RGB'
+
     def __init__(self, bpp):
         self.bpp = bpp
         if bpp == 1:
@@ -31,7 +33,7 @@ class ImageFormat(object):
             pixel_format.rows_top_to_bottom = 1
             pixel_format.y_top_to_bottom = 1
         elif bpp == 24:
-            pixel_format = djvu.decode.PixelFormatRgb()
+            pixel_format = djvu.decode.PixelFormatRgb(self._rgb)
             pixel_format.rows_top_to_bottom = 1
             pixel_format.y_top_to_bottom = 1
         else:
@@ -86,6 +88,8 @@ class BMP(ImageFormat):
     '''
 
     extension = 'bmp'
+
+    _rgb = 'BGR'
 
     def __init__(self, bpp):
         ImageFormat.__init__(self, bpp)
