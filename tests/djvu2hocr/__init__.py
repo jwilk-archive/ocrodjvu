@@ -18,6 +18,7 @@ import re
 import shlex
 import shutil
 import sys
+from cStringIO import StringIO
 
 from ocrodjvu.cli import djvu2hocr
 from ocrodjvu import temporary
@@ -25,7 +26,21 @@ from ocrodjvu import ipc
 
 from tests.common import *
 
-def do(test_filename, djvused_filename, index):
+def test_help():
+    stdout = StringIO()
+    stderr = StringIO()
+    with interim(sys, stdout=stdout, stderr=stderr):
+        try:
+            djvu2hocr.main(['', '--help'])
+        except SystemExit, ex:
+            rc = ex.code
+        else:
+            rc = 0
+    assert_equal(rc, 0)
+    assert_equal(stderr.getvalue(), '')
+    assert_not_equal(stdout.getvalue(), '')
+
+def _test_from_file(test_filename, djvused_filename, index):
     with open(test_filename, 'rb') as file:
         commandline = file.readline()
         expected_output = file.read()
@@ -64,7 +79,7 @@ def list_tests():
         djvused_filename = base_filename + '.djvused'
         func_name = 'test_%s_t%d' % (re.sub(r'\W+', '_', os.path.basename(base_filename)), index)
         def func(test_filename=test_filename, djvused_filename=djvused_filename, index=index):
-            do(test_filename, djvused_filename, index)
+            _test_from_file(test_filename, djvused_filename, index)
         func.__name__ = func_name
         yield func_name, func
 
