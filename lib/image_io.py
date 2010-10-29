@@ -25,6 +25,7 @@ class ImageFormat(object):
     extension = None
 
     def __init__(self, bpp):
+        self.bpp = bpp
         if bpp == 1:
             pixel_format = djvu.decode.PixelFormatPackedBits('>')
             pixel_format.rows_top_to_bottom = 1
@@ -40,6 +41,9 @@ class ImageFormat(object):
     @utils.not_overridden
     def write_image(self, page_job, render_layers, file):
         raise NotImplementedError('Cannot output images in this format')
+
+    def __repr__(self):
+        return '%s.%s(%d)' % (self.__module__, type(self).__name__, self.bpp)
 
 class PNM(ImageFormat):
 
