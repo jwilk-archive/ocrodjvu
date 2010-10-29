@@ -30,12 +30,7 @@ def test_help():
     stdout = StringIO()
     stderr = StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
-        try:
-            djvu2hocr.main(['', '--help'])
-        except SystemExit, ex:
-            rc = ex.code
-        else:
-            rc = 0
+        rc = try_run(djvu2hocr.main, ['', '--help'])
     assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
     assert_not_equal(stdout.getvalue(), '')
@@ -59,7 +54,7 @@ def _test_from_file(test_filename, djvused_filename, index):
             try:
                 with open(os.devnull, 'w') as null:
                     with interim(sys, stdout=xmllint.stdin, stderr=null):
-                        djvu2hocr.main(args)
+                        rc = try_run(djvu2hocr.main, args)
             finally:
                 xmllint.stdin.close()
                 try:
@@ -68,6 +63,7 @@ def _test_from_file(test_filename, djvused_filename, index):
                     # Raising the exception here is likely to hide the real
                     # reason of the failure.
                     pass
+            assert_equal(rc, 0)
             xml_file.seek(0)
             output = xml_file.read()
     assert_ml_equal(output, expected_output)

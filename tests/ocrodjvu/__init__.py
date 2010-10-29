@@ -23,12 +23,7 @@ def test_help():
     stdout = StringIO()
     stderr = StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
-        try:
-            ocrodjvu.main(['', '--help'])
-        except SystemExit, ex:
-            rc = ex.code
-        else:
-            rc = 0
+        rc = try_run(ocrodjvu.main, ['', '--help'])
     assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
     assert_not_equal(stdout.getvalue(), '')

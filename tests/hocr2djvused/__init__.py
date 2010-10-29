@@ -28,12 +28,7 @@ def test_help():
     stdout = StringIO()
     stderr = StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
-        try:
-            hocr2djvused.main(['', '--help'])
-        except SystemExit, ex:
-            rc = ex.code
-        else:
-            rc = 0
+        rc = try_run(hocr2djvused.main, ['', '--help'])
     assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
     assert_not_equal(stdout.getvalue(), '')
@@ -47,7 +42,8 @@ def _test_from_file(test_filename, html_filename, index):
     with contextlib.closing(StringIO()) as output_file:
         with open(html_filename, 'rb') as html_file:
             with interim(sys, stdin=html_file, stdout=output_file):
-                hocr2djvused.main(args)
+                rc = try_run(hocr2djvused.main, args)
+        assert_equal(rc, 0)
         output = output_file.getvalue()
     assert_ml_equal(output, expected_output)
 

@@ -38,6 +38,15 @@ def interim(obj, **override):
         for key, value in copy.iteritems():
             setattr(obj, key, value)
 
-__all__ = list(__all__) + ['assert_ml_equal', 'interim']
+def try_run(f, *args, **kwargs):
+    '''Catch SystemExit etc.'''
+    try:
+        f(*args, **kwargs)
+    except SystemExit, ex:
+        return ex.code
+    else:
+        return 0
+
+__all__ = list(__all__) + ['assert_ml_equal', 'interim', 'try_run']
 
 # vim:ts=4 sw=4 et
