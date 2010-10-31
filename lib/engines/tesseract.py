@@ -138,7 +138,7 @@ class Engine(common.Engine):
                 yield file
 
     @contextlib.contextmanager
-    def recognize_hocr(image, language, details=None):
+    def recognize_hocr(self, image, language, details=None):
         with temporary.directory() as output_dir:
             tessconf_path = os.path.join(output_dir, 'tessconf')
             with file(tessconf_path, 'wt') as tessconf:
