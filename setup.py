@@ -59,6 +59,7 @@ else:
 
 if os.name == 'nt':
     import setuptools
+    # We use setuptools/distribute to be able to have .exe wrappers.
     distutils.core.setup = setuptools.setup
     extra_args = dict(
         entry_points = dict(
