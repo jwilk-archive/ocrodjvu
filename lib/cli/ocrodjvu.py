@@ -444,7 +444,7 @@ class Context(djvu.decode.Context):
         else:
             shutil.rmtree(self._temp_dir)
 
-def main(argv):
+def main(argv=sys.argv):
     options = ArgumentParser().parse_args(argv[1:])
     context = Context()
     context.init(options)

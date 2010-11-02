@@ -50,10 +50,23 @@ class TestCommand(distutils.core.Command):
 
 os.putenv('TAR_OPTIONS', '--owner root --group root --mode a+rX')
 
+scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr']
+
 if os.name == 'posix':
     data_files = [('share/man/man1', glob.glob('doc/*.1'))]
 else:
     data_files = []
+
+if os.name == 'nt':
+    import setuptools
+    distutils.core.setup = setuptools.setup
+    extra_args = dict(
+        entry_points = dict(
+            console_scripts = ['%(name)s = ocrodjvu.cli.%(name)s:main' % dict(name=name) for name in scripts]
+        )
+    )
+else:
+    extra_args = dict(scripts=scripts)
 
 distutils.core.setup(
     name = 'ocrodjvu',
@@ -67,9 +80,9 @@ distutils.core.setup(
     author_email = 'jwilk@jwilk.net',
     packages = ['ocrodjvu', 'ocrodjvu.engines', 'ocrodjvu.cli'],
     package_dir = dict(ocrodjvu='lib'),
-    scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr'],
     data_files = data_files,
     cmdclass = dict(test=TestCommand),
+    **extra_args
 )
 
 # vim:ts=4 sw=4 et

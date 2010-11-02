@@ -50,7 +50,7 @@ class ArgumentParser(argparse.ArgumentParser):
         del options.word_segmentation
         return options
 
-def main(argv):
+def main(argv=sys.argv):
     options = ArgumentParser().parse_args(argv[1:])
     texts = hocr.extract_text(sys.stdin,
         rotation=options.rotation,

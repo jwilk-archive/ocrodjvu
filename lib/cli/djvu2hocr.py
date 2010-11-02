@@ -270,7 +270,7 @@ hocr_footer = '''
 </html>
 '''
 
-def main(argv):
+def main(argv=sys.argv):
     options = ArgumentParser().parse_args(argv[1:])
     print >>sys.stderr, 'Converting %s:' % utils.smart_repr(options.path, system_encoding)
     if options.pages is None:
