@@ -49,6 +49,12 @@ class TestCommand(distutils.core.Command):
         nose.main(argv=['nosetests', '--verbose', '--with-doctest', '--all-modules'])
 
 os.putenv('TAR_OPTIONS', '--owner root --group root --mode a+rX')
+
+if os.name == 'posix':
+    data_files = [('share/man/man1', glob.glob('doc/*.1'))]
+else:
+    data_files = []
+
 distutils.core.setup(
     name = 'ocrodjvu',
     version = version.__version__,
@@ -62,7 +68,7 @@ distutils.core.setup(
     packages = ['ocrodjvu', 'ocrodjvu.engines', 'ocrodjvu.cli'],
     package_dir = dict(ocrodjvu='lib'),
     scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr'],
-    data_files = [('share/man/man1', glob.glob('doc/*.1'))],
+    data_files = data_files,
     cmdclass = dict(test=TestCommand),
 )
 
