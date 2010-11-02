@@ -33,6 +33,21 @@ import os
 
 from lib import version
 
+class TestCommand(distutils.core.Command):
+
+    description = 'run tests'
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        import nose
+        nose.main(argv=['nosetests', '--verbose', '--with-doctest', '--all-modules'])
+
 os.putenv('TAR_OPTIONS', '--owner root --group root --mode a+rX')
 distutils.core.setup(
     name = 'ocrodjvu',
@@ -48,6 +63,7 @@ distutils.core.setup(
     package_dir = dict(ocrodjvu='lib'),
     scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr'],
     data_files = [('share/man/man1', glob.glob('doc/*.1'))],
+    cmdclass = dict(test=TestCommand),
 )
 
 # vim:ts=4 sw=4 et
