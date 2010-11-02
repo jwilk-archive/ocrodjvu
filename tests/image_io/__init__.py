@@ -10,6 +10,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+from __future__ import with_statement
+
 import glob
 import os
 from cStringIO import StringIO
@@ -22,7 +24,12 @@ from ocrodjvu import image_io
 
 from tests.common import *
 
-here = os.path.relpath(os.path.dirname(__file__))
+here = os.path.dirname(__file__)
+try:
+    here = os.path.relpath(here)
+except AttributeError:
+    # Python 2.5. No big deal.
+    pass
 
 formats = image_io.PNM, image_io.BMP, image_io.TIFF
 

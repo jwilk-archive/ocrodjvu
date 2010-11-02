@@ -26,7 +26,12 @@ from ocrodjvu import ipc
 
 from tests.common import *
 
-here = os.path.relpath(os.path.dirname(__file__))
+here = os.path.dirname(__file__)
+try:
+    here = os.path.relpath(here)
+except AttributeError:
+    # Python 2.5. No big deal.
+    pass
 
 def test_help():
     stdout = StringIO()
