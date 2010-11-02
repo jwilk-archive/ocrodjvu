@@ -141,7 +141,7 @@ class Engine(common.Engine):
     def recognize_hocr(self, image, language, details=None):
         with temporary.directory() as output_dir:
             tessconf_path = os.path.join(output_dir, 'tessconf')
-            with file(tessconf_path, 'wt') as tessconf:
+            with open(tessconf_path, 'wt') as tessconf:
                 # Tesseract 3.00 doesn't come with any config file to enable hOCR
                 # output. Let's create our own one.
                 print >>tessconf, 'tessedit_create_hocr T'
