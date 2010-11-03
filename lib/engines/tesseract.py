@@ -12,6 +12,7 @@
 
 from __future__ import with_statement
 
+import cgi
 import contextlib
 import glob
 import os
@@ -19,6 +20,7 @@ import re
 import shlex
 import shutil
 import sys
+from cStringIO import StringIO
 
 from . import common
 from .. import errors
@@ -50,6 +52,26 @@ def _wait_for_worker(worker):
     for line in stderr:
         sys.stderr.write(line)
 
+def fix_html(s):
+    '''
+    Work around buggy hOCR output:
+    http://code.google.com/p/tesseract-ocr/issues/detail?id=376
+    '''
+    regex = re.compile(
+        r'''
+        ( <[!/]?[a-z]+(?:\s+[^<>]*)?>
+        | &[a-z]+;
+        | &[#][0-9]+;
+        | &[#]x[0-9a-f]+;
+        | [^<>&]+
+        )
+        ''', re.IGNORECASE | re.VERBOSE
+    )
+    return ''.join(
+        chunk if n & 1 else cgi.escape(chunk)
+        for n, chunk in enumerate(regex.split(s))
+    )
+
 class ExtractSettings(object):
 
     def __init__(self, rotation=0, details=text_zones.TEXT_DETAILS_WORD, uax29=None, page_size=None, cuneiform=None):
@@ -64,6 +86,7 @@ class Engine(common.Engine):
     executable = utils.property('tesseract')
     extra_args = utils.property([], shlex.split)
     use_hocr = utils.property(None, int)
+    fix_html = utils.property(0, int)
 
     def __init__(self, *args, **kwargs):
         assert args == ()
@@ -150,8 +173,15 @@ class Engine(common.Engine):
                 stderr=ipc.PIPE,
             )
             _wait_for_worker(worker)
-            with open(os.path.join(output_dir, 'tmp.html'), 'r') as file:
-                yield file
+            with open(os.path.join(output_dir, 'tmp.html'), 'r') as hocr_file:
+                if self.fix_html:
+                    contents = hocr_file.read()
+                else:
+                    yield hocr_file
+                    return
+        contents = fix_html(contents)
+        with contextlib.closing(StringIO(contents)) as hocr_file:
+            yield hocr_file
 
     def recognize(self, image, language, details=None):
         if self._hocr is None:
