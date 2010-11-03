@@ -28,9 +28,6 @@ def get_icu():
 def simple_word_break_iterator(text):
     '''
     Create an instance of simple space-to-space word break interator.
-    >>> s = u'\u201cJekyll,\u201d cried Utterson, with a\xa0loud voice, \u201cI demand to see you.\u201d'
-    >>> list(simple_word_break_iterator(s))
-    [9, 10, 15, 16, 25, 26, 30, 31, 32, 33, 37, 38, 44, 45, 47, 48, 54, 55, 57, 58, 61, 62, 67]
     '''
     if not text:
         return
@@ -47,13 +44,6 @@ def word_break_iterator(text, locale=None):
 
     text: unicode string
     locale: ICU locale or None
-
-    >>> icu = get_icu()
-    >>> s = u'\u201cJekyll,\u201d cried Utterson, with a\xa0loud voice, \u201cI demand to see you.\u201d'
-    >>> list(word_break_iterator(s))
-    [9, 10, 15, 16, 25, 26, 30, 31, 32, 33, 37, 38, 44, 45, 47, 48, 54, 55, 57, 58, 61, 62, 67]
-    >>> list(word_break_iterator(s, icu.Locale('en')))
-    [1, 7, 8, 9, 10, 15, 16, 24, 25, 26, 30, 31, 32, 33, 37, 38, 43, 44, 45, 46, 47, 48, 54, 55, 57, 58, 61, 62, 65, 66, 67]
     '''
     if locale is None:
         return simple_word_break_iterator(text)

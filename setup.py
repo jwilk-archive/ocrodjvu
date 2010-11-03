@@ -50,7 +50,7 @@ class test(distutils.core.Command):
 
     def run(self):
         import nose
-        nose.main(argv=['nosetests', '--verbose', '--with-doctest', '--all-modules'])
+        nose.main(argv=['nosetests', '--verbose', '--all-modules', 'tests'])
 
 class build_doc(distutils_build):
 

@@ -17,22 +17,12 @@ import warnings
 
 def parse_page_numbers(pages):
     '''
-    >>> parse_page_numbers(None)
-
-    >>> parse_page_numbers('17')
-    [17]
-
-    >>> parse_page_numbers('37-42')
-    [37, 38, 39, 40, 41, 42]
-
-    >>> parse_page_numbers('17,37-42')
-    [17, 37, 38, 39, 40, 41, 42]
-
-    >>> parse_page_numbers('42-37')
-    []
-
-    >>> parse_page_numbers('17-17')
-    [17]
+    parse_page_numbers(None) -> None
+    parse_page_numbers('17') -> [17]
+    parse_page_numbers('37-42') -> [37, 38, ..., 42]
+    parse_page_numbers('17,37-42') -> [17, 37, 38, ..., 42]
+    parse_page_numbers('42-37') -> []
+    parse_page_numbers('17-17') -> [17]
     '''
     if pages is None:
         return
@@ -64,21 +54,9 @@ def smart_repr(s, encoding=None):
     return "'%s'" % _special_chars_replace(_special_chars_escape, u)
 
 def sanitize_utf8(text):
-    r'''
+    '''
     Replace invalid UTF-8 sequences and control characters (except CR, LF, TAB
     and space) with Unicode replacement characters.
-
-    >>> s = ''.join(map(chr, xrange(32)))
-    >>> sanitize_utf8(s).decode('UTF-8')
-    u'\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\t\n\ufffd\ufffd\r\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd'
-
-    >>> s = 'The quick brown fox jumps over the lazy dog'
-    >>> sanitize_utf8(s) == s
-    True
-
-    >>> s = 'Je\xc5\xbcu kl\xc4\x85tw, sp\xc5\x82\xc3\xb3d\xc5\xba Finom cz\xc4\x99\xc5\x9b\xc4\x87 gry ha\xc5\x84b!'
-    >>> sanitize_utf8(s) == s
-    True
     '''
     text = text.decode('UTF-8', 'replace')
     for ch in map(unichr, xrange(32)):
@@ -91,19 +69,9 @@ class NotOverriddenWarning(UserWarning):
     pass
 
 def not_overridden(f):
-    r'''
-    >>> warnings.filterwarnings('error', category=NotOverriddenWarning)
-    >>> class B(object):
-    ...   @not_overridden
-    ...   def f(self, x, y): pass
-    >>> class C(B):
-    ...   def f(self, x, y): return x * y
-    >>> B().f(6, 7) # doctest: +ELLIPSIS
-    Traceback (most recent call last):
-    ...
-    NotOverriddenWarning: ...B.f() is not overridden
-    >>> C().f(6, 7)
-    42
+    '''
+    Raise warning (NotOverriddenWarning) if the decorated method was not
+    overridden in a subclass, or called directly.
     '''
     @functools.wraps(f)
     def new_f(self, *args, **kwargs):
@@ -123,9 +91,7 @@ def str_as_unicode(s, encoding=sys.getdefaultencoding()):
 
 def identity(x):
     '''
-    >>> o = object()
-    >>> identity(o) is o
-    True
+    identity(x) -> x
     '''
     return x
 

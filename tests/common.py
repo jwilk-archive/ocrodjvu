@@ -12,6 +12,9 @@
 
 import contextlib
 import difflib
+import re
+import sys
+import warnings
 
 from nose.tools import __all__
 from nose.tools import *
@@ -47,6 +50,45 @@ def try_run(f, *args, **kwargs):
     else:
         return 0
 
-__all__ = list(__all__) + ['assert_ml_equal', 'interim', 'try_run']
+try:
+    catch_warnings = warnings.catch_warnings
+except AttributeError:
+    @contextlib.contextmanager
+    def catch_warnings():
+        original_filters = warnings.filters
+        try:
+            yield
+        finally:
+            warnings.filters = original_filters
+
+@contextlib.contextmanager
+def raises(exc_type, string=None, regex=None):
+    if string is None and regex is None:
+        raise ValueError('either string or regex must be provided')
+    assert (string is None) ^ (regex is None)
+    try:
+        yield None
+    except exc_type:
+        _, exc, _ = sys.exc_info()
+        exc_string = str(exc)
+        if string is not None:
+            if string != exc_string:
+                message = '%r != %r' % (exc_string, string)
+                raise AssertionError(message)
+        else:
+            if not re.match(regex, exc_string):
+                message = '%r !~ %r' % (exc_string, regex)
+                raise AssertionError(message)
+    else:
+        message = '%s was not raised' % exc_type.__name__
+        raise AssertionError(message)
+
+__all__ = list(__all__) + [
+    'assert_ml_equal',
+    'interim',
+    'try_run',
+    'catch_warnings',
+    'raises',
+]
 
 # vim:ts=4 sw=4 et
