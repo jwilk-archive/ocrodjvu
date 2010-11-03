@@ -11,6 +11,7 @@
 # General Public License for more details.
 
 import functools
+import locale
 import re
 import sys
 import warnings
@@ -84,7 +85,7 @@ def not_overridden(f):
         return f(self, *args, **kwargs)
     return new_f
 
-def str_as_unicode(s, encoding=sys.getdefaultencoding()):
+def str_as_unicode(s, encoding=locale.getpreferredencoding()):
     if isinstance(s, unicode):
         return s
     return s.decode(encoding, 'replace')
