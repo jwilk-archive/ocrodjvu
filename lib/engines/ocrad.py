@@ -85,7 +85,7 @@ def scan(stream, settings):
             x, y, w, h = map(int, coords.split())
             bbox = text_zones.BBox(x, y, x + w, y + h)
             if line[0] == '0':
-                # No interpretations has been proposed for this particular character.
+                # No interpretations have been proposed for this particular character.
                 text = settings.replacement_character
             else:
                 m = _character_re.match(line)
