@@ -27,11 +27,13 @@ Topic :: Text Processing
 Topic :: Multimedia :: Graphics
 '''.strip().split('\n')
 
-import distutils.command.build
-import distutils.command.sdist
-import distutils.core
 import glob
 import os
+
+import distutils.command
+import distutils.core
+from distutils.command.build import build as distutils_build
+from distutils.command.sdist import sdist as distutils_sdist
 
 from lib import version
 
@@ -50,7 +52,7 @@ class test(distutils.core.Command):
         import nose
         nose.main(argv=['nosetests', '--verbose', '--with-doctest', '--all-modules'])
 
-class build_doc(distutils.command.build.build):
+class build_doc(distutils_build):
 
     description = 'build documentation'
 
@@ -69,13 +71,13 @@ class build_doc(distutils.command.build.build):
             self.make_file([xmlname], manname, distutils.spawn.spawn, [command])
             manpages.add(manname)
 
-class sdist(distutils.command.sdist.sdist):
+class sdist(distutils_sdist):
 
     def run(self):
         self.run_command('build_doc')
-        return distutils.command.sdist.sdist.run(self)
+        return distutils_sdist.run(self)
 
-distutils.command.build.build.sub_commands[:0] = [('build_doc', None)]
+distutils_build.sub_commands[:0] = [('build_doc', None)]
 
 os.putenv('TAR_OPTIONS', '--owner root --group root --mode a+rX')
 
