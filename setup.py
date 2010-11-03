@@ -33,7 +33,7 @@ import os
 
 from lib import version
 
-class TestCommand(distutils.core.Command):
+class test(distutils.core.Command):
 
     description = 'run tests'
     user_options = []
@@ -82,7 +82,7 @@ distutils.core.setup(
     packages = ['ocrodjvu', 'ocrodjvu.engines', 'ocrodjvu.cli'],
     package_dir = dict(ocrodjvu='lib'),
     data_files = data_files,
-    cmdclass = dict(test=TestCommand),
+    cmdclass = dict(test=test),
     **extra_args
 )
 
