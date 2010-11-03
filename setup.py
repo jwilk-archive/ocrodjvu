@@ -27,6 +27,8 @@ Topic :: Text Processing
 Topic :: Multimedia :: Graphics
 '''.strip().split('\n')
 
+import distutils.command.build
+import distutils.command.sdist
 import distutils.core
 import glob
 import os
@@ -48,12 +50,40 @@ class test(distutils.core.Command):
         import nose
         nose.main(argv=['nosetests', '--verbose', '--with-doctest', '--all-modules'])
 
+class build_doc(distutils.command.build.build):
+
+    description = 'build documentation'
+
+    def run(self):
+        if os.name != 'posix':
+            return
+        for xmlname in glob.glob(os.path.join('doc', '*.xml')):
+            manname = os.path.splitext(xmlname)[0] + '.1'
+            command = [
+                'xsltproc', '--nonet',
+                '--param', 'man.charmap.use.subset', '0',
+                '--output', 'doc/',
+                'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
+                xmlname,
+            ]
+            self.make_file([xmlname], manname, distutils.spawn.spawn, [command])
+            manpages.add(manname)
+
+class sdist(distutils.command.sdist.sdist):
+
+    def run(self):
+        self.run_command('build_doc')
+        return distutils.command.sdist.sdist.run(self)
+
+distutils.command.build.build.sub_commands[:0] = [('build_doc', None)]
+
 os.putenv('TAR_OPTIONS', '--owner root --group root --mode a+rX')
 
 scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr']
 
 if os.name == 'posix':
-    data_files = [('share/man/man1', glob.glob('doc/*.1'))]
+    manpages = set()
+    data_files = [('share/man/man1', manpages)]
 else:
     data_files = []
 
@@ -82,7 +112,7 @@ distutils.core.setup(
     packages = ['ocrodjvu', 'ocrodjvu.engines', 'ocrodjvu.cli'],
     package_dir = dict(ocrodjvu='lib'),
     data_files = data_files,
-    cmdclass = dict(test=test),
+    cmdclass = dict(test=test, sdist=sdist, build_doc=build_doc),
     **extra_args
 )
 
