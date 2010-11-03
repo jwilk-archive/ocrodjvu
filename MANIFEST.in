@@ -6,8 +6,8 @@ include doc/*.txt
 include doc/*.xml
 include doc/changelog
 include ocrodjvu.py
-recursive-include tests Makefile*
-recursive-include tests run-test
+recursive-include tests *.bmp *.pbm *.ppm *.tif
+recursive-include tests *.py
 recursive-include tests *.html
 recursive-include tests *.djvused
 recursive-include tests *.test[0-9]
