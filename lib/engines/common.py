@@ -31,7 +31,7 @@ class Engine(object):
                 if not isinstance(prop, utils.property):
                     raise AttributeError
             except AttributeError, ex:
-                ex.args = ('%r is not a valid property for the %r engine',)
+                ex.args = ('%r is not a valid property for the %s engine' % (key, self.name),)
                 raise
             setattr(self, key, value)
 

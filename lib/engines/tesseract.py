@@ -63,7 +63,7 @@ class Engine(common.Engine):
 
     executable = utils.property('tesseract')
     extra_args = utils.property([], shlex.split)
-    use_hocr = utils.property()
+    use_hocr = utils.property(None, int)
 
     def __init__(self, *args, **kwargs):
         assert args == ()

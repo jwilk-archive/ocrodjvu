@@ -174,7 +174,6 @@ class ArgumentParser(argparse.ArgumentParser):
         self.add_argument('--list-languages', action=self.list_languages, nargs=0, help='print list of available languages')
         self.add_argument('--render', dest='render_layers', choices=self._render_map.keys(), action='store', default='mask', help='image layers to render')
         self.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to process')
-        self.add_argument('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
         self.add_argument('--on-error', choices=('abort', 'resume'), default='abort', help='error handling strategy' and argparse.SUPPRESS)
         # --on-error=resume should not be used by anobody. No, really.
         self.add_argument('-j', '--jobs', dest='n_jobs', metavar='N', nargs='?', type=int, default=1, help='number of jobs to run simultaneously')
@@ -182,6 +181,9 @@ class ArgumentParser(argparse.ArgumentParser):
         group = self.add_argument_group(title='text segmentation options')
         group.add_argument('-t', '--details', dest='details', choices=('lines', 'words', 'chars'), action='store', default='words', help='amount of text details to extract')
         group.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='space', help='word segmentation algorithm')
+        group = self.add_argument_group(title='advanced options')
+        group.add_argument('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
+        group.add_argument('-X', dest='properties', metavar='KEY=VALUE', help='set an engine-specific property', action='append', default=[])
 
     class set_engine(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
@@ -255,8 +257,18 @@ class ArgumentParser(argparse.ArgumentParser):
         # engine.
         if options.language is None:
             options.language = options.engine.get_default_language()
+        kwargs = {}
+        for prop in options.properties:
+            try:
+                key, value = prop.split('=', 1)
+            except ValueError:
+                self.error('argument -X: expected KEY=VALUE')
+            key = key.replace('-', '_')
+            kwargs[key] = value
         try:
-            options.engine = options.engine()
+            options.engine = options.engine(**kwargs)
+        except AttributeError, ex:
+            self.error(str(ex))
         except errors.EngineNotFound, ex:
             self.error(str(ex))
         try:

@@ -9,11 +9,14 @@ ocrodjvu (0.7.0) UNRELEASED; urgency=low
   * ocrodjvu:
     + Make ‘-e’ an alias for ‘--engine’.
     + Make ‘-l’ an alias for ‘--language’.
+    + Add the -X option (for advanced users).
+    + Work-around for Cuneiform returning files with control characters is now
+      disabled by default. Use ‘-X fix-html=1’ to re-enable it.
   * djvu2hocr:
     + Fix a typo, which prevented hocr2djvused from correctly parsing files
       produced by it.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 29 Oct 2010 23:42:56 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 03 Nov 2010 21:28:18 +0100
 
 ocrodjvu (0.6.1) unstable; urgency=high
 
