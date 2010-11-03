@@ -5,11 +5,13 @@ ocrodjvu (0.7.0) UNRELEASED; urgency=low
   * Fix crash on Cuneiform-generated hOCR with bounding boxes for whitespace
     characters. Thanks to Alexey Shipunov for the bug report.
   * Fix compatibility with Tesseract 3.0.
-  * ocrodjvu: make ‘-e’ an alias for ‘--engine’.
-  * ocrodjvu: make ‘-l’ an alias for ‘--language’.
-  * djvu2hocr: fix a typo, which prevented hocr2djvused from correctly parsing
-    files produced by it.
   * Fix colors in 24-bit BMP images.
+  * ocrodjvu:
+    + Make ‘-e’ an alias for ‘--engine’.
+    + Make ‘-l’ an alias for ‘--language’.
+  * djvu2hocr:
+    + Fix a typo, which prevented hocr2djvused from correctly parsing files
+      produced by it.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Fri, 29 Oct 2010 23:42:56 +0200
 
@@ -69,22 +71,24 @@ ocrodjvu (0.4.7) unstable; urgency=low
 
 ocrodjvu (0.4.6) unstable; urgency=low
 
-  * Implement work around for Cuneiform returning files with control
+  * Implement work-around for Cuneiform returning files with control
     characters. Thanks to Kyrill Detinov for the bug report.
   * Avoid deprecation warnings with PyICU ≥ 1.0.
     http://bugs.debian.org/589027
-  * djvu2hocr: don't crash on very long documents.
-    http://bugs.debian.org/591389
+  * djvu2hocr:
+    + Don't crash on very long documents.
+      http://bugs.debian.org/591389
 
  -- Jakub Wilk <jwilk@jwilk.net>  Tue, 03 Aug 2010 20:33:49 +0200
 
 ocrodjvu (0.4.5) unstable; urgency=low
 
-  * djvu2hocr: add ocr-system and ocr-capabilities meta information.
   * Fix handling of ‘deu’ and ‘rus-eng’ languages. Thanks to Kyrill Detinov
     for the bug report.
   * Properly handle hOCR with inline formatting. Thanks to Kyrill Detinov for
     the bug report.
+  * djvu2hocr:
+    + Add ocr-system and ocr-capabilities meta information.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Mon, 24 May 2010 21:22:39 +0200
 
@@ -134,22 +138,26 @@ ocrodjvu (0.4.0) unstable; urgency=low
     + --list-engines.
   * Don't crash on non-ASCII file names.
     Thanks to Jean-Christophe Heger for the bug report.
-  * hocr2djvused: add the --page-size option.
-  * ocrodjvu: add the -j/--jobs option.
+  * hocr2djvused:
+    + Add the --page-size option.
+  * ocrodjvu:
+    + Add the -j/--jobs option.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Thu, 21 Jan 2010 23:41:37 +0100
 
 ocrodjvu (0.3.2) unstable; urgency=low
 
   * Accept negative numbers in hOCR bounding boxes.
-  * djvu2hocr: fix broken UAX #29 segmentation.
-  * djvu2hocr: provide correct page bounding boxes.
+  * djvu2hocr:
+    + Fix broken UAX #29 segmentation.
+    + Provide correct page bounding boxes.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Fri, 08 Jan 2010 17:46:51 +0100
 
 ocrodjvu (0.3.1) unstable; urgency=low
 
-  * djvu2hocr: fix broken UAX #29 segmentation.
+  * djvu2hocr:
+    + Fix broken UAX #29 segmentation.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Sun, 03 Jan 2010 12:56:08 +0100
 
