@@ -1,0 +1,9 @@
+#!/bin/sh
+if [ "$1" = "-l" ]
+then
+    printf 'Cuneiform for Linux 1.0.0\n'
+    printf 'Supported languages: eng ger fra rus swe spa ita ruseng ukr srp hrv pol dan por dut cze rum hun bul slo lav lit est tur.\n'
+fi
+exit 1
+
+# vim:ts=4 sw=4 et
