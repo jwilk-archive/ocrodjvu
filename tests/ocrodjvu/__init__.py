@@ -30,6 +30,16 @@ def test_help():
     assert_equal(stderr.getvalue(), '')
     assert_not_equal(stdout.getvalue(), '')
 
+def test_version():
+    # http://bugs.debian.org/573496
+    stdout = StringIO()
+    stderr = StringIO()
+    with interim(sys, stdout=stdout, stderr=stderr):
+        rc = try_run(ocrodjvu.main, ['', '--version'])
+    assert_equal(rc, 0)
+    assert_not_equal(stderr.getvalue(), '')
+    assert_equal(stdout.getvalue(), '')
+
 def test_list_engines():
     global engines
     stdout = StringIO()

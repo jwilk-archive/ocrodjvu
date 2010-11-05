@@ -40,6 +40,16 @@ def test_help():
     assert_equal(stderr.getvalue(), '')
     assert_not_equal(stdout.getvalue(), '')
 
+def test_version():
+    # http://bugs.debian.org/573496
+    stdout = StringIO()
+    stderr = StringIO()
+    with interim(sys, stdout=stdout, stderr=stderr):
+        rc = try_run(hocr2djvused.main, ['', '--version'])
+    assert_equal(rc, 0)
+    assert_not_equal(stderr.getvalue(), '')
+    assert_equal(stdout.getvalue(), '')
+
 def _test_from_file(base_filename, index):
     base_filename = os.path.join(here, base_filename)
     test_filename = '%s.test%d' % (base_filename, index)
