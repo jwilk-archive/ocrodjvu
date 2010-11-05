@@ -12,6 +12,7 @@
 
 import contextlib
 import difflib
+import os
 import re
 import sys
 import warnings
@@ -40,6 +41,29 @@ def interim(obj, **override):
     finally:
         for key, value in copy.iteritems():
             setattr(obj, key, value)
+
+@contextlib.contextmanager
+def amended_environment(**override):
+    keys = set(override)
+    copy_keys = keys & set(os.environ)
+    copy = dict((key, value) for key, value in os.environ.iteritems() if key in copy_keys)
+    for key, value in override.iteritems():
+        if value is None:
+            try:
+                del os.environ[key]
+            except KeyError:
+                pass
+        else:
+            os.environ[key] = value
+    try:
+        yield
+    finally:
+        for key in keys:
+            try:
+                del os.environ[key]
+            except KeyError:
+                pass
+        os.environ.update(copy)
 
 def try_run(f, *args, **kwargs):
     '''Catch SystemExit etc.'''
@@ -86,6 +110,7 @@ def raises(exc_type, string=None, regex=None):
 __all__ = list(__all__) + [
     'assert_ml_equal',
     'interim',
+    'amended_environment',
     'try_run',
     'catch_warnings',
     'raises',
