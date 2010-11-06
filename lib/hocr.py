@@ -205,7 +205,12 @@ def _scan(node, settings):
     has_zone = has_char_zone = has_nonchar_zone = False
     children = get_children(node)
     if len(children) == 0:
-        return []
+        if djvu_class is const.TEXT_ZONE_PAGE:
+            # For all other zone types, 0-child zone are simply skipped.
+            # We return from the function here, to make further checks simpler.
+            return [text_zones.Zone(type=djvu_class, bbox=bbox)]
+        else:
+            return []
 
     for child in children:
         if isinstance(child, basestring):
