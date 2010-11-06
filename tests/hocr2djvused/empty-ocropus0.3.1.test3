@@ -1,0 +1,7 @@
+# --details=words --word-segmentation=uax29
+select 1
+remove-txt
+set-txt
+(page 0 0 100 100 "")
+.
+
