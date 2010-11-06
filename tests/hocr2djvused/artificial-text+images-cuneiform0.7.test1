@@ -1,0 +1,7 @@
+# --page-size=1000x1000 --details=lines
+select 1
+remove-txt
+set-txt
+(page 0 0 1000 1000 (para 100 800 200 900 "x"))
+.
+
