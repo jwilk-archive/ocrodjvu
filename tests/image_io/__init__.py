@@ -40,7 +40,7 @@ def _test_from_file(base_filename, format):
         layers = djvu.decode.RENDER_COLOR
     base_filename = os.path.join(here, base_filename)
     djvu_filename = '%s.djvu' % (base_filename,)
-    expected_filename = '%s-%dbpp.%s' % (base_filename, format.bpp, format.extension)
+    expected_filename = '%s_%dbpp.%s' % (base_filename, format.bpp, format.extension)
     with open(expected_filename, 'rb') as file:
         expected = file.read()
     context = djvu.decode.Context()
