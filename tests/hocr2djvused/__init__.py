@@ -67,10 +67,40 @@ def _test_from_file(base_filename, index):
         output = output_file.getvalue()
     assert_ml_equal(output, expected_output)
 
+def _rough_test_from_file(base_filename, args):
+    args = ['#'] + shlex.split(args)
+    if base_filename.endswith(('cuneiform0.7', 'cuneiform0.8')):
+        # Add dummy page-size information
+        args += ['--page-size=1000x1000']
+    base_filename = os.path.join(here, base_filename)
+    html_filename = '%s.html' % (base_filename,)
+    with contextlib.closing(StringIO()) as output_file:
+        with open(html_filename, 'rb') as html_file:
+            with interim(sys, stdin=html_file, stdout=output_file):
+                rc = try_run(hocr2djvused.main, args)
+        assert_equal(rc, 0)
+        output = output_file.getvalue()
+    assert_not_equal(output, '')
+
 def test_from_file():
+    rough_test_args = ['--details=lines']
+    rough_test_args += [
+        '--details=%s%s' % (details, extra)
+        for details in ('words', 'chars')
+        for extra in ('', ' --word-segmentation=uax29')
+    ]
+    known_bases = set()
     for test_filename in glob.glob(os.path.join(here, '*.test[0-9]')):
         index = int(test_filename[-1])
         base_filename = os.path.basename(test_filename[:-6])
+        known_bases.add(base_filename)
         yield _test_from_file, base_filename, index
+    for html_filename in glob.glob(os.path.join(here, '*.html')):
+        # For HTML files that have no corresponing .test* files, we just check
+        # if they won't trigger any exception.
+        base_filename = os.path.basename(html_filename[:-5])
+        for args in rough_test_args:
+            if base_filename not in known_bases:
+                yield _rough_test_from_file, base_filename, args
 
 # vim:ts=4 sw=4 et
