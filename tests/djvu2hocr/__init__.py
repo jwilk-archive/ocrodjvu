@@ -12,7 +12,6 @@
 
 from __future__ import with_statement
 
-import glob
 import os
 import re
 import shlex
@@ -89,7 +88,7 @@ def _test_from_file(base_filename, index):
     assert_ml_equal(output, expected_output)
 
 def test_from_file():
-    for test_filename in glob.glob(os.path.join(here, '*.test[0-9]')):
+    for test_filename in sorted_glob(os.path.join(here, '*.test[0-9]')):
         index = int(test_filename[-1])
         base_filename = os.path.basename(test_filename[:-6])
         yield _test_from_file, base_filename, index

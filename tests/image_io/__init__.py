@@ -12,7 +12,6 @@
 
 from __future__ import with_statement
 
-import glob
 import os
 from cStringIO import StringIO
 
@@ -68,7 +67,7 @@ def _test_from_file(base_filename, format):
         assert_equal(list(result.getdata()), list(expected.getdata()))
 
 def test_from_file():
-    for djvu_filename in glob.glob(os.path.join(here, '*.djvu')):
+    for djvu_filename in sorted_glob(os.path.join(here, '*.djvu')):
         base_filename = os.path.basename(djvu_filename[:-5])
         for format in formats:
             for bpp in 1, 24:

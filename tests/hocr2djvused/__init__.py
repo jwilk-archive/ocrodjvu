@@ -13,7 +13,6 @@
 from __future__ import with_statement
 
 import contextlib
-import glob
 import os
 import re
 import shlex
@@ -90,12 +89,12 @@ def test_from_file():
         for extra in ('', ' --word-segmentation=uax29')
     ]
     known_bases = set()
-    for test_filename in glob.glob(os.path.join(here, '*.test[0-9]')):
+    for test_filename in sorted_glob(os.path.join(here, '*.test[0-9]')):
         index = int(test_filename[-1])
         base_filename = os.path.basename(test_filename[:-6])
         known_bases.add(base_filename)
         yield _test_from_file, base_filename, index
-    for html_filename in glob.glob(os.path.join(here, '*.html')):
+    for html_filename in sorted_glob(os.path.join(here, '*.html')):
         # For HTML files that have no corresponing .test* files, we just check
         # if they won't trigger any exception.
         base_filename = os.path.basename(html_filename[:-5])

@@ -12,6 +12,7 @@
 
 import contextlib
 import difflib
+import glob
 import os
 import re
 import sys
@@ -107,6 +108,9 @@ def raises(exc_type, string=None, regex=None):
         message = '%s was not raised' % exc_type.__name__
         raise AssertionError(message)
 
+def sorted_glob(*args, **kwargs):
+    return sorted(glob.glob(*args, **kwargs))
+
 __all__ = list(__all__) + [
     'assert_ml_equal',
     'interim',
@@ -114,6 +118,7 @@ __all__ = list(__all__) + [
     'try_run',
     'catch_warnings',
     'raises',
+    'sorted_glob',
 ]
 
 # vim:ts=4 sw=4 et
