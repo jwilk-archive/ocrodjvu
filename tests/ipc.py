@@ -35,7 +35,7 @@ class test_wait():
     def _test_signal(self, name):
         child = ipc.Subprocess(['cat']) # Any long-standing process would do.
         os.kill(child.pid, getattr(signal, name))
-        with raises(ipc.CalledProcessInterrupted, "Command 'cat' was interrputed by signal " + name):
+        with raises(ipc.CalledProcessInterrupted, "Command 'cat' was interrupted by signal " + name):
             child.wait()
 
     def test_wait_signal(self):
