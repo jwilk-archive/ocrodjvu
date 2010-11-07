@@ -426,7 +426,7 @@
 <refsection>
     <title>Environment</title>
     <para>
-        The following environment variables affects <command>&p;</command>:
+        The following environment variables affects &p;:
         <variablelist>
         <varlistentry>
             <term><varname>tesslanguage</varname></term>
@@ -446,7 +446,7 @@
             -->
             <listitem>
                 <para>
-                    <command>&p;</command> makes heavy use of temporary files. It will store them in a directory
+                    &p; makes heavy use of temporary files. It will store them in a directory
                     specified by this variable. The default is <filename>/tmp</filename>.
                 </para>
             </listitem>
