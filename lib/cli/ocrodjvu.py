@@ -367,9 +367,10 @@ class Context(djvu.decode.Context):
                 raise
             except Exception, ex:
                 try:
+                    interrupted_by_user = isinstance(ex, ipc.CalledProcessInterrupted) and ex.by_user
                     message = 'Exception while processing page %d:\n%s' % (n + 1, traceback.format_exc())
                     print >>sys.stderr, message.rstrip()
-                    if self._options.resume_on_error:
+                    if self._options.resume_on_error and not interrupted_by_user:
                         # As requested by user, don't abort on error and pretend that nothing happened.
                         results[n] = False
                         continue
