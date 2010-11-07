@@ -1,4 +1,4 @@
-ocrodjvu (0.7.0) UNRELEASED; urgency=low
+ocrodjvu (0.7.0) unstable; urgency=low
 
   * Correctly handle empty pages recognized by Cuneiform and Ocrad. Thanks to
     Alexey Shipunov for the bug report.
@@ -19,7 +19,7 @@ ocrodjvu (0.7.0) UNRELEASED; urgency=low
       http://bugs.debian.org/600539
   * Extend the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sun, 07 Nov 2010 20:34:12 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 07 Nov 2010 21:37:00 +0100
 
 ocrodjvu (0.6.1) unstable; urgency=high
 
