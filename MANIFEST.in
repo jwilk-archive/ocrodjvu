@@ -12,3 +12,4 @@ recursive-include tests *.djvused
 recursive-include tests *.test[0-9]
 recursive-include tests *.djvu
 recursive-include tests fake-executable
+prune tests/local/
