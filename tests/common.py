@@ -87,23 +87,23 @@ except AttributeError:
             warnings.filters = original_filters
 
 @contextlib.contextmanager
-def raises(exc_type, string=None, regex=None):
-    if string is None and regex is None:
-        raise ValueError('either string or regex must be provided')
-    assert (string is None) ^ (regex is None)
+def raises(exc_type, string=None, regex=None, callback=None):
+    if sum(x is not None for x in (string, regex, callback)) != 1:
+        raise ValueError('exactly one of: string, regex, callback must be provided')
+    if string is not None:
+        def callback(exc):
+            assert_equal(str(exc), string)
+    elif regex is not None:
+        def callback(exc):
+            exc_string = str(exc)
+            if not re.match(regex, exc_string):
+                message = '%r !~ %r' % (exc_string, regex)
+                raise AssertionError(message)
     try:
         yield None
     except exc_type:
         _, exc, _ = sys.exc_info()
-        exc_string = str(exc)
-        if string is not None:
-            if string != exc_string:
-                message = '%r != %r' % (exc_string, string)
-                raise AssertionError(message)
-        else:
-            if not re.match(regex, exc_string):
-                message = '%r !~ %r' % (exc_string, regex)
-                raise AssertionError(message)
+        callback(exc)
     else:
         message = '%s was not raised' % exc_type.__name__
         raise AssertionError(message)
