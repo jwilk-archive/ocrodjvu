@@ -390,6 +390,14 @@
             </listitem>
         </varlistentry>
         <varlistentry>
+            <term><option>-X <replaceable>key</replaceable>=<replaceable>value</replaceable></option></term>
+            <listitem>
+                <para>
+                    This option allow to control some details of how &p; operates.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
             <term><option>--on-error=abort</option></term>
             <listitem>
                 <para>
