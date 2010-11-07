@@ -52,6 +52,8 @@ class CalledProcessInterrupted(CalledProcessError):
 
     def __init__(self, signal_id, command):
         Exception.__init__(self, command, signal_id)
+        self.by_user = signal_id == signal.SIGINT
+
     def __str__(self):
         signal_name = self._signal_names.get(self.args[1], self.args[1])
         return 'Command %r was interrupted by signal %s' % (self.args[0], signal_name)

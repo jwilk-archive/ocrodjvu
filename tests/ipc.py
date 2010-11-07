@@ -21,6 +21,29 @@ from tests.common import *
 from lib import ipc
 from lib import temporary
 
+class test_exceptions():
+
+    def test_sigint(self):
+        ex = ipc.CalledProcessInterrupted(signal.SIGINT, 'eggs')
+        assert_equal(str(ex), "Command 'eggs' was interrupted by signal SIGINT")
+        assert_true(ex.by_user)
+
+    def test_sigabrt(self):
+        ex = ipc.CalledProcessInterrupted(signal.SIGABRT, 'eggs')
+        assert_equal(str(ex), "Command 'eggs' was interrupted by signal SIGABRT")
+        assert_false(ex.by_user)
+
+    def test_sigsegv(self):
+        ex = ipc.CalledProcessInterrupted(signal.SIGSEGV, 'eggs')
+        assert_equal(str(ex), "Command 'eggs' was interrupted by signal SIGSEGV")
+        assert_false(ex.by_user)
+
+    def test_invalid_signo(self):
+        # signal.NSIG is guaranteed not be a correct signal number
+        ex = ipc.CalledProcessInterrupted(signal.NSIG, 'eggs')
+        assert_equal(str(ex), "Command 'eggs' was interrupted by signal %d" % signal.NSIG)
+        assert_false(ex.by_user)
+
 class test_wait():
 
     def test0(self):
