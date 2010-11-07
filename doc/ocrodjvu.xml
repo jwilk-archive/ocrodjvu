@@ -387,6 +387,32 @@
         </varlistentry>
         </variablelist>
     </refsection>
+    <refsection>
+        <title>Advanced options</title>
+        <varlistentry>
+            <term><option>--on-error=abort</option></term>
+            <listitem>
+                <para>
+                    Stop program execution when exception situation (e.g., malformed output from the OCR engine,
+                    internal &p; error, etc.) occurs.
+                </para>
+                <para>
+                    This is the default.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--on-error=resume</option></term>
+            <listitem>
+                <para>
+                    Attempt to recover from exceptional situations.
+                </para>
+                <para>
+                    This option is strongly discouraged.
+                </para>
+            </listitem>
+        </varlistentry>
+    </refsection>
 </refsection>
 
 <refsection>

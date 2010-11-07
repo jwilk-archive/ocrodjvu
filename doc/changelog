@@ -12,13 +12,14 @@ ocrodjvu (0.7.0) UNRELEASED; urgency=low
     + Add the -X option (for advanced users).
     + Work-around for Cuneiform returning files with control characters is now
       disabled by default. Use ‘-X fix-html=1’ to re-enable it.
+    + Add the --on-error option (for advanced users).
   * djvu2hocr:
     + Fix a typo, which prevented hocr2djvused from correctly parsing files
       produced by it.
       http://bugs.debian.org/600539
   * Extend the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 03 Nov 2010 21:28:18 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 07 Nov 2010 20:34:12 +0100
 
 ocrodjvu (0.6.1) unstable; urgency=high
 
