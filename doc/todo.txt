@@ -1,0 +1,24 @@
+Missing tests
+=============
+* For non-ASCII filenames.
+* For Cuneiform hOCR with inline formatting.
+* For Cuneiform hOCR with bounding boxes for whitespace characters.
+* For Cuneiform hOCR with empty pages.
+* For OCRad, in particular:
+  - for non-ASCII characters;
+  - for text close to a page boundary;
+  - for empty pages;
+  - for characters with no interpretations.
+* For GOCR, in particular:
+  - for non-ASCII characters;
+  - for empty pages.
+
+Documentation
+=============
+* Write better documentation for -X.
+
+Nice-to-have things
+===================
+http://bugs.debian.org/575490
+
+.. vim:ft=rst ts=3 sw=3 et tw=72
