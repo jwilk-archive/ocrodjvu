@@ -18,7 +18,6 @@ import glob
 import os
 import re
 import shlex
-import shutil
 import sys
 from cStringIO import StringIO
 
