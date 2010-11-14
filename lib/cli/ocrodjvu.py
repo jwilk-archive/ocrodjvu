@@ -306,8 +306,6 @@ class Context(djvu.decode.Context):
 
     @contextlib.contextmanager
     def get_output_image(self, nth, page_job):
-        size = page_job.size
-        rect = (0, 0) + size
         output_format = self._image_format
         file = self._temp_file('%06d.%s' % (nth, output_format.extension))
         try:
