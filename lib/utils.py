@@ -13,7 +13,6 @@
 import functools
 import locale
 import re
-import sys
 import warnings
 
 def parse_page_numbers(pages):
