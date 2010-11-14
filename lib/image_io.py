@@ -157,7 +157,7 @@ class TIFF(ImageFormat):
             interp = 2
             spp = 3
         else:
-            raise NotImplementedError('Cannot output %d-bpp images' % bpp)
+            raise NotImplementedError('Cannot output %d-bpp images' % self._pixel_format.bpp)
         n_tags = 9
         data_offset = 28 + n_tags * 12
         header = []
