@@ -16,6 +16,7 @@ Dependencies
 
   + GOCR_ ≥ 0.40 (tested with 0.48) —
     document analysis and OCR system
+
   + Tesseract_ ≥ 2.00 (tested with 2.04 and 3.00) —
     an OCR system
 
