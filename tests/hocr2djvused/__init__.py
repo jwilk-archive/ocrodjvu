@@ -14,7 +14,6 @@ from __future__ import with_statement
 
 import contextlib
 import os
-import re
 import shlex
 import sys
 from cStringIO import StringIO

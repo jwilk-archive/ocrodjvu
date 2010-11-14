@@ -63,7 +63,7 @@ class test_language():
             raise EOFError
         with interim(lib.ipc, Subprocess=fake_subprocess):
             with raises(EOFError, ''):
-                with engine.recognize(sys.stdin, lang1) as f:
+                with engine.recognize(sys.stdin, lang1):
                     pass
 
     def test_recognize(self):
