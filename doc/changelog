@@ -39,6 +39,7 @@ ocrodjvu (0.6.1) unstable; urgency=high
     http://bugs.debian.org/598139
   * Fix insecure use of temporary files when using Cuneiform.
     http://bugs.debian.org/598134
+    CVE-2010-4338
 
  -- Jakub Wilk <jwilk@jwilk.net>  Sun, 26 Sep 2010 15:01:51 +0200
 
