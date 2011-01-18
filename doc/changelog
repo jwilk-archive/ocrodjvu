@@ -1,8 +1,9 @@
 ocrodjvu (0.7.1) UNRELEASED; urgency=low
 
-  * 
+  * Windows: guess location of the DjVuLibre DLL (requires python-djvulibre
+    ≥ 0.3.3).
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sun, 07 Nov 2010 21:42:02 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 18 Jan 2011 19:31:20 +0100
 
 ocrodjvu (0.7.0) unstable; urgency=low
 
