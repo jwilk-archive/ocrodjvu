@@ -62,6 +62,9 @@ class Engine(common.Engine):
         self._cuneiform_to_iso = dict(
             ger='deu',
             ruseng='rus-eng',  # mixed Russian-English
+            dut='nld',
+            cze='ces',
+            rum='ron',
         )
         try:
             for line in cuneiform.stdout:

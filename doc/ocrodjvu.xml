@@ -22,6 +22,7 @@
         <year>2008</year>
         <year>2009</year>
         <year>2010</year>
+        <year>2011</year>
         <holder>Jakub Wilk</holder>
     </copyright>
 </refentryinfo>
@@ -294,7 +295,7 @@
             <term><option>--language=<replaceable>language-id</replaceable></option></term>
             <listitem>
                 <para>
-                    Set recognition language. <replaceable>language-id</replaceable> is typically an ISO 639-2
+                    Set recognition language. <replaceable>language-id</replaceable> is typically an ISO 639-2/T
                     three-letter code.
                 </para>
                 <para>

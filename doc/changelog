@@ -5,8 +5,11 @@ ocrodjvu (0.7.1) UNRELEASED; urgency=low
   * Work around a bug in Cuneiform, which mistakenly use ‘slo’ (rather than
     ‘slv’) as language code for Slovenian.
     https://bugs.launchpad.net/cuneiform-linux/+bug/707951
+  * Accept ‘ces’, ‘nld’, ‘slv’, ‘ron’ as language codes for Czech, Dutch,
+    Slovenian and Romanian languages, even when Cuneiform internally use
+    different ones.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 26 Jan 2011 18:45:40 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 26 Jan 2011 19:00:05 +0100
 
 ocrodjvu (0.7.0) unstable; urgency=low
 
