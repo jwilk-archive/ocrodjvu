@@ -2,8 +2,11 @@ ocrodjvu (0.7.1) UNRELEASED; urgency=low
 
   * Windows: guess location of the DjVuLibre DLL (requires python-djvulibre
     ≥ 0.3.3).
+  * Work around a bug in Cuneiform, which mistakenly use ‘slo’ (rather than
+    ‘slv’) as language code for Slovenian.
+    https://bugs.launchpad.net/cuneiform-linux/+bug/707951
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 18 Jan 2011 19:31:20 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 26 Jan 2011 18:45:40 +0100
 
 ocrodjvu (0.7.0) unstable; urgency=low
 

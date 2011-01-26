@@ -1,5 +1,5 @@
 # encoding=UTF-8
-# Copyright © 2010 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
 #
 # This package is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,19 +28,6 @@ from .. import utils
 _default_language = 'eng'
 _language_pattern = re.compile('^[a-z]{3}(-[a-z]+)?$')
 _language_info_pattern = re.compile(r"^Supported languages: (.*)[.]$")
-
-_cuneiform_to_iso = dict(
-    ger='deu',
-    ruseng='rus-eng',  # mixed Russian-English
-)
-
-_iso_to_cuneiform = dict((y, x) for x, y in _cuneiform_to_iso.iteritems())
-
-def cuneiform_to_iso(language):
-    return _cuneiform_to_iso.get(language, language)
-
-def iso_to_cuneiform(language):
-    return _iso_to_cuneiform.get(language, language)
 
 class Engine(common.Engine):
 
@@ -72,12 +59,31 @@ class Engine(common.Engine):
             )
         except OSError:
             raise errors.UnknownLanguageList
+        self._cuneiform_to_iso = dict(
+            ger='deu',
+            ruseng='rus-eng',  # mixed Russian-English
+        )
         try:
             for line in cuneiform.stdout:
                 m = _language_info_pattern.match(line)
                 if m is None:
                     continue
-                return map(cuneiform_to_iso, m.group(1).split())
+                codes = m.group(1).split()
+                if 'slo' in codes:
+                    if 'slv' not in codes:
+                        # Cuneiform ≤ 1.0 mistakenly uses ‘slo’ as language code
+                        # for Slovenian.
+                        # https://bugs.launchpad.net/cuneiform-linux/+bug/707951
+                        self._cuneiform_to_iso['slo'] = 'slv'
+                    else:
+                        # Both ‘slo’ and ‘slv’ are available. Let's guess that
+                        # the former means Slovak.
+                        self._cuneiform_to_iso['slo'] = 'slk'
+                self._iso_to_cuneiform = dict(
+                    (y, x) for x, y in
+                    self._cuneiform_to_iso.iteritems()
+                )
+                return map(self.cuneiform_to_iso, codes)
         finally:
             try:
                 cuneiform.wait()
@@ -92,13 +98,23 @@ class Engine(common.Engine):
         return _default_language
 
     def has_language(self, language):
-        language = cuneiform_to_iso(language)
-        if not _language_pattern.match(language):
-            raise errors.InvalidLanguageId(language)
+        if language == 'slo':
+            # Normally we accept Cuneiform-specific language code. This is an
+            # exception: ‘slo’ is Slovenian in Cuneiform ≤ 1.0 but it is Slovak
+            # according in ISO 639-2.
+            language = 'slk'
+        else:
+            language = self.cuneiform_to_iso(language)
         return language in self._languages
 
     def list_languages(self):
         return iter(self._languages)
+
+    def iso_to_cuneiform(self, language):
+        return self._iso_to_cuneiform.get(language, language)
+
+    def cuneiform_to_iso(self, language):
+        return self._cuneiform_to_iso.get(language, language)
 
     @contextlib.contextmanager
     def recognize(self, image, language, *args, **kwargs):
@@ -107,7 +123,12 @@ class Engine(common.Engine):
             # can create additional files, e.g. images.
             hocr_file_name = os.path.join(hocr_directory, 'ocr.html')
             worker = ipc.Subprocess(
-                [self.executable, '-l', iso_to_cuneiform(language), '-f', 'hocr', '-o', hocr_file_name] + self.extra_args + [image.name],
+                [
+                    self.executable,
+                    '-l', self.iso_to_cuneiform(language),
+                    '-f', 'hocr',
+                    '-o', hocr_file_name
+                ] + self.extra_args + [image.name],
                 stdin=ipc.PIPE,
                 stdout=ipc.PIPE,
             )
