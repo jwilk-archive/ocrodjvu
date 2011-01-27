@@ -192,7 +192,7 @@ def break_plain_text(text, bbox, options):
         yield element
         i = j
 
-def process_zone(parent, parent_zone_type, zone, last, options):
+def process_zone(parent, zone, last, options):
     zone_type = zone.type
     if zone_type <= const.TEXT_ZONE_LINE and parent is not None:
         parent.tail = '\n'
@@ -215,7 +215,7 @@ def process_zone(parent, parent_zone_type, zone, last, options):
         last_child = n == n_children - 1
         if isinstance(child_zone, Zone):
             try:
-                process_zone(self, zone_type, child_zone, last=last_child, options=options)
+                process_zone(self, child_zone, last=last_child, options=options)
             except CharacterLevelDetails:
                 # Do word segmentation by hand.
                 character_level_details = True
@@ -249,7 +249,7 @@ def process_zone(parent, parent_zone_type, zone, last, options):
     return self
 
 def process_page(page_text, options):
-    result = process_zone(None, None, page_text, last=True, options=options)
+    result = process_zone(None, page_text, last=True, options=options)
     tree = etree.ElementTree(result)
     tree.write(sys.stdout, encoding='UTF-8')
 
