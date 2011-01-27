@@ -188,7 +188,10 @@ def _scan(node, settings):
     if m is None:
         bbox = text_zones.BBox()
     else:
-        bbox = text_zones.BBox(*(int(m.group(id)) for id in ('x0', 'y0', 'x1', 'y1')))
+        bbox = text_zones.BBox(
+            *(int(m.group(ident))
+            for ident in ('x0', 'y0', 'x1', 'y1'))
+        )
 
     if djvu_class is const.TEXT_ZONE_PAGE:
         if not bbox:
