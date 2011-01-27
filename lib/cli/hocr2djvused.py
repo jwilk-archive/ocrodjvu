@@ -41,8 +41,8 @@ class ArgumentParser(argparse.ArgumentParser):
         # -l/--language is currently not very useful, as ICU don't have any specialisations for languages ocrodjvu supports:
         group.add_argument('-l', '--language', dest='language', help=argparse.SUPPRESS or 'language for word segmentation', default='eng')
 
-    def parse_args(self, args=None):
-        options = argparse.ArgumentParser.parse_args(self, args)
+    def parse_args(self, args=None, namespace=None):
+        options = argparse.ArgumentParser.parse_args(self, args, namespace)
         if options.rotation % 90 != 0:
             self.error('Rotation is not a multiple of 90 degrees')
         options.details = self._details_map[options.details]

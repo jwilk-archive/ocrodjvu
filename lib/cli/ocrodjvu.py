@@ -232,8 +232,8 @@ class ArgumentParser(argparse.ArgumentParser):
             else:
                 namespace.saver = None
 
-    def parse_args(self, args=None):
-        options = argparse.ArgumentParser.parse_args(self, args)
+    def parse_args(self, args=None, namespace=None):
+        options = argparse.ArgumentParser.parse_args(self, args, namespace)
         try:
             options.pages = utils.parse_page_numbers(options.pages)
         except (TypeError, ValueError):
