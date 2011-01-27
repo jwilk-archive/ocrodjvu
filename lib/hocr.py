@@ -148,7 +148,7 @@ def _apply_bboxes(djvu_class, title, text, settings):
             text_zones.Zone(type=const.TEXT_ZONE_CHARACTER, bbox=(x0, y0, x1, y1), children=[ch])
             for (x0, y0, x1, y1), ch in zip(coordinates, text)
         ]
-    return text,
+    return [text]
 
 def _scan(node, settings):
 
