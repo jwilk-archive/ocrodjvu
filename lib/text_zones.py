@@ -130,28 +130,28 @@ class Zone(object):
             children=self.children,
         )
 
-    def rotate(obj, rotation, xform=None):
-        for x in obj.bbox:
+    def rotate(self, rotation, xform=None):
+        for x in self.bbox:
             assert x is not None
         if xform is None:
-            assert obj.type == const.TEXT_ZONE_PAGE
-            assert obj.bbox[:2] == (0, 0)
-            page_size = obj.bbox[2:]
+            assert self.type == const.TEXT_ZONE_PAGE
+            assert self.bbox[:2] == (0, 0)
+            page_size = self.bbox[2:]
             if (rotation // 90) & 1:
                 xform = decode.AffineTransform((0, 0) + tuple(reversed(page_size)), (0, 0) + page_size)
             else:
                 xform = decode.AffineTransform((0, 0) + page_size, (0, 0) + page_size)
             xform.mirror_y()
             xform.rotate(rotation)
-        x0, y0, x1, y1 = obj.bbox
+        x0, y0, x1, y1 = self.bbox
         x0, y0 = xform.inverse((x0, y0))
         x1, y1 = xform.inverse((x1, y1))
         if x0 > x1:
             x0, x1 = x1, x0
         if y0 > y1:
             y0, y1 = y1, y0
-        obj.bbox = x0, y0, x1, y1
-        for child in obj:
+        self.bbox = x0, y0, x1, y1
+        for child in self:
             if isinstance(child, Zone):
                 child.rotate(rotation, xform)
 
