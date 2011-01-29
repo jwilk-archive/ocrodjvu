@@ -65,8 +65,9 @@ class CharacterLevelDetails(Exception):
 
 class Zone(object):
 
-    def __init__(self, sexpr):
+    def __init__(self, sexpr, page_height):
         self._sexpr = sexpr
+        self._page_height = page_height
 
     @property
     def type(self):
@@ -74,7 +75,12 @@ class Zone(object):
 
     @property
     def bbox(self):
-        return text_zones.BBox(*(self._sexpr[i].value for i in xrange(1, 5)))
+        return text_zones.BBox(
+            self._sexpr[1].value,
+            self._page_height - self._sexpr[4].value,
+            self._sexpr[3].value,
+            self._page_height - self._sexpr[2].value,
+        )
 
     @property
     def text(self):
@@ -88,7 +94,7 @@ class Zone(object):
     def children(self):
         for child in self._sexpr[5:]:
             if isinstance(child, sexpr.ListExpression):
-                yield Zone(child)
+                yield Zone(child, self._page_height)
             else:
                 yield self.text
                 return
@@ -312,7 +318,8 @@ def main(argv=sys.argv):
         except sexpr.ExpressionSyntaxError:
             break
         print >>sys.stderr, '- Page #%d' % n
-        process_page(Zone(page_text), options)
+        page_zone = Zone(page_text, page_size[1])
+        process_page(page_zone, options)
     sys.stdout.write(hocr_footer)
     djvused.wait()
 

@@ -9,8 +9,11 @@ ocrodjvu (0.7.1) UNRELEASED; urgency=low
     + Accept ‘ces’, ‘nld’, ‘slv’, ‘ron’ as language codes for Czech, Dutch,
       Slovenian and Romanian languages, even when Cuneiform internally use
       different ones.
+  * djvu2hocr:
+    + Don't flip hOCR upside-down.
+      http://bugs.debian.org/611460
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 29 Jan 2011 16:39:54 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 29 Jan 2011 17:50:07 +0100
 
 ocrodjvu (0.7.0) unstable; urgency=low
 

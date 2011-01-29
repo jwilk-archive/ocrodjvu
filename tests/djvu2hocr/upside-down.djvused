@@ -1,0 +1,7 @@
+select 1
+set-txt
+(page 0 0 100 200
+  (region 0 100 100 200 "eggs")
+  (region 0 0 100 100 "spam")
+)
+.
