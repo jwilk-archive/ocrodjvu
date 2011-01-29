@@ -1,4 +1,4 @@
-ocrodjvu (0.7.1) UNRELEASED; urgency=low
+ocrodjvu (0.7.1) unstable; urgency=low
 
   * Windows: guess location of the DjVuLibre DLL (requires python-djvulibre
     ≥ 0.3.3).
@@ -13,7 +13,7 @@ ocrodjvu (0.7.1) UNRELEASED; urgency=low
     + Don't flip hOCR upside-down.
       http://bugs.debian.org/611460
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 29 Jan 2011 17:50:07 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 29 Jan 2011 18:14:40 +0100
 
 ocrodjvu (0.7.0) unstable; urgency=low
 
