@@ -1,5 +1,5 @@
 # encoding=UTF-8
-# Copyright © 2008, 2009, 2010 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008, 2009, 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
 #
 # This package is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -12,13 +12,13 @@
 
 import struct
 
+from . import utils
+
 try:
     import djvu.decode
 except ImportError, ex:
-    ex.args = '%s; please install the python-djvulibre package <http://jwilk.net/software/python-djvulibre>' % str(ex),
+    utils.enhance_import_error(ex, 'python-djvulibre', 'python-djvulibre', 'http://jwilk.net/software/python-djvulibre')
     raise
-
-from . import utils
 
 class ImageFormat(object):
 

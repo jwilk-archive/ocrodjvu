@@ -1,5 +1,5 @@
 # encoding=UTF-8
-# Copyright © 2008, 2009, 2010 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008, 2009, 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
 #
 # This package is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -9,6 +9,8 @@
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
+
+from . import utils
 
 def get_icu():
     try:
@@ -22,7 +24,7 @@ def get_icu():
         import PyICU as icu
         return icu
     except ImportError, ex:
-        ex.args = '%s; please install the PyICU package <http://pyicu.osafoundation.org/>' % str(ex),
+        utils.enhance_import_error(ex, 'PyICU', 'python-pyicu', 'http://pyicu.osafoundation.org/')
         raise
 
 def simple_word_break_iterator(text):

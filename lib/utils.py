@@ -12,8 +12,20 @@
 
 import functools
 import locale
+import os
 import re
 import warnings
+
+debian = os.path.isdir('/var/lib/dpkg/info/')
+
+def enhance_import_error(exception, package, debian_package, homepage):
+    message = str(exception)
+    format = '%(message)s; please install the %(package)s package'
+    if debian:
+        package = debian_package
+    else:
+        format += ' <%(homepage)s>'
+    exception.args = [format % locals()]
 
 def parse_page_numbers(pages):
     '''

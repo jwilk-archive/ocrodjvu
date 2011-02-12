@@ -18,12 +18,14 @@ except ImportError:
 else:
     set_dll_search_path()
 
+from . import utils
+
 try:
     from djvu import const
     from djvu import decode
     from djvu import sexpr
 except ImportError, ex:
-    ex.args = '%s; please install the python-djvulibre package <http://jwilk.net/software/python-djvulibre>' % str(ex),
+    utils.enhance_import_error(ex, 'python-djvulibre', 'python-djvulibre', 'http://jwilk.net/software/python-djvulibre')
     raise
 
 TEXT_DETAILS_LINE = const.TEXT_ZONE_LINE

@@ -20,10 +20,12 @@ http://docs.google.com/Doc?id=dfxcv4vc_67g844kf
 import functools
 import re
 
+from . import utils
+
 try:
     from lxml import etree
 except ImportError, ex:
-    ex.args = '%s; please install the lxml package <http://codespeak.net/lxml/>' % str(ex),
+    utils.enhance_import_error(ex, 'lxml', 'python-lxml', 'http://codespeak.net/lxml/')
     raise
 
 from . import errors
