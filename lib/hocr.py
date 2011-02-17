@@ -256,7 +256,7 @@ def _scan(node, settings):
             return [result]
         else:
             # Should not happen.
-            assert 0 
+            assert 0
 
     if not has_zone:
         assert has_string
@@ -298,7 +298,7 @@ def _scan(node, settings):
             return []
 
     assert len(children) > 0
-    
+
     if not bbox:
         if len(node) == 0:
             # Ocropus 0.2 doesn't always provide necessary bounding box
