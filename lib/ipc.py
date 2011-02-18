@@ -15,9 +15,8 @@ import re
 import signal
 import subprocess
 
-PIPE = subprocess.PIPE
-
-from subprocess import CalledProcessError
+# CalledProcessError, CalledProcessInterrupted
+# ============================================
 
 # Protect from scanadf[0] and possibly other brain-dead software that set
 # SIGCHLD to SIG_IGN.
@@ -44,6 +43,8 @@ def get_signal_names():
         pass
     return dict((no, name) for name, no in data.iteritems())
 
+CalledProcessError = subprocess.CalledProcessError
+
 class CalledProcessInterrupted(CalledProcessError):
 
     _signal_names = get_signal_names()
@@ -57,6 +58,9 @@ class CalledProcessInterrupted(CalledProcessError):
         return 'Command %r was interrupted by signal %s' % (self.args[0], signal_name)
 
 del get_signal_names
+
+# Subprocess
+# ==========
 
 class Subprocess(subprocess.Popen):
 
@@ -94,5 +98,18 @@ class Subprocess(subprocess.Popen):
             raise CalledProcessError(return_code, self.__command)
         if return_code < 0:
             raise CalledProcessInterrupted(-return_code, self.__command)
+
+# PIPE
+# ====
+
+PIPE = subprocess.PIPE
+
+# __all__
+# =======
+
+__all__ = [
+    'CalledProcessError', 'CalledProcessInterrupted',
+    'Subprocess', 'PIPE',
+]
 
 # vim:ts=4 sw=4 et
