@@ -1,6 +1,6 @@
 #!/usr/bin/python
-
 # encoding=UTF-8
+
 # Copyright © 2009, 2010 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
