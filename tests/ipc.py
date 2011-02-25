@@ -138,7 +138,7 @@ class test_environment():
             elif key == 'LC_CTYPE':
                 has_lc_ctype = 1
                 assert_equal(value, 'en_US.UTF-8')
-            elif key == 'LANG':
+            elif key in ('LANG', 'LANGUAGE'):
                 has_lang = 1
                 assert_equal(value, '')
             else:
