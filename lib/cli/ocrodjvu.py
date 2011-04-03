@@ -40,6 +40,8 @@ __version__ = version.__version__
 
 system_encoding = locale.getpreferredencoding()
 
+logger = logger.setup()
+
 class Saver(object):
 
     in_place = False
@@ -471,8 +473,6 @@ class Context(djvu.decode.Context):
             shutil.rmtree(self._temp_dir)
 
 def main(argv=sys.argv):
-    global logger
-    logger = logger.setup()
     options = ArgumentParser().parse_args(argv[1:])
     context = Context()
     context.init(options)

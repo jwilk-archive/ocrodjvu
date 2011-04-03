@@ -34,6 +34,8 @@ __version__ = version.__version__
 
 system_encoding = locale.getpreferredencoding()
 
+logger = logger.setup()
+
 class ArgumentParser(argparse.ArgumentParser):
 
     def __init__(self):
@@ -279,8 +281,6 @@ hocr_footer = '''
 '''
 
 def main(argv=sys.argv):
-    global logger
-    logger = logger.setup()
     options = ArgumentParser().parse_args(argv[1:])
     logger.info('Converting %s:' % utils.smart_repr(options.path, system_encoding))
     if options.pages is None:

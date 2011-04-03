@@ -73,7 +73,8 @@ def _test_from_file(base_filename, index):
             try:
                 with open(os.devnull, 'w') as null:
                     with interim(sys, stdout=xmllint.stdin, stderr=null):
-                        rc = try_run(djvu2hocr.main, args)
+                        with interim(djvu2hocr.logger, handlers=[]):
+                            rc = try_run(djvu2hocr.main, args)
             finally:
                 xmllint.stdin.close()
                 try:
