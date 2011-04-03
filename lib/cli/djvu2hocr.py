@@ -307,11 +307,7 @@ def main(argv=sys.argv):
             ocr_system='djvu2hocr %s' % __version__,
             ocr_capabilities=' '.join(hocr.djvu2hocr_capabilities)
     ))
-    while 1:
-        try:
-            n = page_iterator.next()
-        except StopIteration:
-            break
+    for n in page_iterator:
         try:
             page_size = [
                 int(str(sexpr.Expression.from_stream(djvused.stdout).value).split('=')[1])
