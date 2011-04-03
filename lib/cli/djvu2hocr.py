@@ -19,6 +19,7 @@ import sys
 
 from .. import hocr
 from .. import ipc
+from .. import logger
 from .. import temporary
 from .. import text_zones
 from .. import unicode_support
@@ -278,8 +279,10 @@ hocr_footer = '''
 '''
 
 def main(argv=sys.argv):
+    global logger
+    logger = logger.setup()
     options = ArgumentParser().parse_args(argv[1:])
-    print >>sys.stderr, 'Converting %s:' % utils.smart_repr(options.path, system_encoding)
+    logger.info('Converting %s:' % utils.smart_repr(options.path, system_encoding))
     if options.pages is None:
         djvused = ipc.Subprocess(
             ['djvused', '-e', 'n', os.path.abspath(options.path)],
@@ -318,7 +321,7 @@ def main(argv=sys.argv):
             page_text = sexpr.Expression.from_stream(djvused.stdout)
         except sexpr.ExpressionSyntaxError:
             break
-        print >>sys.stderr, '- Page #%d' % n
+        logger.info('- Page #%d', n)
         page_zone = Zone(page_text, page_size[1])
         process_page(page_zone, options)
     sys.stdout.write(hocr_footer)

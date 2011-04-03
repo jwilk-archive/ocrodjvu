@@ -11,6 +11,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+import logging
 import os
 import re
 import signal
@@ -63,6 +64,11 @@ del get_signal_names
 # Subprocess
 # ==========
 
+def shell_escape(s, safe=re.compile('^[a-zA-Z0-9_+/=.,:%-]+$').match):
+    if safe(s):
+        return s
+    return "'%s'" % s.replace("'", r"'\''")
+
 class Subprocess(subprocess.Popen):
 
     @classmethod
@@ -88,9 +94,12 @@ class Subprocess(subprocess.Popen):
         if os.name == 'posix':
             kwargs.update(close_fds=True)
         try:
-            self.__command = kwargs['args'][0]
+            commandline = kwargs['args']
         except KeyError:
-            self.__command = args[0][0]
+            commandline = args[0]
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(' '.join(shell_escape(s) for s in commandline))
+        self.__command = commandline[0]
         subprocess.Popen.__init__(self, *args, **kwargs)
 
     def wait(self):
@@ -104,6 +113,11 @@ class Subprocess(subprocess.Popen):
 # ====
 
 PIPE = subprocess.PIPE
+
+# logging support
+# ===============
+
+logger = logging.getLogger('ocrodjvu.ipc')
 
 # __all__
 # =======

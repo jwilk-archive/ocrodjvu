@@ -26,6 +26,7 @@ import traceback
 from .. import engines
 from .. import errors
 from .. import ipc
+from .. import logger
 from .. import temporary
 from .. import text_zones
 from .. import utils
@@ -213,10 +214,10 @@ class ArgumentParser(argparse.ArgumentParser):
                 for language in namespace.engine().list_languages():
                     print language
             except errors.EngineNotFound, ex:
-                print >>sys.stderr, ex
+                logger.error(ex)
                 sys.exit(1)
             except errors.UnknownLanguageList, ex:
-                print >>sys.stderr, ex
+                logger.error(ex)
                 sys.exit(1)
             else:
                 sys.exit(0)
@@ -302,7 +303,7 @@ class Context(djvu.decode.Context):
 
     def handle_message(self, message):
         if isinstance(message, djvu.decode.ErrorMessage):
-            print >>sys.stderr, message
+            logger.warning(message)
             sys.exit(1)
 
     @contextlib.contextmanager
@@ -317,7 +318,7 @@ class Context(djvu.decode.Context):
             file.close()
 
     def process_page(self, page):
-        print >>sys.stderr, '- Page #%d' % (page.n + 1)
+        logger.info('- Page #%d', page.n + 1)
         page_job = page.decode(wait=True)
         size = page_job.size
         with self.get_output_image(page.n, page_job) as pfile:
@@ -357,7 +358,7 @@ class Context(djvu.decode.Context):
             try:
                 result = self.process_page(page)
             except djvu.decode.NotAvailable:
-                print >>sys.stderr, 'No image suitable for OCR.'
+                logger.info('No image suitable for OCR.')
                 result = False
             except (SystemExit, KeyboardInterrupt), ex:
                 with condition:
@@ -367,7 +368,7 @@ class Context(djvu.decode.Context):
                 try:
                     interrupted_by_user = isinstance(ex, ipc.CalledProcessInterrupted) and ex.by_user
                     message = 'Exception while processing page %d:\n%s' % (n + 1, traceback.format_exc())
-                    print >>sys.stderr, message.rstrip()
+                    logger.error(message.rstrip())
                     if self._options.resume_on_error and not interrupted_by_user:
                         # As requested by user, don't abort on error and pretend that nothing happened.
                         results[n] = False
@@ -386,7 +387,7 @@ class Context(djvu.decode.Context):
 
     def _process(self, path, pages=None):
         self._engine = self._options.engine
-        print >>sys.stderr, 'Processing %s:' % utils.smart_repr(path, system_encoding)
+        logger.info('Processing %s:', utils.smart_repr(path, system_encoding))
         document = self.new_document(djvu.decode.FileURI(path))
         document.decoding_job.wait()
         if pages is None:
@@ -428,7 +429,7 @@ class Context(djvu.decode.Context):
                         break
                 if isinstance(result, Exception):
                     if len(threads) > 1:
-                        print >>sys.stderr, 'Waiting for other threads to finish...'
+                        logger.info('Waiting for other threads to finish...')
                     for thread in threads:
                         thread.join()
                     self._debug = True
@@ -470,16 +471,18 @@ class Context(djvu.decode.Context):
             shutil.rmtree(self._temp_dir)
 
 def main(argv=sys.argv):
+    global logger
+    logger = logger.setup()
     options = ArgumentParser().parse_args(argv[1:])
     context = Context()
     context.init(options)
     try:
         context.process(options.path, options.pages)
     except KeyboardInterrupt:
-        print >>sys.stderr, 'Interrupted by user.'
+        logger.info('Interrupted by user.')
     finally:
         temp_dir = context.close()
         if temp_dir is not None:
-            print >>sys.stderr, 'Intermediate files were left in the %r directory.' % temp_dir
+            logger.info('Intermediate files were left in the %r directory.' % temp_dir)
 
 # vim:ts=4 sw=4 et
