@@ -399,6 +399,12 @@ class Context(djvu.decode.Context):
             threading.Thread(target=self.page_thread, args=(pages, results, condition))
             for i in xrange(self._options.n_jobs)
         ]
+        def stop_threads():
+            with condition:
+                for page in pages:
+                    # Worker threads should not bother with processing other pages.
+                    # Mark them as already taken.
+                    results[page.n] = True
         for thread in threads:
             thread.start()
         sed_file = self._temp_file('ocrodjvu.djvused', auto_remove=False)
@@ -409,19 +415,24 @@ class Context(djvu.decode.Context):
                 file_id = page.file.id.encode(system_encoding)
                 sed_file.write('select \'%s\'\n' % file_id.replace('\\', '\\\\').replace("'", "\\'"))
                 sed_file.write('set-txt\n')
+                result = None
                 with condition:
                     while 1:
                         result = results[page.n]
                         if result is None or result is True:
                             # Result is not yet available.
                             condition.wait()
-                        elif isinstance(result, Exception):
-                            for thread in threads:
-                                thread.join()
-                            self._debug = True
-                            sys.exit(1)
-                        else:
-                            break
+                            continue
+                        if isinstance(result, Exception):
+                            stop_threads()
+                        break
+                if isinstance(result, Exception):
+                    if len(threads) > 1:
+                        print >>sys.stderr, 'Waiting for other threads to finish...'
+                    for thread in threads:
+                        thread.join()
+                    self._debug = True
+                    sys.exit(1)
                 if result is False:
                     # No image suitable for OCR.
                     pass
@@ -437,6 +448,9 @@ class Context(djvu.decode.Context):
                 pages_to_save = [page.n for page in pages]
             self._options.saver.save(document, pages_to_save, path, sed_file)
             document = None
+        except:
+            stop_threads()
+            raise
         finally:
             sed_file.close()
 
@@ -461,6 +475,8 @@ def main(argv=sys.argv):
     context.init(options)
     try:
         context.process(options.path, options.pages)
+    except KeyboardInterrupt:
+        print >>sys.stderr, 'Interrupted by user.'
     finally:
         temp_dir = context.close()
         if temp_dir is not None:
