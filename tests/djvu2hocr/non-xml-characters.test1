@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="ocr-system" content="djvu2hocr 0.7.2" />
+    <meta name="ocr-system" content="djvu2hocr 0.7.3" />
     <meta name="ocr-capabilities" content="ocr_carea ocr_page ocr_par ocrx_block ocrx_line ocrx_word" />
     <title>DjVu hidden text layer</title>
   </head>
