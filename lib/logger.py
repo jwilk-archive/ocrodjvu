@@ -14,6 +14,8 @@
 
 import logging
 
+logger = None
+
 def setup():
     global logger
     logger = logging.getLogger('ocrodjvu.main')
