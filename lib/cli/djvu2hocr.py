@@ -156,6 +156,7 @@ def break_chars(char_zone_list, options):
     text = ''.join(text)
     break_iterator = unicode_support.word_break_iterator(text, options.locale)
     element = None
+    i = 0
     for j in break_iterator:
         subtext = text[i:j]
         if subtext.isspace():
