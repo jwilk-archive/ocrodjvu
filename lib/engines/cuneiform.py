@@ -43,6 +43,8 @@ class Engine(common.Engine):
     def __init__(self, *args, **kwargs):
         assert args == ()
         common.Engine.__init__(self, *args, **kwargs)
+        self._iso_to_cuneiform = None # to be defined later
+        self._cuneiform_to_iso = None # to be defined later
         try:
             self._languages = list(self._get_languages())
         except errors.UnknownLanguageList:
