@@ -116,9 +116,9 @@ class Engine(common.Engine):
     def __init__(self, *args, **kwargs):
         assert args == ()
         common.Engine.__init__(self, *args, **kwargs)
-        self._check_version(self.executable)
+        self._check_version()
 
-    def _check_version(self, executable):
+    def _check_version(self):
         try:
             gocr = ipc.Subprocess([self.executable],
                 stdout=ipc.PIPE,
