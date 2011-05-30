@@ -13,11 +13,37 @@
 
 from __future__ import with_statement
 
+import sys
 import warnings
 
 from tests.common import *
 
+import lib.utils
 from lib.utils import *
+
+class test_enhance_import():
+
+    @classmethod
+    def setup_class(cls):
+        sys.modules['nonexistent'] = None
+
+    def test_debian(self):
+        with interim(lib.utils, debian=True):
+            with raises(ImportError, 'No module named nonexistent; please install the python-nonexistent package'):
+                try:
+                    import nonexistent
+                except ImportError, ex:
+                    enhance_import_error(ex, 'PyNonexistent', 'python-nonexistent', 'http://pynonexistent.example.net/')
+                    raise
+
+    def test_nondebian(self):
+        with interim(lib.utils, debian=False):
+            with raises(ImportError, 'No module named nonexistent; please install the PyNonexistent package <http://pynonexistent.example.net/>'):
+                try:
+                    import nonexistent
+                except ImportError, ex:
+                    enhance_import_error(ex, 'PyNonexistent', 'python-nonexistent', 'http://pynonexistent.example.net/')
+                    raise
 
 class test_parse_page_numbers():
 
