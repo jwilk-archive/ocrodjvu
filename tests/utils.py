@@ -132,6 +132,26 @@ class test_not_overriden():
             result = self.C().f(6, 7)
             assert_equal(result, 42)
 
+class test_str_as_unicode():
+
+    def test_ascii(self):
+        for s in '', 'eggs', u'eggs':
+            assert_equal(str_as_unicode(s), u'' + s)
+            assert_equal(str_as_unicode(s, 'UTF-8'), u'' + s)
+            assert_equal(str_as_unicode(s, 'ASCII'), u'' + s)
+
+    def test_nonascii(self):
+        rc = u'\N{REPLACEMENT CHARACTER}'
+        s = 'jeż'
+        assert_equal(str_as_unicode(s, 'ASCII'), 'je' + rc + rc)
+        assert_equal(str_as_unicode(s, 'UTF-8'), u'jeż')
+
+    def test_unicode(self):
+        s = u'jeż'
+        assert_equal(str_as_unicode(s), s)
+        assert_equal(str_as_unicode(s, 'ASCII'), s)
+        assert_equal(str_as_unicode(s, 'UTF-8'), s)
+
 def test_identity():
     o = object()
     assert_true(identity(o) is o)
