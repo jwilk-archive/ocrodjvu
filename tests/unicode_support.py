@@ -21,6 +21,7 @@ def test_simple_word_break_iterator():
     t = list(simple_word_break_iterator(text))
     s = [9, 10, 15, 16, 25, 26, 30, 31, 32, 33, 37, 38, 44, 45, 47, 48, 54, 55, 57, 58, 61, 62, 67]
     assert_equal(t, s)
+    assert_equal(s[-1], len(text))
 
 class test_word_break_iterator():
 
@@ -28,6 +29,7 @@ class test_word_break_iterator():
         t = list(word_break_iterator(text))
         s = [9, 10, 15, 16, 25, 26, 30, 31, 32, 33, 37, 38, 44, 45, 47, 48, 54, 55, 57, 58, 61, 62, 67]
         assert_equal(t, s)
+        assert_equal(s[-1], len(text))
 
     def test_en(self):
         icu = get_icu()
@@ -35,5 +37,6 @@ class test_word_break_iterator():
         t = list(word_break_iterator(text, icu.Locale('en')))
         s = [1, 7, 8, 9, 10, 15, 16, 24, 25, 26, 30, 31, 32, 33, 37, 38, 43, 44, 45, 46, 47, 48, 54, 55, 57, 58, 61, 62, 65, 66, 67]
         assert_equal(t, s)
+        assert_equal(s[-1], len(text))
 
 # vim:ts=4 sw=4 et
