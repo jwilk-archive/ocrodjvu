@@ -45,6 +45,31 @@ class test_enhance_import():
                     enhance_import_error(ex, 'PyNonexistent', 'python-nonexistent', 'http://pynonexistent.example.net/')
                     raise
 
+class test_smart_repr():
+
+    def test_byte_string(self):
+        for s in '', 'eggs', '''e'gg"s''', 'jeż', '''j'e"ż''':
+            assert_equal(eval(smart_repr(s)), s)
+
+    def test_unicode_string(self):
+        for s in u'', u'eggs', u'''e'gg"s''', u'jeż', u'''j'e"ż''':
+            assert_equal(eval(smart_repr(s)), s)
+
+    def test_encoded_string(self):
+        for s in '', 'eggs', '''e'gg"s''':
+            assert_equal(eval(smart_repr(s, 'ASCII')), s)
+            assert_equal(eval(smart_repr(s, 'UTF-8')), s)
+        for s in 'jeż', '''j'e"ż''':
+            s_repr = smart_repr(s, 'ASCII')
+            assert_true(isinstance(s_repr, str))
+            s_repr.decode('ASCII')
+            assert_equal(eval(s_repr), s)
+        for s in 'jeż', '''j'e"ż''':
+            s_repr = smart_repr(s, 'UTF-8')
+            assert_true(isinstance(s_repr, unicode))
+            assert_true(u'ż' in s_repr)
+            assert_equal(eval(s_repr.encode('UTF-8')), s)
+
 class test_parse_page_numbers():
 
     def test_none(self):
