@@ -29,7 +29,7 @@ class test_enhance_import():
 
     def test_debian(self):
         with interim(lib.utils, debian=True):
-            with raises(ImportError, 'No module named nonexistent; please install the python-nonexistent package'):
+            with exception(ImportError, 'No module named nonexistent; please install the python-nonexistent package'):
                 try:
                     import nonexistent
                 except ImportError, ex:
@@ -38,7 +38,7 @@ class test_enhance_import():
 
     def test_nondebian(self):
         with interim(lib.utils, debian=False):
-            with raises(ImportError, 'No module named nonexistent; please install the PyNonexistent package <http://pynonexistent.example.net/>'):
+            with exception(ImportError, 'No module named nonexistent; please install the PyNonexistent package <http://pynonexistent.example.net/>'):
                 try:
                     import nonexistent
                 except ImportError, ex:
@@ -96,7 +96,7 @@ class test_not_overriden():
     def test_not_overriden(self):
         with catch_warnings():
             warnings.filterwarnings('error', category=NotOverriddenWarning)
-            with raises(NotOverriddenWarning, regex=r'^.*\bB.f[(][)] is not overridden$'):
+            with exception(NotOverriddenWarning, regex=r'^.*\bB.f[(][)] is not overridden$'):
                 self.B().f(6, 7)
 
     def test_overriden(self):

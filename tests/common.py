@@ -88,7 +88,7 @@ except AttributeError:
             warnings.filters = original_filters
 
 @contextlib.contextmanager
-def raises(exc_type, string=None, regex=None, callback=None):
+def exception(exc_type, string=None, regex=None, callback=None):
     if sum(x is not None for x in (string, regex, callback)) != 1:
         raise ValueError('exactly one of: string, regex, callback must be provided')
     if string is not None:
@@ -118,7 +118,7 @@ __all__ = list(__all__) + [
     'amended_environment',
     'try_run',
     'catch_warnings',
-    'raises',
+    'exception',
     'sorted_glob',
 ]
 

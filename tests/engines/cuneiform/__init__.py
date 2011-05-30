@@ -63,7 +63,7 @@ class test_language():
             assert_equal(args[2], lang1)
             raise EOFError
         with interim(lib.ipc, Subprocess=fake_subprocess):
-            with raises(EOFError, ''):
+            with exception(EOFError, ''):
                 with engine.recognize(sys.stdin, lang1):
                     pass
 
