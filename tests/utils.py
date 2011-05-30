@@ -119,10 +119,13 @@ class test_not_overriden():
             return x * y
 
     def test_not_overriden(self):
-        with catch_warnings():
-            warnings.filterwarnings('error', category=NotOverriddenWarning)
+        def show(message, category, filename, lineno, file=None, line=None):
             with exception(NotOverriddenWarning, regex=r'^.*\bB.f[(][)] is not overridden$'):
-                self.B().f(6, 7)
+                raise message
+            assert_equal(filename, __file__)
+        with catch_warnings():
+            warnings.showwarning = show
+            assert_true(self.B().f(6, 7) is None)
 
     def test_overriden(self):
         with catch_warnings():

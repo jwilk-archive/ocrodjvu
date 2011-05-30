@@ -82,10 +82,12 @@ except AttributeError:
     @contextlib.contextmanager
     def catch_warnings():
         original_filters = warnings.filters
+        original_show = warnings.showwarning
         try:
             yield
         finally:
             warnings.filters = original_filters
+            warnings.showwarning = original_show
 
 @contextlib.contextmanager
 def exception(exc_type, string=None, regex=None, callback=None):
