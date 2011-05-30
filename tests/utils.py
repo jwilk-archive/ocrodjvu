@@ -48,15 +48,15 @@ class test_enhance_import():
 class test_smart_repr():
 
     def test_byte_string(self):
-        for s in '', 'eggs', '''e'gg"s''', 'jeż', '''j'e"ż''':
+        for s in '', '\f', 'eggs', '''e'gg"s''', 'jeż', '''j'e"ż''':
             assert_equal(eval(smart_repr(s)), s)
 
     def test_unicode_string(self):
-        for s in u'', u'eggs', u'''e'gg"s''', u'jeż', u'''j'e"ż''':
+        for s in u'', u'\f', u'eggs', u'''e'gg"s''', u'jeż', u'''j'e"ż''':
             assert_equal(eval(smart_repr(s)), s)
 
     def test_encoded_string(self):
-        for s in '', 'eggs', '''e'gg"s''':
+        for s in '', '\f', 'eggs', '''e'gg"s''':
             assert_equal(eval(smart_repr(s, 'ASCII')), s)
             assert_equal(eval(smart_repr(s, 'UTF-8')), s)
         for s in 'jeż', '''j'e"ż''':
