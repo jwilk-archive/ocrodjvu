@@ -156,4 +156,31 @@ def test_identity():
     o = object()
     assert_true(identity(o) is o)
 
+class test_property():
+
+    @classmethod
+    def setup_class(cls):
+        class Dummy(object):
+            eggs = property()
+            ham = property(default_value=42)
+        cls.Dummy = Dummy
+
+    def test_class(self):
+        eggs = self.Dummy.eggs
+        ham = self.Dummy.ham
+        for obj in eggs, ham:
+            assert_true(isinstance(obj, property))
+
+    def test_default_filter(self):
+        dummy = self.Dummy()
+        assert_equal(dummy.eggs, None)
+        assert_equal(dummy.ham, 42)
+        dummy.eggs = -4
+        dummy.ham = -2
+        assert_equal(dummy.eggs, -4)
+        assert_equal(dummy.ham, -2)
+        dummy = self.Dummy()
+        assert_equal(dummy.eggs, None)
+        assert_equal(dummy.ham, 42)
+
 # vim:ts=4 sw=4 et
