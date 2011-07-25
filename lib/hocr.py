@@ -165,9 +165,9 @@ def _scan(node, settings):
                 result += [child.tail]
         return result
 
-    if not isinstance(node.tag, basestring):
+    if not isinstance(node.tag, basestring) or node.tag == 'script':
         # Ignore non-elements.
-        return
+        return []
     if settings.cuneiform and settings.cuneiform <= (0, 8):
         # Cuneiform ≤ 0.8 don't mark OCR elements in an hOCR way.
         djvu_class = cuneiform_tag_to_djvu(node.tag)
