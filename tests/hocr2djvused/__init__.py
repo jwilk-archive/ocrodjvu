@@ -64,7 +64,7 @@ def _test_from_file(base_filename, index):
                 rc = try_run(hocr2djvused.main, args)
         assert_equal(rc, 0)
         output = output_file.getvalue()
-    assert_ml_equal(output, expected_output)
+    assert_ml_equal(expected_output, output)
 
 def _rough_test_from_file(base_filename, args):
     args = ['#'] + shlex.split(args)

@@ -86,7 +86,7 @@ def _test_from_file(base_filename, index):
             assert_equal(rc, 0)
             xml_file.seek(0)
             output = xml_file.read()
-    assert_ml_equal(output, expected_output)
+    assert_ml_equal(expected_output, output)
 
 def test_from_file():
     for test_filename in sorted_glob(os.path.join(here, '*.test[0-9]')):
