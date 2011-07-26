@@ -83,7 +83,7 @@ class Engine(common.Engine):
         return self.tesseract.list_languages()
 
     @contextlib.contextmanager
-    def recognize(self, image, language, details=None):
+    def recognize(self, image, language, details=None, uax29=None):
         hocr = self._hocr
         if details is None:
             details = hocr.TEXT_DETAILS_WORD

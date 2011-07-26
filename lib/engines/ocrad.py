@@ -152,7 +152,7 @@ class Engine(common.Engine):
         return iter(self._languages)
 
     @contextlib.contextmanager
-    def recognize(self, image, language, details=None):
+    def recognize(self, image, language, details=None, uax29=None):
         charset = 'iso-8859-15'
         if language == 'tur':
             charset = 'iso-8859-9'

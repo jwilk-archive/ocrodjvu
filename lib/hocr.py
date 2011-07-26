@@ -87,7 +87,7 @@ bboxes_re = re.compile(
         (?: ,? \s* (?: -?\d+ \s+ -?\d+ \s+ -?\d+ \s+ -?\d+) )* )
     ''', re.VERBOSE)
 
-def _apply_bboxes(djvu_class, title, text, settings):
+def _apply_bboxes(djvu_class, bbox_source, text, settings):
     embedded_eol = False
     if djvu_class <= const.TEXT_ZONE_LINE:
         if text.endswith('\n'):
@@ -98,13 +98,32 @@ def _apply_bboxes(djvu_class, title, text, settings):
     trailing_whitespace_len = len(text) - len(new_text)
     text = new_text
     del new_text
-    if settings.details >= djvu_class:
+    details = settings.details
+    if settings.uax29 is not None and details <= TEXT_DETAILS_WORD:
+        # If using UAX-29 segmentation, we might need more details than user
+        # requested, for internal purposes.
+        details = TEXT_DETAILS_CHARACTER
+    if details >= djvu_class:
         return [text]
-    m = bboxes_re.search(title)
-    if not m:
-        return [text]
-    coordinates = (int(x) for x in m.group(1).replace(',', ' ').split())
-    coordinates = zip(coordinates, coordinates, coordinates, coordinates)
+    if isinstance(bbox_source, basestring):
+        # bboxes from plain old hOCR property
+        m = bboxes_re.search(bbox_source)
+        if not m:
+            return [text]
+        coordinates = (int(x) for x in m.group(1).replace(',', ' ').split())
+        coordinates = zip(coordinates, coordinates, coordinates, coordinates)
+    else:
+        # bboxes from an iterator
+        coordinates = []
+        for ch1, (ch2, bbox, upside_down) in zip(text, bbox_source):
+            if ch2 is not None:
+                if ch1 != ch2:
+                    raise errors.MalformedOcrOutput('hOCR text and "makebox" output do not match')
+            if upside_down < 0:
+                (x0, y0, x1, y1) = bbox
+                (w, h) = settings.page_size
+                bbox = (x0, h - y1, x1, h - y0)
+            coordinates += [bbox]
     if len(coordinates) == len(text):
         pass  # OK
     else:
@@ -251,10 +270,14 @@ def _scan(node, settings):
             if not bbox:
                 raise errors.MalformedHocr("zone without bounding box information")
             text = ''.join(children)
-            result = text_zones.Zone(type=const.TEXT_ZONE_CHARACTER, bbox=bbox, children=[text])
-            # We return TEXT_ZONE_CHARACTER even it was a word according to hOCR.
-            # Words need to be regrouped anyway.
-            return [result]
+            children = _apply_bboxes(djvu_class, settings.bbox_data or title, text, settings)
+            if len(children) == 1 and isinstance(children[0], basestring):
+                result = text_zones.Zone(type=const.TEXT_ZONE_CHARACTER, bbox=bbox, children=children)
+                # We return TEXT_ZONE_CHARACTER even it was a word according to hOCR.
+                # Words need to be regrouped anyway.
+                return [result]
+            else:
+                return children
         else:
             # Should not happen.
             assert 0
@@ -268,7 +291,7 @@ def _scan(node, settings):
             if bboxes_node is not None and len(bboxes_node) == 0 and bboxes_node.text is None:
                 title = bboxes_node.get('title') or ''
         text = ''.join(children)
-        children = _apply_bboxes(djvu_class, title, text, settings)
+        children = _apply_bboxes(djvu_class, settings.bbox_data or title, text, settings)
         if len(children) == 0:
             return []
         if isinstance(children[0], basestring):
@@ -347,6 +370,16 @@ class ExtractSettings(object):
         self.uax29 = uax29
         self.page_size = page_size
         self.cuneiform = cuneiform
+        self.bbox_data = None
+
+def extract_tesseract_bbox_data(node):
+    text = node.text or ''
+    for line in text.splitlines():
+        ch, x0, y0, x1, y1, w = line.split()
+        x0, y0, x1, y1 = map(int, (x0, y0, x1, y1))
+        if ch == '~':
+            ch = None
+        yield ch, (x0, y0, x1, y1), -1
 
 def extract_text(stream, **kwargs):
     '''
@@ -365,6 +398,11 @@ def extract_text(stream, **kwargs):
             # This is wild guess. However, since ocr-system is a required meta
             # tag, the hOCR we are processing is broken anyway.
             settings.cuneiform = (0, 8)
+    if settings.details < TEXT_DETAILS_WORD or (settings.uax29 and settings.details <= text_zones.TEXT_DETAILS_WORD):
+        tesseract_bbox_data = doc.find('//script[@type="ocrodjvu/tesseract"]')
+        if tesseract_bbox_data is not None:
+            tesseract_bbox_data = extract_tesseract_bbox_data(tesseract_bbox_data)
+            settings.bbox_data = tesseract_bbox_data
     scan_result = scan(doc.find('/body'), settings)
     return [zone.sexpr for zone in scan_result]
 

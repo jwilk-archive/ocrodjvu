@@ -35,6 +35,11 @@ const = text_zones.const
 _language_pattern = re.compile('^[a-z]{3}(-[a-z]+)?$')
 _error_pattern = re.compile(r"^(Error openn?ing data|Unable to load unicharset) file (?P<dir>/.*)/[.](?P<ext>[a-z]+)\n$", re.DOTALL)
 
+_bbox_extras_template = '''\
+<!-- The following script was appended to hOCR by ocrodjvu -->
+<script type='ocrodjvu/tesseract'>%s</script>
+'''
+
 def _wait_for_worker(worker):
     stderr = worker.stderr.readlines()
     try:
@@ -150,7 +155,7 @@ class Engine(common.Engine):
         return os.getenv('tesslanguage') or 'eng'
 
     @contextlib.contextmanager
-    def recognize_plain_text(self, image, language, details=None):
+    def recognize_plain_text(self, image, language, details=None, uax29=None):
         with temporary.directory() as output_dir:
             worker = ipc.Subprocess(
                 [self.executable, image.name, os.path.join(output_dir, 'tmp'), '-l', language] + self.extra_args,
@@ -161,7 +166,8 @@ class Engine(common.Engine):
                 yield file
 
     @contextlib.contextmanager
-    def recognize_hocr(self, image, language, details=None):
+    def recognize_hocr(self, image, language, details=text_zones.TEXT_DETAILS_WORD, uax29=None):
+        character_details = details < text_zones.TEXT_DETAILS_WORD or (uax29 and details <= text_zones.TEXT_DETAILS_WORD)
         with temporary.directory() as output_dir:
             tessconf_path = os.path.join(output_dir, 'tessconf')
             with open(tessconf_path, 'wt') as tessconf:
@@ -174,21 +180,30 @@ class Engine(common.Engine):
             )
             _wait_for_worker(worker)
             with open(os.path.join(output_dir, 'tmp.html'), 'r') as hocr_file:
-                if self.fix_html:
+                if self.fix_html or character_details:
                     contents = hocr_file.read()
                 else:
                     yield hocr_file
                     return
-        contents = fix_html(contents)
+            if character_details:
+                worker = ipc.Subprocess(
+                    [self.executable, image.name, os.path.join(output_dir, 'tmp'), '-l', language, 'makebox'] + self.extra_args,
+                    stderr=ipc.PIPE,
+                )
+                _wait_for_worker(worker)
+                with open(os.path.join(output_dir, 'tmp.box'), 'r') as box_file:
+                    contents = contents.replace('</body>', (_bbox_extras_template + '</body>') % cgi.escape(box_file.read()))
+        if self.fix_html:
+            contents = fix_html(contents)
         with contextlib.closing(StringIO(contents)) as hocr_file:
             yield hocr_file
 
-    def recognize(self, image, language, details=None):
+    def recognize(self, image, language, details=None, uax29=None):
         if self._hocr is None:
             f = self.recognize_plain_text
         else:
             f = self.recognize_hocr
-        return f(image, language, details)
+        return f(image, language, details=details, uax29=uax29)
 
     def extract_text(self, stream, **kwargs):
         if self._hocr is not None:

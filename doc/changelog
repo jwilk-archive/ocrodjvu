@@ -2,8 +2,11 @@ ocrodjvu (0.7.3) UNRELEASED; urgency=low
 
   * Use a better method to detect Debian-based systems.
   * Ignore comments and <script> elements in hOCR.
+  * ocrodjvu:
+    + For Tesseract 3.0, extract bounding boxes of particular characters with
+      higher accuracy.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 25 Jul 2011 02:47:41 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 26 Jul 2011 02:36:23 +0200
 
 ocrodjvu (0.7.2) unstable; urgency=low
 

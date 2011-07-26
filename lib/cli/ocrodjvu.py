@@ -325,7 +325,7 @@ class Context(djvu.decode.Context):
         size = page_job.size
         with self.get_output_image(page.n, page_job) as pfile:
             result_file = None
-            with self._engine.recognize(pfile, language=self._options.language, details=self._options.details) as result:
+            with self._engine.recognize(pfile, language=self._options.language, details=self._options.details, uax29=self._options.uax29) as result:
                 try:
                     if self._debug:
                         result_file = self._temp_file('%06d.%s' % (page.n, self._engine.output_format))
