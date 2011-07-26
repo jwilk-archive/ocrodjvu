@@ -100,7 +100,7 @@ def _apply_bboxes(djvu_class, bbox_source, text, settings):
     del new_text
     details = settings.details
     if settings.uax29 is not None and details <= TEXT_DETAILS_WORD:
-        # If using UAX-29 segmentation, we might need more details than user
+        # If using UAX #29 segmentation, we might need more details than user
         # requested, for internal purposes.
         details = TEXT_DETAILS_CHARACTER
     if details >= djvu_class:
