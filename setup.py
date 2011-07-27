@@ -69,7 +69,7 @@ class build_doc(distutils_build):
                 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
                 xmlname,
             ]
-            self.make_file([xmlname], manname, distutils.spawn.spawn, [command])
+            self.make_file([xmlname], manname, self.spawn, [command])
             manpages.add(manname)
 
 class sdist(distutils_sdist):
