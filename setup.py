@@ -65,11 +65,14 @@ class build_doc(distutils_build):
             command = [
                 'xsltproc', '--nonet',
                 '--param', 'man.charmap.use.subset', '0',
+                '--param', 'man.font.links', '"I"',
                 '--output', 'doc/',
                 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
                 xmlname,
             ]
             self.make_file([xmlname], manname, self.spawn, [command])
+            if not self.dry_run:
+                self.spawn(['./tools/manpage-fixup', manname])
             manpages.add(manname)
 
 class sdist(distutils_sdist):
