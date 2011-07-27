@@ -457,6 +457,16 @@
 </refsection>
 
 <refsection>
+    <title>Bugs</title>
+    <para>
+        Tesseract 3.00 is affected by a bug <footnote><para><ulink
+        url='http://code.google.com/p/tesseract-ocr/issues/detail?id=376'/></para></footnote> making it produce invalid
+        hOCR output in certain circumstances. &p; does not try recover form this fault (which couldn't be done reliably
+        anyway) unless you pass the <option>-X fix-html=1</option> option.
+    </para>
+</refsection>
+
+<refsection>
     <title>See also</title>
     <para>
         <citerefentry>
