@@ -11,7 +11,7 @@ Dependencies
   + Cuneiform_ ≥ 0.7 (tested with 0.7, 0.8, 0.9, 1.0) —
     document analysis and OCR system
 
-  + Ocrad_ (tested with 0.17) —
+  + Ocrad_ (tested with 0.17 and 0.21) —
     document analysis and OCR system
 
   + GOCR_ ≥ 0.40 (tested with 0.48) —
