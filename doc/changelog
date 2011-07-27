@@ -1,4 +1,4 @@
-ocrodjvu (0.7.3) UNRELEASED; urgency=low
+ocrodjvu (0.7.3) unstable; urgency=low
 
   * Use a better method to detect Debian-based systems.
   * hocr2djvused:
@@ -7,7 +7,7 @@ ocrodjvu (0.7.3) UNRELEASED; urgency=low
     + For Tesseract 3.0, extract bounding boxes of particular characters with
       higher accuracy.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 26 Jul 2011 02:36:23 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 27 Jul 2011 17:34:38 +0200
 
 ocrodjvu (0.7.2) unstable; urgency=low
 
