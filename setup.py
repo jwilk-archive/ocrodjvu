@@ -77,6 +77,12 @@ class build_doc(distutils_build):
 
 class sdist(distutils_sdist):
 
+    def initialize_options(self):
+        # Python 2.7 doesn't use tar(1) anymore, so setting TAR_OPTIONS is not
+        # effective.
+        distutils_sdist.initialize_options(self)
+        self.owner = self.group = 'root'
+
     def run(self):
         self.run_command('build_doc')
         return distutils_sdist.run(self)
