@@ -1,3 +1,9 @@
+ocrodjvu (0.7.5) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 05 Aug 2011 23:29:00 +0200
+
 ocrodjvu (0.7.4) unstable; urgency=low
 
   * Use a better method to detect Debian-based systems.
