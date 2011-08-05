@@ -30,6 +30,7 @@ Topic :: Multimedia :: Graphics
 
 import glob
 import os
+import sys
 
 import distutils.command
 import distutils.core
@@ -86,6 +87,11 @@ class sdist(distutils_sdist):
     def run(self):
         self.run_command('build_doc')
         return distutils_sdist.run(self)
+
+if sys.version_info < (2, 5):
+    raise RuntimeError('ocrodjvu requires Python >= 2.5')
+if sys.version_info >= (3, 0):
+    raise RuntimeError('ocrodjvu is not compatible with Python 3.X')
 
 distutils_build.sub_commands[:0] = [('build_doc', None)]
 
