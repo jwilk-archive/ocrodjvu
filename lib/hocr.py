@@ -383,6 +383,8 @@ class ExtractSettings(object):
 def extract_tesseract_bbox_data(node):
     text = node.text or ''
     for line in text.splitlines():
+        if not line or line.startswith('//'):
+            continue
         ch, x0, y0, x1, y1, w = line.split()
         x0, y0, x1, y1 = map(int, (x0, y0, x1, y1))
         if ch == '~':

@@ -37,7 +37,11 @@ _error_pattern = re.compile(r"^(Error openn?ing data|Unable to load unicharset) 
 
 _bbox_extras_template = '''\
 <!-- The following script was appended to hOCR by ocrodjvu -->
-<script type='ocrodjvu/tesseract'>%s</script>
+<script type='ocrodjvu/tesseract'>
+//<![CDATA[
+%s
+//]]>
+</script>
 '''
 
 def _wait_for_worker(worker):
@@ -192,7 +196,7 @@ class Engine(common.Engine):
                 )
                 _wait_for_worker(worker)
                 with open(os.path.join(output_dir, 'tmp.box'), 'r') as box_file:
-                    contents = contents.replace('</body>', (_bbox_extras_template + '</body>') % cgi.escape(box_file.read()))
+                    contents = contents.replace('</body>', (_bbox_extras_template + '</body>') % box_file.read())
         if self.fix_html:
             contents = fix_html(contents)
         with contextlib.closing(StringIO(contents)) as hocr_file:
