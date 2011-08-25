@@ -4,7 +4,7 @@ ocrodjvu (0.7.5) UNRELEASED; urgency=low
   * Accept slightly malformed hOCR documents (with a text zone not completely
     within the page area).
     http://bugs.debian.org/575484#35
-  * Fix compatibility with Tesseract > 3.0.
+  * Fix compatibility with Tesseract > 3.00.
     Thanks to Janusz S. Bień for the bug report.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Thu, 25 Aug 2011 19:23:02 +0200
@@ -15,8 +15,8 @@ ocrodjvu (0.7.4) unstable; urgency=low
   * hocr2djvused:
     + Ignore comments and <script> elements in hOCR.
   * ocrodjvu:
-    + For Tesseract 3.0, extract bounding boxes of particular characters with
-      higher accuracy.
+    + For Tesseract ≥ 3.00, extract bounding boxes of particular characters
+      with higher accuracy.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Wed, 27 Jul 2011 17:34:38 +0200
 
@@ -51,7 +51,7 @@ ocrodjvu (0.7.0) unstable; urgency=low
     Alexey Shipunov for the bug report.
   * Fix crash on Cuneiform-generated hOCR with bounding boxes for whitespace
     characters. Thanks to Alexey Shipunov for the bug report.
-  * Fix compatibility with Tesseract 3.0.
+  * Fix compatibility with Tesseract 3.00.
   * Fix colors in 24-bit BMP images.
   * ocrodjvu:
     + Make ‘-e’ an alias for ‘--engine’.
