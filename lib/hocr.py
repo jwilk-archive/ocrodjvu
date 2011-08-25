@@ -30,6 +30,7 @@ except ImportError, ex:
     raise
 
 from . import errors
+from . import html5_support
 from . import text_zones
 from . import unicode_support
 
@@ -372,7 +373,7 @@ def scan(node, settings):
 
 class ExtractSettings(object):
 
-    def __init__(self, rotation=0, details=TEXT_DETAILS_WORD, uax29=None, page_size=None):
+    def __init__(self, rotation=0, details=TEXT_DETAILS_WORD, uax29=None, html5=None, page_size=None):
         self.rotation = rotation
         self.details = details
         if uax29 is not None:
@@ -382,6 +383,7 @@ class ExtractSettings(object):
             else:
                 uax29 = icu.Locale(uax29)
         self.uax29 = uax29
+        self.html5 = html5
         self.page_size = page_size
         self.cuneiform = None
         self.tesseract = None
@@ -406,7 +408,10 @@ def extract_text(stream, **kwargs):
     uax29: None or a PyICU locale
     '''
     settings = ExtractSettings(**kwargs)
-    doc = etree.parse(stream, etree.HTMLParser())
+    if settings.html5:
+        doc = html5_support.parse(stream)
+    else:
+        doc = etree.parse(stream, etree.HTMLParser())
     if doc.find('/head/meta[@name="ocr-capabilities"]') is None:
         ocr_system = doc.find('/head/meta[@name="ocr-system"]')
         if ocr_system is None:
