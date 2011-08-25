@@ -194,7 +194,11 @@ def _scan(node, settings, page_size=None):
         hocr_classes = (node.get('class') or '').split()
         djvu_class = None
         for hocr_class in hocr_classes:
-            djvu_class = hocr_class_to_djvu(hocr_class)
+            if settings.tesseract and hocr_class == 'ocrx_word':
+                # Tesseract > 3.00 use ocrx_word for its own purposes.
+                pass
+            else:
+                djvu_class = hocr_class_to_djvu(hocr_class)
             if djvu_class:
                 break
         else:
@@ -373,6 +377,7 @@ class ExtractSettings(object):
         self.uax29 = uax29
         self.page_size = page_size
         self.cuneiform = None
+        self.tesseract = None
         self.bbox_data = None
 
 def extract_tesseract_bbox_data(node):
@@ -395,12 +400,14 @@ def extract_text(stream, **kwargs):
     doc = etree.parse(stream, etree.HTMLParser())
     if doc.find('/head/meta[@name="ocr-capabilities"]') is None:
         ocr_system = doc.find('/head/meta[@name="ocr-system"]')
-        if ocr_system is not None and ocr_system.get('content') == 'openocr':
-            settings.cuneiform = (0, 9)
-        elif ocr_system is None:
+        if ocr_system is None:
             # This is wild guess. However, since ocr-system is a required meta
             # tag, the hOCR we are processing is broken anyway.
             settings.cuneiform = (0, 8)
+        elif ocr_system.get('content') == 'openocr':
+            settings.cuneiform = (0, 9)
+        elif ocr_system.get('content') == 'tesseract':
+            settings.tesseract = True
     if settings.details < TEXT_DETAILS_WORD or (settings.uax29 and settings.details <= text_zones.TEXT_DETAILS_WORD):
         tesseract_bbox_data = doc.find('//script[@type="ocrodjvu/tesseract"]')
         if tesseract_bbox_data is not None:
