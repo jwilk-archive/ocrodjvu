@@ -95,15 +95,16 @@ def _apply_bboxes(djvu_class, bbox_source, text, settings, page_size):
     if settings.tesseract:
         # Tesseract ≥ 3.00 uses space for characters it couldn't recognize
         # (yay, excellent choice), so let's treat them just like ordinary
-        # characters.
-        trailing_whitespace_len = 0
+        # characters. However, trailing newline characters can appear at the
+        # end of line.
+        new_text = text.rstrip('\n')
     else:
         # Cuneiform tends to attach superfluous whitespace.
         # Also, a newline character can appear at the end of line.
         new_text = text.rstrip()
-        trailing_whitespace_len = len(text) - len(new_text)
-        text = new_text
-        del new_text
+    trailing_whitespace_len = len(text) - len(new_text)
+    text = new_text
+    del new_text
     details = settings.details
     if settings.uax29 is not None and details <= TEXT_DETAILS_WORD:
         # If using UAX #29 segmentation, we might need more details than user
