@@ -231,7 +231,7 @@ def _scan(node, settings):
     children = get_children(node)
     if len(children) == 0:
         if djvu_class is const.TEXT_ZONE_PAGE:
-            # For all other zone types, 0-child zone are simply skipped.
+            # For all other zone types, 0-child zones are simply skipped.
             # We return from the function here, to make further checks simpler.
             return [text_zones.Zone(type=djvu_class, bbox=bbox)]
         else:
