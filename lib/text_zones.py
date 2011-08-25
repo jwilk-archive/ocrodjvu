@@ -137,8 +137,8 @@ class Zone(object):
         for x in self.bbox:
             assert x is not None
         if xform is None:
-            assert self.type == const.TEXT_ZONE_PAGE
-            assert self.bbox[:2] == (0, 0)
+            assert self.type == const.TEXT_ZONE_PAGE, 'the exterior zone is %s rather than %s' % (self.type, const.TEXT_ZONE_PAGE)
+            assert self.bbox[:2] == (0, 0), 'top-left page corner is (%d, %d) rather than (0, 0)' % self.bbox[:2]
             page_size = self.bbox[2:]
             if (rotation // 90) & 1:
                 xform = decode.AffineTransform((0, 0) + tuple(reversed(page_size)), (0, 0) + page_size)
