@@ -27,7 +27,7 @@ Dependencies
   Python bindings for DjVuLibre_
 
 * PyICU_ -
-  Python bindings for PyICU IBM's ICU_ C++ API.
+  Python bindings for PyICU IBM's ICU_ C++ API
 
 * lxml_ —
   Python bindings for libxml2_
