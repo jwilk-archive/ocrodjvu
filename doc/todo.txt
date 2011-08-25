@@ -12,6 +12,7 @@ Missing tests
 * For GOCR, in particular:
   - for non-ASCII characters;
   - for empty pages.
+* For http://bugs.debian.org/575484#35
 
 Documentation
 =============

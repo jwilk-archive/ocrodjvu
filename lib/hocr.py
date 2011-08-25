@@ -257,9 +257,13 @@ def _scan(node, settings):
             raise errors.MalformedHocr("plain text intermixed with structural elements")
         if has_char_zone and has_nonchar_zone:
             raise errors.MalformedHocr("character zones intermixed with non-character zones")
-        for child in children:
-            if isinstance(child, text_zones.Zone):
-                bbox.update(child.bbox)
+        if djvu_class is const.TEXT_ZONE_PAGE:
+            # Bounding box of the whole page is not affected by its children.
+            pass
+        else:
+            for child in children:
+                if isinstance(child, text_zones.Zone):
+                    bbox.update(child.bbox)
         if len(children) == 0:
             return []
 
