@@ -87,7 +87,7 @@ bboxes_re = re.compile(
         (?: ,? \s* (?: -?\d+ \s+ -?\d+ \s+ -?\d+ \s+ -?\d+) )* )
     ''', re.VERBOSE)
 
-def _apply_bboxes(djvu_class, bbox_source, text, settings):
+def _apply_bboxes(djvu_class, bbox_source, text, settings, page_size):
     embedded_eol = False
     if djvu_class <= const.TEXT_ZONE_LINE:
         if text.endswith('\n'):
@@ -121,7 +121,7 @@ def _apply_bboxes(djvu_class, bbox_source, text, settings):
                     raise errors.MalformedOcrOutput('hOCR text and "makebox" output do not match')
             if upside_down < 0:
                 (x0, y0, x1, y1) = bbox
-                (w, h) = settings.page_size
+                (w, h) = page_size
                 bbox = (x0, h - y1, x1, h - y0)
             coordinates += [bbox]
     if len(coordinates) == len(text):
@@ -172,14 +172,14 @@ def _apply_bboxes(djvu_class, bbox_source, text, settings):
         ]
     return [text]
 
-def _scan(node, settings):
+def _scan(node, settings, page_size=None):
 
     def get_children(node):
         result = []
         if node.text:
             result += [node.text]
         for child in node.iterchildren():
-            result += _scan(child, settings)
+            result += _scan(child, settings, page_size)
             if child.tail:
                 result += [child.tail]
         return result
@@ -219,12 +219,15 @@ def _scan(node, settings):
         if not bbox:
             if settings.page_size is None:
                 raise errors.MalformedHocr("page without bounding box information")
-            page_width, page_height = settings.page_size
+            page_width, page_height = page_size = settings.page_size
             bbox = text_zones.BBox(0, 0, page_width, page_height)
         else:
             if (bbox.x0, bbox.y0) != (0, 0):
                 raise errors.MalformedHocr("page's bounding box should start with (0, 0)")
-            settings.page_size = bbox.x1, bbox.y1
+            page_size = bbox.x1, bbox.y1
+    elif page_size is None:
+        # At this point page size should be already known.
+        raise errors.MalformedHocr('unable to determine page size')
 
     has_string = has_nonempty_string = False
     has_zone = has_char_zone = has_nonchar_zone = False
@@ -274,7 +277,7 @@ def _scan(node, settings):
             if not bbox:
                 raise errors.MalformedHocr("zone without bounding box information")
             text = ''.join(children)
-            children = _apply_bboxes(djvu_class, settings.bbox_data or title, text, settings)
+            children = _apply_bboxes(djvu_class, settings.bbox_data or title, text, settings, page_size)
             if len(children) == 1 and isinstance(children[0], basestring):
                 result = text_zones.Zone(type=const.TEXT_ZONE_CHARACTER, bbox=bbox, children=children)
                 # We return TEXT_ZONE_CHARACTER even it was a word according to hOCR.
@@ -295,7 +298,7 @@ def _scan(node, settings):
             if bboxes_node is not None and len(bboxes_node) == 0 and bboxes_node.text is None:
                 title = bboxes_node.get('title') or ''
         text = ''.join(children)
-        children = _apply_bboxes(djvu_class, settings.bbox_data or title, text, settings)
+        children = _apply_bboxes(djvu_class, settings.bbox_data or title, text, settings, page_size)
         if len(children) == 0:
             return []
         if isinstance(children[0], basestring):
@@ -340,15 +343,11 @@ def _scan(node, settings):
                 return []
         raise errors.MalformedHocr("text zone without bounding box information")
 
-    if settings.page_size is None:
-        # At this point page size should be already known.
-        raise errors.MalformedHocr('unable to determine page size')
-
     return [text_zones.Zone(type=djvu_class, bbox=bbox, children=children)]
 
 def scan(node, settings):
     result = []
-    for zone in _scan(node, settings):
+    for zone in _scan(node, settings, settings.page_size):
         if isinstance(zone, basestring):
             if zone == '' or zone.isspace():
                 continue
