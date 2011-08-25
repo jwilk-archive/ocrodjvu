@@ -361,7 +361,7 @@ def scan(node, settings):
 
 class ExtractSettings(object):
 
-    def __init__(self, rotation=0, details=TEXT_DETAILS_WORD, uax29=None, page_size=None, cuneiform=None):
+    def __init__(self, rotation=0, details=TEXT_DETAILS_WORD, uax29=None, page_size=None):
         self.rotation = rotation
         self.details = details
         if uax29 is not None:
@@ -372,7 +372,7 @@ class ExtractSettings(object):
                 uax29 = icu.Locale(uax29)
         self.uax29 = uax29
         self.page_size = page_size
-        self.cuneiform = cuneiform
+        self.cuneiform = None
         self.bbox_data = None
 
 def extract_tesseract_bbox_data(node):
