@@ -113,6 +113,8 @@ def _apply_bboxes(djvu_class, bbox_source, text, settings, page_size):
         details = TEXT_DETAILS_CHARACTER
     if details >= djvu_class:
         return [text]
+    if settings.tesseract and djvu_class >= const.TEXT_ZONE_WORD:
+        return [text]
     if isinstance(bbox_source, basestring):
         # bboxes from plain old hOCR property
         m = bboxes_re.search(bbox_source)
