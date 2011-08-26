@@ -78,12 +78,6 @@ class build_doc(distutils_build):
 
 class sdist(distutils_sdist):
 
-    def initialize_options(self):
-        # Python 2.7 doesn't use tar(1) anymore, so setting TAR_OPTIONS is not
-        # effective.
-        distutils_sdist.initialize_options(self)
-        self.owner = self.group = 'root'
-
     def run(self):
         self.run_command('build_doc')
         return distutils_sdist.run(self)
@@ -94,8 +88,6 @@ if sys.version_info >= (3, 0):
     raise RuntimeError('ocrodjvu is not compatible with Python 3.X')
 
 distutils_build.sub_commands[:0] = [('build_doc', None)]
-
-os.putenv('TAR_OPTIONS', '--owner root --group root --mode a+rX')
 
 scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr']
 
