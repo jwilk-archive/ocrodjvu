@@ -49,14 +49,14 @@ def test_version():
     assert_not_equal(stderr.getvalue(), '')
     assert_equal(stdout.getvalue(), '')
 
-def _test_from_file(base_filename, index):
+def _test_from_file(base_filename, index, extra_args):
     base_filename = os.path.join(here, base_filename)
     test_filename = '%s.test%d' % (base_filename, index)
     html_filename = '%s.html' % (base_filename,)
     with open(test_filename, 'rb') as file:
         commandline = file.readline()
         expected_output = file.read()
-    args = shlex.split(commandline)
+    args = shlex.split(commandline) + shlex.split(extra_args)
     assert args[0] == '#'
     with contextlib.closing(StringIO()) as output_file:
         with open(html_filename, 'rb') as html_file:
@@ -93,13 +93,15 @@ def test_from_file():
         index = int(test_filename[-1])
         base_filename = os.path.basename(test_filename[:-6])
         known_bases.add(base_filename)
-        yield _test_from_file, base_filename, index
+        for extra_args in '', '--html5':
+            yield _test_from_file, base_filename, index, extra_args
     for html_filename in sorted_glob(os.path.join(here, '*.html')):
         # For HTML files that have no corresponing .test* files, we just check
         # if they won't trigger any exception.
         base_filename = os.path.basename(html_filename[:-5])
         for args in rough_test_args:
             if base_filename not in known_bases:
-                yield _rough_test_from_file, base_filename, args
+                for extra_args in '', ' --html5':
+                    yield _rough_test_from_file, base_filename, args + extra_args
 
 # vim:ts=4 sw=4 et
