@@ -1,3 +1,9 @@
+ocrodjvu (0.7.6) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 05 Sep 2011 21:04:11 +0200
+
 ocrodjvu (0.7.5) unstable; urgency=low
 
   * Check Python version in setup.py.
