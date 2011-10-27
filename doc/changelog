@@ -1,11 +1,11 @@
-ocrodjvu (0.7.6) UNRELEASED; urgency=low
+ocrodjvu (0.7.6) unstable; urgency=low
 
   * Improve error handling.
   * ocrodjvu:
     + Fix a regression in gocr, ocrad and tesseract engines, which made them
       unusable.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 27 Oct 2011 18:05:28 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 27 Oct 2011 18:06:38 +0200
 
 ocrodjvu (0.7.5) unstable; urgency=low
 
