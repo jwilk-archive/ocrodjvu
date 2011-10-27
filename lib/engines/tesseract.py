@@ -83,7 +83,7 @@ def fix_html(s):
 
 class ExtractSettings(object):
 
-    def __init__(self, rotation=0, details=text_zones.TEXT_DETAILS_WORD, uax29=None, page_size=None, cuneiform=None):
+    def __init__(self, rotation=0, page_size=None, **kwargs):
         self.rotation = rotation
         self.page_size = page_size
 

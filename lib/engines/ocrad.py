@@ -31,7 +31,7 @@ _language_pattern = re.compile('^[a-z]{3}$')
 
 class ExtractSettings(object):
 
-    def __init__(self, rotation=0, details=text_zones.TEXT_DETAILS_WORD, uax29=None, page_size=None):
+    def __init__(self, rotation=0, details=text_zones.TEXT_DETAILS_WORD, uax29=None, page_size=None, **kwargs):
         self.rotation = rotation
         self.details = details
         if uax29 is not None:

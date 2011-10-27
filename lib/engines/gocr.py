@@ -38,7 +38,7 @@ _version_re = re.compile(r'\bgocr ([0-9]+).([0-9]+)\b')
 
 class ExtractSettings(object):
 
-    def __init__(self, rotation=0, details=text_zones.TEXT_DETAILS_WORD, uax29=None, page_size=None):
+    def __init__(self, rotation=0, details=text_zones.TEXT_DETAILS_WORD, uax29=None, page_size=None, **kwargs):
         self.rotation = rotation
         self.details = details
         if uax29 is not None:
