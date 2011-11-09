@@ -18,6 +18,7 @@ def parse(stream):
         import html5lib
     except ImportError, ex:
         utils.enhance_import_error(ex, 'html5lib', 'python-html5lib', 'http://code.google.com/p/html5lib/')
+        raise
     return html5lib.parse(stream,
         treebuilder='lxml',
         namespaceHTMLElements=False

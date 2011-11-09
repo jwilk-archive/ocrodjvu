@@ -1,8 +1,9 @@
 ocrodjvu (0.7.7) UNRELEASED; urgency=low
 
-  * 
+  * Raise proper import error if html5lib is not installed. Thanks to Kyrill
+    Detinov for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 29 Oct 2011 20:14:37 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 09 Nov 2011 14:13:37 +0100
 
 ocrodjvu (0.7.6) unstable; urgency=low
 
