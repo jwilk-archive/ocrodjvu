@@ -372,6 +372,7 @@
     </refsection>
     <refsection>
         <title>Advanced options</title>
+        <variablelist>
         <varlistentry>
             <term><option>-D</option></term>
             <term><option>--debug</option></term>
@@ -419,6 +420,7 @@
                 </para>
             </listitem>
         </varlistentry>
+        </variablelist>
     </refsection>
 </refsection>
 
