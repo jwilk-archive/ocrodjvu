@@ -1,3 +1,9 @@
+ocrodjvu (0.7.8) UNRELEASED; urgency=low
+
+  * Improve test suite.
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 12 Jan 2012 17:37:02 +0100
+
 ocrodjvu (0.7.7) unstable; urgency=low
 
   * Raise proper import error if html5lib is not installed. Thanks to Kyrill
