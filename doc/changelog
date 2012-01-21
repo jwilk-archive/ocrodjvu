@@ -1,8 +1,8 @@
-ocrodjvu (0.7.8) UNRELEASED; urgency=low
+ocrodjvu (0.7.8) unstable; urgency=low
 
   * Improve test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 12 Jan 2012 17:37:02 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 22 Jan 2012 00:04:16 +0100
 
 ocrodjvu (0.7.7) unstable; urgency=low
 
