@@ -1,8 +1,8 @@
 ocrodjvu (0.7.9) UNRELEASED; urgency=low
 
-  * 
+  * Produce more helpful error message when an external command is not found.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 01 Feb 2012 18:54:16 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 01 Feb 2012 18:54:48 +0100
 
 ocrodjvu (0.7.8) unstable; urgency=low
 
