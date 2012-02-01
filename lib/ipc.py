@@ -102,7 +102,11 @@ class Subprocess(subprocess.Popen):
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(' '.join(shell_escape(s) for s in commandline))
         self.__command = commandline[0]
-        subprocess.Popen.__init__(self, *args, **kwargs)
+        try:
+            subprocess.Popen.__init__(self, *args, **kwargs)
+        except EnvironmentError, ex:
+            ex.filename = self.__command
+            raise
 
     def wait(self):
         return_code = subprocess.Popen.wait(self)
