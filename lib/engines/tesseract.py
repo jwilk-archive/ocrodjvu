@@ -54,7 +54,7 @@ def _wait_for_worker(worker):
         raise
     if len(stderr) == 1:
         [line] = stderr
-        if line.startswith('Tesseract Open Source OCR Engine'):
+        if line.startswith(('Tesseract Open Source OCR Engine', 'Page')):
             # Annoyingly, Tesseract prints its own name on standard error even
             # if nothing went wrong. Filter out such an unhelpful message.
             return
@@ -163,6 +163,7 @@ class Engine(common.Engine):
         with temporary.directory() as output_dir:
             worker = ipc.Subprocess(
                 [self.executable, image.name, os.path.join(output_dir, 'tmp'), '-l', language] + self.extra_args,
+                stdout=ipc.PIPE,
                 stderr=ipc.PIPE,
             )
             _wait_for_worker(worker)
@@ -180,6 +181,7 @@ class Engine(common.Engine):
                 print >>tessconf, 'tessedit_create_hocr T'
             worker = ipc.Subprocess(
                 [self.executable, image.name, os.path.join(output_dir, 'tmp'), '-l', language, tessconf_path] + self.extra_args,
+                stdout=ipc.PIPE,
                 stderr=ipc.PIPE,
             )
             _wait_for_worker(worker)
