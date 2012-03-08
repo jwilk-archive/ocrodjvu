@@ -26,7 +26,7 @@ try:
     from djvu import decode
     from djvu import sexpr
 except ImportError, ex:
-    utils.enhance_import_error(ex, 'python-djvulibre', 'python-djvulibre', 'http://jwilk.net/software/python-djvulibre')
+    utils.enhance_import_error(ex, 'python-djvulibre', 'python-djvu', 'http://jwilk.net/software/python-djvulibre')
     raise
 
 TEXT_DETAILS_LINE = const.TEXT_ZONE_LINE
