@@ -1,9 +1,9 @@
-ocrodjvu (0.7.9) UNRELEASED; urgency=low
+ocrodjvu (0.7.9) unstable; urgency=low
 
   * Improve error handling.
   * Fix compatibility with Tesseract > 3.01.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 08 Mar 2012 19:32:49 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 10 Mar 2012 23:36:03 +0100
 
 ocrodjvu (0.7.8) unstable; urgency=low
 
