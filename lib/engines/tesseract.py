@@ -20,6 +20,7 @@ import os
 import re
 import shlex
 import sys
+import warnings
 from cStringIO import StringIO
 
 from . import common
@@ -139,7 +140,11 @@ class Engine(common.Engine):
             except ipc.CalledProcessError:
                 pass
             else:
-                raise errors.UnknownLanguageList
+                # This should never happen. Recognizing non-existent image
+                # should always fail. But apparently there are subversion
+                # snapshots of Tesseract in the wild that do it wrongly. Rather
+                # than failing hard, issue a warning:
+                warnings.warn('unexpected exit code from Tesseract', category=RuntimeWarning, stacklevel=2)
         return directory, extension
 
     def list_languages(self):
