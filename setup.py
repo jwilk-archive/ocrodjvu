@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # encoding=UTF-8
 
-# Copyright © 2009, 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2009, 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
 '''
 *ocrodjvu* is a wrapper for OCR systems that allows you to perform OCR on `DjVu <http://djvu.org/>`_ files.
 '''
+
+from __future__ import with_statement
 
 classifiers = '''
 Development Status :: 4 - Beta
@@ -30,6 +32,7 @@ Topic :: Multimedia :: Graphics
 
 import glob
 import os
+import re
 import sys
 
 import distutils.command
@@ -58,6 +61,33 @@ class build_doc(distutils_build):
 
     description = 'build documentation'
 
+    _url_regex = re.compile(
+        r'^(\\%http://.*)',
+        re.MULTILINE
+    )
+
+    _date_regex = re.compile(
+        '"(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/(?P<year>[0-9]{4})"'
+    )
+
+    def build_man(self, manname, commandline):
+        self.spawn(commandline)
+        with open(manname, 'r+') as file:
+            contents = file.read()
+            # Format URLs consistently:
+            contents = self._url_regex.sub(
+                lambda m: r'\m[blue]\fI%s\fR\m[]' % m.groups(),
+                contents,
+            )
+            # Use RFC 3339 date format:
+            contents = self._date_regex.sub(
+                lambda m: '%(year)s-%(month)s-%(day)s' % m.groupdict(),
+                contents
+            )
+            file.seek(0)
+            file.truncate()
+            file.write(contents)
+
     def run(self):
         if os.name != 'posix':
             return
@@ -71,9 +101,7 @@ class build_doc(distutils_build):
                 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
                 xmlname,
             ]
-            self.make_file([xmlname], manname, self.spawn, [command])
-            if not self.dry_run:
-                self.spawn(['./tools/manpage-fixup', manname])
+            self.make_file([xmlname], manname, self.build_man, [manname, command])
             manpages.add(manname)
 
 class sdist(distutils_sdist):
