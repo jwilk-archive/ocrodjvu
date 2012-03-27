@@ -5,7 +5,6 @@ include doc/*.txt
 include doc/*.xml
 include doc/changelog
 include ocrodjvu.py
-include tools/manpage-fixup
 recursive-include tests *.bmp *.pbm *.ppm *.tif
 recursive-include tests *.py
 recursive-include tests *.html
