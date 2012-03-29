@@ -489,6 +489,15 @@
             <manvolnum>1</manvolnum>
         </citerefentry>,
         <citerefentry>
+            <refentrytitle>djvu2hocr</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>,
+        <citerefentry>
+            <refentrytitle>hocr2djvused</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>,
+        <sbr/>
+        <citerefentry>
             <refentrytitle>ocroscript</refentrytitle>
             <manvolnum>1</manvolnum>
         </citerefentry>,

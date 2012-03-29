@@ -166,7 +166,15 @@
     <title>See also</title>
     <para>
         <citerefentry>
+            <refentrytitle>djvu</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>,
+        <citerefentry>
             <refentrytitle>ocrodjvu</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>,
+        <citerefentry>
+            <refentrytitle>djvu2hocr</refentrytitle>
             <manvolnum>1</manvolnum>
         </citerefentry>,
         <citerefentry>

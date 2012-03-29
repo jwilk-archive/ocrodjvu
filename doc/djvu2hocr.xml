@@ -121,6 +121,14 @@
         <citerefentry>
             <refentrytitle>djvu</refentrytitle>
             <manvolnum>1</manvolnum>
+        </citerefentry>,
+        <citerefentry>
+            <refentrytitle>hocr2djvused</refentrytitle>
+            <manvolnum>1</manvolnum>
+        </citerefentry>,
+        <citerefentry>
+            <refentrytitle>ocrodjvu</refentrytitle>
+            <manvolnum>1</manvolnum>
         </citerefentry>
     </para>
 </refsection>
