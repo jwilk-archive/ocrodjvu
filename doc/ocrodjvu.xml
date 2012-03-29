@@ -458,17 +458,27 @@
 
 <refsection>
     <title>Bugs</title>
-    <para>
-        Tesseract 3.00 is affected by a bug <footnote><para><ulink
-        url='http://code.google.com/p/tesseract-ocr/issues/detail?id=376'/></para></footnote> making it produce invalid
-        hOCR output in certain circumstances. &p; does not try recover form this fault (which couldn't be done reliably
-        anyway) unless you pass the <option>-X fix-html=1</option> option.
-    </para>
-    <para>
-        When using Tesseract ≥ 3.00, extracting bounding boxes of particular characters (which happens when either
-        <option>--details=chars</option> or <option>--word-segmentation=uax29</option>) is inefficient. This due to
-        limitations of Tesseract command line interface.
-    </para>
+    <refsection>
+        <title>Known bugs</title>
+        <para>
+            Tesseract 3.00 is affected by a bug <footnote><para><ulink
+            url='http://code.google.com/p/tesseract-ocr/issues/detail?id=376'/></para></footnote> making it produce invalid
+            hOCR output in certain circumstances. &p; does not try recover form this fault (which couldn't be done reliably
+            anyway) unless you pass the <option>-X fix-html=1</option> option.
+        </para>
+        <para>
+            When using Tesseract ≥ 3.00, extracting bounding boxes of particular characters (which happens when either
+            <option>--details=chars</option> or <option>--word-segmentation=uax29</option>) is inefficient. This due to
+            limitations of Tesseract command line interface.
+        </para>
+    </refsection>
+    <refsection>
+        <title>Reporting new bugs</title>
+        <para>
+            Please report bugs at:
+            <ulink url='https://bitbucket.org/jwilk/ocrodjvu/issues'/>
+        </para>
+    </refsection>
 </refsection>
 
 <refsection>
