@@ -1,0 +1,46 @@
+#!/bin/sh
+
+set -e
+
+usage()
+{
+    echo 'scans2djvu+hocr <didjvu-arguments> <ocrodjvu-arguments> <djvu2hocr-arguments> <root> [--ext=...] [--keep-djvu-ocr=1]' >&2
+    exit 1
+}
+
+if [ $# -lt 4 ]
+then
+    usage
+fi
+
+ext=.png
+keep_djvu_ocr=0
+didjvu_arguments="$1"; shift
+ocrodjvu_arguments="$1"; shift
+djvu2hocr_arguments="$1"; shift
+root="$1"; shift
+
+while [ $# -gt 0 ]
+do
+    case "$1" in
+        --ext=*) ext="${1#*=}";;
+        --keep-djvu-ocr=*) keep_djvu_ocr="${1#*=}";;
+        *) usage ;;
+    esac
+    shift
+done
+
+set -x
+find "$root" -name "*$ext" |
+while read -r file
+do
+    djvu_file="${file%.*}.djvu"
+    djvu_ocr_file="${djvu_file}+ocr"
+    hocr_file="${file%.*}.html"
+    didjvu encode $didjvu_arguments "$file" -o "${file%.*}.djvu"
+    ocrodjvu $ocrodjvu_arguments "$djvu_file" -o "$djvu_ocr_file"
+    djvu2hocr $djvu2hocr_arguments "$djvu_ocr_file" > "$hocr_file"
+    [ "$keep_djvu_ocr" != 0 ] || rm -f "$djvu_ocr_file"
+done
+
+# vim:ts=4 sw=4 et
