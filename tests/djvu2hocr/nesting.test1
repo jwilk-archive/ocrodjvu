@@ -10,8 +10,15 @@
   </head>
   <body>
     <div class="ocr_page" title="bbox 0 0 1000 1000">
-      <div class="ocrx_block" title="bbox 0 800 100 900">eggs</div>
-      <div class="ocrx_block" title="bbox 0 900 100 1000">spam</div>
+      <div class="ocr_carea" title="bbox 0 900 100 1000">
+        <div class="ocrx_block" title="bbox 0 900 100 1000">
+          <p class="ocr_par" title="bbox 0 900 100 1000">
+            <span class="ocrx_line" title="bbox 0 900 100 1000">
+              <span class="ocrx_word" title="bbox 0 900 100 1000">eggs</span>
+            </span>
+          </p>
+        </div>
+      </div>
     </div>
   </body>
 </html>

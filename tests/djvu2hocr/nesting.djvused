@@ -1,0 +1,14 @@
+select 1
+set-txt
+(page 0 0 100 100
+  (column 0 0 100 100
+    (region 0 0 100 100
+      (para 0 0 100 100
+        (line 0 0 100 100
+          (word 0 0 100 100 "eggs")
+        )
+      )
+    )
+  )
+)
+.
