@@ -113,7 +113,7 @@ def _apply_bboxes(djvu_class, bbox_source, text, settings, page_size):
         details = TEXT_DETAILS_CHARACTER
     if details >= djvu_class:
         return [text]
-    if settings.tesseract and djvu_class >= const.TEXT_ZONE_WORD and text.isspace():
+    if settings.tesseract and djvu_class > const.TEXT_ZONE_WORD and text.isspace():
         # Tesseract ≥ 3.0 sometimes returns series of “empty” words. Let's
         # ignore those.
         return []
