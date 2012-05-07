@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008, 2009, 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -66,17 +66,42 @@ def smart_repr(s, encoding=None):
         return repr(s)
     return "'%s'" % _special_chars_replace(_special_chars_escape, u)
 
+class EncodingWarning(UserWarning):
+    pass
+
+_control_characters_regex = re.compile('[%s]' % ''.join(
+    ch for ch in map(chr, xrange(32))
+    if ch not in u'\n\r\t'
+))
+
 def sanitize_utf8(text):
     '''
     Replace invalid UTF-8 sequences and control characters (except CR, LF, TAB
     and space) with Unicode replacement characters.
     '''
-    text = text.decode('UTF-8', 'replace')
-    for ch in map(unichr, xrange(32)):
-        if ch in u'\n\r\t':
-            continue
-        text = text.replace(ch, u'\N{REPLACEMENT CHARACTER}')
-    return text.encode('UTF-8')
+    try:
+        text = text.decode('UTF-8')
+    except UnicodeDecodeError, exc:
+        text = text.decode('UTF-8', 'replace')
+        message = str(exc)
+        message = re.sub("^'utf8' codec can't decode ", '', message)
+        warnings.warn(
+            message,
+            category=EncodingWarning,
+            stacklevel=2,
+        )
+    text = text.encode('UTF-8')
+    match = _control_characters_regex.search(text)
+    if match:
+        byte = ord(match.group())
+        message = 'byte 0x%02x in position %d: control character' % (byte, match.start())
+        warnings.warn(
+            message,
+            category=EncodingWarning,
+            stacklevel=2,
+        )
+        text = _control_characters_regex.sub(u'\N{REPLACEMENT CHARACTER}'.encode('UTF-8'), text)
+    return text
 
 class NotOverriddenWarning(UserWarning):
     pass

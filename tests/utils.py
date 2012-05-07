@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -93,19 +93,42 @@ class test_parse_page_numbers():
 class test_sanitize_utf8():
 
     def test_control_characters(self):
+        def show(message, category, filename, lineno, file=None, line=None):
+            with exception(EncodingWarning, regex='.*control character.*'):
+                raise message
         s = ''.join(map(chr, xrange(32)))
-        t = sanitize_utf8(s).decode('UTF-8')
+        with catch_warnings():
+            warnings.showwarning = show
+            t = sanitize_utf8(s).decode('UTF-8')
         assert_equal(t, u'\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\t\n\ufffd\ufffd\r\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd')
 
     def test_ascii(self):
         s = 'The quick brown fox jumps over the lazy dog'
-        t = sanitize_utf8(s)
+        with catch_warnings():
+            warnings.filterwarnings('error', category=EncodingWarning)
+            t = sanitize_utf8(s)
         assert_equal(s, t)
 
     def test_utf8(self):
         s = 'Jeżu klątw, spłódź Finom część gry hańb'
-        t = sanitize_utf8(s)
+        with catch_warnings():
+            warnings.filterwarnings('error', category=EncodingWarning)
+            t = sanitize_utf8(s)
         assert_equal(s, t)
+
+    def test_non_utf8(self):
+        def show(message, category, filename, lineno, file=None, line=None):
+            with exception(EncodingWarning, regex='.* invalid continuation byte'):
+                raise message
+        s0 = 'Jeżu klątw, spłódź Finom część gry hańb'
+        good = 'ó'
+        bad = good.decode('UTF-8').encode('ISO-8859-2')
+        s1 = s0.replace(good, bad)
+        s2 = s0.replace(good, u'\N{REPLACEMENT CHARACTER}'.encode('UTF-8'))
+        with catch_warnings():
+            warnings.showwarning = show
+            t = sanitize_utf8(s1)
+        assert_equal(s2, t)
 
 class test_not_overriden():
 
