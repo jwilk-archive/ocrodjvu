@@ -101,6 +101,10 @@ def sanitize_utf8(text):
             stacklevel=2,
         )
         text = _control_characters_regex.sub(u'\N{REPLACEMENT CHARACTER}'.encode('UTF-8'), text)
+    # There are other code points that are not allowed in XML (or even: not
+    # allowed in UTF-8), but which Python happily accept. However, they haven't
+    # seemed to occur in real-world documents.
+    # http://www.w3.org/TR/2008/REC-xml-20081126/#NT-Char
     return text
 
 class NotOverriddenWarning(UserWarning):
