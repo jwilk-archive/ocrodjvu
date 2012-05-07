@@ -92,6 +92,7 @@ class Engine(common.Engine):
 
     name = 'tesseract'
     image_format = image_io.TIFF
+    needs_utf8_fix = True
 
     executable = utils.property('tesseract')
     extra_args = utils.property([], shlex.split)

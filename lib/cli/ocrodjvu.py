@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008, 2009, 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -340,6 +340,7 @@ class Context(djvu.decode.Context):
                         details=self._options.details,
                         uax29=self._options.uax29,
                         html5=self._options.html5,
+                        fix_utf8=self._engine.needs_utf8_fix,
                         page_size=size
                     )
                     # It should be: (page 0 0 <width> <height> …):

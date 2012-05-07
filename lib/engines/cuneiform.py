@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,10 +35,13 @@ class Engine(common.Engine):
     name = 'cuneiform'
     image_format = image_io.BMP
     output_format = 'html'
+    needs_utf8_fix = True
 
     executable = utils.property('cuneiform')
     extra_args = utils.property([], shlex.split)
     fix_html = utils.property(0, int)
+    # fix_html currently does nothing, but we left it, as it might become
+    # useful again at some point in the future.
 
     def __init__(self, *args, **kwargs):
         assert args == ()
@@ -141,17 +144,7 @@ class Engine(common.Engine):
             worker.stdin.close()
             worker.wait()
             with open(hocr_file_name, 'r') as hocr_file:
-                if not self.fix_html:
-                    yield hocr_file
-                    return
-                contents = hocr_file.read()
-        # Sometimes Cuneiform returns files with broken encoding or with control
-        # characters: https://bugs.launchpad.net/cuneiform-linux/+bug/585418
-        # Let's fix it.
-        # FIXME: This work-around is ugly and should be dropped at some point.
-        contents = utils.sanitize_utf8(contents)
-        with contextlib.closing(StringIO(contents)) as hocr_file:
-            yield hocr_file
+                yield hocr_file
 
     def extract_text(self, *args, **kwargs):
         return self._hocr.extract_text(*args, **kwargs)

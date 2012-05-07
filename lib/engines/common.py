@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ class Engine(object):
     name = None
     input_format = None
     output_format = None
+    needs_utf8_fix = False
 
     def __init__(self, *args, **kwargs):
         assert args == ()

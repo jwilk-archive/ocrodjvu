@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008, 2009, 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -377,7 +377,7 @@ def scan(node, settings):
 
 class ExtractSettings(object):
 
-    def __init__(self, rotation=0, details=TEXT_DETAILS_WORD, uax29=None, html5=None, page_size=None):
+    def __init__(self, rotation=0, details=TEXT_DETAILS_WORD, uax29=None, html5=None, fix_utf8=False, page_size=None):
         self.rotation = rotation
         self.details = details
         if uax29 is not None:
@@ -388,6 +388,7 @@ class ExtractSettings(object):
                 uax29 = icu.Locale(uax29)
         self.uax29 = uax29
         self.html5 = html5
+        self.fix_utf8 = fix_utf8
         self.page_size = page_size
         self.cuneiform = None
         self.tesseract = None
@@ -404,6 +405,35 @@ def extract_tesseract_bbox_data(node):
             ch = None
         yield ch, (x0, y0, x1, y1), -1
 
+def read_document(stream, settings):
+    if settings.fix_utf8:
+        # Fix UTF-8 encoding and get rid of control characters that are not
+        # allowed in XML.
+        #
+        # Ideally, this should never be needed, but some OCR engines produce
+        # such broken HTML:
+        #  * https://bugs.launchpad.net/cuneiform-linux/+bug/585418
+        #  * http://code.google.com/p/tesseract-ocr/issues/detail?id=690
+        #
+        # Moreover, the HTML parsers trip over such errors:
+        #  * https://bugs.launchpad.net/lxml/+bug/690110
+        #  * http://bugs.debian.org/671842
+        #
+        # FIXME: This work-around is ugly and should be dropped at some point.
+        contents = stream.read()
+        contents = utils.sanitize_utf8(contents)
+        if settings.html5:
+            return html5_support.parse(contents)
+        else:
+            root_element = etree.fromstring(contents, etree.HTMLParser(encoding='UTF-8'))
+            return etree.ElementTree(root_element)
+        del contents
+    else:
+        if settings.html5:
+            return html5_support.parse(stream)
+        else:
+            return etree.parse(stream, etree.HTMLParser())
+
 def extract_text(stream, **kwargs):
     '''
     Extract DjVu text from an hOCR stream.
@@ -412,10 +442,7 @@ def extract_text(stream, **kwargs):
     uax29: None or a PyICU locale
     '''
     settings = ExtractSettings(**kwargs)
-    if settings.html5:
-        doc = html5_support.parse(stream)
-    else:
-        doc = etree.parse(stream, etree.HTMLParser())
+    doc = read_document(stream, settings)
     if doc.find('/head/meta[@name="ocr-capabilities"]') is None:
         ocr_system = doc.find('/head/meta[@name="ocr-system"]')
         if ocr_system is None:
