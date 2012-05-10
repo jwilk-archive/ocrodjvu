@@ -56,8 +56,8 @@ def _test_from_file(base_filename, format):
     else:
         # The result might be still correct, even if the strings are different.
         # Think of BMP format and its padding bytes.
-        expected = PIL.open(expected_filename)
-        result = PIL.open(StringIO(result))
+        expected = Image.open(expected_filename)
+        result = Image.open(StringIO(result))
         assert_equal(result.format, expected.format)
         assert_equal(result.size, expected.size)
         assert_equal(result.mode, expected.mode)
