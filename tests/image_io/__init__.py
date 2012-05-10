@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2012 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@ from __future__ import with_statement
 import os
 from cStringIO import StringIO
 
-import Image as PIL
+from PIL import Image
 
 import djvu.decode
 
