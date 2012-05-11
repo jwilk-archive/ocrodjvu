@@ -1,4 +1,4 @@
-ocrodjvu (0.7.10) UNRELEASED; urgency=low
+ocrodjvu (0.7.10) unstable; urgency=low
 
   * Improve error handling.
   * ocrodjvu:
@@ -16,7 +16,7 @@ ocrodjvu (0.7.10) UNRELEASED; urgency=low
   * Fix merging results of two Tesseract runs.
     Thanks to Janusz S. Bień for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 10 May 2012 22:29:48 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 12 May 2012 00:37:50 +0200
 
 ocrodjvu (0.7.9) unstable; urgency=low
 
