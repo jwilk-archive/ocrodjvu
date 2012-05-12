@@ -1,3 +1,9 @@
+ocrodjvu (0.7.11) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 13 May 2012 00:10:26 +0200
+
 ocrodjvu (0.7.10) unstable; urgency=low
 
   * Improve error handling.
