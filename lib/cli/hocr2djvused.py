@@ -30,7 +30,7 @@ class ArgumentParser(argparse.ArgumentParser):
     def __init__(self):
         usage = '%(prog)s [options] < <hocr-file> | djvused -s <djvu-file>'
         version = '%(prog)s ' + __version__
-        argparse.ArgumentParser.__init__(self, usage=usage)
+        argparse.ArgumentParser.__init__(self)
         self.add_argument('-v', '--version', action='version', version=version, help='show version information and exit')
         self.add_argument('--rotation', dest='rotation', action='store', type=int, default=0, help='page rotation (in degrees)')
         def size(s):
@@ -43,6 +43,7 @@ class ArgumentParser(argparse.ArgumentParser):
         group.add_argument('-l', '--language', dest='language', help=argparse.SUPPRESS or 'language for word segmentation', default='eng')
         self.add_argument('--html5', dest='html5', action='store_true', help='use HTML5 paser')
         self.add_argument('--fix-utf8', dest='fix_utf8', action='store_true', help='attempt to fix UTF-8 encoding issues')
+        self.add_argument('input_files', metavar='FILE', nargs='*', type=argparse.FileType('r'), default=[sys.stdin], help='hOCR file to parse (default: standard input)')
 
     def parse_args(self, args=None, namespace=None):
         options = argparse.ArgumentParser.parse_args(self, args, namespace)
@@ -53,17 +54,22 @@ class ArgumentParser(argparse.ArgumentParser):
         del options.word_segmentation
         return options
 
+def get_texts(options):
+    for file in options.input_files:
+        texts = hocr.extract_text(file,
+            rotation=options.rotation,
+            details=options.details,
+            uax29=options.uax29,
+            html5=options.html5,
+            fix_utf8=options.fix_utf8,
+            page_size=options.page_size,
+        )
+        for text in texts:
+            yield text
+
 def main(argv=sys.argv):
     options = ArgumentParser().parse_args(argv[1:])
-    texts = hocr.extract_text(sys.stdin,
-        rotation=options.rotation,
-        details=options.details,
-        uax29=options.uax29,
-        html5=options.html5,
-        fix_utf8=options.fix_utf8,
-        page_size=options.page_size,
-    )
-    for i, text in enumerate(texts):
+    for i, text in enumerate(get_texts(options)):
         sys.stdout.write('select %d\nremove-txt\nset-txt\n' % (i + 1))
         text.print_into(sys.stdout, 80)
         sys.stdout.write('\n.\n\n')

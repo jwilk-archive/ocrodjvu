@@ -31,17 +31,22 @@
     <cmdsynopsis>
         <command>&p;</command>
         <arg choice='opt' rep='repeat'><replaceable>option</replaceable></arg>
+        <arg choice='opt' rep='repeat'><replaceable>hocr-file</replaceable></arg>
     </cmdsynopsis>
 </refsynopsisdiv>
 
 <refsection>
     <title>Description</title>
     <para>
-        &p; reads a <ulink url='http://docs.google.com/View?docid=dfxcv4vc_67g844kf'>hOCR</ulink> file (as produced by
+        &p; reads one or more <ulink url='http://docs.google.com/View?docid=dfxcv4vc_67g844kf'>hOCR</ulink> files (as
+        produced by
         <ulink url='http://ocropus.googlecode.com/'><application>OCRopus</application></ulink> or
         <ulink url='http://launchpad.net/cuneiform-linux'><application>Cuneiform</application></ulink> or
         <ulink url='http://tesseract-ocr.googlecode.com/'><application>Tesseract</application></ulink>)
-        from the standard input and converts it to a <command>djvused</command> script.
+        and converts them to a <command>djvused</command> script.
+    </para>
+    <para>
+        Unless a filename is explicitly provided on the command line, hOCR is read from the standard input.
     </para>
 </refsection>
 
