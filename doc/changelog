@@ -1,4 +1,4 @@
-ocrodjvu (0.7.11) UNRELEASED; urgency=low
+ocrodjvu (0.7.11) unstable; urgency=low
 
   * hocr2djvused:
     + Allow processing multiple hOCR documents at once. Thanks to Thomas Koch
@@ -7,7 +7,7 @@ ocrodjvu (0.7.11) UNRELEASED; urgency=low
   * Fix merging results of two Tesseract runs.
     Thanks to Janusz S. Bień for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 28 May 2012 18:09:21 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 28 May 2012 19:43:22 +0200
 
 ocrodjvu (0.7.10) unstable; urgency=low
 
