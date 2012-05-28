@@ -135,7 +135,7 @@ ocrodjvu (0.6.1) unstable; urgency=high
   * Improve detection of Tesseract.
   * Correctly handle unrecognized and non-ASCII characters in Ocrad ORF output.
     Thanks to Heinrich Schwietering for the bug report.
-  * Correct handle text that is closer than 100 pixels from the left edge in
+  * Correctly handle text that is closer than 100 pixels from the left edge in
     Ocrad ORF output. Thanks to Heinrich Schwietering for the test case.
   * Fix crash on hOCR with image elements. Thanks to Alexey Shipunov for the
     bug report.
