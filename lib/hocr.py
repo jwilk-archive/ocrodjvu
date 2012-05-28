@@ -399,12 +399,14 @@ def extract_tesseract_bbox_data(node):
     for line in text.splitlines():
         if not line or line.startswith('//'):
             continue
-        ch, x0, y0, x1, y1, w = line.split()
-        assert len(ch) == 1, 'len(%s) == %d != 1' % (repr(ch).lstrip('u'), len(ch))
+        chars, x0, y0, x1, y1, w = line.split()
         x0, y0, x1, y1 = map(int, (x0, y0, x1, y1))
-        if ch == '~':
-            ch = None
-        yield ch, (x0, y0, x1, y1), -1
+        if chars == '~':
+            chars = [None]
+        w = x1 - x0
+        n = len(chars)
+        for i, ch in enumerate(chars):
+            yield ch, (x0 + w * i, y0, x0 + w * (i + 1) // n, y1), -1
 
 def read_document(stream, settings):
     if settings.fix_utf8:

@@ -4,8 +4,10 @@ ocrodjvu (0.7.11) UNRELEASED; urgency=low
     + Allow processing multiple hOCR documents at once. Thanks to Thomas Koch
       for the bug report and the initial patch.
       https://bitbucket.org/jwilk/ocrodjvu/issue/1
+  * Fix merging results of two Tesseract runs.
+    Thanks to Janusz S. Bień for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 24 May 2012 21:33:14 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 28 May 2012 18:09:21 +0200
 
 ocrodjvu (0.7.10) unstable; urgency=low
 
