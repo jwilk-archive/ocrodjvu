@@ -400,6 +400,7 @@ def extract_tesseract_bbox_data(node):
         if not line or line.startswith('//'):
             continue
         ch, x0, y0, x1, y1, w = line.split()
+        assert len(ch) == 1, 'len(%s) == %d != 1' % (repr(ch).lstrip('u'), len(ch))
         x0, y0, x1, y1 = map(int, (x0, y0, x1, y1))
         if ch == '~':
             ch = None
