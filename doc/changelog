@@ -1,3 +1,9 @@
+ocrodjvu (0.7.12) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 04 Jun 2012 00:33:59 +0200
+
 ocrodjvu (0.7.11) unstable; urgency=low
 
   * hocr2djvused:
