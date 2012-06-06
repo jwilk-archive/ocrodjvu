@@ -1,23 +1,23 @@
 Missing tests
 =============
-* For non-ASCII filenames.
-* For Cuneiform hOCR with inline formatting.
-* For Cuneiform hOCR with bounding boxes for whitespace characters.
-* For Cuneiform hOCR with empty pages.
-* For OCRad, in particular:
-  - for non-ASCII characters;
-  - for text close to a page boundary;
-  - for empty pages;
-  - for characters with no interpretations.
-* For GOCR, in particular:
-  - for non-ASCII characters;
-  - for empty pages.
-* For http://bugs.debian.org/575484#35
-* For http://bugs.debian.org/671764
+* for non-ASCII filenames
+* for Cuneiform hOCR with inline formatting
+* for Cuneiform hOCR with bounding boxes for whitespace characters
+* for Cuneiform hOCR with empty pages
+* for OCRad, in particular:
+  - for non-ASCII characters
+  - for text close to a page boundary
+  - for empty pages
+  - for characters with no interpretations
+* for GOCR, in particular
+  - for non-ASCII characters
+  - for empty pages
+* for http://bugs.debian.org/575484#35
+* for http://bugs.debian.org/671764
 
 Documentation
 =============
-* Write better documentation for -X.
+* write better documentation for -X
 
 Nice-to-have things
 ===================
