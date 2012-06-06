@@ -7,8 +7,8 @@ ocrodjvu (0.7.12) UNRELEASED; urgency=low
 ocrodjvu (0.7.11) unstable; urgency=low
 
   * hocr2djvused:
-    + Allow processing multiple hOCR documents at once. Thanks to Thomas Koch
-      for the bug report and the initial patch.
+    + Allow processing multiple hOCR documents at once.
+      Thanks to Thomas Koch for the bug report and the initial patch.
       https://bitbucket.org/jwilk/ocrodjvu/issue/1
   * Fix merging results of two Tesseract runs.
     Thanks to Janusz S. Bień for the bug report.
@@ -20,8 +20,8 @@ ocrodjvu (0.7.10) unstable; urgency=low
   * Improve error handling.
   * ocrodjvu:
     + Attempt to fix encoding issues and eliminate unwanted control characters
-      in files produced by Tesseract and Cuneiform. Thanks to Thomas Koch for
-      the bug report.
+      in files produced by Tesseract and Cuneiform.
+      Thanks to Thomas Koch for the bug report.
       http://bugs.debian.org/671764
   * hocr2djvused:
     + Add the --fix-utf8 option.
@@ -52,8 +52,8 @@ ocrodjvu (0.7.8) unstable; urgency=low
 
 ocrodjvu (0.7.7) unstable; urgency=low
 
-  * Raise proper import error if html5lib is not installed. Thanks to Kyrill
-    Detinov for the bug report.
+  * Raise proper import error if html5lib is not installed.
+    Thanks to Kyrill Detinov for the bug report.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Sun, 11 Dec 2011 23:08:05 +0100
 
@@ -117,10 +117,11 @@ ocrodjvu (0.7.1) unstable; urgency=low
 
 ocrodjvu (0.7.0) unstable; urgency=low
 
-  * Correctly handle empty pages recognized by Cuneiform and Ocrad. Thanks to
-    Alexey Shipunov for the bug report.
+  * Correctly handle empty pages recognized by Cuneiform and Ocrad.
+    Thanks to Alexey Shipunov for the bug report.
   * Fix crash on Cuneiform-generated hOCR with bounding boxes for whitespace
-    characters. Thanks to Alexey Shipunov for the bug report.
+    characters.
+    Thanks to Alexey Shipunov for the bug report.
   * Fix compatibility with Tesseract 3.00.
   * Fix colors in 24-bit BMP images.
   * ocrodjvu:
@@ -144,9 +145,10 @@ ocrodjvu (0.6.1) unstable; urgency=high
   * Correctly handle unrecognized and non-ASCII characters in Ocrad ORF output.
     Thanks to Heinrich Schwietering for the bug report.
   * Correctly handle text that is closer than 100 pixels from the left edge in
-    Ocrad ORF output. Thanks to Heinrich Schwietering for the test case.
-  * Fix crash on hOCR with image elements. Thanks to Alexey Shipunov for the
-    bug report.
+    Ocrad ORF output.
+    Thanks to Heinrich Schwietering for the test case.
+  * Fix crash on hOCR with image elements.
+    Thanks to Alexey Shipunov for the bug report.
     http://bugs.debian.org/598139
   * Fix insecure use of temporary files when using Cuneiform.
     http://bugs.debian.org/598134
@@ -157,8 +159,8 @@ ocrodjvu (0.6.1) unstable; urgency=high
 ocrodjvu (0.6.0) unstable; urgency=low
 
   * Add support for the Tesseract OCR engine.
-  * Fix Cuneiform support (a regression introduced in 0.5). Thanks to Kyrill
-    Detinov for the bug report.
+  * Fix Cuneiform support (a regression introduced in 0.5).
+    Thanks to Kyrill Detinov for the bug report.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Thu, 16 Sep 2010 19:24:20 +0200
 
@@ -176,13 +178,13 @@ ocrodjvu (0.5.0) unstable; urgency=low
   * Add support for the Ocrad OCR engine.
   * Add support for the GOCR engine.
   * Cuneiform is no longer required to be linked with ImageMagick.
-  * Prevent Cuneiform from asking interactive questions. Thanks to Heinrich
-    Schwietering for the bug report.
-  * Make sure that signals are handled in a sane way. Thanks to Heinrich
-    Schwietering for the bug report.
+  * Prevent Cuneiform from asking interactive questions.
+    Thanks to Heinrich Schwietering for the bug report.
+  * Make sure that signals are handled in a sane way.
+    Thanks to Heinrich Schwietering for the bug report.
   * Drop support for guessing page size from image (scan) contents.
-  * Let the setup.py script install manual pages. Thanks to Kyrill Detinov and
-    Heinrich Schwietering for bug reports.
+  * Let the setup.py script install manual pages.
+    Thanks to Kyrill Detinov and Heinrich Schwietering for bug reports.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Tue, 14 Sep 2010 23:00:35 +0200
 
@@ -197,7 +199,8 @@ ocrodjvu (0.4.7) unstable; urgency=low
 ocrodjvu (0.4.6) unstable; urgency=low
 
   * Implement work-around for Cuneiform returning files with control
-    characters. Thanks to Kyrill Detinov for the bug report.
+    characters.
+    Thanks to Kyrill Detinov for the bug report.
   * Avoid deprecation warnings with PyICU ≥ 1.0.
     http://bugs.debian.org/589027
   * djvu2hocr:
@@ -208,10 +211,10 @@ ocrodjvu (0.4.6) unstable; urgency=low
 
 ocrodjvu (0.4.5) unstable; urgency=low
 
-  * Fix handling of ‘deu’ and ‘rus-eng’ languages. Thanks to Kyrill Detinov
-    for the bug report.
-  * Properly handle hOCR with inline formatting. Thanks to Kyrill Detinov for
-    the bug report.
+  * Fix handling of ‘deu’ and ‘rus-eng’ languages.
+    Thanks to Kyrill Detinov for the bug report.
+  * Properly handle hOCR with inline formatting.
+    Thanks to Kyrill Detinov for the bug report.
   * djvu2hocr:
     + Add ocr-system and ocr-capabilities meta information.
 
