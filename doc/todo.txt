@@ -22,6 +22,7 @@ Documentation
 Nice-to-have things
 ===================
 * support for OCRopus 0.5
+* ``--debug`` should enable debug logging
 * http://bugs.debian.org/575490
 
 .. vim:ft=rst ts=3 sw=3 et tw=72
