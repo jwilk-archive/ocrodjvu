@@ -12,7 +12,7 @@
 # General Public License for more details.
 
 '''
-Helper module that allows to use command-line tools without installing them.
+helper module that allows using the command-line tools without installing them
 '''
 
 import sys
