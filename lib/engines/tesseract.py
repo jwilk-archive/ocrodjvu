@@ -70,12 +70,15 @@ def fix_html(s):
     regex = re.compile(
         r'''
         ( <[!/]?[a-z]+(?:\s+[^<>]*)?>
+        | <!--.*?-->
+        | (?<= // ) <!\[CDATA\[
+        | (?<= //]] ) >
         | &[a-z]+;
         | &[#][0-9]+;
         | &[#]x[0-9a-f]+;
         | [^<>&]+
         )
-        ''', re.IGNORECASE | re.VERBOSE
+        ''', re.IGNORECASE | re.VERBOSE | re.MULTILINE
     )
     return ''.join(
         chunk if n & 1 else cgi.escape(chunk)

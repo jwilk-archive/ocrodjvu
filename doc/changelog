@@ -1,8 +1,10 @@
 ocrodjvu (0.7.12) UNRELEASED; urgency=low
 
-  * 
+  * Don't let “-X fix-html=1” break HTML snippets ocrodjvu generates itself
+    for the “-t chars” Tesseract support.
+    Thanks to Janusz S. Bień for the test case.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 04 Jun 2012 00:33:59 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 01 Aug 2012 21:27:46 +0200
 
 ocrodjvu (0.7.11) unstable; urgency=low
 
