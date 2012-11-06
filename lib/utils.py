@@ -112,8 +112,8 @@ class NotOverriddenWarning(UserWarning):
 
 def not_overridden(f):
     '''
-    Raise warning (NotOverriddenWarning) if the decorated method was not
-    overridden in a subclass, or called directly.
+    Issue NotOverriddenWarning if the decorated method was not overridden in a
+    subclass, or called directly.
     '''
     @functools.wraps(f)
     def new_f(self, *args, **kwargs):
