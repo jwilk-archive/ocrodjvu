@@ -1,3 +1,10 @@
+ocrodjvu (0.7.13) UNRELEASED; urgency=low
+
+  * Remove the “AUTHOR” section from the manual pages, as per man-pages(7)
+    recommendation.
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 25 Jan 2013 20:04:00 +0100
+
 ocrodjvu (0.7.12) unstable; urgency=low
 
   * Don't let “-X fix-html=1” break HTML snippets ocrodjvu generates itself

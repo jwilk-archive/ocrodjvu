@@ -95,6 +95,7 @@ class build_doc(distutils_build):
             manname = os.path.splitext(xmlname)[0] + '.1'
             command = [
                 'xsltproc', '--nonet',
+                '--param', 'man.authors.section.enabled', '0',
                 '--param', 'man.charmap.use.subset', '0',
                 '--param', 'man.font.links', '"I"',
                 '--output', 'doc/',
