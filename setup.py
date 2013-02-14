@@ -33,7 +33,6 @@ Topic :: Multimedia :: Graphics
 import glob
 import os
 import re
-import sys
 
 import distutils.command
 import distutils.core
