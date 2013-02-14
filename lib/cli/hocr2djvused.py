@@ -28,7 +28,6 @@ class ArgumentParser(argparse.ArgumentParser):
     )
 
     def __init__(self):
-        usage = '%(prog)s [options] < <hocr-file> | djvused -s <djvu-file>'
         version = '%(prog)s ' + __version__
         argparse.ArgumentParser.__init__(self)
         self.add_argument('-v', '--version', action='version', version=version, help='show version information and exit')
