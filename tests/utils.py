@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2011, 2012, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,10 +16,27 @@ from __future__ import with_statement
 import sys
 import warnings
 
-from tests.common import *
+from tests.common import (
+    assert_equal,
+    assert_true,
+    catch_warnings,
+    exception,
+    interim,
+)
 
 import lib.utils
-from lib.utils import *
+from lib.utils import (
+    EncodingWarning,
+    NotOverriddenWarning,
+    enhance_import_error,
+    identity,
+    not_overridden,
+    parse_page_numbers,
+    property,
+    sanitize_utf8,
+    smart_repr,
+    str_as_unicode,
+)
 
 class test_enhance_import():
 

@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2011, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,7 +17,13 @@ import os
 import signal
 import stat
 
-from tests.common import *
+from tests.common import (
+    amended_environment,
+    assert_equal,
+    assert_false,
+    assert_true,
+    exception,
+)
 
 from lib import ipc
 from lib import temporary

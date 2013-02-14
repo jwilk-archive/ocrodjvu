@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,13 @@ from cStringIO import StringIO
 
 from ocrodjvu.cli import ocrodjvu
 
-from tests.common import *
+from tests.common import (
+    assert_equal,
+    assert_not_equal,
+    assert_true,
+    interim,
+    try_run,
+)
 
 engines = None
 

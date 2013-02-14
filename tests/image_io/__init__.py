@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2012 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2012, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +22,11 @@ import djvu.decode
 
 from ocrodjvu import image_io
 
-from tests.common import *
+from tests.common import (
+    assert_equal,
+    assert_true,
+    sorted_glob,
+)
 
 here = os.path.dirname(__file__)
 try:

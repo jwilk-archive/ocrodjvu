@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2011, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -11,9 +11,16 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
-from tests.common import *
+from tests.common import (
+    assert_equal,
+    assert_not_equal,
+)
 
-from lib.unicode_support import *
+from lib.unicode_support import (
+    get_icu,
+    simple_word_break_iterator,
+    word_break_iterator,
+)
 
 text = u'\u201cJekyll,\u201d cried Utterson, with a\xa0loud voice, \u201cI demand to see you.\u201d'
 

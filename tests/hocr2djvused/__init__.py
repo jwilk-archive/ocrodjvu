@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2011, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,7 +21,14 @@ from cStringIO import StringIO
 
 from ocrodjvu.cli import hocr2djvused
 
-from tests.common import *
+from tests.common import (
+    assert_equal,
+    assert_ml_equal,
+    assert_not_equal,
+    interim,
+    sorted_glob,
+    try_run,
+)
 
 here = os.path.dirname(__file__)
 try:
