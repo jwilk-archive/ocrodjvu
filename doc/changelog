@@ -1,3 +1,9 @@
+ocrodjvu (0.7.14) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 15 Feb 2013 00:37:13 +0100
+
 ocrodjvu (0.7.13) unstable; urgency=low
 
   * Abort early if one tries to use an incompatible Python version.
