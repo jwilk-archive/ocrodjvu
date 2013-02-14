@@ -1,4 +1,4 @@
-ocrodjvu (0.7.13) UNRELEASED; urgency=low
+ocrodjvu (0.7.13) unstable; urgency=low
 
   * Abort early if one tries to use an incompatible Python version.
   * Improve the manual pages, as per man-pages(7) recommendations:
@@ -8,7 +8,7 @@ ocrodjvu (0.7.13) UNRELEASED; urgency=low
   * Make “setup.py clean -a” remove compiled manual pages (unless they were
     built by “setup.py sdist”).
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 14 Feb 2013 23:26:11 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 14 Feb 2013 23:28:56 +0100
 
 ocrodjvu (0.7.12) unstable; urgency=low
 
