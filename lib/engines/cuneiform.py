@@ -17,7 +17,6 @@ import contextlib
 import os
 import re
 import shlex
-from cStringIO import StringIO
 
 from . import common
 from .. import errors
