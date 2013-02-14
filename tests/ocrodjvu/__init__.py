@@ -55,7 +55,7 @@ def _test_list_languages(engine):
     stdout = StringIO()
     stderr = StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
-        rc = try_run(ocrodjvu.main, ['', '--ocr-engine', engine, '--list-languages'])
+        rc = try_run(ocrodjvu.main, ['', '--engine', engine, '--list-languages'])
     assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
     assert_not_equal(stdout.getvalue(), '')

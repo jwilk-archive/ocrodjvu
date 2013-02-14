@@ -3,8 +3,9 @@ ocrodjvu (0.7.13) UNRELEASED; urgency=low
   * Improve the manual pages, as per man-pages(7) recommendations:
     - Remove the “AUTHOR” sections.
     - Rename the “REPORTING BUGS” sections as “BUGS”.
+  * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 25 Jan 2013 20:07:36 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 14 Feb 2013 11:36:18 +0100
 
 ocrodjvu (0.7.12) unstable; urgency=low
 
