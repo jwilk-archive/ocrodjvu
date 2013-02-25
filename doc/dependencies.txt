@@ -5,7 +5,7 @@ Dependencies
 
 * An OCR engine:
 
-  + OCRopus_ ≥ 0.2 (tested with 0.2 and 0.3.1) —
+  + OCRopus_ 0.2, 0.3 or 0.3.1 —
     document analysis and OCR system
 
   + Cuneiform_ ≥ 0.7 (tested with 0.7, 0.8, 0.9, 1.0) —
