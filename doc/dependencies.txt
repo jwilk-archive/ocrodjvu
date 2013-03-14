@@ -53,7 +53,7 @@ Dependencies
 .. _DjVu:
    http://djvu.org/
 .. _python-djvulibre:
-   http://jwilk.net/software/python-djvulibre.html
+   http://jwilk.net/software/python-djvulibre
 .. _PyICU:
    http://pyicu.osafoundation.org/
 .. _ICU:
