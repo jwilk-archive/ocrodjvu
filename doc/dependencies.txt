@@ -1,5 +1,4 @@
-Dependencies
-============
+The following software is needed to run ocrodjvu:
 
 * Python ≥ 2.5
 
@@ -26,17 +25,22 @@ Dependencies
 * python-djvulibre_ ≥ 0.1.14 —
   Python bindings for DjVuLibre_
 
-* PyICU_ -
-  Python bindings for PyICU IBM's ICU_ C++ API
+* argparse_ —
+  Python command line parser
 
 * lxml_ —
   Python bindings for libxml2_
 
-* html5lib_ -
-  HTML parser based on the HTML5_ specification
+Additionally, some optional features require the following software:
 
-* argparse_ —
-  Python command line parser
+* PyICU_ -
+  Python bindings for PyICU IBM's ICU_ C++ API;
+  required for the ``--word-segmentation=uax29`` option
+
+* html5lib_ -
+  HTML parser based on the HTML5_ specification;
+  required for the ``--html5`` option
+
 
 .. _OCRopus:
    http://code.google.com/p/ocropus/
@@ -54,19 +58,19 @@ Dependencies
    http://djvu.org/
 .. _python-djvulibre:
    http://jwilk.net/software/python-djvulibre
-.. _PyICU:
-   http://pyicu.osafoundation.org/
 .. _ICU:
    http://www-306.ibm.com/software/globalization/icu/
 .. _lxml:
    http://codespeak.net/lxml/
 .. _libxml2:
    http://xmlsoft.org/
+.. _argparse:
+   http://code.google.com/p/argparse/
+.. _PyICU:
+   http://pyicu.osafoundation.org/
 .. _html5lib:
    http://code.google.com/p/html5lib/
 .. _HTML5:
    http://www.whatwg.org/specs/web-apps/current-work/
-.. _argparse:
-   http://code.google.com/p/argparse/
 
 .. vim:ft=rst ts=3 sw=3 et tw=72
