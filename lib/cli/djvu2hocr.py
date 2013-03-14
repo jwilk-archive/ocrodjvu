@@ -48,7 +48,7 @@ class ArgumentParser(argparse.ArgumentParser):
         group.add_argument('path', metavar='FILE', help='DjVu file to covert')
         group.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
         group = self.add_argument_group(title='word segmentation options')
-        group.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='space', help='word segmentation algorithm')
+        group.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='simple', help='word segmentation algorithm')
         # -l/--language is currently not very useful, as ICU don't have any specialisations for languages ocrodjvu supports:
         group.add_argument('-l', '--language', dest='language', help=argparse.SUPPRESS or 'language for word segmentation', default='eng')
         group = self.add_argument_group(title='HTML output options')
