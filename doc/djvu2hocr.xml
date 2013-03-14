@@ -79,6 +79,22 @@
         </variablelist>
     </refsection>
     <refsection>
+        <title>HTML output options</title>
+        <variablelist>
+        <varlistentry>
+            <term><option>--title=<replaceable>title</replaceable></option></term>
+            <listitem>
+                <para>
+                    Specifies the document title.
+                </para>
+                <para>
+                    The default is <quote>DjVu hidden text layer</quote>.
+                </para>
+            </listitem>
+        </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
         <title>Other options</title>
         <variablelist>
         <varlistentry>

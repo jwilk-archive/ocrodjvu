@@ -12,6 +12,7 @@
 # General Public License for more details.
 
 import argparse
+import cgi
 import locale
 import os
 import re
@@ -49,6 +50,8 @@ class ArgumentParser(argparse.ArgumentParser):
         group.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='space', help='word segmentation algorithm')
         # -l/--language is currently not very useful, as ICU don't have any specialisations for languages ocrodjvu supports:
         group.add_argument('-l', '--language', dest='language', help=argparse.SUPPRESS or 'language for word segmentation', default='eng')
+        group = self.add_argument_group(title='HTML output options')
+        group.add_argument('--title', dest='title', help='document title', default='DjVu hidden text layer')
 
     def parse_args(self, args=None, namespace=None):
         options = argparse.ArgumentParser.parse_args(self, args, namespace)
@@ -272,7 +275,7 @@ hocr_header = '''\
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="ocr-system" content="%(ocr_system)s" />
   <meta name="ocr-capabilities" content="%(ocr_capabilities)s" />
-  <title>DjVu hidden text layer</title>
+  <title>%(title)s</title>
 </head>
 <body>
 '''
@@ -306,8 +309,10 @@ def main(argv=sys.argv):
     sys.stdout.write(
         hocr_header % dict(
             ocr_system='djvu2hocr %s' % __version__,
-            ocr_capabilities=' '.join(hocr.djvu2hocr_capabilities)
-    ))
+            ocr_capabilities=' '.join(hocr.djvu2hocr_capabilities),
+            title=cgi.escape(options.title),
+        )
+    )
     for n in page_iterator:
         try:
             page_size = [
