@@ -53,6 +53,7 @@ class ArgumentParser(argparse.ArgumentParser):
         group.add_argument('-l', '--language', dest='language', help=argparse.SUPPRESS or 'language for word segmentation', default='eng')
         group = self.add_argument_group(title='HTML output options')
         group.add_argument('--title', dest='title', help='document title', default='DjVu hidden text layer')
+        group.add_argument('--css', metavar='STYLE', dest='css', help='CSS style', default='')
 
     def parse_args(self, args=None, namespace=None):
         options = argparse.ArgumentParser.parse_args(self, args, namespace)
@@ -268,7 +269,7 @@ def process_page(page_text, options):
     tree = etree.ElementTree(result)
     tree.write(sys.stdout, encoding='UTF-8')
 
-hocr_header = '''\
+hocr_header_template = '''\
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -276,10 +277,14 @@ hocr_header = '''\
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="ocr-system" content="%(ocr_system)s" />
   <meta name="ocr-capabilities" content="%(ocr_capabilities)s" />
+  <style type="text/css">%(css)s</style>
   <title>%(title)s</title>
 </head>
 <body>
 '''
+
+hocr_header_style_re = re.compile('^\s+<style\s.*?\n', re.MULTILINE)
+
 hocr_footer = '''
 </body>
 </html>
@@ -307,13 +312,15 @@ def main(argv=sys.argv):
         ['djvused', '-f', sed_script.name, os.path.abspath(options.path)],
         stdout=ipc.PIPE,
     )
-    sys.stdout.write(
-        hocr_header % dict(
-            ocr_system='djvu2hocr %s' % __version__,
-            ocr_capabilities=' '.join(hocr.djvu2hocr_capabilities),
-            title=cgi.escape(options.title),
-        )
+    hocr_header = hocr_header_template % dict(
+        ocr_system='djvu2hocr %s' % __version__,
+        ocr_capabilities=' '.join(hocr.djvu2hocr_capabilities),
+        title=cgi.escape(options.title),
+        css=cgi.escape(options.css),
     )
+    if not options.css:
+        hocr_header = re.sub(hocr_header_style_re, '', hocr_header, count=1)
+    sys.stdout.write(hocr_header)
     for n in page_iterator:
         try:
             page_size = [

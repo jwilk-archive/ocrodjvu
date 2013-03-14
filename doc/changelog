@@ -3,9 +3,10 @@ ocrodjvu (0.7.14) UNRELEASED; urgency=low
   * Document which versions of OCRopus are supported.
   * djvu2hocr:
     + Add the --title option.
+    + Add the --css option.
     + Document the -p/--pages option.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 14 Mar 2013 20:24:17 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 14 Mar 2013 21:10:06 +0100
 
 ocrodjvu (0.7.13) unstable; urgency=low
 

@@ -111,6 +111,18 @@
                 </para>
             </listitem>
         </varlistentry>
+        <varlistentry>
+            <term><option>--css=<replaceable>style</replaceable></option></term>
+            <listitem>
+                <para>
+                    Add the specfied CSS style to the document.
+                </para>
+                <para>
+                    For example, <option>--css='.ocrx_line { display: block; }'</option> can be used to visually
+                    preserve line breaks.
+                </para>
+            </listitem>
+        </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
