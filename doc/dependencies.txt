@@ -42,6 +42,15 @@ Additionally, some optional features require the following software:
   required for the ``--html5`` option
 
 
+The following software is needed to rebuild the manual pages from
+source:
+
+* xsltproc_ -
+  command line XSLT processor, part of libxslt_
+
+* `DocBook XSL stylesheets`_
+
+
 .. _OCRopus:
    http://code.google.com/p/ocropus/
 .. _Cuneiform:
@@ -72,5 +81,11 @@ Additionally, some optional features require the following software:
    http://code.google.com/p/html5lib/
 .. _HTML5:
    http://www.whatwg.org/specs/web-apps/current-work/
+.. _xsltproc:
+    http://xmlsoft.org/XSLT/xsltproc2.htm
+.. _libxslt:
+    http://xmlsoft.org/XSLT/
+.. _Docbook XSL stylesheets:
+    http://wiki.docbook.org/DocBookXslStylesheets
 
 .. vim:ft=rst ts=3 sw=3 et tw=72
