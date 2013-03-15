@@ -1,3 +1,9 @@
+ocrodjvu (0.7.15) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 15 Mar 2013 14:31:45 +0100
+
 ocrodjvu (0.7.14) unstable; urgency=low
 
   * Document which versions of OCRopus are supported.
