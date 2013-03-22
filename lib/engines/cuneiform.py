@@ -109,7 +109,7 @@ class Engine(common.Engine):
         if language == 'slo':
             # Normally we accept Cuneiform-specific language code. This is an
             # exception: ‘slo’ is Slovenian in Cuneiform ≤ 1.0 but it is Slovak
-            # according in ISO 639-2.
+            # according to ISO 639-2.
             language = 'slk'
         else:
             language = self.cuneiform_to_iso(language)
