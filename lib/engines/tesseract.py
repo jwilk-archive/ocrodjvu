@@ -159,9 +159,12 @@ class Engine(common.Engine):
                 yield language
 
     def has_language(self, language):
-        if not _language_pattern.match(language):
-            raise errors.InvalidLanguageId(language)
-        return os.path.exists(os.path.join(self._directory, '%s.%s' % (language, self._extension)))
+        for language in language.split('+'):
+            if not _language_pattern.match(language):
+                raise errors.InvalidLanguageId(language)
+            if not os.path.exists(os.path.join(self._directory, '%s.%s' % (language, self._extension))):
+                return False
+        return True
 
     @classmethod
     def get_default_language(cls):

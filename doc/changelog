@@ -1,8 +1,8 @@
 ocrodjvu (0.7.15) UNRELEASED; urgency=low
 
-  * 
+  * Make it possible to pass multiple languages to Tesseract.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 15 Mar 2013 14:31:45 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 22 Mar 2013 22:35:43 +0100
 
 ocrodjvu (0.7.14) unstable; urgency=low
 
