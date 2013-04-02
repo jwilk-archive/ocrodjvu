@@ -1,8 +1,10 @@
 ocrodjvu (0.7.15) UNRELEASED; urgency=low
 
   * Make it possible to pass multiple languages to Tesseract.
+  * Fix compatibility with nose 1.2.
+    Thanks to Kyrill Detinov for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 22 Mar 2013 22:35:43 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 02 Apr 2013 17:55:35 +0200
 
 ocrodjvu (0.7.14) unstable; urgency=low
 

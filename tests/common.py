@@ -19,7 +19,12 @@ import re
 import sys
 import warnings
 
-from nose.tools import __all__
+try:
+    from nose.tools import __all__
+except ImportError:
+    # nose 1.2 doesn't have nose.tools.__all__
+    import nose.tools
+    __all__ = list(v for v in vars(nose.tools) if not v.startswith('_'))
 from nose.tools import *
 
 def assert_ml_equal(first, second, msg='Strings differ'):
