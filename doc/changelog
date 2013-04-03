@@ -5,10 +5,11 @@ ocrodjvu (0.7.15) UNRELEASED; urgency=low
   * Cuneiform: rename mixed Russian-English language code:
     ‘rus-eng’ → ‘rus+eng’. This is for consistency with Tesseract.
   * Tesseract: fix support for Chinese language pack.
+  * Make --list-languages output sorted.
   * Fix compatibility with nose 1.2.
     Thanks to Kyrill Detinov for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 03 Apr 2013 22:26:42 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 03 Apr 2013 22:29:32 +0200
 
 ocrodjvu (0.7.14) unstable; urgency=low
 

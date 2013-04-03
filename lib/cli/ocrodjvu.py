@@ -214,7 +214,7 @@ class ArgumentParser(argparse.ArgumentParser):
     class list_languages(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
             try:
-                for language in namespace.engine().list_languages():
+                for language in sorted(namespace.engine().list_languages()):
                     print language
             except errors.EngineNotFound, ex:
                 logger.error(ex)
