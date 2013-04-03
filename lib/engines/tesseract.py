@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2009, 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2009, 2010, 2011, 2012, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -158,13 +158,12 @@ class Engine(common.Engine):
             if _language_pattern.match(language):
                 yield language
 
-    def has_language(self, language):
-        for language in language.split('+'):
-            if not _language_pattern.match(language):
-                raise errors.InvalidLanguageId(language)
-            if not os.path.exists(os.path.join(self._directory, '%s.%s' % (language, self._extension))):
-                return False
-        return True
+    def check_language(self, language):
+        for sublang in language.split('+'):
+            if not _language_pattern.match(sublang):
+                raise errors.InvalidLanguageId(sublang)
+            if not os.path.exists(os.path.join(self._directory, '%s.%s' % (sublang, self._extension))):
+                raise errors.MissingLanguagePack(sublang)
 
     @classmethod
     def get_default_language(cls):

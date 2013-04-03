@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2011, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ from .. import utils
 const = text_zones.const
 
 _default_language = 'eng'
+_language_pattern = re.compile('^[a-z]{3}$')
 _version_re = re.compile(r'\bgocr ([0-9]+).([0-9]+)\b')
 
 class ExtractSettings(object):
@@ -143,8 +144,11 @@ class Engine(common.Engine):
     def get_default_language(cls):
         return _default_language
 
-    def has_language(self, language):
-        return language == _default_language
+    def check_language(self, language):
+        if not _language_pattern.match(language):
+            raise errors.InvalidLanguageId(language)
+        if language != _default_language:
+            raise errors.MissingLanguagePack(language)
 
     def list_languages(self):
         yield _default_language

@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2009, 2010 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2009, 2010, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,6 +20,11 @@ class InvalidLanguageId(ValueError):
 
     def __init__(self, name):
         ValueError.__init__(self, 'Invalid language identifier: %s; language identifier is typically an ISO 639-2 three-letter code' % name)
+
+class MissingLanguagePack(Exception):
+
+    def __init__(self, language):
+        Exception.__init__(self, 'language pack for the selected language (%s) is not available' % language)
 
 class EngineNotFound(Exception):
 

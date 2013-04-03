@@ -26,7 +26,7 @@ from .. import temporary
 from .. import utils
 
 _default_language = 'eng'
-_language_pattern = re.compile('^[a-z]{3}(-[a-z]+)?$')
+_language_pattern = re.compile('^[a-z]{3}(?:[+][a-z]{3})*$')
 _language_info_pattern = re.compile(r"^Supported languages: (.*)[.]$")
 
 class Engine(common.Engine):
@@ -66,7 +66,7 @@ class Engine(common.Engine):
             raise errors.UnknownLanguageList
         self._cuneiform_to_iso = dict(
             ger='deu',
-            ruseng='rus-eng',  # mixed Russian-English
+            ruseng='rus+eng',  # mixed Russian-English
             dut='nld',
             cze='ces',
             rum='ron',
@@ -88,9 +88,10 @@ class Engine(common.Engine):
                         # the former means Slovak.
                         self._cuneiform_to_iso['slo'] = 'slk'
                 self._iso_to_cuneiform = dict(
-                    (y, x) for x, y in
+                    (frozenset(y.split('+')), x) for x, y in
                     self._cuneiform_to_iso.iteritems()
                 )
+                self._iso_to_cuneiform[frozenset(['rus-eng'])] = 'ruseng' # for compatibility with ocrodjvu ≤ 0.7.14
                 return map(self.cuneiform_to_iso, codes)
         finally:
             try:
@@ -105,7 +106,7 @@ class Engine(common.Engine):
     def get_default_language(cls):
         return _default_language
 
-    def has_language(self, language):
+    def check_language(self, language):
         if language == 'slo':
             # Normally we accept Cuneiform-specific language code. This is an
             # exception: ‘slo’ is Slovenian in Cuneiform ≤ 1.0 but it is Slovak
@@ -113,16 +114,26 @@ class Engine(common.Engine):
             language = 'slk'
         else:
             language = self.cuneiform_to_iso(language)
-        return language in self._languages
+        language = self.normalize_iso(language)
+        if not _language_pattern.match(language):
+            raise errors.InvalidLanguageId(language)
+        if language not in self._languages:
+            raise errors.MissingLanguagePack(language)
 
     def list_languages(self):
         return iter(self._languages)
 
     def iso_to_cuneiform(self, language):
-        return self._iso_to_cuneiform.get(language, language)
+        language_set = frozenset(language.split('+'))
+        return self._iso_to_cuneiform.get(language_set, language)
 
     def cuneiform_to_iso(self, language):
         return self._cuneiform_to_iso.get(language, language)
+
+    def normalize_iso(self, language):
+        language = self.iso_to_cuneiform(language)
+        language = self.cuneiform_to_iso(language)
+        return language
 
     @contextlib.contextmanager
     def recognize(self, image, language, *args, **kwargs):

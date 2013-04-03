@@ -51,9 +51,10 @@ class test_language():
 
     def _test_has_language(self, lang, ok):
         if ok:
-            assert_true(engine.has_language(lang))
+            engine.check_language(lang)
         else:
-            assert_false(engine.has_language(lang))
+            with exception(lib.errors.MissingLanguagePack, regex='^language pack for the selected language (.+) is not available$'):
+                engine.check_language(lang)
 
     def test_has_language(self):
         for lang1, lang2 in self.existing_languages:

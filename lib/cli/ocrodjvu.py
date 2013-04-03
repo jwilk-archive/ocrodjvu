@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008, 2009, 2010, 2011, 2012, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -276,8 +276,9 @@ class ArgumentParser(argparse.ArgumentParser):
         except errors.EngineNotFound, ex:
             self.error(str(ex))
         try:
-            if not options.engine.has_language(options.language):
-                self.error('Language pack for the selected language (%s) is not available.' % options.language)
+            options.engine.check_language(options.language)
+        except errors.MissingLanguagePack, ex:
+            self.error(str(ex))
         except errors.InvalidLanguageId, ex:
             self.error(str(ex))
         except errors.UnknownLanguageList:

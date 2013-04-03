@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008, 2009, 2010, 2011, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -76,8 +76,8 @@ class Engine(common.Engine):
     def get_default_language(cls):
         return tesseract.Engine.get_default_language()
 
-    def has_language(self, language):
-        return self.tesseract.has_language(language)
+    def check_language(self, language):
+        return self.tesseract.check_language(language)
 
     def list_languages(self):
         return self.tesseract.list_languages()

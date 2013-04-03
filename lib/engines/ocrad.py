@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010, 2011, 2013 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -139,10 +139,11 @@ class Engine(common.Engine):
                 raise errors.UnknownLanguageList
         return result
 
-    def has_language(self, language):
+    def check_language(self, language):
         if not _language_pattern.match(language):
             raise errors.InvalidLanguageId(language)
-        return language in self._languages
+        if language not in self._languages:
+            raise errors.MissingLanguagePack(language)
 
     @classmethod
     def get_default_language(cls):
