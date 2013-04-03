@@ -2,7 +2,7 @@ ocrodjvu (0.7.15) UNRELEASED; urgency=low
 
   * Make it possible to pass multiple languages to Tesseract ≥ 3.02.
     Thanks to Janusz S. Bień  for the bug report.
-  * Rename mixed Russian-English language code for Cuneiform:
+  * Cuneiform: rename mixed Russian-English language code:
     ‘rus-eng’ → ‘rus+eng’. This is for consistency with Tesseract.
   * Tesseract: fix support for Chinese language pack.
   * Fix compatibility with nose 1.2.
