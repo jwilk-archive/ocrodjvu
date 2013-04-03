@@ -33,7 +33,7 @@ from .. import utils
 
 const = text_zones.const
 
-_language_pattern = re.compile('^[a-z]{3}(-[a-z]+)?$')
+_language_pattern = re.compile('^[a-z]{3}([-_][a-z]+)?$')
 _error_pattern = re.compile(r"^(Error openn?ing data|Unable to load unicharset) file (?P<dir>/.*)/nonexistent[.](?P<ext>[a-z]+)\n")
 
 _bbox_extras_template = '''\
