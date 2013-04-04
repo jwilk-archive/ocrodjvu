@@ -27,13 +27,14 @@ from . import common
 from .. import errors
 from .. import image_io
 from .. import ipc
+from .. import iso639
 from .. import temporary
 from .. import text_zones
 from .. import utils
 
 const = text_zones.const
 
-_language_pattern = re.compile('^[a-z]{3}([-_][a-z]+)?$')
+_language_pattern = re.compile('^([a-z]{3})(?:[-_]([a-z]+))?$')
 _error_pattern = re.compile(r"^(Error openn?ing data|Unable to load unicharset) file (?P<dir>/.*)/nonexistent[.](?P<ext>[a-z]+)\n")
 
 _bbox_extras_template = '''\
@@ -120,6 +121,8 @@ class Engine(common.Engine):
         else:
             self._hocr = None
             self.output_format = 'txt'
+        self._user_to_tesseract = None  # to be defined later
+        self._languages = list(self._get_languages())
 
     def get_filesystem_info(self):
         try:
@@ -152,18 +155,42 @@ class Engine(common.Engine):
         return directory, extension
 
     def list_languages(self):
+        return iter(self._languages)
+
+    def _get_languages(self):
+        self._user_to_tesseract = {}
         for filename in glob.glob(os.path.join(self._directory, '*.%s' % self._extension)):
             filename = os.path.basename(filename)
-            language = os.path.splitext(filename)[0]
-            if _language_pattern.match(language):
-                yield language
+            code = os.path.splitext(filename)[0]
+            try:
+                isocode = self.user_to_iso639(code)
+            except errors.InvalidLanguageId:
+                continue
+            self._user_to_tesseract[isocode] = code
+            yield isocode
+
+    def user_to_iso639(self, language):
+        match = _language_pattern.match(language)
+        if match is None:
+            raise errors.InvalidLanguageId(language)
+        isocode = iso639.b_to_t(match.group(1))
+        if match.group(2) is not None:
+            isocode += '-' + match.group(2)
+        return isocode
+
+    def user_to_tesseract(self, language):
+        result = []
+        for sublang in language.split('+'):
+            isocode = self.user_to_iso639(sublang)
+            try:
+                tesseract_code = self._user_to_tesseract[isocode]
+            except LookupError:
+                raise errors.MissingLanguagePack(isocode)
+            result += [tesseract_code]
+        return '+'.join(result)
 
     def check_language(self, language):
-        for sublang in language.split('+'):
-            if not _language_pattern.match(sublang):
-                raise errors.InvalidLanguageId(sublang)
-            if not os.path.exists(os.path.join(self._directory, '%s.%s' % (sublang, self._extension))):
-                raise errors.MissingLanguagePack(sublang)
+        self.user_to_tesseract(language)
 
     @classmethod
     def get_default_language(cls):
@@ -171,6 +198,7 @@ class Engine(common.Engine):
 
     @contextlib.contextmanager
     def recognize_plain_text(self, image, language, details=None, uax29=None):
+        language = self.user_to_tesseract(language)
         with temporary.directory() as output_dir:
             worker = ipc.Subprocess(
                 [self.executable, image.name, os.path.join(output_dir, 'tmp'), '-l', language] + self.extra_args,
@@ -183,6 +211,7 @@ class Engine(common.Engine):
 
     @contextlib.contextmanager
     def recognize_hocr(self, image, language, details=text_zones.TEXT_DETAILS_WORD, uax29=None):
+        language = self.user_to_tesseract(language)
         character_details = details < text_zones.TEXT_DETAILS_WORD or (uax29 and details <= text_zones.TEXT_DETAILS_WORD)
         with temporary.directory() as output_dir:
             tessconf_path = os.path.join(output_dir, 'tessconf')
