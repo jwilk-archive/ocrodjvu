@@ -88,17 +88,21 @@ bboxes_re = re.compile(
         (?: ,? \s* (?: -?\d+ \s+ -?\d+ \s+ -?\d+ \s+ -?\d+) )* )
     ''', re.VERBOSE)
 
+tesseract_rstrip = functools.partial(
+    re.compile('\n\s+$').sub,
+    ''
+)
+
 def _apply_bboxes(djvu_class, bbox_source, text, settings, page_size):
     embedded_eol = False
     if djvu_class <= const.TEXT_ZONE_LINE:
         if text.endswith('\n'):
             embedded_eol = True
     if settings.tesseract:
-        # Tesseract ≥ 3.00 uses space for characters it couldn't recognize
-        # (yay, excellent choice), so let's treat them just like ordinary
-        # characters. However, trailing newline characters can appear at the
-        # end of line.
-        new_text = text.rstrip('\n')
+        # Tesseract ≥ 3.00 uses space for characters it couldn't recognize, so
+        # let's treat them just like ordinary characters. However, trailing
+        # newline characters can appear at the end of line.
+        new_text = tesseract_rstrip(text)
     else:
         # Cuneiform tends to attach superfluous whitespace.
         # Also, a newline character can appear at the end of line.
@@ -199,6 +203,17 @@ def _scan(node, settings, page_size=None):
     if not isinstance(node.tag, basestring) or node.tag == 'script':
         # Ignore non-elements.
         return []
+
+    title = node.get('title') or ''
+    m = bbox_re.search(title)
+    if m is None:
+        bbox = text_zones.BBox()
+    else:
+        bbox = text_zones.BBox(
+            *(int(m.group(ident))
+            for ident in ('x0', 'y0', 'x1', 'y1'))
+        )
+
     if settings.cuneiform and settings.cuneiform <= (0, 8):
         # Cuneiform ≤ 0.8 don't mark OCR elements in an hOCR way.
         djvu_class = cuneiform_tag_to_djvu(node.tag)
@@ -206,8 +221,9 @@ def _scan(node, settings, page_size=None):
         hocr_classes = (node.get('class') or '').split()
         djvu_class = None
         for hocr_class in hocr_classes:
-            if settings.tesseract and hocr_class == 'ocrx_word':
-                # Tesseract > 3.00 use ocrx_word for its own purposes.
+            if settings.tesseract and hocr_class == 'ocrx_word' and not bbox:
+                # Some versions of Tesseract > 3.00 use ocrx_word for its own
+                # purposes.
                 pass
             else:
                 djvu_class = hocr_class_to_djvu(hocr_class)
@@ -221,15 +237,6 @@ def _scan(node, settings, page_size=None):
     if not djvu_class:
         # Just process our children.
         return get_children(node)
-    title = node.get('title') or ''
-    m = bbox_re.search(title)
-    if m is None:
-        bbox = text_zones.BBox()
-    else:
-        bbox = text_zones.BBox(
-            *(int(m.group(ident))
-            for ident in ('x0', 'y0', 'x1', 'y1'))
-        )
 
     if djvu_class is const.TEXT_ZONE_PAGE:
         if not bbox:
