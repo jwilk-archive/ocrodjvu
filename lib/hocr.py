@@ -283,8 +283,6 @@ def _scan(node, settings, page_size=None):
             for child in children:
                 if isinstance(child, text_zones.Zone):
                     bbox.update(child.bbox)
-        if len(children) == 0:
-            return []
 
     if djvu_class <= const.TEXT_ZONE_WORD:
         if has_zone:
