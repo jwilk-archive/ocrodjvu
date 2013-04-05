@@ -44,14 +44,17 @@ _b_to_t = {
     'wel': 'cym',
 }
 
-def b_to_t(lang):
+def b_to_t(lang, permissive=False):
     '''
     convert from ISO 639-2/B to 639-2/T
     '''
     if not isinstance(lang, str):
         raise TypeError
     if len(lang) != 3:
-        raise ValueError
+        if not permissive:
+            raise ValueError
+        else:
+            return lang
     return _b_to_t.get(lang, lang)
 
 # vim:ts=4 sw=4 et

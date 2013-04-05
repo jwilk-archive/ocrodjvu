@@ -126,7 +126,7 @@ class Engine(common.Engine):
 
     def user_to_cuneiform(self, language):
         language_set = frozenset(
-            iso639.b_to_t(code)
+            iso639.b_to_t(code, permissive=True)
             for code in language.split('+')
         )
         return self._user_to_cuneiform.get(language_set, language)

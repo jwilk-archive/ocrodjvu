@@ -44,9 +44,13 @@ def setup_module():
 
 class test_language():
 
-    # Prior to 0.4.5, ocrodjvu didn't handle ‘deu’ and ‘rus-eng’ languages correctly.
-
-    existing_languages = ('eng', 'eng'), ('ger', 'deu'), ('ruseng', 'rus-eng')
+    existing_languages = (
+        ('eng', 'eng'),
+        ('ger', 'deu'),
+        ('ruseng', 'rus-eng'),
+        ('ruseng', 'rus+eng'),
+        ('ruseng', 'eng+rus'),
+    )
     missing_languages = 'tlh',
 
     def _test_has_language(self, lang, ok):
