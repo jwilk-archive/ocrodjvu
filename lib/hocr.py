@@ -446,19 +446,20 @@ def extract_text(stream, **kwargs):
     '''
     settings = ExtractSettings(**kwargs)
     doc = read_document(stream, settings)
-    if doc.find('/head/meta[@name="ocr-capabilities"]') is None:
-        ocr_system = doc.find('/head/meta[@name="ocr-system"]')
-        if ocr_system is None:
+    ocr_system = doc.find('/head/meta[@name="ocr-system"]')
+    if ocr_system is None:
+        if doc.find('/head/meta[@name="ocr-capabilities"]') is None:
             # This is wild guess. However, since ocr-system is a required meta
             # tag, the hOCR we are processing is broken anyway.
             settings.cuneiform = (0, 8)
-        elif ocr_system.get('content') == 'openocr':
-            settings.cuneiform = (0, 9)
-        elif ocr_system.get('content') == 'tesseract':
-            settings.tesseract = True
+    elif ocr_system.get('content') == 'openocr':
+        settings.cuneiform = (0, 9)
+    elif ocr_system.get('content').split()[0] == 'tesseract':
+        settings.tesseract = True
     if settings.details < TEXT_DETAILS_WORD or (settings.uax29 and settings.details <= text_zones.TEXT_DETAILS_WORD):
         tesseract_bbox_data = doc.find('//script[@type="ocrodjvu/tesseract"]')
         if tesseract_bbox_data is not None:
+            settings.tesseract = True
             tesseract_bbox_data = extract_tesseract_bbox_data(tesseract_bbox_data)
             settings.bbox_data = tesseract_bbox_data
     scan_result = scan(doc.find('/body'), settings)

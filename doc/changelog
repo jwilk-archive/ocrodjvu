@@ -2,6 +2,8 @@ ocrodjvu (0.7.15) UNRELEASED; urgency=low
 
   * Make it possible to pass multiple languages to Tesseract ≥ 3.02.
     Thanks to Janusz S. Bień  for the bug report.
+  * Improve the ocr-system meta element parser.
+    Thanks to Janusz S. Bień  for the bug report.
   * Cuneiform: rename mixed Russian-English language code:
     ‘rus-eng’ → ‘rus+eng’. This is for consistency with Tesseract.
   * Tesseract: fix support for Chinese language pack.
@@ -10,7 +12,7 @@ ocrodjvu (0.7.15) UNRELEASED; urgency=low
   * Fix compatibility with nose 1.2.
     Thanks to Kyrill Detinov for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 04 Apr 2013 19:32:06 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 05 Apr 2013 19:11:14 +0200
 
 ocrodjvu (0.7.14) unstable; urgency=low
 
