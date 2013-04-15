@@ -38,8 +38,8 @@ _language_pattern = re.compile('^([a-z]{3})(?:[-_]([a-z]+))?$')
 _error_pattern = re.compile(r"^(Error openn?ing data|Unable to load unicharset) file (?P<dir>/.*)/nonexistent[.](?P<ext>[a-z]+)\n")
 
 _bbox_extras_template = '''\
-<!-- The following script was appended to hOCR by ocrodjvu -->
-<script type='ocrodjvu/tesseract'>
+<!-- The following script was appended to hOCR by ocrodjvu for internal purposes. -->
+<script type='application/x-ocrodjvu-tesseract'>
 //<![CDATA[
 %s
 //]]>

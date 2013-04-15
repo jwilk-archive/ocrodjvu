@@ -465,7 +465,7 @@ def extract_text(stream, **kwargs):
     elif ocr_system.get('content').split()[0] == 'tesseract':
         settings.tesseract = True
     if settings.details < TEXT_DETAILS_WORD or (settings.uax29 and settings.details <= text_zones.TEXT_DETAILS_WORD):
-        tesseract_bbox_data = doc.find('//script[@type="ocrodjvu/tesseract"]')
+        tesseract_bbox_data = doc.find('//script[@type="application/x-ocrodjvu-tesseract"]')
         if tesseract_bbox_data is not None:
             settings.tesseract = True
             tesseract_bbox_data = extract_tesseract_bbox_data(tesseract_bbox_data)
