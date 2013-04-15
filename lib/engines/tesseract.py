@@ -221,8 +221,26 @@ class Engine(common.Engine):
                 # Tesseract 3.00 doesn't come with any config file to enable hOCR
                 # output. Let's create our own one.
                 print >>tessconf, 'tessedit_create_hocr T'
+            early_extra_args = []
+            late_extra_args = []
+            n_early = 0
+            for arg in self.extra_args:
+                if n_early > 0:
+                    early_extra_args += [arg]
+                    n_early -= 1
+                elif arg == '-psm':
+                    early_extra_args += [arg]
+                    n_early = 1
+                else:
+                    late_extra_args += [arg]
+            commandline = (
+                [self.executable, image.name, os.path.join(output_dir, 'tmp')] +
+                early_extra_args +
+                ['-l', language, tessconf_path] +
+                late_extra_args
+            )
             worker = ipc.Subprocess(
-                [self.executable, image.name, os.path.join(output_dir, 'tmp'), '-l', language, tessconf_path] + self.extra_args,
+                commandline,
                 stdout=ipc.PIPE,
                 stderr=ipc.PIPE,
             )
