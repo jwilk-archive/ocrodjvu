@@ -82,7 +82,6 @@ class Engine(common.Engine):
     def list_languages(self):
         return self.tesseract.list_languages()
 
-    @contextlib.contextmanager
     def recognize(self, image, language, details=None, uax29=None):
         hocr = self._hocr
         if details is None:
@@ -101,7 +100,7 @@ class Engine(common.Engine):
             env=dict(tesslanguage=language),
         )
         try:
-            yield ocropus.stdout
+            return ocropus.stdout.read()
         finally:
             ocropus.wait()
 

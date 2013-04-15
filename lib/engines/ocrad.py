@@ -152,7 +152,6 @@ class Engine(common.Engine):
     def list_languages(self):
         return iter(self._languages)
 
-    @contextlib.contextmanager
     def recognize(self, image, language, details=None, uax29=None):
         charset = 'iso-8859-15'
         if language == 'tur':
@@ -162,7 +161,7 @@ class Engine(common.Engine):
             stdout=ipc.PIPE,
         )
         try:
-            yield worker.stdout
+            return worker.stdout.read()
         finally:
             worker.wait()
 

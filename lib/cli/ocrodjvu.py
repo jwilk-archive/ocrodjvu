@@ -14,6 +14,7 @@
 from __future__ import with_statement
 
 import argparse
+import cStringIO as io
 import contextlib
 import inspect
 import locale
@@ -326,30 +327,29 @@ class Context(djvu.decode.Context):
         page_job = page.decode(wait=True)
         size = page_job.size
         with self.get_output_image(page.n, page_job) as pfile:
+            result = self._engine.recognize(pfile, language=self._options.language, details=self._options.details, uax29=self._options.uax29)
             result_file = None
-            with self._engine.recognize(pfile, language=self._options.language, details=self._options.details, uax29=self._options.uax29) as result:
-                try:
-                    if self._debug:
-                        result_file = self._temp_file('%06d.%s' % (page.n, self._engine.output_format))
-                        result_data = result.read()
-                        result_file.write(result_data)
-                        result_file.seek(0)
-                    else:
-                        result_file = result
-                    [text] = self._engine.extract_text(result_file,
-                        rotation=page.rotation,
-                        details=self._options.details,
-                        uax29=self._options.uax29,
-                        html5=self._options.html5,
-                        fix_utf8=self._engine.needs_utf8_fix,
-                        page_size=size
-                    )
-                    # It should be: (page 0 0 <width> <height> …):
-                    assert len(text) > 5
-                    return text
-                finally:
-                    if result_file is not None:
-                        result_file.close()
+            try:
+                if self._debug:
+                    result_file = self._temp_file('%06d.%s' % (page.n, self._engine.output_format))
+                    result_file.write(result)
+                    result_file.seek(0)
+                else:
+                    result_file = io.StringIO(result)
+                [text] = self._engine.extract_text(result_file,
+                    rotation=page.rotation,
+                    details=self._options.details,
+                    uax29=self._options.uax29,
+                    html5=self._options.html5,
+                    fix_utf8=self._engine.needs_utf8_fix,
+                    page_size=size
+                )
+                # It should be: (page 0 0 <width> <height> …):
+                assert len(text) > 5
+                return text
+            finally:
+                if result_file is not None:
+                    result_file.close()
 
     def page_thread(self, pages, results, condition):
         for page in pages:

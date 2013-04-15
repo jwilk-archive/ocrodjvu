@@ -211,7 +211,6 @@ class Engine(common.Engine):
             with open(os.path.join(output_dir, 'tmp.txt'), 'rt') as file:
                 yield file
 
-    @contextlib.contextmanager
     def recognize_hocr(self, image, language, details=text_zones.TEXT_DETAILS_WORD, uax29=None):
         language = self.user_to_tesseract(language)
         character_details = details < text_zones.TEXT_DETAILS_WORD or (uax29 and details <= text_zones.TEXT_DETAILS_WORD)
@@ -246,11 +245,7 @@ class Engine(common.Engine):
             )
             _wait_for_worker(worker)
             with open(os.path.join(output_dir, 'tmp.html'), 'r') as hocr_file:
-                if self.fix_html or character_details:
-                    contents = hocr_file.read()
-                else:
-                    yield hocr_file
-                    return
+                contents = hocr_file.read()
             if character_details:
                 worker = ipc.Subprocess(
                     [self.executable, image.name, os.path.join(output_dir, 'tmp'), '-l', language, 'makebox'] + self.extra_args,
@@ -261,8 +256,7 @@ class Engine(common.Engine):
                     contents = contents.replace('</body>', (_bbox_extras_template + '</body>') % box_file.read())
         if self.fix_html:
             contents = fix_html(contents)
-        with contextlib.closing(StringIO(contents)) as hocr_file:
-            yield hocr_file
+        return contents
 
     def recognize(self, image, language, details=None, uax29=None):
         if self._hocr is None:

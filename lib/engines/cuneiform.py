@@ -139,7 +139,6 @@ class Engine(common.Engine):
         language = self.cuneiform_to_iso(language)
         return language
 
-    @contextlib.contextmanager
     def recognize(self, image, language, *args, **kwargs):
         with temporary.directory() as hocr_directory:
             # A separate non-world-writable directory is needed, as Cuneiform
@@ -158,7 +157,7 @@ class Engine(common.Engine):
             worker.stdin.close()
             worker.wait()
             with open(hocr_file_name, 'r') as hocr_file:
-                yield hocr_file
+                return hocr_file.read()
 
     def extract_text(self, *args, **kwargs):
         return self._hocr.extract_text(*args, **kwargs)

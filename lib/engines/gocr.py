@@ -153,14 +153,13 @@ class Engine(common.Engine):
     def list_languages(self):
         yield _default_language
 
-    @contextlib.contextmanager
     def recognize(self, image, language, details=None, uax29=None):
         worker = ipc.Subprocess(
             [self.executable, '-i', image.name, '-f', 'XML'] + self.extra_args,
             stdout=ipc.PIPE,
         )
         try:
-            yield worker.stdout
+            return worker.stdout.read()
         finally:
             worker.wait()
 
