@@ -3,9 +3,9 @@ ocrodjvu (0.7.15) UNRELEASED; urgency=low
   * Strip trailing whitespace from text zones bigger than words (lines,
     paragraphs, …).
   * Fix compatibility with Tesseract 3.02.
-    Thanks to Janusz S. Bień  for the bug report.
+    Thanks to Janusz S. Bień for the bug report.
   * Make it possible to pass multiple languages to Tesseract ≥ 3.02.
-    Thanks to Janusz S. Bień  for the bug report.
+    Thanks to Janusz S. Bień for the bug report.
   * Cuneiform: rename mixed Russian-English language code:
     ‘rus-eng’ → ‘rus+eng’. This is for consistency with Tesseract.
   * Tesseract: fix support for Chinese language pack.
