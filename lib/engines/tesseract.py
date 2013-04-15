@@ -162,6 +162,8 @@ class Engine(common.Engine):
         for filename in glob.glob(os.path.join(self._directory, '*.%s' % self._extension)):
             filename = os.path.basename(filename)
             code = os.path.splitext(filename)[0]
+            if code == 'osd':
+                continue
             try:
                 isocode = self.user_to_iso639(code)
             except errors.InvalidLanguageId:
