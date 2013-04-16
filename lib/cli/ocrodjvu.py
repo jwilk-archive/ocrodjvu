@@ -327,24 +327,19 @@ class Context(djvu.decode.Context):
         size = page_job.size
         with self.get_output_image(page.n, page_job) as pfile:
             result = self._engine.recognize(pfile, language=self._options.language, details=self._options.details, uax29=self._options.uax29)
-            result_file = None
-            try:
-                if self._debug:
-                    result.save(os.path.join(self._temp_dir, '%06d' % page.n))
-                [text] = self._engine.extract_text(result.as_stringio(),
-                    rotation=page.rotation,
-                    details=self._options.details,
-                    uax29=self._options.uax29,
-                    html5=self._options.html5,
-                    fix_utf8=self._engine.needs_utf8_fix,
-                    page_size=size
-                )
-                # It should be: (page 0 0 <width> <height> …):
-                assert len(text) > 5
-                return text
-            finally:
-                if result_file is not None:
-                    result_file.close()
+            if self._debug:
+                result.save(os.path.join(self._temp_dir, '%06d' % page.n))
+            [text] = self._engine.extract_text(result.as_stringio(),
+                rotation=page.rotation,
+                details=self._options.details,
+                uax29=self._options.uax29,
+                html5=self._options.html5,
+                fix_utf8=self._engine.needs_utf8_fix,
+                page_size=size
+            )
+            # It should be: (page 0 0 <width> <height> …):
+            assert len(text) > 5
+            return text
 
     def page_thread(self, pages, results, condition):
         for page in pages:

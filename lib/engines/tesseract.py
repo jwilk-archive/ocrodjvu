@@ -14,14 +14,12 @@
 from __future__ import with_statement
 
 import cgi
-import contextlib
 import glob
 import os
 import re
 import shlex
 import sys
 import warnings
-from cStringIO import StringIO
 
 from . import common
 from .. import errors

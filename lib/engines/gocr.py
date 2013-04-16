@@ -13,7 +13,6 @@
 
 from __future__ import division
 
-import contextlib
 import functools
 import re
 import shlex
