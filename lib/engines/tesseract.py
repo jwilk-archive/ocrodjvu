@@ -256,7 +256,7 @@ class Engine(common.Engine):
             contents = fix_html(contents)
         return common.Output(
             contents,
-            format='txt',
+            format='html',
         )
 
     def recognize(self, image, language, details=None, uax29=None):
