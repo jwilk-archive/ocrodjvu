@@ -1,4 +1,4 @@
-ocrodjvu (0.7.15) UNRELEASED; urgency=low
+ocrodjvu (0.7.15) unstable; urgency=low
 
   * Strip trailing whitespace from text zones bigger than words (lines,
     paragraphs, …).
@@ -24,7 +24,7 @@ ocrodjvu (0.7.15) UNRELEASED; urgency=low
   * Fix compatibility with nose 1.2.
     Thanks to Kyrill Detinov for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 16 Apr 2013 23:53:16 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 17 Apr 2013 00:59:23 +0200
 
 ocrodjvu (0.7.14) unstable; urgency=low
 
