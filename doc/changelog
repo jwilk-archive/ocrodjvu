@@ -1,3 +1,9 @@
+ocrodjvu (0.7.16) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 17 Apr 2013 01:03:26 +0200
+
 ocrodjvu (0.7.15) unstable; urgency=low
 
   * Strip trailing whitespace from text zones bigger than words (lines,
