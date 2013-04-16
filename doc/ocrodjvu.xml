@@ -191,6 +191,29 @@
         </para>
         <variablelist>
         <varlistentry>
+            <term><option>--ocr-only</option></term>
+            <listitem>
+                <para>
+                    If OCR results are to be saved to a separate document (<option>-o</option>/<option>--output</option>
+                    or <option>-i</option>/<option>--indirect</option>), save only the pages selected for OCR.
+                </para>
+                <para>
+                    The default is to save all pages, even when the <option>-p</option>/<option>--pages</option> option is in effect.
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><option>--clear-text</option></term>
+            <listitem>
+                <para>
+                    Remove existing hidden text if present in the pages not selected for OCR.
+                </para>
+                <para>
+                    (Use this option to retain compatibility with &p; &lt; 0.2.)
+                </para>
+            </listitem>
+        </varlistentry>
+        <varlistentry>
             <term><option>--save-raw-ocr=<filename><replaceable>output-directory</replaceable></filename></option></term>
             <listitem>
                 <para>
@@ -311,23 +334,6 @@
     <refsection>
         <title>Other options</title>
         <variablelist>
-        <varlistentry>
-            <term><option>--clear-text</option></term>
-            <listitem>
-                <para>
-                    Remove existing hidden text if present in the pages not selected for OCR.
-                </para>
-                <para>
-                    (Use this option to retain compatibility with &p; &lt; 0.2.)
-                </para>
-            </listitem>
-        </varlistentry>
-        <varlistentry>
-            <term><option>--ocr-only</option></term>
-            <listitem>
-                <para>Don't save pages that were not processed.</para>
-            </listitem>
-        </varlistentry>
         <varlistentry>
             <term><option>-l</option></term>
             <term><option>--language=<replaceable>language-id</replaceable></option></term>
