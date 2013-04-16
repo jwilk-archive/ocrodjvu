@@ -556,7 +556,8 @@
             <refentrytitle>hocr2djvused</refentrytitle>
             <manvolnum>1</manvolnum>
         </citerefentry>,
-        <sbr/>
+    </para>
+    <para>
         <citerefentry>
             <refentrytitle>ocroscript</refentrytitle>
             <manvolnum>1</manvolnum>
