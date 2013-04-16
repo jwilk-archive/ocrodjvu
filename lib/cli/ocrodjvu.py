@@ -170,6 +170,7 @@ class ArgumentParser(argparse.ArgumentParser):
                     help=saver_type.__doc__
                 )
             )
+        saver_group.add_argument('--save-raw-ocr', dest='save_raw_ocr_dir', metavar='DIRECTORY', help='save raw OCR output')
         self.add_argument('-e', '--engine', dest='engine', nargs=1, action=self.set_engine, default=self.default_engine, help='OCR engine to use')
         self.add_argument('--list-engines', action=self.list_engines, nargs=0, help='print list of available OCR engines')
         self.add_argument('--ocr-only', dest='ocr_only', action='store_true', default=False, help='''don't save pages without OCR''')
@@ -255,6 +256,11 @@ class ArgumentParser(argparse.ArgumentParser):
                 'You must use exactly one of the following options: %s' %
                 ', '.join('/'.join(saver.options) for saver in self.savers)
             )
+        if options.save_raw_ocr_dir is not None:
+            try:
+                os.stat(os.path.join(options.save_raw_ocr_dir, ''))
+            except EnvironmentError, ex:
+                self.error('cannot open %r: %s' % (ex.filename, ex[1]))
         # It might be tempting to verify language name correctness at argument
         # parse time (rather than after argument parsing). However, it's
         # desirable to be able to specify a language *before* specifying an OCR
@@ -321,6 +327,17 @@ class Context(djvu.decode.Context):
         finally:
             file.close()
 
+    def save_raw_ocr(self, page, result):
+        output_dir = self._options.save_raw_ocr_dir
+        if output_dir is None:
+            return
+        pageid = page.file.id
+        basename, ext = os.path.splitext(pageid)
+        if ext in ('.djv', '.djvu'):
+            ext = ''
+        prefix = os.path.join(output_dir, basename + ext)
+        result.save(prefix)
+
     def process_page(self, page):
         logger.info('- Page #%d', page.n + 1)
         page_job = page.decode(wait=True)
@@ -329,6 +346,7 @@ class Context(djvu.decode.Context):
             result = self._engine.recognize(pfile, language=self._options.language, details=self._options.details, uax29=self._options.uax29)
             if self._debug:
                 result.save(os.path.join(self._temp_dir, '%06d' % page.n))
+            self.save_raw_ocr(page, result)
             [text] = self._engine.extract_text(result.as_stringio(),
                 rotation=page.rotation,
                 details=self._options.details,

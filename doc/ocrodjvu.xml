@@ -135,9 +135,6 @@
     </refsection>
     <refsection>
         <title>Options controlling output</title>
-        <para>
-            It is mandatory to use exactly one of the following options:
-        </para>
         <variablelist>
         <varlistentry>
             <term><option>-o</option></term>
@@ -185,6 +182,20 @@
             <listitem>
                 <para>
                     Don't change any files, throw OCR results away.
+                </para>
+            </listitem>
+        </varlistentry>
+        </variablelist>
+        <para>
+            It is mandatory to use exactly one of the above options.
+        </para>
+        <variablelist>
+        <varlistentry>
+            <term><option>--save-raw-ocr=<filename><replaceable>output-directory</replaceable></filename></option></term>
+            <listitem>
+                <para>
+                    Save raw OCR results (typically in the hOCR format) into
+                    <filename><replaceable>output-directory</replaceable></filename>.
                 </para>
             </listitem>
         </varlistentry>

@@ -17,8 +17,9 @@ ocrodjvu (0.7.15) UNRELEASED; urgency=low
   * Accept both ISO 639-2/T and ISO 639-2/B language codes.
   * Fix compatibility with nose 1.2.
     Thanks to Kyrill Detinov for the bug report.
+  * Add the --save-raw-ocr option.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 15 Apr 2013 18:53:39 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 16 Apr 2013 14:26:23 +0200
 
 ocrodjvu (0.7.14) unstable; urgency=low
 
