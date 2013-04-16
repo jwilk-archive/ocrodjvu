@@ -9,13 +9,13 @@ ocrodjvu (0.7.15) UNRELEASED; urgency=low
       Thanks to Janusz S. Bień for the bug report.
       https://bitbucket.org/jwilk/ocrodjvu/issue/3
     + Cuneiform: rename mixed Russian-English language code:
-      ‘rus-eng’ → ‘rus+eng’. This is for consistency with Tesseract.
+      “rus-eng” → “rus+eng”. This is for consistency with Tesseract.
     + Tesseract: fix support for Chinese language pack.
     + Tesseract: make it possible to pass the -psm option in order to
       customize layout analysis. For example, to enable OSD, use:
       “-X extra_args='-psm 1'”.
     + Make --list-languages output sorted.
-    + Tesseract: remove ‘osd’ from language list.
+    + Tesseract: remove “osd” from language list.
     + Accept both ISO 639-2/T and ISO 639-2/B language codes.
     + Add the --save-raw-ocr option.
     + Add the --raw-ocr-filename-template option.
@@ -158,10 +158,10 @@ ocrodjvu (0.7.1) unstable; urgency=low
   * Windows: guess location of the DjVuLibre DLL (requires python-djvulibre
     ≥ 0.3.3).
   * ocrodjvu:
-    + Work around a bug in Cuneiform, which mistakenly use ‘slo’ (rather than
-      ‘slv’) as language code for Slovenian.
+    + Work around a bug in Cuneiform, which mistakenly use “slo” (rather than
+      “slv”) as language code for Slovenian.
       https://bugs.launchpad.net/cuneiform-linux/+bug/707951
-    + Accept ‘ces’, ‘nld’, ‘slv’, ‘ron’ as language codes for Czech, Dutch,
+    + Accept “ces”, “nld”, “slv”, “ron” as language codes for Czech, Dutch,
       Slovenian and Romanian languages, even when Cuneiform internally use
       different ones.
   * djvu2hocr:
@@ -180,11 +180,11 @@ ocrodjvu (0.7.0) unstable; urgency=low
   * Fix compatibility with Tesseract 3.00.
   * Fix colors in 24-bit BMP images.
   * ocrodjvu:
-    + Make ‘-e’ an alias for ‘--engine’.
-    + Make ‘-l’ an alias for ‘--language’.
+    + Make “-e” an alias for “--engine”.
+    + Make “-l” an alias for “--language”.
     + Add the -X option (for advanced users).
     + Work-around for Cuneiform returning files with control characters is now
-      disabled by default. Use ‘-X fix-html=1’ to re-enable it.
+      disabled by default. Use “-X fix-html=1” to re-enable it.
     + Add the --on-error option (for advanced users).
   * djvu2hocr:
     + Fix a typo, which prevented hocr2djvused from correctly parsing files
@@ -266,7 +266,7 @@ ocrodjvu (0.4.6) unstable; urgency=low
 
 ocrodjvu (0.4.5) unstable; urgency=low
 
-  * Fix handling of ‘deu’ and ‘rus-eng’ languages.
+  * Fix handling of “deu” and “rus-eng” languages.
     Thanks to Kyrill Detinov for the bug report.
   * Properly handle hOCR with inline formatting.
     Thanks to Kyrill Detinov for the bug report.
