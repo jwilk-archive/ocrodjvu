@@ -119,7 +119,7 @@
             <term><option>--engine=<replaceable>engine-id</replaceable></option></term>
             <listitem>
                 <para>
-                    Use this OCR engine. The default is ‘<literal>ocropus</literal>’ (OCRopus).
+                    Use this OCR engine. The default is <quote><literal>ocropus</literal></quote> (OCRopus).
                 </para>
             </listitem>
         </varlistentry>
@@ -198,7 +198,8 @@
                     or <option>-i</option>/<option>--indirect</option>), save only the pages selected for OCR.
                 </para>
                 <para>
-                    The default is to save all pages, even when the <option>-p</option>/<option>--pages</option> option is in effect.
+                    The default is to save all pages, even when the <option>-p</option>/<option>--pages</option> option
+                    is in effect.
                 </para>
             </listitem>
         </varlistentry>
@@ -343,12 +344,13 @@
                     three-letter code.
                 </para>
                 <para>
-                    Tesseract ≥ 3.02 allows specifing multiple languages separated by ‘+’ characters.
+                    Tesseract ≥ 3.02 allows specifing multiple languages separated by
+                    <quote><literal>+</literal></quote> characters.
                 </para>
                 <para>
-                    For OCRopus, the default is ‘<literal>eng</literal>’ (English), unless the
+                    For OCRopus, the default is <quote><literal>eng</literal></quote> (English), unless the
                     <varname>tesslanguage</varname> environment variable is set.
-                    For other OCR engines, the default is always ‘<literal>eng</literal>’.
+                    For other OCR engines, the default is always <quote><literal>eng</literal></quote>.
                 </para>
             </listitem>
         </varlistentry>
