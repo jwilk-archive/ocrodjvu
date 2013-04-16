@@ -19,6 +19,7 @@ ocrodjvu (0.7.15) UNRELEASED; urgency=low
     + Accept both ISO 639-2/T and ISO 639-2/B language codes.
     + Add the --save-raw-ocr option.
     + Add the --raw-ocr-filename-template option.
+    + Improve documentation of the --ocr-only option.
   * Require Python ≥ 2.6.
   * Fix compatibility with nose 1.2.
     Thanks to Kyrill Detinov for the bug report.
