@@ -4,20 +4,21 @@ ocrodjvu (0.7.15) UNRELEASED; urgency=low
     paragraphs, …).
   * Fix compatibility with Tesseract 3.02.
     Thanks to Janusz S. Bień for the bug report.
-  * Make it possible to pass multiple languages to Tesseract ≥ 3.02.
-    Thanks to Janusz S. Bień for the bug report.
-  * Cuneiform: rename mixed Russian-English language code:
-    ‘rus-eng’ → ‘rus+eng’. This is for consistency with Tesseract.
-  * Tesseract: fix support for Chinese language pack.
-  * Tesseract: remove ‘osd’ from language list.
-  * Tesseract: make it possible to pass the -psm option in order to customize
-    layout analysis. For example, to enable OSD, use:
-    “-X extra_args='-psm 1'”.
-  * Make --list-languages output sorted.
-  * Accept both ISO 639-2/T and ISO 639-2/B language codes.
+  * ocrodjvu:
+    + Make it possible to pass multiple languages to Tesseract ≥ 3.02.
+      Thanks to Janusz S. Bień for the bug report.
+    + Cuneiform: rename mixed Russian-English language code:
+      ‘rus-eng’ → ‘rus+eng’. This is for consistency with Tesseract.
+    + Tesseract: fix support for Chinese language pack.
+    + Tesseract: make it possible to pass the -psm option in order to
+      customize layout analysis. For example, to enable OSD, use:
+      “-X extra_args='-psm 1'”.
+    + Make --list-languages output sorted.
+    + Tesseract: remove ‘osd’ from language list.
+    + Accept both ISO 639-2/T and ISO 639-2/B language codes.
+    + Add the --save-raw-ocr option.
   * Fix compatibility with nose 1.2.
     Thanks to Kyrill Detinov for the bug report.
-  * Add the --save-raw-ocr option.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Tue, 16 Apr 2013 14:26:23 +0200
 
