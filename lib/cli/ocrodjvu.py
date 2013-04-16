@@ -19,6 +19,7 @@ import inspect
 import locale
 import os.path
 import shutil
+import string
 import sys
 import threading
 import traceback
@@ -171,6 +172,7 @@ class ArgumentParser(argparse.ArgumentParser):
                 )
             )
         saver_group.add_argument('--save-raw-ocr', dest='save_raw_ocr_dir', metavar='DIRECTORY', help='save raw OCR output')
+        saver_group.add_argument('--raw-ocr-filename-template', metavar='TEMPLATE', default='{id-ext}', help='file naming scheme for raw OCR')
         self.add_argument('-e', '--engine', dest='engine', nargs=1, action=self.set_engine, default=self.default_engine, help='OCR engine to use')
         self.add_argument('--list-engines', action=self.list_engines, nargs=0, help='print list of available OCR engines')
         self.add_argument('--ocr-only', dest='ocr_only', action='store_true', default=False, help='''don't save pages without OCR''')
@@ -331,11 +333,41 @@ class Context(djvu.decode.Context):
         output_dir = self._options.save_raw_ocr_dir
         if output_dir is None:
             return
+        template = self._options.raw_ocr_filename_template
         pageid = page.file.id
-        basename, ext = os.path.splitext(pageid)
-        if ext in ('.djv', '.djvu'):
-            ext = ''
-        prefix = os.path.join(output_dir, basename + ext)
+        assert '/' not in pageid
+        d = {
+            'page': page.n + 1,
+            'id': pageid,
+            'id-ext': os.path.splitext(pageid)[0],
+        }
+        formatter = string.Formatter()
+        for _, var, _, _ in formatter.parse(template):
+            if var is None:
+                continue
+            if '+' in var:
+                sign = +1
+                base_var, offset = var.split('+')
+            elif '-' in var:
+                sign = -1
+                base_var, offset = var.split('-')
+            else:
+                continue
+            try:
+                offset = sign * int(offset, 10)
+            except ValueError:
+                continue
+            try:
+                base_value = d[base_var]
+            except LookupError:
+                continue
+            if not isinstance(base_value, int):
+                continue
+            d[var] = d[base_var] + offset
+        prefix = os.path.join(
+            output_dir,
+            formatter.vformat(template, (), d),
+        )
         result.save(prefix)
 
     def process_page(self, page):

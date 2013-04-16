@@ -199,6 +199,44 @@
                 </para>
             </listitem>
         </varlistentry>
+        <varlistentry>
+            <term><option>--raw-ocr-filename-template=<filename><replaceable>template</replaceable></filename></option></term>
+            <listitem>
+                <para>
+                    Specifies the file naming scheme for raw OCR results.
+                </para>
+                <para>
+                    The template language uses the <ulink
+                    url='http://docs.python.org/library/string.html#format-string-syntax'>Python
+                    string formatting syntax</ulink>. The following fields are available:
+                    <variablelist>
+                        <varlistentry>
+                            <term><varname>page</varname></term>
+                            <term><varname>page+<replaceable>N</replaceable></varname></term>
+                            <term><varname>page-<replaceable>N</replaceable></varname></term>
+                            <listitem>
+                                <para>page number, optionally shifted by a number <replaceable>N</replaceable></para>
+                            </listitem>
+                        </varlistentry>
+                        <varlistentry>
+                            <term><varname>id</varname></term>
+                            <listitem>
+                                <para>page identifier</para>
+                            </listitem>
+                        </varlistentry>
+                        <varlistentry>
+                            <term><varname>id-ext</varname></term>
+                            <listitem>
+                                <para>page identifier without file extension</para>
+                            </listitem>
+                        </varlistentry>
+                    </variablelist>
+                </para>
+                <para>
+                    The default template is <quote><literal>{id-ext}</literal></quote>.
+                </para>
+            </listitem>
+        </varlistentry>
         </variablelist>
     </refsection>
     <refsection>
