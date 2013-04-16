@@ -128,6 +128,37 @@ def get_cpu_count():
     except (ValueError, OSError, AttributeError):
         return 1
 
+def expand_template(template, pageno, pageid):
+    d = {
+        'page': pageno,
+        'id': pageid,
+        'id-ext': os.path.splitext(pageid)[0],
+    }
+    formatter = string.Formatter()
+    for _, var, _, _ in formatter.parse(template):
+        if var is None:
+            continue
+        if '+' in var:
+            sign = +1
+            base_var, offset = var.split('+')
+        elif '-' in var:
+            sign = -1
+            base_var, offset = var.split('-')
+        else:
+            continue
+        try:
+            offset = sign * int(offset, 10)
+        except ValueError:
+            continue
+        try:
+            base_value = d[base_var]
+        except LookupError:
+            continue
+        if not isinstance(base_value, int):
+            continue
+        d[var] = d[base_var] + offset
+    return formatter.vformat(template, (), d)
+
 class ArgumentParser(argparse.ArgumentParser):
 
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
@@ -263,6 +294,12 @@ class ArgumentParser(argparse.ArgumentParser):
                 os.stat(os.path.join(options.save_raw_ocr_dir, ''))
             except EnvironmentError, ex:
                 self.error('cannot open %r: %s' % (ex.filename, ex[1]))
+            try:
+                expand_template(options.raw_ocr_filename_template, pageno=0, pageid='')
+            except ValueError, ex:
+                self.error('cannot parse filename template %r: %s' % (options.raw_ocr_filename_template, ex))
+            except KeyError, ex:
+                self.error('cannot parse filename template %r: unknown field %r' % (options.raw_ocr_filename_template, ex.args[0]))
         # It might be tempting to verify language name correctness at argument
         # parse time (rather than after argument parsing). However, it's
         # desirable to be able to specify a language *before* specifying an OCR
@@ -335,38 +372,10 @@ class Context(djvu.decode.Context):
             return
         template = self._options.raw_ocr_filename_template
         pageid = page.file.id
-        assert '/' not in pageid
-        d = {
-            'page': page.n + 1,
-            'id': pageid,
-            'id-ext': os.path.splitext(pageid)[0],
-        }
-        formatter = string.Formatter()
-        for _, var, _, _ in formatter.parse(template):
-            if var is None:
-                continue
-            if '+' in var:
-                sign = +1
-                base_var, offset = var.split('+')
-            elif '-' in var:
-                sign = -1
-                base_var, offset = var.split('-')
-            else:
-                continue
-            try:
-                offset = sign * int(offset, 10)
-            except ValueError:
-                continue
-            try:
-                base_value = d[base_var]
-            except LookupError:
-                continue
-            if not isinstance(base_value, int):
-                continue
-            d[var] = d[base_var] + offset
+        pageno = page.n + 1
         prefix = os.path.join(
             output_dir,
-            formatter.vformat(template, (), d),
+            expand_template(template, pageno=pageno, pageid=pageid),
         )
         result.save(prefix)
 
