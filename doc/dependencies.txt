@@ -1,6 +1,6 @@
 The following software is needed to run ocrodjvu:
 
-* Python ≥ 2.5
+* Python ≥ 2.6
 
 * An OCR engine:
 
