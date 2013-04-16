@@ -34,7 +34,6 @@ class Engine(common.Engine):
 
     name = 'cuneiform'
     image_format = image_io.BMP
-    output_format = 'html'
     needs_utf8_fix = True
 
     executable = utils.property('cuneiform')
@@ -157,7 +156,10 @@ class Engine(common.Engine):
             worker.stdin.close()
             worker.wait()
             with open(hocr_file_name, 'r') as hocr_file:
-                return hocr_file.read()
+                return common.Output(
+                    hocr_file.read(),
+                    format='html',
+                )
 
     def extract_text(self, *args, **kwargs):
         return self._hocr.extract_text(*args, **kwargs)

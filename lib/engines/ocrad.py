@@ -102,7 +102,6 @@ class Engine(common.Engine):
 
     name = 'ocrad'
     image_format = image_io.PNM
-    output_format = 'orf'
 
     executable = utils.property('ocrad')
     extra_args = utils.property([], shlex.split)
@@ -161,7 +160,10 @@ class Engine(common.Engine):
             stdout=ipc.PIPE,
         )
         try:
-            return worker.stdout.read()
+            return common.Output(
+                worker.stdout.read(),
+                format='orf',
+            )
         finally:
             worker.wait()
 

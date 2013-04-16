@@ -117,10 +117,8 @@ class Engine(common.Engine):
             # output is not used.
             from .. import hocr
             self._hocr = hocr
-            self.output_format = 'html'
         else:
             self._hocr = None
-            self.output_format = 'txt'
         self._user_to_tesseract = None  # to be defined later
         self._languages = list(self._get_languages())
 
@@ -198,7 +196,6 @@ class Engine(common.Engine):
     def get_default_language(cls):
         return os.getenv('tesslanguage') or 'eng'
 
-    @contextlib.contextmanager
     def recognize_plain_text(self, image, language, details=None, uax29=None):
         language = self.user_to_tesseract(language)
         with temporary.directory() as output_dir:
@@ -209,7 +206,10 @@ class Engine(common.Engine):
             )
             _wait_for_worker(worker)
             with open(os.path.join(output_dir, 'tmp.txt'), 'rt') as file:
-                yield file
+                return common.Output(
+                    file.read(),
+                    format='txt',
+                )
 
     def recognize_hocr(self, image, language, details=text_zones.TEXT_DETAILS_WORD, uax29=None):
         language = self.user_to_tesseract(language)
@@ -256,7 +256,10 @@ class Engine(common.Engine):
                     contents = contents.replace('</body>', (_bbox_extras_template + '</body>') % box_file.read())
         if self.fix_html:
             contents = fix_html(contents)
-        return contents
+        return common.Output(
+            contents,
+            format='txt',
+        )
 
     def recognize(self, image, language, details=None, uax29=None):
         if self._hocr is None:

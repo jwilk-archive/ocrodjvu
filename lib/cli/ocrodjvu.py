@@ -14,7 +14,6 @@
 from __future__ import with_statement
 
 import argparse
-import cStringIO as io
 import contextlib
 import inspect
 import locale
@@ -331,12 +330,8 @@ class Context(djvu.decode.Context):
             result_file = None
             try:
                 if self._debug:
-                    result_file = self._temp_file('%06d.%s' % (page.n, self._engine.output_format))
-                    result_file.write(result)
-                    result_file.seek(0)
-                else:
-                    result_file = io.StringIO(result)
-                [text] = self._engine.extract_text(result_file,
+                    result.save(os.path.join(self._temp_dir, '%06d' % page.n))
+                [text] = self._engine.extract_text(result.as_stringio(),
                     rotation=page.rotation,
                     details=self._options.details,
                     uax29=self._options.uax29,

@@ -109,7 +109,6 @@ class Engine(common.Engine):
 
     name = 'gocr'
     image_format = image_io.PNM
-    output_format = 'gocr.xml'
 
     executable = utils.property('gocr')
     extra_args = utils.property([], shlex.split)
@@ -159,7 +158,10 @@ class Engine(common.Engine):
             stdout=ipc.PIPE,
         )
         try:
-            return worker.stdout.read()
+            return common.Output(
+                worker.stdout.read(),
+                format='gocr.xml',
+            )
         finally:
             worker.wait()
 

@@ -25,7 +25,6 @@ class Engine(common.Engine):
 
     name = 'ocropus'
     image_format = image_io.PNM
-    output_format = 'html'
 
     executable = utils.property('ocroscript')
     tesseract_executable = utils.property('tesseract')
@@ -100,7 +99,10 @@ class Engine(common.Engine):
             env=dict(tesslanguage=language),
         )
         try:
-            return ocropus.stdout.read()
+            return common.Output(
+                ocropus.stdout.read(),
+                format='html',
+            )
         finally:
             ocropus.wait()
 

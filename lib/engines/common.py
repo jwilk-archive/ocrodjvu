@@ -12,19 +12,20 @@
 # General Public License for more details.
 
 from .. import utils
+from .. import image_io
+
+import cStringIO as io
 
 class Engine(object):
 
     name = None
-    input_format = None
-    output_format = None
+    image_format = None
     needs_utf8_fix = False
 
     def __init__(self, *args, **kwargs):
         assert args == ()
         assert isinstance(self.name, str)
-        # We do not check self.{input,output}_format here.
-        # Values for these attributes might be not available at this point.
+        assert issubclass(self.image_format, image_io.ImageFormat)
         for key, value in kwargs.iteritems():
             try:
                 prop = getattr(type(self), key)
@@ -34,5 +35,27 @@ class Engine(object):
                 ex.args = ('%r is not a valid property for the %s engine' % (key, self.name),)
                 raise
             setattr(self, key, value)
+
+class Output(object):
+
+    format = None
+
+    def __init__(self, contents, format=None):
+        self._contents = contents
+        if format is not None:
+            self.format = format
+        if self.format is None:
+            raise TypeError('output format is not defined')
+
+    def __str__(self):
+        return self._contents
+
+    def save(self, prefix):
+        path = '%s.%s' % (prefix, self.format)
+        with open(path, 'wb') as file:
+            file.write(str(self))
+
+    def as_stringio(self):
+        return io.StringIO(str(self))
 
 # vim:ts=4 sw=4 et
