@@ -220,6 +220,7 @@
                 <para>
                     Save raw OCR results (typically in the hOCR format) into
                     <filename><replaceable>output-directory</replaceable></filename>.
+                    The directory must exist and be writable.
                 </para>
             </listitem>
         </varlistentry>
