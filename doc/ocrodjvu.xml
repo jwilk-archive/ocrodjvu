@@ -299,6 +299,9 @@
                     three-letter code.
                 </para>
                 <para>
+                    Tesseract ≥ 3.02 allows specifing multiple languages separated by ‘+’ characters.
+                </para>
+                <para>
                     For OCRopus, the default is ‘<literal>eng</literal>’ (English), unless the
                     <varname>tesslanguage</varname> environment variable is set.
                     For other OCR engines, the default is always ‘<literal>eng</literal>’.
