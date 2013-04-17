@@ -194,8 +194,10 @@
             <term><option>--ocr-only</option></term>
             <listitem>
                 <para>
-                    If OCR results are to be saved to a separate document (<option>-o</option>/<option>--output</option>
-                    or <option>-i</option>/<option>--indirect</option>), save only the pages selected for OCR.
+                    If OCR results are to be saved to a separate document
+                    (<option>-o</option>/<option>--save-bundled</option> or
+                    <option>-i</option>/<option>--save-indirect</option>),
+                    save only the pages selected for OCR.
                 </para>
                 <para>
                     The default is to save all pages, even when the <option>-p</option>/<option>--pages</option> option

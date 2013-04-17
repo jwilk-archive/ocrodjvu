@@ -1,8 +1,8 @@
 ocrodjvu (0.7.16) UNRELEASED; urgency=low
 
-  * 
+  * Fix option names in documentation of the --ocr-only option.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 17 Apr 2013 01:03:26 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 17 Apr 2013 01:31:19 +0200
 
 ocrodjvu (0.7.15) unstable; urgency=low
 
