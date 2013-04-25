@@ -36,7 +36,7 @@ class ExtractSettings(object):
         if uax29 is not None:
             icu = unicode_support.get_icu()
             if uax29 is True:
-                uax29 = icu.Locale()
+                uax29 = icu.Locale('en-US-POSIX')
             else:
                 uax29 = icu.Locale(uax29)
         self.uax29 = uax29
