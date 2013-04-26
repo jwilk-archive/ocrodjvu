@@ -468,8 +468,13 @@ class Context(djvu.decode.Context):
             if self._options.clear_text:
                 sed_file.write('remove-txt\n')
             for page in pages:
-                file_id = page.file.id.encode(system_encoding)
-                sed_file.write('select \'%s\'\n' % file_id.replace('\\', '\\\\').replace("'", "\\'"))
+                try:
+                    file_id = page.file.id.encode(system_encoding)
+                except UnicodeError:
+                    logger.warning('warning: cannot convert page %d identifier to locale encoding' % page.file.n)
+                    sed_file.write('select %d\n' % page.file.n)
+                else:
+                    sed_file.write('select \'%s\'\n' % file_id.replace('\\', '\\\\').replace("'", "\\'"))
                 sed_file.write('set-txt\n')
                 result = None
                 with condition:

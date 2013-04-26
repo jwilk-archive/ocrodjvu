@@ -2,8 +2,11 @@ ocrodjvu (0.7.16) UNRELEASED; urgency=low
 
   * Fix option names in documentation of the --ocr-only option.
   * Use “en-US-POSIX” as the default locale for ICU.
+  * Don't crash if file identifier is not in UTF-8 or if it cannot be converted
+    to locale encoding; use the page number instead.
+    https://bitbucket.org/jwilk/ocrodjvu/issue/4
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 26 Apr 2013 01:16:43 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 26 Apr 2013 20:57:14 +0200
 
 ocrodjvu (0.7.15) unstable; urgency=low
 
