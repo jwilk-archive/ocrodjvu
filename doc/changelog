@@ -6,8 +6,10 @@ ocrodjvu (0.7.16) UNRELEASED; urgency=low
     + Don't crash if file identifier is not in UTF-8 or if it cannot be
       converted to locale encoding; use the page number instead.
       https://bitbucket.org/jwilk/ocrodjvu/issue/4
+    + Don't hang if a page cannot be decoded.
+      https://bitbucket.org/jwilk/ocrodjvu/issue/5
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 26 Apr 2013 21:02:03 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 27 Apr 2013 15:24:30 +0200
 
 ocrodjvu (0.7.15) unstable; urgency=low
 

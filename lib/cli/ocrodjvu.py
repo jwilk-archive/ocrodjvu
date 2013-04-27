@@ -353,7 +353,7 @@ class Context(djvu.decode.Context):
     def handle_message(self, message):
         if isinstance(message, djvu.decode.ErrorMessage):
             logger.warning(message)
-            sys.exit(1)
+        return djvu.decode.Context.handle_message(self, message)
 
     @contextlib.contextmanager
     def get_output_image(self, nth, page_job):
@@ -382,6 +382,10 @@ class Context(djvu.decode.Context):
     def process_page(self, page):
         logger.info('- Page #%d', page.n + 1)
         page_job = page.decode(wait=True)
+        # Due to a bug in python-djvulibre <= 0.3.9, sometimes the exception is not raised.
+        # Raise in manually in such case.
+        if issubclass(page_job.status, djvu.decode.JobFailed):
+            raise page_job.status
         size = page_job.size
         with self.get_output_image(page.n, page_job) as pfile:
             result = self._engine.recognize(pfile, language=self._options.language, details=self._options.details, uax29=self._options.uax29)
