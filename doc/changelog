@@ -1,4 +1,4 @@
-ocrodjvu (0.7.16) UNRELEASED; urgency=low
+ocrodjvu (0.7.16) unstable; urgency=low
 
   * Use “en-US-POSIX” as the default locale for ICU.
   * ocrodjvu:
@@ -9,7 +9,7 @@ ocrodjvu (0.7.16) UNRELEASED; urgency=low
     + Don't hang if a page cannot be decoded.
       https://bitbucket.org/jwilk/ocrodjvu/issue/5
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 27 Apr 2013 15:24:30 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 28 Apr 2013 15:08:19 +0200
 
 ocrodjvu (0.7.15) unstable; urgency=low
 
