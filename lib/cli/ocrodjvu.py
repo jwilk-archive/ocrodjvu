@@ -353,7 +353,6 @@ class Context(djvu.decode.Context):
     def handle_message(self, message):
         if isinstance(message, djvu.decode.ErrorMessage):
             logger.warning(message)
-        return djvu.decode.Context.handle_message(self, message)
 
     @contextlib.contextmanager
     def get_output_image(self, nth, page_job):
