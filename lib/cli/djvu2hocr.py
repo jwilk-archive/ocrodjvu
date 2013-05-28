@@ -283,7 +283,7 @@ hocr_header_template = '''\
 <body>
 '''
 
-hocr_header_style_re = re.compile('^\s+<style\s.*?\n', re.MULTILINE)
+hocr_header_style_re = re.compile(r'^\s+<style\s.*?\n', re.MULTILINE)
 
 hocr_footer = '''
 </body>

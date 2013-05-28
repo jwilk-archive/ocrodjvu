@@ -89,7 +89,7 @@ bboxes_re = re.compile(
     ''', re.VERBOSE)
 
 tesseract_rstrip = functools.partial(
-    re.compile('\n\s+$').sub,
+    re.compile(r'\n\s+$').sub,
     ''
 )
 
