@@ -541,6 +541,7 @@ def main(argv=sys.argv):
         context.process(options.path, options.pages)
     except KeyboardInterrupt:
         logger.info('Interrupted by user.')
+        sys.exit(1)
     finally:
         temp_dir = context.close()
         if temp_dir is not None:
