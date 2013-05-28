@@ -447,7 +447,7 @@
             <term><option>-X <replaceable>key</replaceable>=<replaceable>value</replaceable></option></term>
             <listitem>
                 <para>
-                    This option allow to control some details of how &p; operates.
+                    This option allows controlling some details of how &p; operates.
                 </para>
             </listitem>
         </varlistentry>
