@@ -347,7 +347,7 @@
                     three-letter code.
                 </para>
                 <para>
-                    Tesseract ≥ 3.02 allows specifing multiple languages separated by
+                    Tesseract ≥ 3.02 allows specifying multiple languages separated by
                     <quote><literal>+</literal></quote> characters.
                 </para>
                 <para>
