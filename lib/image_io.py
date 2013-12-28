@@ -122,7 +122,7 @@ class BMP(ImageFormat):
             0, # compression method
             len(data), # size of pixel data
             dpm, dpm, # resolution in pixels/meter
-            n_palette_colors, # number of colors in the color pallete
+            n_palette_colors, # number of colors in the color palette
             n_palette_colors # number of important colors
         ))
         if self._pixel_format.bpp == 1:
