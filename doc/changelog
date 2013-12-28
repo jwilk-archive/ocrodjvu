@@ -3,7 +3,7 @@ ocrodjvu (0.7.17) UNRELEASED; urgency=low
   * ocrodjvu:
     + Ensure that exit code is non-zero if the program was interrupted by
       user.
-    + Fix a typo in the documentation.
+    + Fix typos in the documentation.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Thu, 21 Nov 2013 09:23:16 +0100
 
