@@ -33,7 +33,10 @@ from .. import utils
 const = text_zones.const
 
 _language_pattern = re.compile('^([a-z]{3})(?:[-_]([a-z]+))?$')
-_error_pattern = re.compile(r"^(Error openn?ing data|Unable to load unicharset) file (?P<dir>/.*)/nonexistent[.](?P<ext>[a-z]+)\n")
+_error_pattern = re.compile(
+    r"^(Error openn?ing data|Unable to load unicharset) file (?P<dir>/.*)/nonexistent[.](?P<ext>[a-z]+)$",
+    re.MULTILINE
+)
 
 _bbox_extras_template = '''\
 <!-- The following script was appended to hOCR by ocrodjvu for internal purposes. -->
@@ -129,8 +132,8 @@ class Engine(common.Engine):
         except OSError:
             raise errors.UnknownLanguageList
         try:
-            line = tesseract.stderr.read()
-            match = _error_pattern.match(line)
+            stderr = tesseract.stderr.read()
+            match = _error_pattern.search(stderr)
             if match is None:
                 raise errors.UnknownLanguageList
             directory = match.group('dir')
@@ -242,7 +245,10 @@ class Engine(common.Engine):
                 stderr=ipc.PIPE,
             )
             _wait_for_worker(worker)
-            with open(os.path.join(output_dir, 'tmp.html'), 'r') as hocr_file:
+            hocr_path = os.path.join(output_dir, 'tmp.hocr')
+            if not os.path.exists(hocr_path):
+                hocr_path = hocr_path[:-4] + 'html'
+            with open(os.path.join(output_dir, hocr_path), 'r') as hocr_file:
                 contents = hocr_file.read()
             if character_details:
                 worker = ipc.Subprocess(
