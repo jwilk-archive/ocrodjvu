@@ -1,3 +1,9 @@
+ocrodjvu (0.7.18) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 04 Feb 2014 11:58:39 +0100
+
 ocrodjvu (0.7.17) unstable; urgency=low
 
   * Fix compatibility with Tesseract > 3.02.
