@@ -1,4 +1,4 @@
-ocrodjvu (0.7.17) UNRELEASED; urgency=low
+ocrodjvu (0.7.17) unstable; urgency=low
 
   * Fix compatibility with Tesseract > 3.02.
     Thanks to Heinrich Schwietering for the bug report.
@@ -8,7 +8,7 @@ ocrodjvu (0.7.17) UNRELEASED; urgency=low
       user.
     + Fix typos in the documentation.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sun, 02 Feb 2014 21:58:21 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 04 Feb 2014 11:28:46 +0100
 
 ocrodjvu (0.7.16) unstable; urgency=low
 
