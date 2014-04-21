@@ -3,7 +3,7 @@ from .. import utils
 try:
     import argparse
 except ImportError, ex:
-    utils.enhance_import_error(ex, 'argparse', 'python-argparse', 'http://code.google.com/p/argparse/')
+    utils.enhance_import_error(ex, 'argparse', 'python-argparse', 'https://code.google.com/p/argparse/')
     raise
 
 argparse.ArgumentParser # quieten pyflakes
