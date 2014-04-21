@@ -12,8 +12,8 @@ Missing tests
 * for GOCR, in particular
   - for non-ASCII characters
   - for empty pages
-* for http://bugs.debian.org/575484#35
-* for http://bugs.debian.org/671764
+* for https://bugs.debian.org/575484#35
+* for https://bugs.debian.org/671764
 * for https://bitbucket.org/jwilk/ocrodjvu/issue/4
 
 Documentation
@@ -24,6 +24,6 @@ Nice-to-have things
 ===================
 * support for OCRopus 0.5
 * ``--debug`` should enable debug logging
-* http://bugs.debian.org/575490
+* https://bugs.debian.org/575490
 
 .. vim:ft=rst ts=3 sw=3 et tw=72
