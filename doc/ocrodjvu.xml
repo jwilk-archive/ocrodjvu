@@ -88,22 +88,22 @@
         The following OCR engines are supported:
         <itemizedlist>
         <listitem>
-            <para><ulink url='http://ocropus.googlecode.com/'><application>OCRopus</application></ulink> (internally,
+            <para><ulink url='https://code.google.com/p/ocropus/'><application>OCRopus</application></ulink> (internally,
                 &p; calls <command>ocroscript</command>'s <command>recognize</command> (or <command>rec-tess</command>)
                 command, so that ultimately <application>Tesseract</application> acts as the OCR backend);
             </para>
         </listitem>
         <listitem>
-            <para><ulink url='http://launchpad.net/cuneiform-linux'><application>Cuneiform for Linux</application></ulink>.</para>
+            <para><ulink url='https://launchpad.net/cuneiform-linux'><application>Cuneiform for Linux</application></ulink>.</para>
         </listitem>
         <listitem>
-            <para><ulink url='http://www.gnu.org/software/ocrad/'><application>Ocrad</application></ulink>.</para>
+            <para><ulink url='https://www.gnu.org/software/ocrad/'><application>Ocrad</application></ulink>.</para>
         </listitem>
         <listitem>
             <para><ulink url='http://jocr.sourceforge.net/'><application>GOCR</application></ulink>.</para>
         </listitem>
         <listitem>
-            <para>Stand-alone <ulink url='http://code.google.com/p/tesseract-ocr/'><application>Tesseract</application></ulink>.</para>
+            <para>Stand-alone <ulink url='https://code.google.com/p/tesseract-ocr/'><application>Tesseract</application></ulink>.</para>
         </listitem>
         </itemizedlist>
     </para>
@@ -234,7 +234,7 @@
                 </para>
                 <para>
                     The template language uses the <ulink
-                    url='http://docs.python.org/library/string.html#format-string-syntax'>Python
+                    url='https://docs.python.org/library/string.html#format-string-syntax'>Python
                     string formatting syntax</ulink>. The following fields are available:
                     <variablelist>
                         <varlistentry>
@@ -525,7 +525,7 @@
         <title>Known bugs</title>
         <para>
             Tesseract 3.00 is affected by a bug <footnote><para><ulink
-            url='http://code.google.com/p/tesseract-ocr/issues/detail?id=376'/></para></footnote> making it produce invalid
+            url='https://code.google.com/p/tesseract-ocr/issues/detail?id=376'/></para></footnote> making it produce invalid
             hOCR output in certain circumstances. &p; does not try recover form this fault (which couldn't be done reliably
             anyway) unless you pass the <option>-X fix-html=1</option> option.
         </para>
