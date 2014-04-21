@@ -52,15 +52,15 @@ source:
 
 
 .. _OCRopus:
-   http://code.google.com/p/ocropus/
+   https://code.google.com/p/ocropus/
 .. _Cuneiform:
-   http://launchpad.net/cuneiform-linux
+   https://launchpad.net/cuneiform-linux
 .. _Ocrad:
-   http://www.gnu.org/software/ocrad/
+   https://www.gnu.org/software/ocrad/
 .. _GOCR:
    http://jocr.sourceforge.net/
 .. _Tesseract:
-   http://code.google.com/p/tesseract-ocr/
+   https://code.google.com/p/tesseract-ocr/
 .. _DjVuLibre:
    http://djvu.sourceforge.net/
 .. _DjVu:
@@ -74,11 +74,11 @@ source:
 .. _libxml2:
    http://xmlsoft.org/
 .. _argparse:
-   http://code.google.com/p/argparse/
+   https://code.google.com/p/argparse/
 .. _PyICU:
    http://pyicu.osafoundation.org/
 .. _html5lib:
-   http://code.google.com/p/html5lib/
+   https://code.google.com/p/html5lib/
 .. _HTML5:
    http://www.whatwg.org/specs/web-apps/current-work/
 .. _xsltproc:
