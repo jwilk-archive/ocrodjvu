@@ -26,7 +26,7 @@ from . import utils
 try:
     from lxml import etree
 except ImportError, ex:
-    utils.enhance_import_error(ex, 'lxml', 'python-lxml', 'http://codespeak.net/lxml/')
+    utils.enhance_import_error(ex, 'lxml', 'python-lxml', 'http://lxml.de/')
     raise
 
 from . import errors
