@@ -1,8 +1,10 @@
 ocrodjvu (0.7.18) UNRELEASED; urgency=low
 
-  * 
+  [ Filip Graliński ]
+  * Fix counting pages when file identifier cannot be converted to locale
+    encoding.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 04 Feb 2014 11:58:39 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 21 Apr 2014 22:07:51 +0200
 
 ocrodjvu (0.7.17) unstable; urgency=low
 
