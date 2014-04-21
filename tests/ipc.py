@@ -74,7 +74,7 @@ class test_wait():
 
 class test_environment():
 
-    # http://bugs.debian.org/594385
+    # https://bugs.debian.org/594385
 
     def test1(self):
         with amended_environment(ocrodjvu='42'):

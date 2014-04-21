@@ -24,7 +24,7 @@ import subprocess
 
 # Protect from scanadf[0] and possibly other brain-dead software that set
 # SIGCHLD to SIG_IGN.
-# [0] http://bugs.debian.org/596232
+# [0] https://bugs.debian.org/596232
 if os.name == 'posix':
     signal.signal(signal.SIGCHLD, signal.SIG_DFL)
 

@@ -49,7 +49,7 @@ def test_help():
     assert_not_equal(stdout.getvalue(), '')
 
 def test_version():
-    # http://bugs.debian.org/573496
+    # https://bugs.debian.org/573496
     stdout = StringIO()
     stderr = StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):

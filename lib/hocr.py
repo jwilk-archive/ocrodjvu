@@ -428,7 +428,7 @@ def read_document(stream, settings):
         #
         # Moreover, the HTML parsers trip over such errors:
         #  * https://bugs.launchpad.net/lxml/+bug/690110
-        #  * http://bugs.debian.org/671842
+        #  * https://bugs.debian.org/671842
         #
         # FIXME: This work-around is ugly and should be dropped at some point.
         contents = stream.read()
