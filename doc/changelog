@@ -4,7 +4,10 @@ ocrodjvu (0.7.18) UNRELEASED; urgency=low
   * Fix counting pages when file identifier cannot be converted to locale
     encoding.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 21 Apr 2014 22:07:51 +0200
+  [ Jakub Wilk ]
+  * Use HTTPS URLs when they are available, in documentation and comments.
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 21 Apr 2014 22:58:19 +0200
 
 ocrodjvu (0.7.17) unstable; urgency=low
 
