@@ -474,8 +474,9 @@ class Context(djvu.decode.Context):
                 try:
                     file_id = page.file.id.encode(system_encoding)
                 except UnicodeError:
-                    logger.warning('warning: cannot convert page %d identifier to locale encoding' % page.file.n)
-                    sed_file.write('select %d\n' % page.file.n)
+                    pageno = page.file.n + 1
+                    logger.warning('warning: cannot convert page %d identifier to locale encoding' % pageno)
+                    sed_file.write('select %d\n' % pageno)
                 else:
                     sed_file.write('select \'%s\'\n' % file_id.replace('\\', '\\\\').replace("'", "\\'"))
                 sed_file.write('set-txt\n')
