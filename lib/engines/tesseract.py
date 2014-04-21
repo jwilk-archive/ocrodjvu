@@ -67,7 +67,7 @@ def _wait_for_worker(worker):
 def fix_html(s):
     '''
     Work around buggy hOCR output:
-    http://code.google.com/p/tesseract-ocr/issues/detail?id=376
+    https://code.google.com/p/tesseract-ocr/issues/detail?id=376
     '''
     regex = re.compile(
         r'''

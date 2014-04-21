@@ -15,7 +15,7 @@
 Process hOCR documents.
 
 The hOCR format specification:
-http://docs.google.com/Doc?id=dfxcv4vc_67g844kf
+https://docs.google.com/Doc?id=dfxcv4vc_67g844kf
 '''
 
 import functools
@@ -424,7 +424,7 @@ def read_document(stream, settings):
         # Ideally, this should never be needed, but some OCR engines produce
         # such broken HTML:
         #  * https://bugs.launchpad.net/cuneiform-linux/+bug/585418
-        #  * http://code.google.com/p/tesseract-ocr/issues/detail?id=690
+        #  * https://code.google.com/p/tesseract-ocr/issues/detail?id=690
         #
         # Moreover, the HTML parsers trip over such errors:
         #  * https://bugs.launchpad.net/lxml/+bug/690110
