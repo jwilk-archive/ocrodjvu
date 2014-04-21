@@ -110,7 +110,7 @@ ocrodjvu (0.7.10) unstable; urgency=low
     + Attempt to fix encoding issues and eliminate unwanted control characters
       in files produced by Tesseract and Cuneiform.
       Thanks to Thomas Koch for the bug report.
-      http://bugs.debian.org/671764
+      https://bugs.debian.org/671764
   * hocr2djvused:
     + Add the --fix-utf8 option.
   * djvu2hocr:
@@ -159,7 +159,7 @@ ocrodjvu (0.7.5) unstable; urgency=low
   * Check Python version in setup.py.
   * Accept slightly malformed hOCR documents (with a text zone not completely
     within the page area).
-    http://bugs.debian.org/575484#35
+    https://bugs.debian.org/575484#35
   * Fix compatibility with Tesseract > 3.00.
     Thanks to Janusz S. Bień for the bug report.
   * ocrodjvu, hocr2djvused:
@@ -199,7 +199,7 @@ ocrodjvu (0.7.1) unstable; urgency=low
       different ones.
   * djvu2hocr:
     + Don't flip hOCR upside-down.
-      http://bugs.debian.org/611460
+      https://bugs.debian.org/611460
 
  -- Jakub Wilk <jwilk@jwilk.net>  Sat, 29 Jan 2011 18:14:40 +0100
 
@@ -222,7 +222,7 @@ ocrodjvu (0.7.0) unstable; urgency=low
   * djvu2hocr:
     + Fix a typo, which prevented hocr2djvused from correctly parsing files
       produced by it.
-      http://bugs.debian.org/600539
+      https://bugs.debian.org/600539
   * Extend the test suite.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Sun, 07 Nov 2010 21:37:00 +0100
@@ -237,9 +237,9 @@ ocrodjvu (0.6.1) unstable; urgency=high
     Thanks to Heinrich Schwietering for the test case.
   * Fix crash on hOCR with image elements.
     Thanks to Alexey Shipunov for the bug report.
-    http://bugs.debian.org/598139
+    https://bugs.debian.org/598139
   * Fix insecure use of temporary files when using Cuneiform.
-    http://bugs.debian.org/598134
+    https://bugs.debian.org/598134
     CVE-2010-4338
 
  -- Jakub Wilk <jwilk@jwilk.net>  Sun, 26 Sep 2010 15:01:51 +0200
@@ -280,7 +280,7 @@ ocrodjvu (0.4.7) unstable; urgency=low
 
   * Preserve as much environment as possible when calling external programs.
     Thanks to Heinrich Schwietering for the bug report.
-    http://bugs.debian.org/594385
+    https://bugs.debian.org/594385
 
  -- Jakub Wilk <jwilk@jwilk.net>  Wed, 25 Aug 2010 20:27:17 +0200
 
@@ -290,10 +290,10 @@ ocrodjvu (0.4.6) unstable; urgency=low
     characters.
     Thanks to Kyrill Detinov for the bug report.
   * Avoid deprecation warnings with PyICU ≥ 1.0.
-    http://bugs.debian.org/589027
+    https://bugs.debian.org/589027
   * djvu2hocr:
     + Don't crash on very long documents.
-      http://bugs.debian.org/591389
+      https://bugs.debian.org/591389
 
  -- Jakub Wilk <jwilk@jwilk.net>  Tue, 03 Aug 2010 20:33:49 +0200
 
@@ -311,19 +311,19 @@ ocrodjvu (0.4.5) unstable; urgency=low
 ocrodjvu (0.4.4) unstable; urgency=low
 
   * Document that ocrodjvu honours TMPDIR environment variable.
-    http://bugs.debian.org/575488
+    https://bugs.debian.org/575488
   * Don't remove temporary directory if ocrodjvu crashed.
-    http://bugs.debian.org/575487
+    https://bugs.debian.org/575487
 
  -- Jakub Wilk <jwilk@jwilk.net>  Fri, 02 Apr 2010 12:00:11 +0200
 
 ocrodjvu (0.4.3) unstable; urgency=low
 
   * Don't crash on --version.
-    http://bugs.debian.org/573496
+    https://bugs.debian.org/573496
   * Give more meaningful error messages on a malformed hOCR produced by
     Cuneiform.
-    http://bugs.debian.org/572522
+    https://bugs.debian.org/572522
   * Document how djvu2hocr deals with non-XML characters.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Fri, 19 Mar 2010 01:22:54 +0100
@@ -334,7 +334,7 @@ ocrodjvu (0.4.2) unstable; urgency=low
     + --render=mask,
     + --render=foreground,
     + --render=all.
-    http://bugs.debian.org/572081
+    https://bugs.debian.org/572081
   * Fix off-by-one error in text area coordinates.
   * Add support for Cuneiform 0.9.
 
