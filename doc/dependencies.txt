@@ -70,7 +70,7 @@ source:
 .. _ICU:
    http://www-306.ibm.com/software/globalization/icu/
 .. _lxml:
-   http://codespeak.net/lxml/
+   http://lxml.de/
 .. _libxml2:
    http://xmlsoft.org/
 .. _argparse:
@@ -78,11 +78,11 @@ source:
 .. _PyICU:
    http://pyicu.osafoundation.org/
 .. _html5lib:
-   https://code.google.com/p/html5lib/
+   https://github.com/html5lib/html5lib-python
 .. _HTML5:
    http://www.whatwg.org/specs/web-apps/current-work/
 .. _xsltproc:
-   http://xmlsoft.org/XSLT/xsltproc2.htm
+   http://xmlsoft.org/XSLT/xsltproc2.html
 .. _libxslt:
    http://xmlsoft.org/XSLT/
 .. _Docbook XSL stylesheets:
