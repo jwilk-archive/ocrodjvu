@@ -455,7 +455,7 @@
             <term><option>--on-error=abort</option></term>
             <listitem>
                 <para>
-                    Stop program execution when exception situation (e.g., malformed output from the OCR engine,
+                    Stop program execution when an exceptional situation (e.g., malformed output from the OCR engine,
                     internal &p; error, etc.) occurs.
                 </para>
                 <para>
