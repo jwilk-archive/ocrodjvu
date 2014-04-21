@@ -64,7 +64,7 @@ class build_doc(distutils_build):
     description = 'build documentation'
 
     _url_regex = re.compile(
-        r'^(\\%http://.*)',
+        r'^(\\%https?://.*)',
         re.MULTILINE
     )
 
