@@ -5,9 +5,10 @@ ocrodjvu (0.7.18) UNRELEASED; urgency=low
     encoding.
 
   [ Jakub Wilk ]
-  * Use HTTPS URLs when they are available, in documentation and comments.
+  * Use HTTPS URLs when they are available, in documentation and code.
+  * Update some stale URLs in documentation and code.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 21 Apr 2014 22:58:19 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 22 Apr 2014 11:12:16 +0200
 
 ocrodjvu (0.7.17) unstable; urgency=low
 
