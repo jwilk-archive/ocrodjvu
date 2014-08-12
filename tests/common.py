@@ -117,7 +117,7 @@ def exception(exc_type, string=None, regex=None, callback=None):
         raise AssertionError(message)
 
 def sorted_glob(*args, **kwargs):
-    return sorted(glob.glob(*args, **kwargs))
+    return sorted(glob.iglob(*args, **kwargs))
 
 __all__ = list(__all__) + [
     'assert_ml_equal',

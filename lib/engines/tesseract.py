@@ -158,7 +158,7 @@ class Engine(common.Engine):
 
     def _get_languages(self):
         self._user_to_tesseract = {}
-        for filename in glob.glob(os.path.join(self._directory, '*.%s' % self._extension)):
+        for filename in glob.iglob(os.path.join(self._directory, '*.%s' % self._extension)):
             filename = os.path.basename(filename)
             code = os.path.splitext(filename)[0]
             if code == 'osd':
