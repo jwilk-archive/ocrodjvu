@@ -103,9 +103,19 @@ class Zone(object):
             for child in self.children
             if not isinstance(child, Space)
         ] or ['']
+        x0, y0, x1, y1 = self.bbox
+        if x0 > x1:
+            x0, x1 = x1, x0
+        elif x0 == x1:
+            x1 += 1
+        if y0 > y1:
+            y0, y1 = y1, y0
+        elif y0 == y1:
+            y1 += 1
+        assert x0 < x1
+        assert y0 < y1
         return sexpr.Expression(
-            [self.type] +
-            list(self.bbox) +
+            [self.type, x0, y0, x1, y1] +
             children
         )
 
