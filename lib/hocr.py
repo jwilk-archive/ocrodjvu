@@ -414,7 +414,7 @@ def extract_tesseract_bbox_data(node):
         w = x1 - x0
         n = len(chars)
         for i, ch in enumerate(chars):
-            yield ch, (x0 + w * i, y0, x0 + w * (i + 1) // n, y1), -1
+            yield ch, (x0 + w * i // n, y0, x0 + w * (i + 1) // n, y1), -1
 
 def read_document(stream, settings):
     if settings.fix_utf8:
