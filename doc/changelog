@@ -4,8 +4,9 @@ ocrodjvu (0.7.19) UNRELEASED; urgency=low
   * Tesseract: fix splitting bounding boxes for character clusters.
     Thanks to Janusz S. Bień for the bug report.
     https://bitbucket.org/jwilk/ocrodjvu/issue/12
+  * Fix typos in the documentation.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 06 Nov 2014 22:15:18 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 08 Nov 2014 12:21:54 +0100
 
 ocrodjvu (0.7.18) unstable; urgency=low
 
