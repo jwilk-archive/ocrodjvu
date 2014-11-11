@@ -167,4 +167,4 @@ class test_environment():
         with amended_environment(LC_ALL=None, LC_CTYPE=None, LANG='en_US.UTF-8'):
             self._test_locale()
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

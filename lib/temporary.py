@@ -32,4 +32,4 @@ def directory(*args, **kwargs):
 
 __all__ = ['raw', 'file', 'directory', 'name', 'wrapper']
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

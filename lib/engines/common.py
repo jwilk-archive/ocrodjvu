@@ -58,4 +58,4 @@ class Output(object):
     def as_stringio(self):
         return io.StringIO(str(self))
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

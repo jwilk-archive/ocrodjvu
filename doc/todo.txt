@@ -27,4 +27,4 @@ Nice-to-have things
 * ``--debug`` should enable debug logging
 * https://bugs.debian.org/575490
 
-.. vim:ft=rst ts=3 sw=3 et tw=72
+.. vim:ft=rst ts=3 sts=3 sw=3 et tw=72

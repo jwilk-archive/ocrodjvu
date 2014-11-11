@@ -73,4 +73,4 @@ def main(argv=sys.argv):
         text.print_into(sys.stdout, 80)
         sys.stdout.write('\n.\n\n')
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

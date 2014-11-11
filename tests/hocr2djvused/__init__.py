@@ -111,4 +111,4 @@ def test_from_file():
                 for extra_args in '', ' --html5':
                     yield _rough_test_from_file, base_filename, args + extra_args
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

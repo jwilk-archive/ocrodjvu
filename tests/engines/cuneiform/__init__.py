@@ -86,4 +86,4 @@ class test_language():
             if lang1 != lang2:
                 yield self._test_recognize, lang1, lang1
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

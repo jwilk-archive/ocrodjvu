@@ -55,4 +55,4 @@ def word_break_iterator(text, locale=None):
     break_iterator.setText(text)
     return break_iterator
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

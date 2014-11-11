@@ -62,4 +62,4 @@ class test_word_break_iterator():
         t = list(word_break_iterator('', icu.Locale('en')))
         assert_equal(t, [])
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

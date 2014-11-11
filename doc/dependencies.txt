@@ -88,4 +88,4 @@ source:
 .. _Docbook XSL stylesheets:
    http://wiki.docbook.org/DocBookXslStylesheets
 
-.. vim:ft=rst ts=3 sw=3 et tw=72
+.. vim:ft=rst ts=3 sts=3 sw=3 et tw=72

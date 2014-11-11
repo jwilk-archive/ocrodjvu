@@ -78,4 +78,4 @@ def test_from_file():
             for bpp in 1, 24:
                 yield _test_from_file, base_filename, format(bpp)
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

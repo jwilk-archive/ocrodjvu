@@ -153,4 +153,4 @@ class property(object):
         setattr(instance, self._private_name, self._filter(value))
         return
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

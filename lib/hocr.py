@@ -478,4 +478,4 @@ __all__ = [
     'TEXT_DETAILS_LINE', 'TEXT_DETAILS_WORD', 'TEXT_DETAILS_CHARACTER'
 ]
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

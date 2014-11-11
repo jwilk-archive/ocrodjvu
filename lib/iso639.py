@@ -57,4 +57,4 @@ def b_to_t(lang, permissive=False):
             return lang
     return _b_to_t.get(lang, lang)
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

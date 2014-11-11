@@ -548,4 +548,4 @@ def main(argv=sys.argv):
         if temp_dir is not None:
             logger.info('Intermediate files were left in the %r directory.' % temp_dir)
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

@@ -170,4 +170,4 @@ class Engine(common.Engine):
         scan_result = scan(stream, settings)
         return [scan_result.sexpr]
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

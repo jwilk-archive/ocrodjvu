@@ -71,4 +71,4 @@ def test_list_languages():
     for engine in engines:
         yield _test_list_languages, engine
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

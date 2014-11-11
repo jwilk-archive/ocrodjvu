@@ -213,4 +213,4 @@ def group_words(zones, details, word_break_iterator):
         i = j
     return words
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

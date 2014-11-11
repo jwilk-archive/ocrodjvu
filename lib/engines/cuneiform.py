@@ -163,4 +163,4 @@ class Engine(common.Engine):
     def extract_text(self, *args, **kwargs):
         return self._hocr.extract_text(*args, **kwargs)
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et

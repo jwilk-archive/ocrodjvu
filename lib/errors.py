@@ -41,4 +41,4 @@ class MalformedHocr(MalformedOcrOutput):
     def __init__(self, message):
         Exception.__init__(self, 'Malformed hOCR document: %s' % message)
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et
