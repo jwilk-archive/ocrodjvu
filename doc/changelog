@@ -1,3 +1,9 @@
+ocrodjvu (0.7.20) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 11 Nov 2014 18:21:27 +0100
+
 ocrodjvu (0.7.19) unstable; urgency=low
 
   * Make sure that text zones are at least 1 pixel wide and 1 pixel high.
