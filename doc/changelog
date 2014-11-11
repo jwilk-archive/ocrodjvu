@@ -1,4 +1,4 @@
-ocrodjvu (0.7.19) UNRELEASED; urgency=low
+ocrodjvu (0.7.19) unstable; urgency=low
 
   * Make sure that text zones are at least 1 pixel wide and 1 pixel high.
   * Tesseract: fix splitting bounding boxes for character clusters.
@@ -6,7 +6,7 @@ ocrodjvu (0.7.19) UNRELEASED; urgency=low
     https://bitbucket.org/jwilk/ocrodjvu/issue/12
   * Fix typos in the documentation.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 08 Nov 2014 12:21:54 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 11 Nov 2014 18:11:36 +0100
 
 ocrodjvu (0.7.18) unstable; urgency=low
 
