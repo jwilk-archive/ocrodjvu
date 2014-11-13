@@ -2,7 +2,7 @@
 version=${1:?"no version number provided"}
 set -e
 set -x
-dch -m -v "$version" -c doc/changelog
+dch -m -v "$version" -u low -c doc/changelog
 sed -i -r -e "s/^(__version__) = '[0-9.]+'$/\1 = '$version'/" lib/version.py
 sed -i -r -e "s/<(!ENTITY version) '[0-9.]+'>/<\1 '$version'>/" doc/*.xml
 sed -i -r -e "s/(djvu2hocr) [0-9.]+/\1 $version/" tests/djvu2hocr/*.test*
