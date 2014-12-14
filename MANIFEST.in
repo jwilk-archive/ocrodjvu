@@ -1,8 +1,8 @@
 include MANIFEST.in
-include COPYING
 include doc/*.1
 include doc/*.txt
 include doc/*.xml
+include doc/COPYING
 include doc/changelog
 include ocrodjvu.py
 include private/*
