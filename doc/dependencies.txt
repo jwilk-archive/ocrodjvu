@@ -74,7 +74,7 @@ source:
 .. _libxml2:
    http://xmlsoft.org/
 .. _argparse:
-   https://code.google.com/p/argparse/
+   https://pypi.python.org/pypi/argparse
 .. _PyICU:
    http://pyicu.osafoundation.org/
 .. _html5lib:
