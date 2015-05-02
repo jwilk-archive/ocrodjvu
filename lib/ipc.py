@@ -22,7 +22,7 @@ import subprocess
 # CalledProcessError, CalledProcessInterrupted
 # ============================================
 
-# Protect from scanadf[0] and possibly other brain-dead software that set
+# Protect from scanadf[0] and possibly other software that sets
 # SIGCHLD to SIG_IGN.
 # [0] https://bugs.debian.org/596232
 if os.name == 'posix':
