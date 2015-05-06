@@ -55,8 +55,8 @@ def _test_from_file(base_filename, format):
     result = file.getvalue()
     assert_equal(len(result), len(expected))
     if result == expected:
-       # The easy part:
-       return
+        # The easy part:
+        return
     else:
         # The result might be still correct, even if the strings are different.
         # Think of BMP format and its padding bytes.
