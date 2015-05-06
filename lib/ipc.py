@@ -81,9 +81,9 @@ class Subprocess(subprocess.Popen):
         # - but reset all other locale settings (which tend to break things).
         lc_ctype = env.get('LC_ALL') or env.get('LC_CTYPE') or env.get('LANG')
         env = dict(
-                (k, v)
-                for k, v in env.iteritems()
-                if not (k.startswith('LC_') or k in ('LANG', 'LANGUAGE'))
+            (k, v)
+            for k, v in env.iteritems()
+            if not (k.startswith('LC_') or k in ('LANG', 'LANGUAGE'))
         )
         if lc_ctype:
             env['LC_CTYPE'] = lc_ctype
