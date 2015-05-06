@@ -40,8 +40,7 @@ TEXT_DETAILS_LINE = const.TEXT_ZONE_LINE
 TEXT_DETAILS_WORD = const.TEXT_ZONE_WORD
 TEXT_DETAILS_CHARACTER = const.TEXT_ZONE_CHARACTER
 
-hocr_class_to_djvu = \
-dict(
+hocr_class_to_djvu = dict(
     ocr_page=const.TEXT_ZONE_PAGE,
     ocr_column=const.TEXT_ZONE_COLUMN,
     ocr_carea=const.TEXT_ZONE_COLUMN,
@@ -53,8 +52,7 @@ dict(
     ocrx_word=const.TEXT_ZONE_WORD
 ).get
 
-cuneiform_tag_to_djvu = \
-dict(
+cuneiform_tag_to_djvu = dict(
     body=const.TEXT_ZONE_PAGE,
     p=const.TEXT_ZONE_PARAGRAPH,
     span=const.TEXT_ZONE_CHARACTER,
