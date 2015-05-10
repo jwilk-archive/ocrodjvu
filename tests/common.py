@@ -121,12 +121,12 @@ def sorted_glob(*args, **kwargs):
 
 __all__ = list(__all__) + [
     'assert_ml_equal',
-    'interim',
-    'interim_environ',
-    'try_run',
     'catch_warnings',
     'exception',
+    'interim',
+    'interim_environ',
     'sorted_glob',
+    'try_run',
 ]
 
 # vim:ts=4 sts=4 sw=4 et
