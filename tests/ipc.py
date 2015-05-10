@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011, 2013 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,11 +18,11 @@ import signal
 import stat
 
 from tests.common import (
-    amended_environment,
     assert_equal,
     assert_false,
     assert_true,
     exception,
+    interim_environ,
 )
 
 from lib import ipc
@@ -77,7 +77,7 @@ class test_environment():
     # https://bugs.debian.org/594385
 
     def test1(self):
-        with amended_environment(ocrodjvu='42'):
+        with interim_environ(ocrodjvu='42'):
             child = ipc.Subprocess(
                 ['sh', '-c', 'printf $ocrodjvu'],
                 stdout=ipc.PIPE, stderr=ipc.PIPE,
@@ -87,7 +87,7 @@ class test_environment():
             assert_equal(stderr, '')
 
     def test2(self):
-        with amended_environment(ocrodjvu='42'):
+        with interim_environ(ocrodjvu='42'):
             child = ipc.Subprocess(
                 ['sh', '-c', 'printf $ocrodjvu'],
                 stdout=ipc.PIPE, stderr=ipc.PIPE,
@@ -98,7 +98,7 @@ class test_environment():
             assert_equal(stderr, '')
 
     def test3(self):
-        with amended_environment(ocrodjvu='42'):
+        with interim_environ(ocrodjvu='42'):
             child = ipc.Subprocess(
                 ['sh', '-c', 'printf $ocrodjvu'],
                 stdout=ipc.PIPE, stderr=ipc.PIPE,
@@ -119,7 +119,7 @@ class test_environment():
             os.chmod(command_path, stat.S_IRWXU)
             path[:0] = [tmpdir]
             path = ':'.join(path)
-            with amended_environment(PATH=path):
+            with interim_environ(PATH=path):
                 child = ipc.Subprocess([command_name],
                     stdout=ipc.PIPE, stderr=ipc.PIPE,
                 )
@@ -156,15 +156,15 @@ class test_environment():
         assert_true(has_lang)
 
     def test_locale_lc_all(self):
-        with amended_environment(LC_ALL='en_US.UTF-8'):
+        with interim_environ(LC_ALL='en_US.UTF-8'):
             self._test_locale()
 
     def test_locale_lc_ctype(self):
-        with amended_environment(LC_ALL=None, LC_CTYPE='en_US.UTF-8'):
+        with interim_environ(LC_ALL=None, LC_CTYPE='en_US.UTF-8'):
             self._test_locale()
 
     def test_locale_lang(self):
-        with amended_environment(LC_ALL=None, LC_CTYPE=None, LANG='en_US.UTF-8'):
+        with interim_environ(LC_ALL=None, LC_CTYPE=None, LANG='en_US.UTF-8'):
             self._test_locale()
 
 # vim:ts=4 sts=4 sw=4 et

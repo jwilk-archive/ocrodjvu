@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ def interim(obj, **override):
             setattr(obj, key, value)
 
 @contextlib.contextmanager
-def amended_environment(**override):
+def interim_environ(**override):
     keys = set(override)
     copy_keys = keys & set(os.environ)
     copy = dict((key, value) for key, value in os.environ.iteritems() if key in copy_keys)
@@ -122,7 +122,7 @@ def sorted_glob(*args, **kwargs):
 __all__ = list(__all__) + [
     'assert_ml_equal',
     'interim',
-    'amended_environment',
+    'interim_environ',
     'try_run',
     'catch_warnings',
     'exception',
