@@ -19,13 +19,12 @@ import re
 import sys
 import warnings
 
-try:
-    from nose.tools import __all__
-except ImportError:
-    # nose 1.2 doesn't have nose.tools.__all__
-    import nose.tools
-    __all__ = list(v for v in vars(nose.tools) if not v.startswith('_'))
-from nose.tools import *
+from nose.tools import (
+    assert_equal,
+    assert_false,
+    assert_not_equal,
+    assert_true,
+)
 
 def assert_ml_equal(first, second, msg='Strings differ'):
     '''Assert that two multi-line strings are equal.'''
@@ -119,8 +118,12 @@ def exception(exc_type, string=None, regex=None, callback=None):
 def sorted_glob(*args, **kwargs):
     return sorted(glob.iglob(*args, **kwargs))
 
-__all__ = list(__all__) + [
+__all__ = [
+    'assert_equal',
+    'assert_false',
     'assert_ml_equal',
+    'assert_not_equal',
+    'assert_true',
     'catch_warnings',
     'exception',
     'interim',
