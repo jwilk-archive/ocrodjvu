@@ -119,7 +119,12 @@ class test_sanitize_utf8():
         with catch_warnings():
             warnings.showwarning = show
             t = sanitize_utf8(s).decode('UTF-8')
-        assert_equal(t, u'\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\t\n\ufffd\ufffd\r\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd')
+        assert_equal(t,
+            u'\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd'
+            u'\ufffd\t\n\ufffd\ufffd\r\ufffd\ufffd'
+            u'\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd'
+            u'\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd'
+        )
 
     def test_ascii(self):
         s = 'The quick brown fox jumps over the lazy dog'
