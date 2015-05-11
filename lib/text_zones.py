@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -187,6 +187,7 @@ def group_words(zones, details, word_break_iterator):
             Zone(zone.type, BBox(x0 + w * n // m, y0, x0 + w * (n + 1) // m, y1))
             for n, ch in enumerate(zone_text)
         ]
+        del x0, y0, x1, y1  # quieten pyflakes
     zones = split_zones
     del split_zones
     assert len(text) == len(zones)
