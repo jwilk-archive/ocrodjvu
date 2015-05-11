@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011, 2012, 2013 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -137,6 +137,7 @@ def _apply_bboxes(djvu_class, bbox_source, text, settings, page_size):
                 (x0, y0, x1, y1) = bbox
                 (w, h) = page_size
                 bbox = (x0, h - y1, x1, h - y0)
+                del x0, y0, x1, y1  # quieten pyflakes
             coordinates += [bbox]
     if len(coordinates) == len(text):
         pass  # OK
