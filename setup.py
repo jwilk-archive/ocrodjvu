@@ -163,19 +163,19 @@ else:
     extra_args = dict(scripts=scripts)
 
 distutils.core.setup(
-    name = 'ocrodjvu',
-    version = version.__version__,
-    license = 'GNU GPL 2',
-    description = 'OCR for DjVu',
-    long_description = __doc__.strip(),
-    classifiers = classifiers,
-    url = 'http://jwilk.net/software/ocrodjvu',
-    author = 'Jakub Wilk',
-    author_email = 'jwilk@jwilk.net',
-    packages = ['ocrodjvu', 'ocrodjvu.engines', 'ocrodjvu.cli'],
-    package_dir = dict(ocrodjvu='lib'),
-    data_files = data_files,
-    cmdclass = dict(
+    name='ocrodjvu',
+    version=version.__version__,
+    license='GNU GPL 2',
+    description='OCR for DjVu',
+    long_description=__doc__.strip(),
+    classifiers=classifiers,
+    url='http://jwilk.net/software/ocrodjvu',
+    author='Jakub Wilk',
+    author_email='jwilk@jwilk.net',
+    packages=['ocrodjvu', 'ocrodjvu.engines', 'ocrodjvu.cli'],
+    package_dir=dict(ocrodjvu='lib'),
+    data_files=data_files,
+    cmdclass=dict(
         build_doc=build_doc,
         clean=clean,
         sdist=sdist,
