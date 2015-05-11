@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011, 2013 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@ import sys
 
 from tests.common import (
     assert_equal,
-    assert_false,
-    assert_true,
     exception,
     interim,
 )
