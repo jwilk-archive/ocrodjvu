@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011, 2012, 2013 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -10,8 +10,6 @@
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
-
-from __future__ import with_statement
 
 import argparse
 import contextlib
