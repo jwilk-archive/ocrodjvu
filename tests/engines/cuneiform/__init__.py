@@ -26,11 +26,7 @@ from lib.engines.cuneiform import (
 )
 
 here = os.path.dirname(__file__)
-try:
-    here = os.path.relpath(here)
-except AttributeError:
-    # Python 2.5. No big deal.
-    pass
+here = os.path.relpath(here)
 
 engine = None
 

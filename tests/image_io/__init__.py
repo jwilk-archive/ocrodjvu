@@ -27,11 +27,7 @@ from tests.common import (
 )
 
 here = os.path.dirname(__file__)
-try:
-    here = os.path.relpath(here)
-except AttributeError:
-    # Python 2.5. No big deal.
-    pass
+here = os.path.relpath(here)
 
 formats = image_io.PNM, image_io.BMP, image_io.TIFF
 
