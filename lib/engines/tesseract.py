@@ -11,6 +11,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+from __future__ import print_function
+
 import cgi
 import glob
 import os
@@ -218,7 +220,7 @@ class Engine(common.Engine):
             with open(tessconf_path, 'wt') as tessconf:
                 # Tesseract 3.00 doesn't come with any config file to enable hOCR
                 # output. Let's create our own one.
-                print >>tessconf, 'tessedit_create_hocr T'
+                print('tessedit_create_hocr T', file=tessconf)
             early_extra_args = []
             late_extra_args = []
             n_early = 0

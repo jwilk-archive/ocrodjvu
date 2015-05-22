@@ -11,6 +11,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+from __future__ import print_function
+
 import os
 import signal
 import stat
@@ -112,8 +114,8 @@ class test_environment():
             command_name = temporary.name(dir=tmpdir)
             command_path = os.path.join(tmpdir, command_name)
             with open(command_path, 'wt') as file:
-                print >>file, '#!/bin/sh'
-                print >>file, 'printf 42'
+                print('#!/bin/sh', file=file)
+                print('printf 42', file=file)
             os.chmod(command_path, stat.S_IRWXU)
             path[:0] = [tmpdir]
             path = ':'.join(path)

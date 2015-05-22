@@ -11,6 +11,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+from __future__ import print_function
+
 import argparse
 import cgi
 import locale
@@ -306,7 +308,7 @@ def main(argv=sys.argv):
     page_iterator = iter(options.pages)
     sed_script = temporary.file(suffix='.djvused')
     for n in options.pages:
-        print >>sed_script, 'select %d; size; print-txt' % n
+        print('select %d; size; print-txt' % n, file=sed_script)
     sed_script.flush()
     djvused = ipc.Subprocess(
         ['djvused', '-f', sed_script.name, os.path.abspath(options.path)],

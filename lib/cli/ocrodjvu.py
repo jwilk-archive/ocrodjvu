@@ -11,6 +11,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+from __future__ import print_function
+
 import argparse
 import contextlib
 import inspect
@@ -240,14 +242,14 @@ class ArgumentParser(argparse.ArgumentParser):
                 except errors.EngineNotFound:
                     pass
                 else:
-                    print engine.name
+                    print(engine.name)
             sys.exit(0)
 
     class list_languages(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
             try:
                 for language in sorted(namespace.engine().list_languages()):
-                    print language
+                    print(language)
             except errors.EngineNotFound as ex:
                 logger.error(ex)
                 sys.exit(1)
