@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@ class Subprocess(subprocess.Popen):
         self.__command = commandline[0]
         try:
             subprocess.Popen.__init__(self, *args, **kwargs)
-        except EnvironmentError, ex:
+        except EnvironmentError as ex:
             ex.filename = self.__command
             raise
 

@@ -47,7 +47,7 @@ class test_enhance_import():
             with exception(ImportError, 'No module named nonexistent; please install the python-nonexistent package'):
                 try:
                     import nonexistent
-                except ImportError, ex:
+                except ImportError as ex:
                     enhance_import_error(ex, 'PyNonexistent', 'python-nonexistent', 'http://pynonexistent.example.net/')
                     raise
                 nonexistent.f() # quieten pyflakes
@@ -57,7 +57,7 @@ class test_enhance_import():
             with exception(ImportError, 'No module named nonexistent; please install the PyNonexistent package <http://pynonexistent.example.net/>'):
                 try:
                     import nonexistent
-                except ImportError, ex:
+                except ImportError as ex:
                     enhance_import_error(ex, 'PyNonexistent', 'python-nonexistent', 'http://pynonexistent.example.net/')
                     raise
                 nonexistent.f() # quieten pyflakes

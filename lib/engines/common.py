@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010, 2011, 2012, 2013 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ class Engine(object):
                 prop = getattr(type(self), key)
                 if not isinstance(prop, utils.property):
                     raise AttributeError
-            except AttributeError, ex:
+            except AttributeError as ex:
                 ex.args = ('%r is not a valid property for the %s engine' % (key, self.name),)
                 raise
             setattr(self, key, value)

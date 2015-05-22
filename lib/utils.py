@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ def sanitize_utf8(text):
     '''
     try:
         text = text.decode('UTF-8')
-    except UnicodeDecodeError, exc:
+    except UnicodeDecodeError as exc:
         text = text.decode('UTF-8', 'replace')
         message = str(exc)
         message = re.sub("^'utf8' codec can't decode ", '', message)

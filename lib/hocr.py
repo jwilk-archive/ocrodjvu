@@ -25,7 +25,7 @@ from . import utils
 
 try:
     from lxml import etree
-except ImportError, ex:
+except ImportError as ex:
     utils.enhance_import_error(ex, 'lxml', 'python-lxml', 'http://lxml.de/')
     raise
 

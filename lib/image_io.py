@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011, 2012 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@ from . import utils
 
 try:
     import djvu.decode
-except ImportError, ex:
+except ImportError as ex:
     utils.enhance_import_error(ex, 'python-djvulibre', 'python-djvu', 'http://jwilk.net/software/python-djvulibre')
     raise
 

@@ -75,7 +75,7 @@ def try_run(f, *args, **kwargs):
     '''Catch SystemExit etc.'''
     try:
         f(*args, **kwargs)
-    except SystemExit, ex:
+    except SystemExit as ex:
         return ex.code
     else:
         return 0

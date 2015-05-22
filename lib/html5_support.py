@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2011-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@ from . import utils
 def parse(stream):
     try:
         import html5lib
-    except ImportError, ex:
+    except ImportError as ex:
         utils.enhance_import_error(ex, 'html5lib', 'python-html5lib', 'https://github.com/html5lib/html5lib-python')
         raise
     return html5lib.parse(stream,

@@ -248,10 +248,10 @@ class ArgumentParser(argparse.ArgumentParser):
             try:
                 for language in sorted(namespace.engine().list_languages()):
                     print language
-            except errors.EngineNotFound, ex:
+            except errors.EngineNotFound as ex:
                 logger.error(ex)
                 sys.exit(1)
-            except errors.UnknownLanguageList, ex:
+            except errors.UnknownLanguageList as ex:
                 logger.error(ex)
                 sys.exit(1)
             else:
@@ -290,13 +290,13 @@ class ArgumentParser(argparse.ArgumentParser):
         if options.save_raw_ocr_dir is not None:
             try:
                 os.stat(os.path.join(options.save_raw_ocr_dir, ''))
-            except EnvironmentError, ex:
+            except EnvironmentError as ex:
                 self.error('cannot open %r: %s' % (ex.filename, ex[1]))
             try:
                 expand_template(options.raw_ocr_filename_template, pageno=0, pageid='')
-            except ValueError, ex:
+            except ValueError as ex:
                 self.error('cannot parse filename template %r: %s' % (options.raw_ocr_filename_template, ex))
-            except KeyError, ex:
+            except KeyError as ex:
                 self.error('cannot parse filename template %r: unknown field %r' % (options.raw_ocr_filename_template, ex.args[0]))
         # It might be tempting to verify language name correctness at argument
         # parse time (rather than after argument parsing). However, it's
@@ -314,15 +314,15 @@ class ArgumentParser(argparse.ArgumentParser):
             kwargs[key] = value
         try:
             options.engine = options.engine(**kwargs)
-        except AttributeError, ex:
+        except AttributeError as ex:
             self.error(str(ex))
-        except errors.EngineNotFound, ex:
+        except errors.EngineNotFound as ex:
             self.error(str(ex))
         try:
             options.engine.check_language(options.language)
-        except errors.MissingLanguagePack, ex:
+        except errors.MissingLanguagePack as ex:
             self.error(str(ex))
-        except errors.InvalidLanguageId, ex:
+        except errors.InvalidLanguageId as ex:
             self.error(str(ex))
         except errors.UnknownLanguageList:
             # For now, let's assume the language pack is installed.
@@ -416,11 +416,11 @@ class Context(djvu.decode.Context):
             except djvu.decode.NotAvailable:
                 logger.info('No image suitable for OCR.')
                 result = False
-            except (SystemExit, KeyboardInterrupt), ex:
+            except (SystemExit, KeyboardInterrupt) as ex:
                 with condition:
                     condition.notify()
                 raise
-            except Exception, ex:
+            except Exception as ex:
                 try:
                     interrupted_by_user = isinstance(ex, ipc.CalledProcessInterrupted) and ex.by_user
                     message = 'Exception while processing page %d:\n%s' % (n + 1, traceback.format_exc())

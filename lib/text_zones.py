@@ -25,7 +25,7 @@ try:
     from djvu import const
     from djvu import decode
     from djvu import sexpr
-except ImportError, ex:
+except ImportError as ex:
     utils.enhance_import_error(ex, 'python-djvulibre', 'python-djvu', 'http://jwilk.net/software/python-djvulibre')
     raise
 

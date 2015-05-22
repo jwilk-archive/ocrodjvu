@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2009, 2010, 2011, 2013 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2009-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -214,7 +214,7 @@ def process_zone(parent, zone, last, options):
         parent.tail = '\n'
     try:
         hocr_tag, hocr_class = hocr.djvu_zone_to_hocr(zone_type)
-    except LookupError, ex:
+    except LookupError as ex:
         if ex[0] == const.TEXT_ZONE_CHARACTER:
             raise CharacterLevelDetails
         raise
