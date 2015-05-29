@@ -8,7 +8,7 @@ before_install:
 install:
  - pip install cython
  - pip install python-djvulibre
- - "[[ $TRAVIS_PYTHON_VERSION == '2.6' ]] && pip install argparse"
+ - if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then pip install argparse; fi
  - pip install lxml
  - pip install pyicu
  - pip install html5lib
