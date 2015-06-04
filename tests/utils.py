@@ -50,7 +50,7 @@ class test_enhance_import():
                 except ImportError as ex:
                     enhance_import_error(ex, 'PyNonexistent', 'python-nonexistent', 'http://pynonexistent.example.net/')
                     raise
-                nonexistent.f() # quieten pyflakes
+                nonexistent.f()  # quieten pyflakes
 
     def test_nondebian(self):
         with interim(lib.utils, debian=False):
@@ -60,7 +60,7 @@ class test_enhance_import():
                 except ImportError as ex:
                     enhance_import_error(ex, 'PyNonexistent', 'python-nonexistent', 'http://pynonexistent.example.net/')
                     raise
-                nonexistent.f() # quieten pyflakes
+                nonexistent.f()  # quieten pyflakes
 
 class test_smart_repr():
 
