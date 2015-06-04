@@ -158,8 +158,8 @@ def break_chars(char_zone_list, options):
                 int(bbox.x0 + (bbox.x1 - bbox.x0) * 1.0 * (i + 1) / len(char_text) + 0.5),
                 bbox.y1,
             )
-            bbox_list += subbox,
-        text += char_text,
+            bbox_list += [subbox]
+        text += [char_text]
     text = ''.join(text)
     break_iterator = unicode_support.word_break_iterator(text, options.locale)
     element = None
