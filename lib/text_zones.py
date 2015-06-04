@@ -202,7 +202,7 @@ def group_words(zones, details, word_break_iterator):
         for k in xrange(i, j):
             bbox.update(zones[k].bbox)
         last_word = Zone(type=const.TEXT_ZONE_WORD, bbox=bbox)
-        words += last_word,
+        words += [last_word]
         if details > TEXT_DETAILS_CHARACTER:
             last_word += [subtext]
         else:
