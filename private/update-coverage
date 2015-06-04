@@ -1,0 +1,64 @@
+#!/usr/bin/python
+# encoding=UTF-8
+
+# Copyright © 2014-2015 Jakub Wilk <jwilk@jwilk.net>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; version 2 dated June, 1991.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+
+from __future__ import print_function
+
+import glob
+import io
+import os
+import sys
+
+import nose
+import nose.plugins.allmodules
+import nose.plugins.cover
+
+class Coverage(nose.plugins.cover.Coverage):
+
+    stream = None
+
+    def report(self, stream):
+        return super(Coverage, self).report(self.stream)
+
+
+def main():
+    basedir = os.path.join(os.path.dirname(__file__), os.pardir)
+    os.chdir(basedir)
+    argv = [
+        sys.argv[0],
+        '--all-modules',
+        '--with-coverage',
+        '--cover-package=lib',
+        '--cover-erase',
+        'tests',
+    ]
+    path = os.path.join('tests', 'coverage.txt')
+    plugin = Coverage()
+    report_stream = plugin.stream = io.BytesIO()
+    print('Generated automatically by private/update-coverage. '
+        'Do not edit.\n', file=report_stream)
+    plugins = [plugin, nose.plugins.allmodules.AllModules()]
+    ok = nose.run(argv=argv, plugins=plugins)
+    if not ok:
+        sys.exit(1)
+    report_stream.seek(0)
+    with open(path + '.tmp', 'w') as file:
+        for line in report_stream:
+            line = line.rstrip()
+            print(line, file=file)
+    os.rename(path + '.tmp', path)
+
+if __name__ == '__main__':
+    main()
+
+# vim:ts=4 sts=4 sw=4 et

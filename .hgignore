@@ -1,5 +1,7 @@
 syntax: glob
+
 *.py[co]
+.coverage
 MANIFEST
 build/
 dist/

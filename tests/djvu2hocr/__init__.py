@@ -17,9 +17,9 @@ import shutil
 import sys
 from cStringIO import StringIO
 
-from ocrodjvu.cli import djvu2hocr
-from ocrodjvu import temporary
-from ocrodjvu import ipc
+from lib.cli import djvu2hocr
+from lib import temporary
+from lib import ipc
 
 from tests.common import (
     assert_equal,

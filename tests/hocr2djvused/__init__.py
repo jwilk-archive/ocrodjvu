@@ -17,7 +17,7 @@ import shlex
 import sys
 from cStringIO import StringIO
 
-from ocrodjvu.cli import hocr2djvused
+from lib.cli import hocr2djvused
 
 from tests.common import (
     assert_equal,

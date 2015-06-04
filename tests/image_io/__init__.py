@@ -18,7 +18,7 @@ from PIL import Image
 
 import djvu.decode
 
-from ocrodjvu import image_io
+from lib import image_io
 
 from tests.common import (
     assert_equal,

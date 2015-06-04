@@ -14,7 +14,7 @@
 import sys
 from cStringIO import StringIO
 
-from ocrodjvu.cli import ocrodjvu
+from lib.cli import ocrodjvu
 
 from tests.common import (
     assert_equal,
