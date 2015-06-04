@@ -127,7 +127,7 @@ class Engine(common.Engine):
             line = ocrad.stderr.read()
             charsets = set(line.split()[1:])
             if 'iso-8859-9' in charsets:
-                result += 'tur',
+                result += ['tur']
         finally:
             try:
                 ocrad.wait()
