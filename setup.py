@@ -158,8 +158,8 @@ if os.name == 'nt':
     # We use setuptools/distribute to be able to have .exe wrappers.
     distutils.core.setup = setuptools.setup
     extra_args = dict(
-        entry_points = dict(
-            console_scripts = ['%(name)s = ocrodjvu.cli.%(name)s:main' % dict(name=name) for name in scripts]
+        entry_points=dict(
+            console_scripts=['%(name)s = ocrodjvu.cli.%(name)s:main' % dict(name=name) for name in scripts]
         )
     )
 else:
