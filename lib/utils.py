@@ -45,7 +45,7 @@ def parse_page_numbers(pages):
             x, y = map(int, page_range.split('-', 1))
             result += xrange(x, y + 1)
         else:
-            result += int(page_range, 10),
+            result += [int(page_range, 10)]
     return result
 
 _special_chars_replace = re.compile(ur'''[\x00-\x1f'"\x5c\x7f-\x9f]''', re.UNICODE).sub
