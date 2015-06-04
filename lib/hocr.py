@@ -168,9 +168,9 @@ def _apply_bboxes(djvu_class, bbox_source, text, settings, page_size):
                     raise errors.MalformedHocr("missing bbox for non-whitespace character")
                 bbox.update(text_zones.BBox(*coordinates[k]))
             last_word = text_zones.Zone(type=const.TEXT_ZONE_WORD, bbox=bbox)
-            words += last_word,
+            words += [last_word]
             if settings.details > TEXT_DETAILS_CHARACTER:
-                last_word += subtext,
+                last_word += [subtext]
             else:
                 last_word += [
                     text_zones.Zone(type=const.TEXT_ZONE_CHARACTER, bbox=(x0, y0, x1, y1), children=[ch])
