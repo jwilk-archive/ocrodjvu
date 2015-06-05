@@ -14,6 +14,7 @@
 from __future__ import print_function
 
 import argparse
+import collections
 import contextlib
 import inspect
 import locale
@@ -252,10 +253,10 @@ class ArgumentParser(argparse.ArgumentParser):
                     print(language)
             except errors.EngineNotFound as ex:
                 logger.error(ex)
-                sys.exit(1)
+                sys.exit(errors.EXIT_FATAL)
             except errors.UnknownLanguageList as ex:
                 logger.error(ex)
-                sys.exit(1)
+                sys.exit(errors.EXIT_FATAL)
             else:
                 sys.exit(0)
 
@@ -333,6 +334,12 @@ class ArgumentParser(argparse.ArgumentParser):
         if options.n_jobs is None:
             options.n_jobs = get_cpu_count()
         return options
+
+class Results(dict):
+    seen_exception = False
+
+    def __missing__(self, key):
+        return
 
 class Context(djvu.decode.Context):
 
@@ -430,6 +437,7 @@ class Context(djvu.decode.Context):
                     if self._options.resume_on_error and not interrupted_by_user:
                         # As requested by user, don't abort on error and pretend that nothing happened.
                         results[n] = False
+                        results.seen_exception = True
                         continue
                     else:
                         # The main thread will take care of aborting the application.
@@ -452,7 +460,7 @@ class Context(djvu.decode.Context):
             pages = list(document.pages)
         else:
             pages = [document.pages[i - 1] for i in pages]
-        results = dict((page.n, None) for page in pages)
+        results = Results()
         condition = threading.Condition()
         threads = [
             threading.Thread(target=self.page_thread, args=(pages, results, condition))
@@ -497,7 +505,7 @@ class Context(djvu.decode.Context):
                     for thread in threads:
                         thread.join()
                     self._debug = True
-                    sys.exit(1)
+                    sys.exit(errors.EXIT_FATAL)
                 if result is False:
                     # No image suitable for OCR.
                     pass
@@ -518,6 +526,8 @@ class Context(djvu.decode.Context):
             raise
         finally:
             sed_file.close()
+        if results.seen_exception:
+            sys.exit(errors.EXIT_NONFATAL)
 
     def process(self, *args, **kwargs):
         try:
@@ -542,7 +552,7 @@ def main(argv=sys.argv):
         context.process(options.path, options.pages)
     except KeyboardInterrupt:
         logger.info('Interrupted by user.')
-        sys.exit(1)
+        sys.exit(errors.FATAL)
     finally:
         temp_dir = context.close()
         if temp_dir is not None:

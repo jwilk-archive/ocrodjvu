@@ -492,6 +492,27 @@
 </refsection>
 
 <refsection>
+    <title>Exit status</title>
+    <para>
+        One of the following exit values can be returned by &p;:
+        <variablelist>
+        <varlistentry>
+            <term>0</term>
+            <listitem><para>The program finished successfully.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+            <term>1</term>
+            <listitem><para>A fatal error occurred.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+            <term>2</term>
+            <listitem><para>The program recovered from an error (<option>--on-error=resume</option>).</para></listitem>
+        </varlistentry>
+        </variablelist>
+    </para>
+</refsection>
+
+<refsection>
     <title>Environment</title>
     <para>
         The following environment variables affects &p;:

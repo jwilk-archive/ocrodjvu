@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2009, 2010, 2013 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2009-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -40,5 +40,8 @@ class MalformedHocr(MalformedOcrOutput):
 
     def __init__(self, message):
         Exception.__init__(self, 'Malformed hOCR document: %s' % message)
+
+EXIT_FATAL = 1
+EXIT_NONFATAL = 2
 
 # vim:ts=4 sts=4 sw=4 et
