@@ -163,7 +163,7 @@ class ArgumentParser(argparse.ArgumentParser):
 
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
     engines = list(engines.get_engines())
-    [default_engine] = [engine for engine in engines if engine.name == 'ocropus']
+    [default_engine] = [engine for engine in engines if engine.name == 'tesseract']
 
     _details_map = dict(
         lines=text_zones.TEXT_DETAILS_LINE,
@@ -206,7 +206,7 @@ class ArgumentParser(argparse.ArgumentParser):
         group.add_argument('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
         group.add_argument('--save-raw-ocr', dest='save_raw_ocr_dir', metavar='DIRECTORY', help='save raw OCR output')
         group.add_argument('--raw-ocr-filename-template', metavar='TEMPLATE', default='{id-ext}', help='file naming scheme for raw OCR')
-        self.add_argument('-e', '--engine', dest='engine', nargs=1, action=self.set_engine, default=self.default_engine, help='OCR engine to use')
+        self.add_argument('-e', '--engine', dest='engine', nargs=1, action=self.set_engine, default=self.default_engine, help='OCR engine to use (default: {0})'.format(self.default_engine.name))
         self.add_argument('--list-engines', action=self.list_engines, nargs=0, help='print list of available OCR engines')
         self.add_argument('-l', '--language', dest='language', help='set recognition language')
         self.add_argument('--list-languages', action=self.list_languages, nargs=0, help='print list of available languages')

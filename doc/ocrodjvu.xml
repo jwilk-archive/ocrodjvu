@@ -119,7 +119,11 @@
             <term><option>--engine=<replaceable>engine-id</replaceable></option></term>
             <listitem>
                 <para>
-                    Use this OCR engine. The default is <quote><literal>ocropus</literal></quote> (OCRopus).
+                    Use this OCR engine.
+                </para>
+                <para>
+                    The default is <quote><literal>tesseract</literal></quote>.
+                    (The default was <quote><literal>ocropus</literal></quote> prior to &p; 0.8.)
                 </para>
             </listitem>
         </varlistentry>
