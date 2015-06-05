@@ -53,7 +53,7 @@ def _wait_for_worker(worker):
         worker.wait()
     except Exception:
         for line in stderr:
-            sys.stderr.write(line)
+            sys.stderr.write('tesseract: ' + line)
         raise
     if len(stderr) == 1:
         [line] = stderr
@@ -62,7 +62,7 @@ def _wait_for_worker(worker):
             # if nothing went wrong. Filter out such an unhelpful message.
             return
     for line in stderr:
-        sys.stderr.write(line)
+        sys.stderr.write('tesseract: ' + line)
 
 def fix_html(s):
     '''
