@@ -1,6 +1,7 @@
 ocrodjvu (0.7.20) UNRELEASED; urgency=low
 
   * Add the “tesseract: ” prefix to messages Tesseract prints on stderr.
+    https://bitbucket.org/jwilk/ocrodjvu/issue/10
     Thanks to Janusz S. Bień for the bug report.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Fri, 05 Jun 2015 21:37:54 +0200
