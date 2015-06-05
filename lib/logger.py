@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # encoding=UTF-8
 
-# Copyright © 2011 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2011-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,10 +14,7 @@
 
 import logging
 
-logger = None
-
 def setup():
-    global logger
     logger = logging.getLogger('ocrodjvu.main')
     ipc_logger = logging.getLogger('ocrodjvu.ipc')
     # Main handler:
