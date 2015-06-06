@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2008, 2009, 2010, 2011, 2012, 2013 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2008-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ class ArgumentParser(argparse.ArgumentParser):
     def parse_args(self, args=None, namespace=None):
         options = argparse.ArgumentParser.parse_args(self, args, namespace)
         if options.rotation % 90 != 0:
-            self.error('Rotation is not a multiple of 90 degrees')
+            self.error('rotation must be a multiple of 90 degrees')
         options.details = self._details_map[options.details]
         options.uax29 = options.language if options.word_segmentation == 'uax29' else None
         del options.word_segmentation

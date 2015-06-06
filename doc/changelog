@@ -6,8 +6,9 @@ ocrodjvu (0.8) UNRELEASED; urgency=low
     Thanks to Janusz S. Bień for the bug report.
   * Ensure that exit code is non-zero if the program recovered from an error.
     https://bitbucket.org/jwilk/ocrodjvu/issue/6
+  * Improve error handling.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 05 Jun 2015 23:14:11 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 06 Jun 2015 22:12:29 +0200
 
 ocrodjvu (0.7.19) unstable; urgency=low
 
