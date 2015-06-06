@@ -14,7 +14,7 @@
 from .. import utils
 from .. import image_io
 
-import cStringIO as io
+import io
 
 class Engine(object):
 
@@ -56,6 +56,6 @@ class Output(object):
             file.write(str(self))
 
     def as_stringio(self):
-        return io.StringIO(str(self))
+        return io.BytesIO(str(self))
 
 # vim:ts=4 sts=4 sw=4 et
