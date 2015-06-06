@@ -114,8 +114,8 @@ class Engine(common.Engine):
         if self.use_hocr is None:
             self.use_hocr = self._extension == 'traineddata'
         if self.use_hocr:
-            # Import hocr late, so that importing lxml is not triggered if hOCR
-            # output is not used.
+            # Import hocr late,
+            # so that lxml is imported only when needed.
             from .. import hocr
             self._hocr = hocr
         else:

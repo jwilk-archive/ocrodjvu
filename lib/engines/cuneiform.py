@@ -48,8 +48,8 @@ class Engine(common.Engine):
             self._languages = list(self._get_languages())
         except errors.UnknownLanguageList:
             raise errors.EngineNotFound(self.name)
-        # Import hocr late, so that importing lxml is not triggered if
-        # Cuneiform is not used.
+        # Import hocr late,
+        # so that lxml is imported only when needed.
         from .. import hocr
         self._hocr = hocr
 
