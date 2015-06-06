@@ -65,7 +65,7 @@ class Engine(common.Engine):
         if self.has_charboxes is None and script_name == 'recognize':
             # OCRopus ≥ 0.3
             self.has_charboxes = True
-        # Import hocr late, so that importing lxml is not triggered if Ocropus
+        # Import hocr late, so that importing lxml is not triggered if OCRopus
         # is not used.
         from .. import hocr
         self._hocr = hocr
