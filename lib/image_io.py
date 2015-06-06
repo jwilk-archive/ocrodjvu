@@ -140,8 +140,8 @@ class TIFF(ImageFormat):
     '''
 
     extension = 'tif'
-    # Ideally it should be 'tiff', but tesseract is not happy with such an
-    # extension
+    # Ideally it should be 'tiff',
+    # but Tesseract is not happy with such an extension
 
     def write_image(self, page_job, render_layers, file):
         size = page_job.size
