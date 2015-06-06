@@ -18,13 +18,13 @@ def get_icu():
         # For PyICU ≥ 1.0
         import icu
         return icu
-    except ImportError:
+    except ImportError:  # <no-coverage>
         pass
-    try:
+    try:  # <no-coverage>
         # For PyICU < 1.0
         import PyICU as icu
         return icu
-    except ImportError as ex:
+    except ImportError as ex:  # <no-coverage>
         utils.enhance_import_error(ex, 'PyICU', 'python-pyicu', 'http://pyicu.osafoundation.org/')
         raise
 
