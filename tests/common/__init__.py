@@ -26,6 +26,24 @@ from nose.tools import (
     assert_true,
 )
 
+if sys.version_info >= (2, 7):
+    from nose.tools import (
+        assert_greater_equal,
+        assert_is_instance,
+    )
+else:
+    # Python 2.6:
+    def assert_greater_equal(x, y):
+        assert_true(
+            x >= y,
+            msg='{0!r} not greater than or equal to {1!r}'.format(x, y)
+        )
+    def assert_is_instance(obj, cls):
+        assert_true(
+            isinstance(obj, cls),
+            msg='{0!r} is not an instance of {1!r}'.format(obj, cls)
+        )
+
 def assert_ml_equal(first, second, msg='Strings differ'):
     '''Assert that two multi-line strings are equal.'''
     assert_true(isinstance(first, basestring), 'First argument is not a string')
@@ -121,6 +139,8 @@ def sorted_glob(*args, **kwargs):
 __all__ = [
     'assert_equal',
     'assert_false',
+    'assert_greater_equal',
+    'assert_is_instance',
     'assert_ml_equal',
     'assert_not_equal',
     'assert_true',

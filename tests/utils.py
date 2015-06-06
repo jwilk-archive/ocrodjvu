@@ -16,6 +16,8 @@ import warnings
 
 from tests.common import (
     assert_equal,
+    assert_greater_equal,
+    assert_is_instance,
     assert_true,
     catch_warnings,
     exception,
@@ -227,5 +229,10 @@ class test_property():
         dummy = self.Dummy()
         assert_equal(dummy.eggs, None)
         assert_equal(dummy.ham, 42)
+
+def test_get_cpu_count():
+    n = lib.utils.get_cpu_count()
+    assert_is_instance(n, int)
+    assert_greater_equal(n, 1)
 
 # vim:ts=4 sts=4 sw=4 et

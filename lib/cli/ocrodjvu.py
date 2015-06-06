@@ -118,17 +118,6 @@ class DryRunSaver(Saver):
     def save(self, document, pages, djvu_path, sed_file):
         pass
 
-def get_cpu_count():
-    try:
-        import multiprocessing
-        return multiprocessing.cpu_count()
-    except (ImportError, NotImplementedError):
-        pass
-    try:
-        return os.sysconf('SC_NPROCESSORS_ONLN')
-    except (ValueError, OSError, AttributeError):
-        return 1
-
 def expand_template(template, pageno, pageid):
     d = {
         'page': pageno,
@@ -332,7 +321,7 @@ class ArgumentParser(argparse.ArgumentParser):
             pass
         options.uax29 = options.language if options.word_segmentation == 'uax29' else None
         if options.n_jobs is None:
-            options.n_jobs = get_cpu_count()
+            options.n_jobs = utils.get_cpu_count()
         return options
 
 class Results(dict):
