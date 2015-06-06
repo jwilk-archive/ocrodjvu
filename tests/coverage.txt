@@ -2,7 +2,7 @@ Generated automatically by private/update-coverage. Do not edit.
 
 Name                    Stmts   Miss Branch BrMiss  Cover   Missing
 -------------------------------------------------------------------
-lib                         5      2      4      2    56%   4, 6
+lib                         1      0      0      0   100%
 lib.cli                     7      3      0      0    57%   18-20
 lib.cli.djvu2hocr         229     78     78     40    62%   64-65, 99, 101, 117, 121, 147-185, 188-211, 219-222, 237-240, 243-248, 253-258, 264, 334-335
 lib.cli.hocr2djvused       41      1      8      1    96%   50
@@ -27,4 +27,4 @@ lib.unicode_support        21      0      8      0   100%
 lib.utils                  82      0     20      0   100%
 lib.version                 1      0      0      0   100%
 -------------------------------------------------------------------
-TOTAL                    2092    732    674    309    62%
+TOTAL                    2088    730    670    307    62%
