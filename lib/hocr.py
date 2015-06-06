@@ -214,7 +214,7 @@ def _scan(node, settings, page_size=None):
         )
 
     if settings.cuneiform and settings.cuneiform <= (0, 8):
-        # Cuneiform ≤ 0.8 don't mark OCR elements in an hOCR way.
+        # Cuneiform ≤ 0.8 doesn't mark OCR elements in an hOCR way.
         djvu_class = cuneiform_tag_to_djvu(node.tag)
     else:
         hocr_classes = (node.get('class') or '').split()
@@ -230,7 +230,7 @@ def _scan(node, settings, page_size=None):
                 break
         else:
             if node.tag == 'p':
-                # Cuneiform ≥ 0.9 don't mark paragraphs in an hOCR way.
+                # Cuneiform ≥ 0.9 doesn't mark paragraphs in an hOCR way.
                 djvu_class = cuneiform_tag_to_djvu(node.tag)
 
     if not djvu_class:
