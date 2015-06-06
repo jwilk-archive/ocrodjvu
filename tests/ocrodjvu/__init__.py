@@ -11,8 +11,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+import io
 import sys
-from cStringIO import StringIO
 
 from lib.cli import ocrodjvu
 
@@ -27,8 +27,8 @@ from tests.common import (
 engines = None
 
 def test_help():
-    stdout = StringIO()
-    stderr = StringIO()
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--help'])
     assert_equal(rc, 0)
@@ -37,8 +37,8 @@ def test_help():
 
 def test_version():
     # https://bugs.debian.org/573496
-    stdout = StringIO()
-    stderr = StringIO()
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--version'])
     assert_equal(rc, 0)
@@ -47,8 +47,8 @@ def test_version():
 
 def test_list_engines():
     global engines
-    stdout = StringIO()
-    stderr = StringIO()
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--list-engines'])
     assert_equal(rc, 0)
@@ -56,8 +56,8 @@ def test_list_engines():
     engines = stdout.getvalue().splitlines()
 
 def _test_list_languages(engine):
-    stdout = StringIO()
-    stderr = StringIO()
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--engine', engine, '--list-languages'])
     assert_equal(rc, 0)

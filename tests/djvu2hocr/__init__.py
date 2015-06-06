@@ -11,11 +11,11 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+import io
 import os
 import shlex
 import shutil
 import sys
-from cStringIO import StringIO
 
 from lib.cli import djvu2hocr
 from lib import temporary
@@ -34,8 +34,8 @@ here = os.path.dirname(__file__)
 here = os.path.relpath(here)
 
 def test_help():
-    stdout = StringIO()
-    stderr = StringIO()
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(djvu2hocr.main, ['', '--help'])
     assert_equal(rc, 0)
@@ -44,8 +44,8 @@ def test_help():
 
 def test_version():
     # https://bugs.debian.org/573496
-    stdout = StringIO()
-    stderr = StringIO()
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(djvu2hocr.main, ['', '--version'])
     assert_equal(rc, 0)

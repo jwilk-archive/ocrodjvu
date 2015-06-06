@@ -11,8 +11,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License for more details.
 
+import io
 import os
-from cStringIO import StringIO
 
 from PIL import Image
 
@@ -44,7 +44,7 @@ def _test_from_file(base_filename, format):
     context = djvu.decode.Context()
     document = context.new_document(djvu.decode.FileUri(djvu_filename))
     page_job = document.pages[0].decode(wait=True)
-    file = StringIO()
+    file = io.BytesIO()
     format.write_image(page_job, layers, file)
     result = file.getvalue()
     assert_equal(len(result), len(expected))
@@ -55,7 +55,7 @@ def _test_from_file(base_filename, format):
         # The result might be still correct, even if the strings are different.
         # Think of BMP format and its padding bytes.
         expected = Image.open(expected_filename)
-        result = Image.open(StringIO(result))
+        result = Image.open(io.BytesIO(result))
         assert_equal(result.format, expected.format)
         assert_equal(result.size, expected.size)
         assert_equal(result.mode, expected.mode)

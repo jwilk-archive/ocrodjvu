@@ -12,10 +12,10 @@
 # General Public License for more details.
 
 import contextlib
+import io
 import os
 import shlex
 import sys
-from cStringIO import StringIO
 
 from lib.cli import hocr2djvused
 
@@ -32,8 +32,8 @@ here = os.path.dirname(__file__)
 here = os.path.relpath(here)
 
 def test_help():
-    stdout = StringIO()
-    stderr = StringIO()
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(hocr2djvused.main, ['', '--help'])
     assert_equal(rc, 0)
@@ -42,8 +42,8 @@ def test_help():
 
 def test_version():
     # https://bugs.debian.org/573496
-    stdout = StringIO()
-    stderr = StringIO()
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(hocr2djvused.main, ['', '--version'])
     assert_equal(rc, 0)
@@ -59,7 +59,7 @@ def _test_from_file(base_filename, index, extra_args):
         expected_output = file.read()
     args = shlex.split(commandline) + shlex.split(extra_args)
     assert args[0] == '#'
-    with contextlib.closing(StringIO()) as output_file:
+    with contextlib.closing(io.BytesIO()) as output_file:
         with open(html_filename, 'rb') as html_file:
             with interim(sys, stdin=html_file, stdout=output_file):
                 rc = try_run(hocr2djvused.main, args)
@@ -74,7 +74,7 @@ def _rough_test_from_file(base_filename, args):
         args += ['--page-size=1000x1000']
     base_filename = os.path.join(here, base_filename)
     html_filename = '%s.html' % (base_filename,)
-    with contextlib.closing(StringIO()) as output_file:
+    with contextlib.closing(io.BytesIO()) as output_file:
         with open(html_filename, 'rb') as html_file:
             with interim(sys, stdin=html_file, stdout=output_file):
                 rc = try_run(hocr2djvused.main, args)
