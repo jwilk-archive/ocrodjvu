@@ -97,7 +97,7 @@ def test_from_file():
         for extra_args in '', '--html5':
             yield _test_from_file, base_filename, index, extra_args
     for html_filename in sorted_glob(os.path.join(here, '*.html')):
-        # For HTML files that have no corresponing .test* files, we just check
+        # For HTML files that have no corresponding .test* files, we just check
         # if they won't trigger any exception.
         base_filename = os.path.basename(html_filename[:-5])
         for args in rough_test_args:
