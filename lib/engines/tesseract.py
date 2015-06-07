@@ -147,7 +147,7 @@ class Engine(common.Engine):
                 pass
             else:
                 # This should never happen. Recognizing non-existent image
-                # should always fail. But apparently there are subversion
+                # should always fail. But apparently there are Subversion
                 # snapshots of Tesseract in the wild that do it wrongly. Rather
                 # than failing hard, issue a warning:
                 warnings.warn('unexpected exit code from Tesseract', category=RuntimeWarning, stacklevel=2)
