@@ -322,6 +322,8 @@ class ArgumentParser(argparse.ArgumentParser):
         options.uax29 = options.language if options.word_segmentation == 'uax29' else None
         if options.n_jobs is None:
             options.n_jobs = utils.get_cpu_count()
+        elif options.n_jobs < 1:
+            options.n_jobs = 1
         return options
 
 class Results(dict):
