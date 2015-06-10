@@ -52,8 +52,8 @@ def test_version():
 
 def _test_from_file(base_filename, index, extra_args):
     base_filename = os.path.join(here, base_filename)
-    test_filename = '%s.test%d' % (base_filename, index)
-    html_filename = '%s.html' % (base_filename,)
+    test_filename = '{base}.test{i}'.format(base=base_filename, i=index)
+    html_filename = '{base}.html'.format(base=base_filename)
     with open(test_filename, 'rb') as file:
         commandline = file.readline()
         expected_output = file.read()
@@ -73,7 +73,7 @@ def _rough_test_from_file(base_filename, args):
         # Add dummy page-size information
         args += ['--page-size=1000x1000']
     base_filename = os.path.join(here, base_filename)
-    html_filename = '%s.html' % (base_filename,)
+    html_filename = '{base}.html'.format(base=base_filename)
     with contextlib.closing(io.BytesIO()) as output_file:
         with open(html_filename, 'rb') as html_file:
             with interim(sys, stdin=html_file, stdout=output_file):
@@ -85,7 +85,7 @@ def _rough_test_from_file(base_filename, args):
 def test_from_file():
     rough_test_args = ['--details=lines']
     rough_test_args += [
-        '--details=%s%s' % (details, extra)
+        '--details={0}'.format(details) + extra
         for details in ('words', 'chars')
         for extra in ('', ' --word-segmentation=uax29')
     ]
