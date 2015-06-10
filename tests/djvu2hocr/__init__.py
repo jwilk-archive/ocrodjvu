@@ -54,7 +54,7 @@ def test_version():
 
 def _test_from_file(base_filename, index):
     base_filename = os.path.join(here, base_filename)
-    test_filename = '%s.test%d' % (base_filename, index)
+    test_filename = '{base}.test{i}'.format(base=base_filename, i=index)
     djvused_filename = base_filename + '.djvused'
     with open(test_filename, 'rb') as file:
         commandline = file.readline()
