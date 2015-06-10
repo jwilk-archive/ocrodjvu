@@ -48,7 +48,7 @@ class test_exceptions():
     def test_invalid_signo(self):
         # signal.NSIG is guaranteed not be a correct signal number
         ex = ipc.CalledProcessInterrupted(signal.NSIG, 'eggs')
-        assert_equal(str(ex), "Command 'eggs' was interrupted by signal %d" % signal.NSIG)
+        assert_equal(str(ex), "Command 'eggs' was interrupted by signal {0}".format(signal.NSIG))
         assert_false(ex.by_user)
 
 class test_wait():
