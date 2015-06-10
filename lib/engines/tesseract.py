@@ -42,7 +42,7 @@ _bbox_extras_template = '''\
 <!-- The following script was appended to hOCR by ocrodjvu for internal purposes. -->
 <script type='application/x-ocrodjvu-tesseract'>
 //<![CDATA[
-%s
+{0}
 //]]>
 </script>
 '''
@@ -53,7 +53,7 @@ def _wait_for_worker(worker):
         worker.wait()
     except Exception:
         for line in stderr:
-            sys.stderr.write('tesseract: ' + line)
+            sys.stderr.write('tesseract: {0}'.format(line))
         raise
     if len(stderr) == 1:
         [line] = stderr
@@ -62,7 +62,7 @@ def _wait_for_worker(worker):
             # if nothing went wrong. Filter out such an unhelpful message.
             return
     for line in stderr:
-        sys.stderr.write('tesseract: ' + line)
+        sys.stderr.write('tesseract: {0}'.format(line))
 
 def fix_html(s):
     '''
@@ -158,7 +158,8 @@ class Engine(common.Engine):
 
     def _get_languages(self):
         self._user_to_tesseract = {}
-        for filename in glob.iglob(os.path.join(self._directory, '*.%s' % self._extension)):
+        wildcard = '*.{ext}'.format(ext=self._extension)
+        for filename in glob.iglob(os.path.join(self._directory, wildcard)):
             filename = os.path.basename(filename)
             code = os.path.splitext(filename)[0]
             if code == 'osd':
@@ -257,7 +258,10 @@ class Engine(common.Engine):
                 )
                 _wait_for_worker(worker)
                 with open(os.path.join(output_dir, 'tmp.box'), 'r') as box_file:
-                    contents = contents.replace('</body>', (_bbox_extras_template + '</body>') % box_file.read())
+                    contents = contents.replace(
+                        '</body>',
+                        _bbox_extras_template.format(box_file.read()) + '</body>'
+                    )
         if self.fix_html:
             contents = fix_html(contents)
         return common.Output(
