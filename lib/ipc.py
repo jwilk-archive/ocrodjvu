@@ -59,7 +59,7 @@ class CalledProcessInterrupted(CalledProcessError):
 
     def __str__(self):
         signal_name = self._signal_names.get(self.args[1], self.args[1])
-        return 'Command %r was interrupted by signal %s' % (self.args[0], signal_name)
+        return 'Command {cmd!r} was interrupted by signal {sig}'.format(cmd=self.args[0], sig=signal_name)
 
 del get_signal_names
 
@@ -69,7 +69,7 @@ del get_signal_names
 def shell_escape(s, safe=re.compile('^[a-zA-Z0-9_+/=.,:%-]+$').match):
     if safe(s):
         return s
-    return "'%s'" % s.replace("'", r"'\''")
+    return "'{0}'".format(s.replace("'", r"'\''"))
 
 class Subprocess(subprocess.Popen):
 
