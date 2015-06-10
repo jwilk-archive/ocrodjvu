@@ -1,4 +1,4 @@
-ocrodjvu (0.8) UNRELEASED; urgency=low
+ocrodjvu (0.8) unstable; urgency=low
 
   * Change the default OCR engine to Tesseract.
   * Add the “tesseract: ” prefix to messages Tesseract prints on stderr.
@@ -8,7 +8,7 @@ ocrodjvu (0.8) UNRELEASED; urgency=low
     https://bitbucket.org/jwilk/ocrodjvu/issue/6
   * Improve error handling.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 06 Jun 2015 22:12:29 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 10 Jun 2015 21:17:32 +0200
 
 ocrodjvu (0.7.19) unstable; urgency=low
 
