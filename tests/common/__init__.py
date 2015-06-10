@@ -122,7 +122,7 @@ def exception(exc_type, string=None, regex=None, callback=None):
         def callback(exc):
             exc_string = str(exc)
             if not re.match(regex, exc_string):
-                message = '%r !~ %r' % (exc_string, regex)
+                message = "regexp didn't match: {re!r} not found in {exc!r}".format(re=regex, exc=exc_string)
                 raise AssertionError(message)
     try:
         yield None
@@ -130,7 +130,7 @@ def exception(exc_type, string=None, regex=None, callback=None):
         _, exc, _ = sys.exc_info()
         callback(exc)
     else:
-        message = '%s was not raised' % exc_type.__name__
+        message = '{exc} was not raised'.format(exc=exc_type.__name__)
         raise AssertionError(message)
 
 def sorted_glob(*args, **kwargs):
