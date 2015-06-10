@@ -81,12 +81,12 @@ class build_doc(distutils_build):
             contents = file.read()
             # Format URLs consistently:
             contents = self._url_regex.sub(
-                lambda m: r'\m[blue]\fI%s\fR\m[]' % m.groups(),
+                lambda m: r'\m[blue]\fI{0}\fR\m[]'.format(*m.groups()),
                 contents,
             )
             # Use RFC 3339 date format:
             contents = self._date_regex.sub(
-                lambda m: '%(year)s-%(month)s-%(day)s' % m.groupdict(),
+                lambda m: '{year}-{month}-{day}'.format(**m.groupdict()),
                 contents
             )
             file.seek(0)
@@ -122,7 +122,7 @@ class clean(distutils_clean):
             with open(manname, 'r') as file:
                 stamp = file.readline()
             if stamp != sdist.manpage_stamp:
-                self.execute(os.unlink, [manname], 'removing %s' % manname)
+                self.execute(os.unlink, [manname], 'removing {0}'.format(manname))
 
 class sdist(distutils_sdist):
 
@@ -143,7 +143,7 @@ class sdist(distutils_sdist):
     def make_release_tree(self, base_dir, files):
         distutils_sdist.make_release_tree(self, base_dir, files)
         for manname in glob.iglob(os.path.join(base_dir, 'doc', '*.1')):
-            self.execute(self._rewrite_manpage, [manname], 'rewriting %s' % manname)
+            self.execute(self._rewrite_manpage, [manname], 'rewriting {0}'.format(manname))
 
 scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr']
 
@@ -159,7 +159,7 @@ if os.name == 'nt':
     distutils.core.setup = setuptools.setup
     extra_args = dict(
         entry_points=dict(
-            console_scripts=['%(name)s = ocrodjvu.cli.%(name)s:main' % dict(name=name) for name in scripts]
+            console_scripts=['{name} = ocrodjvu.cli.{name}:main'.format(name=name) for name in scripts]
         )
     )
 else:
