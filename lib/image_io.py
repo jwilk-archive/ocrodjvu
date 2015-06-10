@@ -38,7 +38,7 @@ class ImageFormat(object):
             pixel_format.rows_top_to_bottom = 1
             pixel_format.y_top_to_bottom = 1
         else:
-            raise NotImplementedError('Cannot output %d-bpp images' % bpp)
+            raise NotImplementedError('Cannot output {0}-bpp images'.format(bpp))
         self._pixel_format = pixel_format
 
     @utils.not_overridden
@@ -46,7 +46,7 @@ class ImageFormat(object):
         raise NotImplementedError('Cannot output images in this format')
 
     def __repr__(self):
-        return '%s.%s(%d)' % (self.__module__, type(self).__name__, self.bpp)
+        return '{mod}.{cls}({bpp})'.format(mod=self.__module__, cls=type(self).__name__, bpp=self.bpp)
 
 class PNM(ImageFormat):
 
@@ -70,9 +70,9 @@ class PNM(ImageFormat):
         size = page_job.size
         rect = (0, 0) + size
         if self._pixel_format.bpp == 1:
-            file.write('P4 %d %d\n' % size)  # PBM header
+            file.write('P4 {0} {1}\n'.format(*size))  # PBM header
         else:
-            file.write('P6 %d %d 255\n' % size)  # PPM header
+            file.write('P6 {0} {1} 255\n'.format(*size))  # PPM header
         data = page_job.render(
             render_layers,
             rect, rect,
@@ -158,7 +158,7 @@ class TIFF(ImageFormat):
             interp = 2
             spp = 3
         else:
-            raise NotImplementedError('Cannot output %d-bpp images' % self._pixel_format.bpp)
+            raise NotImplementedError('Cannot output {0}-bpp images'.format(self._pixel_format.bpp))
         n_tags = 9
         data_offset = 28 + n_tags * 12
         header = []
