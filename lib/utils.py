@@ -21,12 +21,12 @@ debian = os.path.exists('/etc/debian_version')
 
 def enhance_import_error(exception, package, debian_package, homepage):
     message = str(exception)
-    format = '%(message)s; please install the %(package)s package'
     if debian:
         package = debian_package
-    else:
-        format += ' <%(homepage)s>'
-    exception.args = [format % locals()]
+    message += '; please install the {pkg} package'.format(pkg=package)
+    if not debian:
+        message += ' <{url}>'.format(url=homepage)
+    exception.args = [message]
 
 def parse_page_numbers(pages):
     '''
@@ -64,15 +64,15 @@ def smart_repr(s, encoding=None):
         u = s.decode(encoding)
     except UnicodeDecodeError:
         return repr(s)
-    return "'%s'" % _special_chars_replace(_special_chars_escape, u)
+    return u"'{0}'".format(_special_chars_replace(_special_chars_escape, u))
 
 class EncodingWarning(UserWarning):
     pass
 
-_control_characters_regex = re.compile('[%s]' % ''.join(
+_control_characters_regex = re.compile('[{0}]'.format(''.join(
     ch for ch in map(chr, xrange(32))
     if ch not in u'\n\r\t'
-))
+)))
 
 def sanitize_utf8(text):
     '''
@@ -94,7 +94,7 @@ def sanitize_utf8(text):
     match = _control_characters_regex.search(text)
     if match:
         byte = ord(match.group())
-        message = 'byte 0x%02x in position %d: control character' % (byte, match.start())
+        message = 'byte 0x{byte:02x} in position {i}: control character'.format(byte=byte, i=match.start())
         warnings.warn(
             message,
             category=EncodingWarning,
@@ -119,7 +119,7 @@ def not_overridden(f):
     def new_f(self, *args, **kwargs):
         cls = type(self)
         warnings.warn(
-            '%s.%s.%s() is not overridden' % (cls.__module__, cls.__name__, f.__name__),
+            '{mod}.{cls}.{func}() is not overridden'.format(mod=cls.__module__, cls=cls.__name__, func=f.__name__),
             category=NotOverriddenWarning,
             stacklevel=2
         )
@@ -140,7 +140,7 @@ def identity(x):
 class property(object):
 
     def __init__(self, default_value=None, filter=identity):
-        self._private_name = '__%s__%d' % (self.__module__, id(self))
+        self._private_name = '__{mod}__{id}'.format(mod=self.__module__, id=id(self))
         self._filter = filter
         self._default_value = default_value
 
