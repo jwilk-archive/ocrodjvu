@@ -5,6 +5,7 @@ python:
 before_install:
 - sudo apt-get update
 - sudo apt-get install -y libdjvulibre-dev djvulibre-bin
+- sudo apt-get install -y libxml2-utils
 install:
 - pip install cython
 - pip install python-djvulibre
@@ -15,5 +16,6 @@ install:
 - pip install pillow
 script:
 - nosetests --all --verbose
+- xmllint --noout --valid doc/*.xml
 
 # vim:ts=2 sts=2 sw=2 et
