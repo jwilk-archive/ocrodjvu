@@ -32,7 +32,7 @@ class Engine(object):
                 if not isinstance(prop, utils.property):
                     raise AttributeError
             except AttributeError as ex:
-                ex.args = ('%r is not a valid property for the %s engine' % (key, self.name),)
+                ex.args = ('{key!r} is not a valid property for the {engine} engine'.format(key=key, engine=self.name),)
                 raise
             setattr(self, key, value)
 
@@ -51,7 +51,7 @@ class Output(object):
         return self._contents
 
     def save(self, prefix):
-        path = '%s.%s' % (prefix, self.format)
+        path = '{base}.{ext}'.format(base=prefix, ext=self.format)
         with open(path, 'wb') as file:
             file.write(str(self))
 
