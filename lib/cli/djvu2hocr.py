@@ -96,7 +96,7 @@ class Zone(object):
     @property
     def text(self):
         if len(self._sexpr) != 6:
-            raise TypeError('List of %d (!= 6) elements' % len(self._sexpr))
+            raise TypeError('List of {0} (!= 6) elements'.format(len(self._sexpr)))
         if not isinstance(self._sexpr[5], sexpr.StringExpression):
             raise TypeError('Last element is not a string')
         return unicode(self._sexpr[5].value, 'UTF-8', 'replace')
@@ -114,11 +114,11 @@ class Zone(object):
     def n_children(self):
         n = len(self._sexpr) - 5
         if n <= 0:
-            raise TypeError('List of %d (< 6) elements' % len(self._sexpr))
+            raise TypeError('List of {0} (< 6) elements'.format(len(self._sexpr)))
         return n
 
     def __repr__(self):
-        return '%s(%r)' % (type(self).__name__, self._sexpr)
+        return '{tp}({sexpr!r})'.format(tp=type(self).__name__, sexpr=self._sexpr)
 
 _xml_string_re = re.compile(
     u'''
@@ -139,7 +139,7 @@ def set_text(element, text):
         if match.group(2):
             last = etree.Element('span')
             last.set('class', 'djvu_char')
-            last.set('title', '#x%02x' % ord(match.group(2)))
+            last.set('title', '#x{0:02x}'.format(ord(match.group(2))))
             last.text = ' '
             element.append(last)
 
@@ -176,7 +176,7 @@ def break_chars(char_zone_list, options):
             bbox.update(bbox_list[k])
         element = etree.Element('span')
         element.set('class', 'ocrx_word')
-        element.set('title', 'bbox %(bbox)s; bboxes %(bboxes)s' % dict(
+        element.set('title', 'bbox {bbox}; bboxes {bboxes}'.format(
             bbox=' '.join(map(str, bbox)),
             bboxes=', '.join(' '.join(map(str, bbox)) for bbox in bbox_list[i:j])
         ))
@@ -277,10 +277,10 @@ hocr_header_template = '''\
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="ocr-system" content="%(ocr_system)s" />
-  <meta name="ocr-capabilities" content="%(ocr_capabilities)s" />
-  <style type="text/css">%(css)s</style>
-  <title>%(title)s</title>
+  <meta name="ocr-system" content="{ocr_system}" />
+  <meta name="ocr-capabilities" content="{ocr_capabilities}" />
+  <style type="text/css">{css}</style>
+  <title>{title}</title>
 </head>
 <body>
 '''
@@ -294,7 +294,7 @@ hocr_footer = '''
 
 def main(argv=sys.argv):
     options = ArgumentParser().parse_args(argv[1:])
-    logger.info('Converting %s:' % utils.smart_repr(options.path, system_encoding))
+    logger.info('Converting {path}:'.format(path=utils.smart_repr(options.path, system_encoding)))
     if options.pages is None:
         djvused = ipc.Subprocess(
             ['djvused', '-e', 'n', os.path.abspath(options.path)],
@@ -308,14 +308,15 @@ def main(argv=sys.argv):
     page_iterator = iter(options.pages)
     sed_script = temporary.file(suffix='.djvused')
     for n in options.pages:
-        print('select %d; size; print-txt' % n, file=sed_script)
+        print('select {0}; size; print-txt'.format(n), file=sed_script)
     sed_script.flush()
     djvused = ipc.Subprocess(
         ['djvused', '-f', sed_script.name, os.path.abspath(options.path)],
         stdout=ipc.PIPE,
     )
-    hocr_header = hocr_header_template % dict(
-        ocr_system='djvu2hocr %s' % __version__,
+    ocr_system = 'djvu2hocr {ver}'.format(ver=__version__)
+    hocr_header = hocr_header_template.format(
+        ocr_system=ocr_system,
         ocr_capabilities=' '.join(hocr.djvu2hocr_capabilities),
         title=cgi.escape(options.title),
         css=cgi.escape(options.css),
@@ -333,7 +334,7 @@ def main(argv=sys.argv):
             page_text = sexpr.Expression.from_stream(djvused.stdout)
         except sexpr.ExpressionSyntaxError:
             break
-        logger.info('- Page #%d', n)
+        logger.info('- Page #{n}'.format(n=n))
         page_zone = Zone(page_text, page_size[1])
         process_page(page_zone, options)
     sys.stdout.write(hocr_footer)
