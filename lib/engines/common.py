@@ -23,9 +23,13 @@ class Engine(object):
     needs_utf8_fix = False
 
     def __init__(self, *args, **kwargs):
-        assert args == ()
-        assert isinstance(self.name, str)
-        assert issubclass(self.image_format, image_io.ImageFormat)
+        tpname = '{mod}.{tp}'.format(tp=type(self).__name__, mod=self.__module__)
+        if args:
+            raise ValueError('{tp}.__init__() takes no positional arguments'.format(tp=tpname))  # <no-coverage>
+        if not isinstance(self.name, str):
+            raise TypeError('{tp}.name must be a string'.format(tp=tpname))  # <no-coverage>
+        if not issubclass(self.image_format, image_io.ImageFormat):
+            raise TypeError('{tp}.image_format must be an ImageFormat subclass'.format(tp=tpname))  # <no-coverage>
         for key, value in kwargs.iteritems():
             try:
                 prop = getattr(type(self), key)
