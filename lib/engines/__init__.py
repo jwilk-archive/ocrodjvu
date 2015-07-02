@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2010 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2010-2015 Jakub Wilk <jwilk@jwilk.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,13 +16,9 @@ import pkgutil
 def get_engines():
     for importer, name, ispkg in pkgutil.iter_modules(__path__):
         thismodule = __import__('', globals=globals(), fromlist=(name,), level=1)
-        try:
-            engine = getattr(thismodule, name).Engine
-            if engine.name is None:
-                continue
-        except AttributeError:
+        engine = getattr(thismodule, name).Engine
+        if engine.name is None:
             continue
-        else:
-            yield engine
+        yield engine
 
 # vim:ts=4 sts=4 sw=4 et
