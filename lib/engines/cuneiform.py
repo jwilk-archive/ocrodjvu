@@ -40,7 +40,6 @@ class Engine(common.Engine):
     # useful again at some point in the future.
 
     def __init__(self, *args, **kwargs):
-        assert args == ()
         common.Engine.__init__(self, *args, **kwargs)
         self._user_to_cuneiform = None  # to be defined later
         self._cuneiform_to_iso = None  # to be defined later

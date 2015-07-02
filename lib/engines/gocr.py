@@ -113,7 +113,6 @@ class Engine(common.Engine):
     extra_args = utils.property([], shlex.split)
 
     def __init__(self, *args, **kwargs):
-        assert args == ()
         common.Engine.__init__(self, *args, **kwargs)
         self._check_version()
 

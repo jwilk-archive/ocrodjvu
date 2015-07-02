@@ -32,7 +32,6 @@ class Engine(common.Engine):
     has_charboxes = utils.property()
 
     def __init__(self, *args, **kwargs):
-        assert args == ()
         common.Engine.__init__(self, **kwargs)
         self.tesseract = tesseract.Engine(executable=self.tesseract_executable)
         # Determine:

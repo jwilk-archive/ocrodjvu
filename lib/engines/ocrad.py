@@ -107,7 +107,6 @@ class Engine(common.Engine):
     replacement_character = utils.property(u'\N{REPLACEMENT CHARACTER}', utils.str_as_unicode)
 
     def __init__(self, *args, **kwargs):
-        assert args == ()
         common.Engine.__init__(self, **kwargs)
         try:
             self._languages = self._get_languages()

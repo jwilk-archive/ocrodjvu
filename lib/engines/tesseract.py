@@ -105,7 +105,6 @@ class Engine(common.Engine):
     fix_html = utils.property(0, int)
 
     def __init__(self, *args, **kwargs):
-        assert args == ()
         common.Engine.__init__(self, **kwargs)
         try:
             self._directory, self._extension = self.get_filesystem_info()
