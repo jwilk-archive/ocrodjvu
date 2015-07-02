@@ -48,7 +48,9 @@ class ArgumentParser(argparse.ArgumentParser):
         self.add_argument('-v', '--version', action='version', version=version, help='show version information and exit')
         group = self.add_argument_group(title='input selection options')
         group.add_argument('path', metavar='FILE', help='DjVu file to covert')
-        group.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to convert')
+        def pages(x):
+            return utils.parse_page_numbers(x)
+        group.add_argument('-p', '--pages', dest='pages', action='store', default=None, type=pages, help='pages to convert')
         group = self.add_argument_group(title='word segmentation options')
         group.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='simple', help='word segmentation algorithm')
         # -l/--language is currently not very useful, as ICU don't have any specialisations for languages ocrodjvu supports:
@@ -59,10 +61,6 @@ class ArgumentParser(argparse.ArgumentParser):
 
     def parse_args(self, args=None, namespace=None):
         options = argparse.ArgumentParser.parse_args(self, args, namespace)
-        try:
-            options.pages = utils.parse_page_numbers(options.pages)
-        except (TypeError, ValueError):
-            self.error('Unable to parse page numbers')
         if options.word_segmentation == 'uax29':
             options.icu = icu = unicode_support.get_icu()
             options.locale = icu.Locale(options.language)

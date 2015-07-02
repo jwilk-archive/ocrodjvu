@@ -200,7 +200,9 @@ class ArgumentParser(argparse.ArgumentParser):
         self.add_argument('-l', '--language', dest='language', help='set recognition language')
         self.add_argument('--list-languages', action=self.list_languages, nargs=0, help='print list of available languages')
         self.add_argument('--render', dest='render_layers', choices=self._render_map.keys(), action='store', default='mask', help='image layers to render')
-        self.add_argument('-p', '--pages', dest='pages', action='store', default=None, help='pages to process')
+        def pages(x):
+            return utils.parse_page_numbers(x)
+        self.add_argument('-p', '--pages', dest='pages', action='store', default=None, type=pages, help='pages to process')
         self.add_argument('-j', '--jobs', dest='n_jobs', metavar='N', nargs='?', type=int, default=1, help='number of jobs to run simultaneously')
         self.add_argument('path', metavar='FILE', help='DjVu file to process')
         group = self.add_argument_group(title='text segmentation options')
@@ -262,10 +264,6 @@ class ArgumentParser(argparse.ArgumentParser):
 
     def parse_args(self, args=None, namespace=None):
         options = argparse.ArgumentParser.parse_args(self, args, namespace)
-        try:
-            options.pages = utils.parse_page_numbers(options.pages)
-        except (TypeError, ValueError):
-            self.error('Unable to parse page numbers')
         options.details = self._details_map[options.details]
         options.render_layers = self._render_map[options.render_layers]
         options.resume_on_error = options.on_error == 'resume'
