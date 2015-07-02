@@ -60,7 +60,7 @@ def _test_from_file(base_filename, index):
         commandline = file.readline()
         expected_output = file.read()
     args = shlex.split(commandline)
-    assert args[0] == '#'
+    assert_equal(args[0], '#')
     with temporary.directory() as tmpdir:
         djvu_filename = os.path.join(tmpdir, 'empty.djvu')
         args += [djvu_filename]

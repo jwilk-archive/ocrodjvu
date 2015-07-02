@@ -58,7 +58,7 @@ def _test_from_file(base_filename, index, extra_args):
         commandline = file.readline()
         expected_output = file.read()
     args = shlex.split(commandline) + shlex.split(extra_args)
-    assert args[0] == '#'
+    assert_equal(args[0], '#')
     with contextlib.closing(io.BytesIO()) as output_file:
         with open(html_filename, 'rb') as html_file:
             with interim(sys, stdin=html_file, stdout=output_file):
