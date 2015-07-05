@@ -18,6 +18,7 @@ from tests.common import (
     assert_equal,
     assert_greater_equal,
     assert_is_instance,
+    assert_raises,
     assert_true,
     catch_warnings,
     exception,
@@ -46,23 +47,31 @@ class test_enhance_import():
 
     def test_debian(self):
         with interim(lib.utils, debian=True):
-            with exception(ImportError, 'No module named nonexistent; please install the python-nonexistent package'):
+            with assert_raises(ImportError) as ecm:
                 try:
                     import nonexistent
                 except ImportError as ex:
                     enhance_import_error(ex, 'PyNonexistent', 'python-nonexistent', 'http://pynonexistent.example.net/')
                     raise
                 nonexistent.f()  # quieten pyflakes
+            assert_equal(str(ecm.exception),
+                'No module named nonexistent; '
+                'please install the python-nonexistent package'
+            )
 
     def test_nondebian(self):
         with interim(lib.utils, debian=False):
-            with exception(ImportError, 'No module named nonexistent; please install the PyNonexistent package <http://pynonexistent.example.net/>'):
+            with assert_raises(ImportError) as ecm:
                 try:
                     import nonexistent
                 except ImportError as ex:
                     enhance_import_error(ex, 'PyNonexistent', 'python-nonexistent', 'http://pynonexistent.example.net/')
                     raise
                 nonexistent.f()  # quieten pyflakes
+            assert_equal(str(ecm.exception),
+                'No module named nonexistent; '
+                'please install the PyNonexistent package <http://pynonexistent.example.net/>'
+            )
 
 class test_smart_repr():
 

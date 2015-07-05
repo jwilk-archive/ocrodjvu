@@ -31,6 +31,9 @@ if sys.version_info >= (2, 7):
         assert_greater_equal,
         assert_is_instance,
         assert_multi_line_equal,
+        assert_raises,
+        assert_raises_regexp,
+        assert_regexp_matches,
     )
 else:
     # Python 2.6:
@@ -45,6 +48,38 @@ else:
             msg='{0!r} is not an instance of {1!r}'.format(obj, cls)
         )
     assert_multi_line_equal = assert_equal
+    class assert_raises(object):
+        def __init__(self, exc_type):
+            self._exc_type = exc_type
+            self.exception = None
+        def __enter__(self):
+            return self
+        def __exit__(self, exc_type, exc_value, tb):
+            if exc_type is None:
+                assert_true(False, '{0} not raised'.format(self._exc_type.__name__))
+            if not issubclass(exc_type, self._exc_type):
+                return False
+            if isinstance(exc_value, exc_type):
+                pass
+                # This branch is not always taken in Python 2.6:
+                # https://bugs.python.org/issue7853
+            elif isinstance(exc_value, tuple):
+                exc_value = exc_type(*exc_value)
+            else:
+                exc_value = exc_type(exc_value)
+            self.exception = exc_value
+            return True
+    @contextlib.contextmanager
+    def assert_raises_regexp(exc_type, regexp):
+        with assert_raises(exc_type) as ecm:
+            yield
+        assert_regexp_matches(str(ecm.exception), regexp)
+    def assert_regexp_matches(text, regexp):
+        if isinstance(regexp, basestring):
+            regexp = re.compile(regexp)
+        if not regexp.search(text):
+            message = "Regexp didn't match: {0!r} not found in {1!r}".format(regexp.pattern, text)
+            assert_true(False, msg=message)
 
 @contextlib.contextmanager
 def interim(obj, **override):
@@ -135,8 +170,10 @@ __all__ = [
     'assert_multi_line_equal',
     'assert_not_equal',
     'assert_true',
+    'assert_raises',
+    'assert_raises_regexp',
+    'assert_regexp_matches',
     'catch_warnings',
-    'exception',
     'interim',
     'interim_environ',
     'sorted_glob',

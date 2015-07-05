@@ -16,7 +16,8 @@ import sys
 
 from tests.common import (
     assert_equal,
-    exception,
+    assert_raises,
+    assert_raises_regexp,
     interim,
 )
 
@@ -49,7 +50,7 @@ class test_language():
         if ok:
             engine.check_language(lang)
         else:
-            with exception(lib.errors.MissingLanguagePack, regex='^language pack for the selected language (.+) is not available$'):
+            with assert_raises_regexp(lib.errors.MissingLanguagePack, '^language pack for the selected language (.+) is not available$'):
                 engine.check_language(lang)
 
     def test_has_language(self):
@@ -68,7 +69,7 @@ class test_language():
             assert_equal(args[2], lang1)
             raise EOFError
         with interim(lib.ipc, Subprocess=fake_subprocess):
-            with exception(EOFError, ''):
+            with assert_raises(EOFError):
                 with engine.recognize(sys.stdin, lang1):
                     pass
 
