@@ -12,7 +12,6 @@
 # General Public License for more details.
 
 import contextlib
-import difflib
 import glob
 import os
 import re
