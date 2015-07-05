@@ -15,6 +15,7 @@ import sys
 import warnings
 
 from tests.common import (
+    assert_is_instance,
     assert_equal,
     assert_greater_equal,
     assert_is_instance,
@@ -89,12 +90,12 @@ class test_smart_repr():
             assert_equal(eval(smart_repr(s, 'UTF-8')), s)
         for s in 'jeż', '''j'e"ż''':
             s_repr = smart_repr(s, 'ASCII')
-            assert_true(isinstance(s_repr, str))
+            assert_is_instance(s_repr, str)
             s_repr.decode('ASCII')
             assert_equal(eval(s_repr), s)
         for s in 'jeż', '''j'e"ż''':
             s_repr = smart_repr(s, 'UTF-8')
-            assert_true(isinstance(s_repr, unicode))
+            assert_is_instance(s_repr, unicode)
             assert_true(u'ż' in s_repr)
             assert_equal(eval(s_repr.encode('UTF-8')), s)
 
@@ -225,7 +226,7 @@ class test_property():
         eggs = self.Dummy.eggs
         ham = self.Dummy.ham
         for obj in eggs, ham:
-            assert_true(isinstance(obj, property))
+            assert_is_instance(obj, property)
 
     def test_default_filter(self):
         dummy = self.Dummy()
