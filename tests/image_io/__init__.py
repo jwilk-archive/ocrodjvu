@@ -22,7 +22,7 @@ from lib import image_io
 
 from tests.common import (
     assert_equal,
-    assert_true,
+    assert_is_none,
     sorted_glob,
 )
 
@@ -60,7 +60,7 @@ def _test_from_file(base_filename, format):
         assert_equal(result.size, expected.size)
         assert_equal(result.mode, expected.mode)
         if result.palette is None:
-            assert_true(expected.palette is None)
+            assert_is_none(expected.palette)
         else:
             assert_equal(list(result.palette.getdata()), list(expected.palette.getdata()))
         assert_equal(list(result.getdata()), list(expected.getdata()))

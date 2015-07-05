@@ -18,9 +18,11 @@ from tests.common import (
     assert_is_instance,
     assert_equal,
     assert_greater_equal,
+    assert_in,
+    assert_is,
     assert_is_instance,
+    assert_is_none,
     assert_raises,
-    assert_true,
     catch_warnings,
     exception,
     interim,
@@ -96,13 +98,13 @@ class test_smart_repr():
         for s in 'jeż', '''j'e"ż''':
             s_repr = smart_repr(s, 'UTF-8')
             assert_is_instance(s_repr, unicode)
-            assert_true(u'ż' in s_repr)
+            assert_in(u'ż', s_repr)
             assert_equal(eval(s_repr.encode('UTF-8')), s)
 
 class test_parse_page_numbers():
 
     def test_none(self):
-        assert_true(parse_page_numbers(None) is None)
+        assert_is_none(parse_page_numbers(None))
 
     def test_single(self):
         assert_equal(parse_page_numbers('17'), [17])
@@ -181,7 +183,7 @@ class test_not_overriden():
                 raise message
         with catch_warnings():
             warnings.showwarning = show
-            assert_true(self.B().f(6, 7) is None)
+            assert_is_none(self.B().f(6, 7))
 
     def test_overriden(self):
         with catch_warnings():
@@ -211,7 +213,7 @@ class test_str_as_unicode():
 
 def test_identity():
     o = object()
-    assert_true(identity(o) is o)
+    assert_is(identity(o), o)
 
 class test_property():
 

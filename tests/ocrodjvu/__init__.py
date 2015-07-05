@@ -18,8 +18,8 @@ from lib.cli import ocrodjvu
 
 from tests.common import (
     assert_equal,
+    assert_is_not_none,
     assert_not_equal,
-    assert_true,
     interim,
     try_run,
 )
@@ -65,7 +65,7 @@ def _test_list_languages(engine):
     assert_not_equal(stdout.getvalue(), '')
 
 def test_list_languages():
-    assert_true(engines is not None)
+    assert_is_not_none(engines)
     for engine in engines:
         yield _test_list_languages, engine
 

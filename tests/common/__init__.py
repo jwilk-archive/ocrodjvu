@@ -29,7 +29,11 @@ from nose.tools import (
 if sys.version_info >= (2, 7):
     from nose.tools import (
         assert_greater_equal,
+        assert_in,
+        assert_is,
         assert_is_instance,
+        assert_is_none,
+        assert_is_not_none,
         assert_multi_line_equal,
         assert_raises,
         assert_raises_regexp,
@@ -42,10 +46,27 @@ else:
             x >= y,
             msg='{0!r} not greater than or equal to {1!r}'.format(x, y)
         )
+    def assert_in(x, y):
+        assert_true(
+            x in y,
+            msg='{0!r} not found in {1!r}'.format(x, y)
+        )
+    def assert_is(x, y):
+        assert_true(
+            x is y,
+            msg='{0!r} is not {1!r}'.format(x, y)
+        )
     def assert_is_instance(obj, cls):
         assert_true(
             isinstance(obj, cls),
             msg='{0!r} is not an instance of {1!r}'.format(obj, cls)
+        )
+    def assert_is_none(obj):
+        assert_is(obj, None)
+    def assert_is_not_none(obj):
+        assert_true(
+            obj is not None,
+            msg='{0!r} is None'.format(obj)
         )
     assert_multi_line_equal = assert_equal
     class assert_raises(object):
@@ -166,7 +187,11 @@ __all__ = [
     'assert_equal',
     'assert_false',
     'assert_greater_equal',
+    'assert_in',
+    'assert_is',
     'assert_is_instance',
+    'assert_is_none',
+    'assert_is_not_none',
     'assert_multi_line_equal',
     'assert_not_equal',
     'assert_true',
