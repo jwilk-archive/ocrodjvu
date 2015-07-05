@@ -30,6 +30,7 @@ if sys.version_info >= (2, 7):
     from nose.tools import (
         assert_greater_equal,
         assert_is_instance,
+        assert_multi_line_equal,
     )
 else:
     # Python 2.6:
@@ -43,17 +44,7 @@ else:
             isinstance(obj, cls),
             msg='{0!r} is not an instance of {1!r}'.format(obj, cls)
         )
-
-def assert_ml_equal(first, second, msg='Strings differ'):
-    '''Assert that two multi-line strings are equal.'''
-    assert_true(isinstance(first, basestring), 'First argument is not a string')
-    assert_true(isinstance(second, basestring), 'Second argument is not a string')
-    if first == second:
-        return
-    first = first.splitlines(True)
-    second = second.splitlines(True)
-    diff = '\n' + ''.join(difflib.unified_diff(first, second))
-    raise AssertionError(msg + diff)
+    assert_multi_line_equal = assert_equal
 
 @contextlib.contextmanager
 def interim(obj, **override):
@@ -141,7 +132,7 @@ __all__ = [
     'assert_false',
     'assert_greater_equal',
     'assert_is_instance',
-    'assert_ml_equal',
+    'assert_multi_line_equal',
     'assert_not_equal',
     'assert_true',
     'catch_warnings',

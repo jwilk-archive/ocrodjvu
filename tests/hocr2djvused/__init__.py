@@ -21,7 +21,7 @@ from lib.cli import hocr2djvused
 
 from tests.common import (
     assert_equal,
-    assert_ml_equal,
+    assert_multi_line_equal,
     assert_not_equal,
     interim,
     sorted_glob,
@@ -65,7 +65,7 @@ def _test_from_file(base_filename, index, extra_args):
                 rc = try_run(hocr2djvused.main, args)
         assert_equal(rc, 0)
         output = output_file.getvalue()
-    assert_ml_equal(expected_output, output)
+    assert_multi_line_equal(expected_output, output)
 
 def _rough_test_from_file(base_filename, args):
     args = ['#'] + shlex.split(args)

@@ -23,7 +23,7 @@ from lib import ipc
 
 from tests.common import (
     assert_equal,
-    assert_ml_equal,
+    assert_multi_line_equal,
     assert_not_equal,
     interim,
     sorted_glob,
@@ -87,7 +87,7 @@ def _test_from_file(base_filename, index):
             assert_equal(rc, 0)
             xml_file.seek(0)
             output = xml_file.read()
-    assert_ml_equal(expected_output, output)
+    assert_multi_line_equal(expected_output, output)
 
 def test_from_file():
     for test_filename in sorted_glob(os.path.join(here, '*.test[0-9]')):
