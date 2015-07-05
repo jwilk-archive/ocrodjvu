@@ -15,7 +15,6 @@ import sys
 import warnings
 
 from tests.common import (
-    assert_is_instance,
     assert_equal,
     assert_greater_equal,
     assert_in,
