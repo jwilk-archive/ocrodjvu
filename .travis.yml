@@ -2,10 +2,12 @@ language: python
 python:
 - "2.6"
 - "2.7"
-before_install:
-- sudo apt-get update
-- sudo apt-get install -y libdjvulibre-dev djvulibre-bin
-- sudo apt-get install -y libxml2-utils
+addons:
+  apt:
+    packages:
+    - djvulibre-bin
+    - libdjvulibre-dev
+    - libxml2-utils
 install:
 - pip install cython
 - pip install python-djvulibre
