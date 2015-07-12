@@ -8,6 +8,10 @@ addons:
     - djvulibre-bin
     - libdjvulibre-dev
     - libxml2-utils
+cache:
+  directories:
+  - $HOME/.cache/pip
+  - $HOME/.ccache
 install:
 - pip install cython
 - pip install python-djvulibre
