@@ -14,13 +14,13 @@ cache:
   - $HOME/.ccache
 install:
 - export PATH="/usr/lib/ccache:$PATH"
-- pip install cython
+- pip install --build build-cython cython
 - pip install python-djvulibre
 - if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then pip install argparse; fi
-- pip install lxml
+- pip install --build build-lxml lxml
 - pip install pyicu
 - pip install html5lib
-- pip install pillow
+- pip install --build build-pillow pillow
 script:
 - nosetests --all --verbose
 - xmllint --noout --valid doc/*.xml
