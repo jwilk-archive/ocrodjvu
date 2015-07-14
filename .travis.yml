@@ -13,6 +13,7 @@ cache:
   - $HOME/.cache/pip
   - $HOME/.ccache
 install:
+- export PATH="/usr/lib/ccache:$PATH"
 - pip install cython
 - pip install python-djvulibre
 - if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then pip install argparse; fi
