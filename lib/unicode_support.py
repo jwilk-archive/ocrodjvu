@@ -30,7 +30,7 @@ def get_icu():
 
 def simple_word_break_iterator(text):
     '''
-    Create an instance of simple space-to-space word break interator.
+    Create an instance of simple space-to-space word break iterator.
     '''
     if not text:
         return
@@ -43,7 +43,7 @@ def simple_word_break_iterator(text):
 
 def word_break_iterator(text, locale=None):
     '''
-    Create an instance of word break interator.
+    Create an instance of word break iterator.
 
     text: unicode string
     locale: ICU locale or None
