@@ -69,7 +69,7 @@ def get_texts(options):
 def main(argv=sys.argv):
     options = ArgumentParser().parse_args(argv[1:])
     for i, text in enumerate(get_texts(options)):
-        sys.stdout.write('select %d\nremove-txt\nset-txt\n' % (i + 1))
+        sys.stdout.write('select {0}\nremove-txt\nset-txt\n'.format(i + 1))
         text.print_into(sys.stdout, 80)
         sys.stdout.write('\n.\n\n')
 
