@@ -89,7 +89,7 @@ def scan(stream, settings):
             stack[-1] += [zone]
         elif element.tag in ('box', 'space'):
             if len(stack) > 3:
-                raise errors.MalformedOcrOutput('<%s> at unexpected depth' % element.tag)
+                raise errors.MalformedOcrOutput('<{tag}> at unexpected depth'.format(tag=element.tag))
             while len(stack) < 3:
                 stack += [[]]
             if element.tag == 'space':
@@ -101,7 +101,7 @@ def scan(stream, settings):
             zone = text_zones.Zone(const.TEXT_ZONE_CHARACTER, bbox, [text])
             stack[-1] += [zone]
         else:
-            raise errors.MalformedOcrOutput('unexpected <%s>' % element.tag.encode('ASCII', 'unicode-escape'))
+            raise errors.MalformedOcrOutput('unexpected <{tag}>'.format(tag=element.tag.encode('ASCII', 'unicode-escape')))
     raise errors.MalformedOcrOutput('<page> not found')
 
 class Engine(common.Engine):
