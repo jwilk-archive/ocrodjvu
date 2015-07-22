@@ -90,12 +90,12 @@ def scan(stream, settings):
             else:
                 m = _character_re.match(line)
                 if not m:
-                    raise errors.MalformedOcrOutput('bad character description: %r' % line)
+                    raise errors.MalformedOcrOutput('bad character description: {line!r}'.format(line=line))
                 [text] = m.groups()
                 text = text.decode('UTF-8')
             return text_zones.Zone(const.TEXT_ZONE_CHARACTER, bbox, [text])
-        raise errors.MalformedOcrOutput('unexpected line: %r' % line)
-    raise errors.MalformedOcrOutput('unexpected line at EOF: %r' % line)
+        raise errors.MalformedOcrOutput('unexpected line: {line!r}'.format(line=line))
+    raise errors.MalformedOcrOutput('unexpected line at EOF: {line!r}'.format(line=line))
 
 class Engine(common.Engine):
 
