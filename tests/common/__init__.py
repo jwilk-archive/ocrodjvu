@@ -38,6 +38,7 @@ if sys.version_info >= (2, 7):
         assert_raises_regexp,
         assert_regexp_matches,
     )
+    assert_multi_line_equal.im_class.maxDiff = None
 else:
     # Python 2.6:
     def assert_greater_equal(x, y):
