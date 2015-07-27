@@ -1,3 +1,9 @@
+ocrodjvu (0.9.1) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 27 Jul 2015 21:43:25 +0200
+
 ocrodjvu (0.9) unstable; urgency=low
 
   * If python-djvulibre >= 0.4 is installed, don't escape non-ASCII characters
