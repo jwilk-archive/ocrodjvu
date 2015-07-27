@@ -56,12 +56,9 @@ def test_version():
 def normalize_sexpr(match):
     return djvu.sexpr.Expression.from_string(match.group(1)).as_string(width=80)
 
+_djvused_text_re = re.compile('^([(].*)(?=^[.]$)', flags=(re.MULTILINE | re.DOTALL))
 def normalize_djvused(script):
-    return re.sub('^([(].*)(?=^[.]$)',
-        normalize_sexpr,
-        script,
-        flags=(re.MULTILINE | re.DOTALL)
-    )
+    return _djvused_text_re.sub(normalize_sexpr, script)
 
 def _test_from_file(base_filename, index, extra_args):
     base_filename = os.path.join(here, base_filename)
