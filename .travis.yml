@@ -2,6 +2,9 @@ language: python
 python:
 - "2.6"
 - "2.7"
+env:
+- PYTHON_DJVULIBRE_VERSION=0.1.14
+- PYTHON_DJVULIBRE_VERSION=
 addons:
   apt:
     packages:
@@ -14,7 +17,7 @@ cache:
 install:
 - pip install --upgrade pip
 - pip install --verbose cython
-- pip install --verbose python-djvulibre
+- pip install --verbose python-djvulibre${PYTHON_DJVULIBRE_VERSION:+==$PYTHON_DJVULIBRE_VERSION}
 - if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then pip install argparse; fi
 - pip install --verbose lxml
 - pip install --verbose pyicu
