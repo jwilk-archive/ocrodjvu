@@ -15,6 +15,7 @@ import argparse
 import sys
 
 from .. import hocr
+from .. import text_zones
 from .. import version
 
 __version__ = version.__version__
@@ -70,7 +71,7 @@ def main(argv=sys.argv):
     options = ArgumentParser().parse_args(argv[1:])
     for i, text in enumerate(get_texts(options)):
         sys.stdout.write('select {0}\nremove-txt\nset-txt\n'.format(i + 1))
-        text.print_into(sys.stdout, 80)
+        text_zones.print_sexpr(text, sys.stdout, width=80)
         sys.stdout.write('\n.\n\n')
 
 # vim:ts=4 sts=4 sw=4 et

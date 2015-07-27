@@ -1,8 +1,11 @@
 ocrodjvu (0.8.1) UNRELEASED; urgency=low
 
-  * 
+  * If python-djvulibre >= 0.4 is installed, don't escape non-ASCII characters
+    in djvused scripts.
+    https://bitbucket.org/jwilk/ocrodjvu/issue/13
+    Thanks to Janusz S. Bień for the bug report.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 10 Jun 2015 22:47:01 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 27 Jul 2015 19:15:52 +0200
 
 ocrodjvu (0.8) unstable; urgency=low
 

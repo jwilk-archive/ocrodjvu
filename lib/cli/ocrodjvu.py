@@ -498,7 +498,7 @@ class Context(djvu.decode.Context):
                     # No image suitable for OCR.
                     pass
                 else:
-                    result.print_into(sed_file)
+                    text_zones.print_sexpr(result, sed_file)
                 sed_file.write('\n.\n\n')
             sed_file.flush()
             saver = self._options.saver

@@ -14,8 +14,11 @@
 import contextlib
 import io
 import os
+import re
 import shlex
 import sys
+
+import djvu.sexpr
 
 from lib.cli import hocr2djvused
 
@@ -50,6 +53,16 @@ def test_version():
     assert_not_equal(stderr.getvalue(), '')
     assert_equal(stdout.getvalue(), '')
 
+def normalize_sexpr(match):
+    return djvu.sexpr.Expression.from_string(match.group(1)).as_string(width=80)
+
+def normalize_djvused(script):
+    return re.sub('^([(].*)(?=^[.]$)',
+        normalize_sexpr,
+        script,
+        flags=(re.MULTILINE | re.DOTALL)
+    )
+
 def _test_from_file(base_filename, index, extra_args):
     base_filename = os.path.join(here, base_filename)
     test_filename = '{base}.test{i}'.format(base=base_filename, i=index)
@@ -65,7 +78,10 @@ def _test_from_file(base_filename, index, extra_args):
                 rc = try_run(hocr2djvused.main, args)
         assert_equal(rc, 0)
         output = output_file.getvalue()
-    assert_multi_line_equal(expected_output, output)
+    assert_multi_line_equal(
+        normalize_djvused(expected_output),
+        normalize_djvused(output)
+    )
 
 def _rough_test_from_file(base_filename, args):
     args = ['#'] + shlex.split(args)
