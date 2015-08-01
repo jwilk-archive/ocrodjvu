@@ -19,27 +19,27 @@ class UnknownLanguageList(Exception):
 class InvalidLanguageId(ValueError):
 
     def __init__(self, name):
-        ValueError.__init__(self, 'invalid language identifier: %s; language identifier is typically an ISO 639-2 three-letter code' % name)
+        ValueError.__init__(self, 'invalid language identifier: {lang}; language identifier is typically an ISO 639-2 three-letter code'.format(lang=name))
 
 class MissingLanguagePack(Exception):
 
     def __init__(self, language):
-        Exception.__init__(self, 'language pack for the selected language (%s) is not available' % language)
+        Exception.__init__(self, 'language pack for the selected language ({lang}) is not available'.format(lang=language))
 
 class EngineNotFound(Exception):
 
     def __init__(self, name):
-        Exception.__init__(self, 'OCR engine (%s) was not found' % name)
+        Exception.__init__(self, 'OCR engine ({engine}) was not found'.format(engine=name))
 
 class MalformedOcrOutput(Exception):
 
     def __init__(self, message):
-        Exception.__init__(self, 'malformed OCR output: %s' % message)
+        Exception.__init__(self, 'malformed OCR output: {msg}'.format(msg= message))
 
 class MalformedHocr(MalformedOcrOutput):
 
     def __init__(self, message):
-        Exception.__init__(self, 'malformed hOCR document: %s' % message)
+        Exception.__init__(self, 'malformed hOCR document: {msg}'.format(msg=message))
 
 EXIT_FATAL = 1
 EXIT_NONFATAL = 2
