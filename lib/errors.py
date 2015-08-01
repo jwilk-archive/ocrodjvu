@@ -14,12 +14,12 @@
 class UnknownLanguageList(Exception):
 
     def __init__(self):
-        Exception.__init__(self, 'Unable to determine list of available languages')
+        Exception.__init__(self, 'unable to determine list of available languages')
 
 class InvalidLanguageId(ValueError):
 
     def __init__(self, name):
-        ValueError.__init__(self, 'Invalid language identifier: %s; language identifier is typically an ISO 639-2 three-letter code' % name)
+        ValueError.__init__(self, 'invalid language identifier: %s; language identifier is typically an ISO 639-2 three-letter code' % name)
 
 class MissingLanguagePack(Exception):
 
@@ -34,12 +34,12 @@ class EngineNotFound(Exception):
 class MalformedOcrOutput(Exception):
 
     def __init__(self, message):
-        Exception.__init__(self, 'Malformed OCR output: %s' % message)
+        Exception.__init__(self, 'malformed OCR output: %s' % message)
 
 class MalformedHocr(MalformedOcrOutput):
 
     def __init__(self, message):
-        Exception.__init__(self, 'Malformed hOCR document: %s' % message)
+        Exception.__init__(self, 'malformed hOCR document: %s' % message)
 
 EXIT_FATAL = 1
 EXIT_NONFATAL = 2
