@@ -274,7 +274,7 @@ def _scan(node, settings, page_size=None):
             else:
                 has_nonchar_zone = True
         else:
-            raise TypeError('Unexpected %s object; expected a string or a text zone' % type(child).__name__)
+            raise TypeError('Unexpected {tp} object; expected a string or a text zone'.format(tp=type(child).__name__))
 
     if has_zone:
         # Catch obvious inconsistencies early.
@@ -377,7 +377,7 @@ def scan(node, settings):
             else:
                 raise errors.MalformedHocr("plain text intermixed with structural elements")
         if not isinstance(zone, text_zones.Zone):
-            raise TypeError('Unexpected %s object; expected a text zone' % type(zone).__name__)
+            raise TypeError('Unexpected {tp} object; expected a text zone'.format(tp=type(zone).__name__))
         result += [zone]
         zone.rotate(settings.rotation)
     return result
