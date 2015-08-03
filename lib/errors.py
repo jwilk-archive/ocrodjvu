@@ -34,7 +34,7 @@ class EngineNotFound(Exception):
 class MalformedOcrOutput(Exception):
 
     def __init__(self, message):
-        Exception.__init__(self, 'malformed OCR output: {msg}'.format(msg= message))
+        Exception.__init__(self, 'malformed OCR output: {msg}'.format(msg=message))
 
 class MalformedHocr(MalformedOcrOutput):
 
