@@ -64,7 +64,10 @@ class BBox(object):
         return True
 
     def __repr__(self):
-        return '%s(%r, %r, %r, %r)' % ((self.__class__.__name__,) + tuple(self._coordinates))
+        return '{cls}({0!r}, {1!r}, {2!r}, {3!r})'.format(
+            *self._coordinates,
+            cls=self.__class__.__name__
+        )
 
     def update(self, bbox):
         for i, self_i in enumerate(self._coordinates):
@@ -136,19 +139,19 @@ class Zone(object):
         return len(self.children)
 
     def __repr__(self):
-        return '%(name)s(type=%(type)r, bbox=%(bbox)r, children=%(children)r)' % dict(
-            name=type(self).__name__,
-            type=self.type,
+        return '{cls}(type={tp}, bbox={bbox!r}, children={chld!r})'.format(
+            cls=type(self).__name__,
+            tp=self.type,
             bbox=self.bbox,
-            children=self.children,
+            chld=self.children,
         )
 
     def rotate(self, rotation, xform=None):
         for x in self.bbox:
             assert x is not None
         if xform is None:
-            assert self.type == const.TEXT_ZONE_PAGE, 'the exterior zone is %s rather than %s' % (self.type, const.TEXT_ZONE_PAGE)
-            assert self.bbox[:2] == (0, 0), 'top-left page corner is (%d, %d) rather than (0, 0)' % self.bbox[:2]
+            assert self.type == const.TEXT_ZONE_PAGE, 'the exterior zone is {tp} rather than {pg}'.format(tp=self.type, pg=const.TEXT_ZONE_PAGE)
+            assert self.bbox[:2] == (0, 0), 'top-left page corner is ({0}, {1}) rather than (0, 0)'.format(*self.bbox[:2])
             page_size = self.bbox[2:]
             if (rotation // 90) & 1:
                 xform = decode.AffineTransform((0, 0) + tuple(reversed(page_size)), (0, 0) + page_size)
