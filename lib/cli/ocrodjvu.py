@@ -361,7 +361,10 @@ class Context(djvu.decode.Context):
     @contextlib.contextmanager
     def get_output_image(self, nth, page_job):
         output_format = self._image_format
-        file = self._temp_file('%06d.%s' % (nth, output_format.extension))
+        file = self._temp_file('{n:06}.{ext}'.format(
+            n=nth,
+            ext=output_format.extension
+        ))
         try:
             output_format.write_image(page_job, self._options.render_layers, file)
             file.flush()
@@ -393,7 +396,7 @@ class Context(djvu.decode.Context):
         with self.get_output_image(page.n, page_job) as pfile:
             result = self._engine.recognize(pfile, language=self._options.language, details=self._options.details, uax29=self._options.uax29)
             if self._debug:
-                result.save(os.path.join(self._temp_dir, '%06d' % page.n))
+                result.save(os.path.join(self._temp_dir, '{n:06}'.format(n=page.n)))
             self.save_raw_ocr(page, result)
             [text] = self._engine.extract_text(result.as_stringio(),
                 rotation=page.rotation,
@@ -429,7 +432,10 @@ class Context(djvu.decode.Context):
             except Exception as ex:
                 try:
                     interrupted_by_user = isinstance(ex, ipc.CalledProcessInterrupted) and ex.by_user
-                    message = 'Exception while processing page %d:\n%s' % (n + 1, traceback.format_exc())
+                    message = 'Exception while processing page {n}:\n{tb}'.format(
+                        n=(n + 1),
+                        tb=traceback.format_exc()
+                    )
                     logger.error(message.rstrip())
                     if self._options.resume_on_error and not interrupted_by_user:
                         # As requested by user, don't abort on error and pretend that nothing happened.
@@ -480,10 +486,12 @@ class Context(djvu.decode.Context):
                     file_id = page.file.id.encode(system_encoding)
                 except UnicodeError:
                     pageno = page.file.n + 1
-                    logger.warning('warning: cannot convert page %d identifier to locale encoding' % pageno)
-                    sed_file.write('select %d\n' % pageno)
+                    logger.warning('warning: cannot convert page {n} identifier to locale encoding'.format(n=pageno))
+                    sed_file.write('select {n}\n'.format(n=pageno))
                 else:
-                    sed_file.write('select \'%s\'\n' % file_id.replace('\\', '\\\\').replace("'", "\\'"))
+                    sed_file.write("select '{fileid}'\n".format(
+                        fileid=file_id.replace('\\', '\\\\').replace("'", "\\'")
+                    ))
                 sed_file.write('set-txt\n')
                 result = None
                 with condition:
@@ -553,6 +561,6 @@ def main(argv=sys.argv):
     finally:
         temp_dir = context.close()
         if temp_dir is not None:
-            logger.info('Intermediate files were left in the %r directory.' % temp_dir)
+            logger.info('Intermediate files were left in the {path!r} directory.'.format(path=temp_dir))
 
 # vim:ts=4 sts=4 sw=4 et
