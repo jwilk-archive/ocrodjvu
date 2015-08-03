@@ -66,7 +66,7 @@ class BBox(object):
     def __repr__(self):
         return '{cls}({0!r}, {1!r}, {2!r}, {3!r})'.format(
             *self._coordinates,
-            cls=self.__class__.__name__
+            cls=type(self).__name__
         )
 
     def update(self, bbox):
