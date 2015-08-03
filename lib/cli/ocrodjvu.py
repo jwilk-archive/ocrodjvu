@@ -280,13 +280,22 @@ class ArgumentParser(argparse.ArgumentParser):
             try:
                 os.stat(os.path.join(options.save_raw_ocr_dir, ''))
             except EnvironmentError as ex:
-                self.error('cannot open %r: %s' % (ex.filename, ex[1]))
+                self.error('cannot open {path!r}: {msg}'.format(
+                    path=ex.filename,
+                    msg=ex[1],
+                ))
             try:
                 expand_template(options.raw_ocr_filename_template, pageno=0, pageid='')
             except ValueError as ex:
-                self.error('cannot parse filename template %r: %s' % (options.raw_ocr_filename_template, ex))
+                self.error('cannot parse filename template {tmpl!r}: {msg}'.format(
+                    tmpl=options.raw_ocr_filename_template,
+                    msg=ex,
+                ))
             except KeyError as ex:
-                self.error('cannot parse filename template %r: unknown field %r' % (options.raw_ocr_filename_template, ex.args[0]))
+                self.error('cannot parse filename template {tmpl!r}: unknown field {key!r}'.format(
+                    tmpl=options.raw_ocr_filename_template,
+                    key=ex.args[0],
+                ))
         # It might be tempting to verify language name correctness at argument
         # parse time (rather than after argument parsing). However, it's
         # desirable to be able to specify a language *before* specifying an OCR
