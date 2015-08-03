@@ -273,8 +273,9 @@ class ArgumentParser(argparse.ArgumentParser):
             saver = None
         if saver is None:
             self.error(
-                'You must use exactly one of the following options: %s' %
-                ', '.join('/'.join(saver.options) for saver in self.savers)
+                'You must use exactly one of the following options: {opt}'.format(
+                    opt=', '.join('/'.join(saver.options) for saver in self.savers)
+                )
             )
         if options.save_raw_ocr_dir is not None:
             try:
