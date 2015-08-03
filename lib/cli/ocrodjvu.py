@@ -273,7 +273,7 @@ class ArgumentParser(argparse.ArgumentParser):
             saver = None
         if saver is None:
             self.error(
-                'You must use exactly one of the following options: {opt}'.format(
+                'exactly one of the following options is required: {opt}'.format(
                     opt=', '.join('/'.join(saver.options) for saver in self.savers)
                 )
             )
