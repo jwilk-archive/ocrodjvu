@@ -387,7 +387,7 @@ class Context(djvu.decode.Context):
         result.save(prefix)
 
     def process_page(self, page):
-        logger.info('- Page #%d', page.n + 1)
+        logger.info('- Page #{0}'.format(page.n + 1))
         page_job = page.decode(wait=True)
         # Due to a bug in python-djvulibre <= 0.3.9, sometimes the exception is not raised.
         # Raise in manually in such case.
@@ -457,7 +457,7 @@ class Context(djvu.decode.Context):
 
     def _process(self, path, pages=None):
         self._engine = self._options.engine
-        logger.info('Processing %s:', utils.smart_repr(path, system_encoding))
+        logger.info('Processing {path}:'.format(path=utils.smart_repr(path, system_encoding)))
         document = self.new_document(djvu.decode.FileURI(path))
         document.decoding_job.wait()
         if pages is None:
