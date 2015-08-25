@@ -21,7 +21,7 @@ import signal
 thread_safe = True
 try:
     import subprocess32 as subprocess
-except ImportError:
+except ImportError:  # <no-coverage>
     import subprocess
     if os.name == 'posix':
         thread_safe = False
