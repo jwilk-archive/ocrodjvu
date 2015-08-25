@@ -115,8 +115,8 @@ class Subprocess(subprocess.Popen):
             ex.filename = self.__command
             raise
 
-    def wait(self):
-        return_code = subprocess.Popen.wait(self)
+    def wait(self, *args, **kwargs):
+        return_code = subprocess.Popen.wait(self, *args, **kwargs)
         if return_code > 0:
             raise CalledProcessError(return_code, self.__command)
         if return_code < 0:
