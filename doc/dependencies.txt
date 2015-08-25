@@ -36,7 +36,7 @@ Additionally, some optional features require the following software:
 * subprocess32_ -
   thread-safe replacement for the subprocess_ management module,
   backported from Python 3.X;
-  strongly recommended for the ``-j``/``--jobs`` opton
+  strongly recommended for the ``-j``/``--jobs`` option
 
 * PyICU_ -
   Python bindings for PyICU IBM's ICU_ C++ API;
