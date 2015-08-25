@@ -1,4 +1,4 @@
-ocrodjvu (0.9.1) UNRELEASED; urgency=low
+ocrodjvu (0.9.1) unstable; urgency=low
 
   * Use the subprocess32 module (a thread-safe replacement for the subprocess
     module) when it's available.
@@ -7,7 +7,7 @@ ocrodjvu (0.9.1) UNRELEASED; urgency=low
   * Include an example script for converting scans to DjVu + hOCR.
   * Improve error handling.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 25 Aug 2015 22:04:55 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 25 Aug 2015 23:36:12 +0200
 
 ocrodjvu (0.9) unstable; urgency=low
 
