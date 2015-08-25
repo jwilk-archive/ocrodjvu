@@ -4,8 +4,9 @@ ocrodjvu (0.9.1) UNRELEASED; urgency=low
     module) when it's available.
   * Issue a warning when the -j/--jobs is enabled, but the subprocess is not
     thread-safe.
+  * Improve error handling.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 25 Aug 2015 19:20:31 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 25 Aug 2015 19:28:59 +0200
 
 ocrodjvu (0.9) unstable; urgency=low
 
