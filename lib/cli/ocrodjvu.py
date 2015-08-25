@@ -331,6 +331,10 @@ class ArgumentParser(argparse.ArgumentParser):
             options.n_jobs = utils.get_cpu_count()
         elif options.n_jobs < 1:
             options.n_jobs = 1
+        if options.n_jobs > 1 and not ipc.thread_safe:
+            exc = Warning('the subprocess module is not thread-safe')
+            utils.enhance_import_error(exc, 'subprocess32', None, 'https://pypi.python.org/pypi/subprocess32')
+            print('Warning: {exc}'.format(exc=exc))
         return options
 
 class Results(dict):

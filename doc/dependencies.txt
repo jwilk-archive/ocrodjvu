@@ -33,6 +33,11 @@ The following software is needed to run ocrodjvu:
 
 Additionally, some optional features require the following software:
 
+* subprocess32_ -
+  thread-safe replacement for the subprocess_ management module,
+  backported from Python 3.X;
+  strongly recommended for the ``-j``/``--jobs`` opton
+
 * PyICU_ -
   Python bindings for PyICU IBM's ICU_ C++ API;
   required for the ``--word-segmentation=uax29`` option
@@ -75,6 +80,10 @@ source:
    http://xmlsoft.org/
 .. _argparse:
    https://pypi.python.org/pypi/argparse
+.. _subprocess32:
+   https://pypi.python.org/pypi/subprocess32
+.. _subprocess:
+   https://docs.python.org/2/library/subprocess.html
 .. _PyICU:
    http://pyicu.osafoundation.org/
 .. _html5lib:

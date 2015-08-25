@@ -17,7 +17,14 @@ import logging
 import os
 import re
 import signal
-import subprocess
+
+thread_safe = True
+try:
+    import subprocess32 as subprocess
+except ImportError:
+    import subprocess
+    if os.name == 'posix':
+        thread_safe = False
 
 # CalledProcessError, CalledProcessInterrupted
 # ============================================
@@ -131,6 +138,7 @@ logger = logging.getLogger('ocrodjvu.ipc')
 __all__ = [
     'CalledProcessError', 'CalledProcessInterrupted',
     'Subprocess', 'PIPE',
+    'thread_safe',
 ]
 
 # vim:ts=4 sts=4 sw=4 et
