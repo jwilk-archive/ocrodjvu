@@ -75,6 +75,24 @@ class test_enhance_import():
                 'please install the PyNonexistent package <http://pynonexistent.example.net/>'
             )
 
+    def test_no_debian_pkg(self):
+        def t():
+            with assert_raises(ImportError) as ecm:
+                try:
+                    import nonexistent
+                except ImportError as ex:
+                    enhance_import_error(ex, 'PyNonexistent', None, 'http://pynonexistent.example.net/')
+                    raise
+                nonexistent.f()  # quieten pyflakes
+            assert_equal(str(ecm.exception),
+                'No module named nonexistent; '
+                'please install the PyNonexistent package <http://pynonexistent.example.net/>'
+            )
+        with interim(lib.utils, debian=False):
+            t()
+        with interim(lib.utils, debian=True):
+            t()
+
 class test_smart_repr():
 
     def test_byte_string(self):
