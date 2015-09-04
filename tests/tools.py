@@ -160,19 +160,6 @@ def try_run(f, *args, **kwargs):
     else:
         return 0
 
-try:
-    catch_warnings = warnings.catch_warnings
-except AttributeError:
-    @contextlib.contextmanager
-    def catch_warnings():
-        original_filters = warnings.filters
-        original_show = warnings.showwarning
-        try:
-            yield
-        finally:
-            warnings.filters = original_filters
-            warnings.showwarning = original_show
-
 @contextlib.contextmanager
 def exception(exc_type, string=None, regex=None, callback=None):
     if sum(x is not None for x in (string, regex, callback)) != 1:
@@ -213,7 +200,6 @@ __all__ = [
     'assert_raises',
     'assert_raises_regexp',
     'assert_regexp_matches',
-    'catch_warnings',
     'interim',
     'interim_environ',
     'sorted_glob',

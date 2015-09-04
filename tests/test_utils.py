@@ -22,7 +22,6 @@ from tests.tools import (
     assert_is_instance,
     assert_is_none,
     assert_raises,
-    catch_warnings,
     exception,
     interim,
 )
@@ -145,7 +144,7 @@ class test_sanitize_utf8():
             with exception(EncodingWarning, regex='.*control character.*'):
                 raise message
         s = ''.join(map(chr, xrange(32)))
-        with catch_warnings():
+        with warnings.catch_warnings():
             warnings.showwarning = show
             t = sanitize_utf8(s).decode('UTF-8')
         assert_equal(t,
@@ -157,14 +156,14 @@ class test_sanitize_utf8():
 
     def test_ascii(self):
         s = 'The quick brown fox jumps over the lazy dog'
-        with catch_warnings():
+        with warnings.catch_warnings():
             warnings.filterwarnings('error', category=EncodingWarning)
             t = sanitize_utf8(s)
         assert_equal(s, t)
 
     def test_utf8(self):
         s = 'Jeżu klątw, spłódź Finom część gry hańb'
-        with catch_warnings():
+        with warnings.catch_warnings():
             warnings.filterwarnings('error', category=EncodingWarning)
             t = sanitize_utf8(s)
         assert_equal(s, t)
@@ -178,7 +177,7 @@ class test_sanitize_utf8():
         bad = good.decode('UTF-8').encode('ISO-8859-2')
         s1 = s0.replace(good, bad)
         s2 = s0.replace(good, u'\N{REPLACEMENT CHARACTER}'.encode('UTF-8'))
-        with catch_warnings():
+        with warnings.catch_warnings():
             warnings.showwarning = show
             t = sanitize_utf8(s1)
         assert_equal(s2, t)
@@ -198,12 +197,12 @@ class test_not_overriden():
         def show(message, category, filename, lineno, file=None, line=None):
             with exception(NotOverriddenWarning, regex=r'^.*\bB.f[(][)] is not overridden$'):
                 raise message
-        with catch_warnings():
+        with warnings.catch_warnings():
             warnings.showwarning = show
             assert_is_none(self.B().f(6, 7))
 
     def test_overriden(self):
-        with catch_warnings():
+        with warnings.catch_warnings():
             warnings.filterwarnings('error', category=NotOverriddenWarning)
             result = self.C().f(6, 7)
             assert_equal(result, 42)
