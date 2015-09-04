@@ -22,7 +22,7 @@ from tests.tools import (
     assert_is_instance,
     assert_is_none,
     assert_raises,
-    assert_raises_regexp,
+    assert_raises_regex,
     interim,
 )
 
@@ -141,7 +141,7 @@ class test_sanitize_utf8():
 
     def test_control_characters(self):
         def show(message, category, filename, lineno, file=None, line=None):
-            with assert_raises_regexp(EncodingWarning, '.*control character.*'):
+            with assert_raises_regex(EncodingWarning, '.*control character.*'):
                 raise message
         s = ''.join(map(chr, xrange(32)))
         with warnings.catch_warnings():
@@ -170,7 +170,7 @@ class test_sanitize_utf8():
 
     def test_non_utf8(self):
         def show(message, category, filename, lineno, file=None, line=None):
-            with assert_raises_regexp(EncodingWarning, '.* invalid continuation byte'):
+            with assert_raises_regex(EncodingWarning, '.* invalid continuation byte'):
                 raise message
         s0 = 'Jeżu klątw, spłódź Finom część gry hańb'
         good = 'ó'
@@ -195,7 +195,7 @@ class test_not_overriden():
 
     def test_not_overriden(self):
         def show(message, category, filename, lineno, file=None, line=None):
-            with assert_raises_regexp(NotOverriddenWarning, r'^.*\bB.f[(][)] is not overridden$'):
+            with assert_raises_regex(NotOverriddenWarning, r'^.*\bB.f[(][)] is not overridden$'):
                 raise message
         with warnings.catch_warnings():
             warnings.showwarning = show

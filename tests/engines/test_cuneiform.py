@@ -17,7 +17,7 @@ import sys
 from tests.tools import (
     assert_equal,
     assert_raises,
-    assert_raises_regexp,
+    assert_raises_regex,
     interim,
 )
 
@@ -50,7 +50,7 @@ class test_language():
         if ok:
             engine.check_language(lang)
         else:
-            with assert_raises_regexp(lib.errors.MissingLanguagePack, '^language pack for the selected language (.+) is not available$'):
+            with assert_raises_regex(lib.errors.MissingLanguagePack, '^language pack for the selected language (.+) is not available$'):
                 engine.check_language(lang)
 
     def test_has_language(self):
