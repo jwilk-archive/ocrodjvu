@@ -65,7 +65,7 @@ def _test_from_file(base_filename, index):
         djvu_filename = os.path.join(tmpdir, 'empty.djvu')
         args += [djvu_filename]
         shutil.copy(
-            os.path.join(os.path.dirname(__file__), '..', 'common', 'empty.djvu'),
+            os.path.join(os.path.dirname(__file__), '..', 'data', 'empty.djvu'),
             djvu_filename)
         ipc.Subprocess(['djvused', '-f', djvused_filename, '-s', djvu_filename]).wait()
         xml_filename = os.path.join(tmpdir, 'output.html')
