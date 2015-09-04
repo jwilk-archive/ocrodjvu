@@ -33,7 +33,7 @@ engine = None
 
 def setup_module():
     global engine
-    engine = Engine(executable=os.path.join(here, 'fake-executable'))
+    engine = Engine(executable=os.path.join(here, 'fake-cuneiform'))
 
 class test_language():
 
