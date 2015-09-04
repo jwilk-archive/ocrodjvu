@@ -14,7 +14,7 @@
 import io
 import distutils.version
 
-from tests.common import (
+from tests.tools import (
     assert_equal,
 )
 

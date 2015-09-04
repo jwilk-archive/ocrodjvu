@@ -14,7 +14,7 @@
 import sys
 import warnings
 
-from tests.common import (
+from tests.tools import (
     assert_equal,
     assert_greater_equal,
     assert_in,

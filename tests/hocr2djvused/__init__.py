@@ -22,7 +22,7 @@ import djvu.sexpr
 
 from lib.cli import hocr2djvused
 
-from tests.common import (
+from tests.tools import (
     assert_equal,
     assert_multi_line_equal,
     assert_not_equal,

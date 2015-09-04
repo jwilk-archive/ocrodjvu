@@ -14,7 +14,7 @@
 import os
 import sys
 
-from tests.common import (
+from tests.tools import (
     assert_equal,
     assert_raises,
     assert_raises_regexp,

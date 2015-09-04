@@ -20,7 +20,7 @@ import djvu.decode
 
 from lib import image_io
 
-from tests.common import (
+from tests.tools import (
     assert_equal,
     assert_is_none,
     sorted_glob,

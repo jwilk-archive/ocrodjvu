@@ -16,7 +16,7 @@ import sys
 
 from lib.cli import ocrodjvu
 
-from tests.common import (
+from tests.tools import (
     assert_equal,
     assert_is_not_none,
     assert_not_equal,

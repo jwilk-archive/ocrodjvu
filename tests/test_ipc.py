@@ -17,7 +17,7 @@ import os
 import signal
 import stat
 
-from tests.common import (
+from tests.tools import (
     assert_equal,
     assert_false,
     assert_true,
