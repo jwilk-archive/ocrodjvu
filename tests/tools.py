@@ -25,82 +25,97 @@ from nose.tools import (
     assert_true,
 )
 
-if sys.version_info >= (2, 7):
-    from nose.tools import (
-        assert_greater_equal,
-        assert_in,
-        assert_is,
-        assert_is_instance,
-        assert_is_none,
-        assert_is_not_none,
-        assert_multi_line_equal,
-        assert_raises,
-        assert_raises_regexp,
-        assert_regexp_matches,
+import nose.tools
+
+def noseimport(vmaj, vmin, name=None):
+    def wrapper(f):
+        if sys.version_info >= (vmaj, vmin):
+            return getattr(nose.tools, name or f.__name__)
+        return f
+    return wrapper
+
+@noseimport(2, 7)
+def assert_greater_equal(x, y):
+    assert_true(
+        x >= y,
+        msg='{0!r} not greater than or equal to {1!r}'.format(x, y)
     )
+
+@noseimport(2, 7)
+def assert_in(x, y):
+    assert_true(
+        x in y,
+        msg='{0!r} not found in {1!r}'.format(x, y)
+    )
+
+@noseimport(2, 7)
+def assert_is(x, y):
+    assert_true(
+        x is y,
+        msg='{0!r} is not {1!r}'.format(x, y)
+    )
+
+@noseimport(2, 7)
+def assert_is_instance(obj, cls):
+    assert_true(
+        isinstance(obj, cls),
+        msg='{0!r} is not an instance of {1!r}'.format(obj, cls)
+    )
+
+@noseimport(2, 7)
+def assert_is_none(obj):
+    assert_is(obj, None)
+
+@noseimport(2, 7)
+def assert_is_not_none(obj):
+    assert_true(
+        obj is not None,
+        msg='{0!r} is None'.format(obj)
+    )
+
+@noseimport(2, 7)
+def assert_multi_line_equal(x, y):
+    assert_equal(x, y)
+if sys.version_info >= (2, 7):
     type(assert_multi_line_equal.__self__).maxDiff = None
-else:
-    # Python 2.6:
-    def assert_greater_equal(x, y):
-        assert_true(
-            x >= y,
-            msg='{0!r} not greater than or equal to {1!r}'.format(x, y)
-        )
-    def assert_in(x, y):
-        assert_true(
-            x in y,
-            msg='{0!r} not found in {1!r}'.format(x, y)
-        )
-    def assert_is(x, y):
-        assert_true(
-            x is y,
-            msg='{0!r} is not {1!r}'.format(x, y)
-        )
-    def assert_is_instance(obj, cls):
-        assert_true(
-            isinstance(obj, cls),
-            msg='{0!r} is not an instance of {1!r}'.format(obj, cls)
-        )
-    def assert_is_none(obj):
-        assert_is(obj, None)
-    def assert_is_not_none(obj):
-        assert_true(
-            obj is not None,
-            msg='{0!r} is None'.format(obj)
-        )
-    assert_multi_line_equal = assert_equal
-    class assert_raises(object):
-        def __init__(self, exc_type):
-            self._exc_type = exc_type
-            self.exception = None
-        def __enter__(self):
-            return self
-        def __exit__(self, exc_type, exc_value, tb):
-            if exc_type is None:
-                assert_true(False, '{0} not raised'.format(self._exc_type.__name__))
-            if not issubclass(exc_type, self._exc_type):
-                return False
-            if isinstance(exc_value, exc_type):
-                pass
-                # This branch is not always taken in Python 2.6:
-                # https://bugs.python.org/issue7853
-            elif isinstance(exc_value, tuple):
-                exc_value = exc_type(*exc_value)
-            else:
-                exc_value = exc_type(exc_value)
-            self.exception = exc_value
-            return True
-    @contextlib.contextmanager
-    def assert_raises_regexp(exc_type, regexp):
-        with assert_raises(exc_type) as ecm:
-            yield
-        assert_regexp_matches(str(ecm.exception), regexp)
-    def assert_regexp_matches(text, regexp):
-        if isinstance(regexp, basestring):
-            regexp = re.compile(regexp)
-        if not regexp.search(text):
-            message = "Regexp didn't match: {0!r} not found in {1!r}".format(regexp.pattern, text)
-            assert_true(False, msg=message)
+
+@noseimport(2, 7)
+class assert_raises(object):
+    def __init__(self, exc_type):
+        self._exc_type = exc_type
+        self.exception = None
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc_value, tb):
+        if exc_type is None:
+            assert_true(False, '{0} not raised'.format(self._exc_type.__name__))
+        if not issubclass(exc_type, self._exc_type):
+            return False
+        if isinstance(exc_value, exc_type):
+            pass
+            # This branch is not always taken in Python 2.6:
+            # https://bugs.python.org/issue7853
+        elif isinstance(exc_value, tuple):
+            exc_value = exc_type(*exc_value)
+        else:
+            exc_value = exc_type(exc_value)
+        self.exception = exc_value
+        return True
+
+@noseimport(2, 7)
+@contextlib.contextmanager
+def assert_raises_regexp(exc_type, regexp):
+    with assert_raises(exc_type) as ecm:
+        yield
+    assert_regexp_matches(str(ecm.exception), regexp)
+
+@noseimport(2, 7)
+def assert_regexp_matches(text, regexp):
+    if isinstance(regexp, basestring):
+        regexp = re.compile(regexp)
+    if not regexp.search(text):
+        message = "Regexp didn't match: {0!r} not found in {1!r}".format(regexp.pattern, text)
+        assert_true(False, msg=message)
 
 @contextlib.contextmanager
 def interim(obj, **override):
