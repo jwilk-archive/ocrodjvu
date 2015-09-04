@@ -119,7 +119,10 @@ def assert_regex(text, regex):
 
 @contextlib.contextmanager
 def interim(obj, **override):
-    copy = dict((key, getattr(obj, key)) for key in override)
+    copy = dict(
+        (key, getattr(obj, key))
+        for key in override
+    )
     for key, value in override.iteritems():
         setattr(obj, key, value)
     try:
@@ -132,7 +135,11 @@ def interim(obj, **override):
 def interim_environ(**override):
     keys = set(override)
     copy_keys = keys & set(os.environ)
-    copy = dict((key, value) for key, value in os.environ.iteritems() if key in copy_keys)
+    copy = dict(
+        (key, value)
+        for key, value in os.environ.iteritems()
+        if key in copy_keys
+    )
     for key, value in override.iteritems():
         if value is None:
             try:
