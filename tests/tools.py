@@ -160,28 +160,6 @@ def try_run(f, *args, **kwargs):
     else:
         return 0
 
-@contextlib.contextmanager
-def exception(exc_type, string=None, regex=None, callback=None):
-    if sum(x is not None for x in (string, regex, callback)) != 1:
-        raise ValueError('exactly one of: string, regex, callback must be provided')
-    if string is not None:
-        def callback(exc):
-            assert_equal(str(exc), string)
-    elif regex is not None:
-        def callback(exc):
-            exc_string = str(exc)
-            if not re.match(regex, exc_string):
-                message = "regexp didn't match: {re!r} not found in {exc!r}".format(re=regex, exc=exc_string)
-                raise AssertionError(message)
-    try:
-        yield None
-    except exc_type:
-        _, exc, _ = sys.exc_info()
-        callback(exc)
-    else:
-        message = '{exc} was not raised'.format(exc=exc_type.__name__)
-        raise AssertionError(message)
-
 def sorted_glob(*args, **kwargs):
     return sorted(glob.iglob(*args, **kwargs))
 
