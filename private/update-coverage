@@ -35,7 +35,6 @@ def main():
     os.chdir(basedir)
     argv = [
         sys.argv[0],
-        '--all-modules',
         '--with-coverage',
         '--cover-package=lib',
         '--cover-erase',
