@@ -500,7 +500,7 @@ class Context(djvu.decode.Context):
                 sed_file.write('set-txt\n')
                 result = None
                 with condition:
-                    while 1:
+                    while True:
                         result = results[page.n]
                         if result is None or result is True:
                             # Result is not yet available.
