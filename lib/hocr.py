@@ -310,7 +310,7 @@ def _scan(node, settings, page_size=None):
                 return children
         else:
             # Should not happen.
-            assert 0
+            assert False
 
     if not has_zone:
         assert has_string
