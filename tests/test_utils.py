@@ -182,7 +182,7 @@ class test_sanitize_utf8():
             t = sanitize_utf8(s1)
         assert_equal(s2, t)
 
-class test_not_overriden():
+class test_not_overridden():
 
     class B(object):
         @not_overridden
@@ -193,7 +193,7 @@ class test_not_overriden():
         def f(self, x, y):
             return x * y
 
-    def test_not_overriden(self):
+    def test_not_overridden(self):
         def show(message, category, filename, lineno, file=None, line=None):
             with assert_raises_regex(NotOverriddenWarning, r'^.*\bB.f[(][)] is not overridden$'):
                 raise message
@@ -201,7 +201,7 @@ class test_not_overriden():
             warnings.showwarning = show
             assert_is_none(self.B().f(6, 7))
 
-    def test_overriden(self):
+    def test_overridden(self):
         with warnings.catch_warnings():
             warnings.filterwarnings('error', category=NotOverriddenWarning)
             result = self.C().f(6, 7)
