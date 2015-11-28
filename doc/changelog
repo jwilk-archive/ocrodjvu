@@ -1,8 +1,9 @@
 ocrodjvu (0.9.2) UNRELEASED; urgency=low
 
   * Fix typo in the documentation.
+  * Update URLs for the HTML5 specification.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 23 Nov 2015 16:17:17 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 28 Nov 2015 20:45:51 +0100
 
 ocrodjvu (0.9.1) unstable; urgency=low
 

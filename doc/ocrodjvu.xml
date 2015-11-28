@@ -482,7 +482,7 @@
             <term><option>--html5</option></term>
             <listitem>
                 <para>
-                    Use a <ulink url='http://www.whatwg.org/specs/web-apps/current-work/#html-parser'>HTML5
+                    Use a <ulink url='https://html.spec.whatwg.org/multipage/syntax.html#parsing'>HTML5
                     parser</ulink>, which is more robust but slower than the default parser.
                 </para>
             </listitem>
