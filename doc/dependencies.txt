@@ -73,7 +73,7 @@ source:
 .. _python-djvulibre:
    http://jwilk.net/software/python-djvulibre
 .. _ICU:
-   http://www-306.ibm.com/software/globalization/icu/
+   http://site.icu-project.org/
 .. _lxml:
    http://lxml.de/
 .. _libxml2:
