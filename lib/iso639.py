@@ -16,10 +16,10 @@ ISO 639-2 support
 '''
 
 # Reference:
-# http://www.loc.gov/standards/iso639-2/php/code_list.php
+# https://www.loc.gov/standards/iso639-2/php/code_list.php
 
 # Machine-readable code list:
-# http://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt
+# https://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt
 
 _b_to_t = {
     'alb': 'sqi',
