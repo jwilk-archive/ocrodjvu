@@ -25,7 +25,7 @@ def get_icu():
         import PyICU as icu
         return icu
     except ImportError as ex:  # <no-coverage>
-        utils.enhance_import_error(ex, 'PyICU', 'python-pyicu', 'http://pyicu.osafoundation.org/')
+        utils.enhance_import_error(ex, 'PyICU', 'python-pyicu', 'https://pypi.python.org/pypi/PyICU/')
         raise
 
 def simple_word_break_iterator(text):

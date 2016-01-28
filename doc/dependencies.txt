@@ -85,7 +85,7 @@ source:
 .. _subprocess:
    https://docs.python.org/2/library/subprocess.html
 .. _PyICU:
-   http://pyicu.osafoundation.org/
+   https://pypi.python.org/pypi/PyICU/
 .. _html5lib:
    https://github.com/html5lib/html5lib-python
 .. _HTML5:
