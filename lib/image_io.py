@@ -172,7 +172,7 @@ class TIFF(ImageFormat):
             header += struct.pack('<HHII', 0x102, 3, 3, 8),  # BitsPerSample
         else:
             header += struct.pack('<HHII', 0x102, 3, 1, 1),  # BitsPerSample
-        header += struct.pack('<HHIHxx', 0x106, 3, 1, interp),  # PhotometicInterpretation
+        header += struct.pack('<HHIHxx', 0x106, 3, 1, interp),  # PhotometricInterpretation
         header += struct.pack('<HHII', 0x111, 4, 1, data_offset),  # StripOffsets
         header += struct.pack('<HHIHxx', 0x115, 3, 1, spp),  # SamplesPerPixel
         header += struct.pack('<HHII', 0x117, 4, 1, len(data)),  # StripByteCounts
