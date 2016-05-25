@@ -41,7 +41,7 @@ class ArgumentParser(argparse.ArgumentParser):
         group.add_argument('--word-segmentation', dest='word_segmentation', choices=('simple', 'uax29'), default='simple', help='word segmentation algorithm')
         # -l/--language is currently not very useful, as ICU don't have any specialisations for languages ocrodjvu supports:
         group.add_argument('-l', '--language', dest='language', help=argparse.SUPPRESS or 'language for word segmentation', default='eng')
-        self.add_argument('--html5', dest='html5', action='store_true', help='use HTML5 paser')
+        self.add_argument('--html5', dest='html5', action='store_true', help='use HTML5 parser')
         self.add_argument('--fix-utf8', dest='fix_utf8', action='store_true', help='attempt to fix UTF-8 encoding issues')
         self.add_argument('input_files', metavar='FILE', nargs='*', type=argparse.FileType('r'), default=[sys.stdin], help='hOCR file to parse (default: standard input)')
 
