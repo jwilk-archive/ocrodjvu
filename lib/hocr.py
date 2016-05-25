@@ -355,7 +355,7 @@ def _scan(node, settings, page_size=None):
 
     if not bbox:
         if len(node) == 0:
-            # Ocropus 0.2 doesn't always provide necessary bounding box
+            # OCRopus 0.2 doesn't always provide necessary bounding box
             # information. We have no other choice than to drop such a broken
             # zone silently.
             # FIXME: This work-around is ugly and should be dropped at some point.

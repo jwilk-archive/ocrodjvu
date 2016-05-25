@@ -312,7 +312,7 @@ ocrodjvu (0.6.0) unstable; urgency=low
 
 ocrodjvu (0.5.1) unstable; urgency=low
 
-  * Fix crash when listing engines/languages if Ocropus is not found.
+  * Fix crash when listing engines/languages if OCRopus is not found.
     Thanks to Kyrill Detinov for the bug report.
   * lxml is no longer required for OCR engines that are not using hOCR as
     output format.
