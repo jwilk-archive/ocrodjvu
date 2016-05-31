@@ -2,6 +2,7 @@ ocrodjvu (0.9.2) UNRELEASED; urgency=low
 
   * Fix crashes on empty pages.
     https://bitbucket.org/jwilk/ocrodjvu/issues/18
+    https://bitbucket.org/jwilk/ocrodjvu/issues/7
     Thanks to Janusz S. Bień for the bug report.
   * Fix typo in the documentation.
   * Ignore boring diagnostic messages from Tesseract.
