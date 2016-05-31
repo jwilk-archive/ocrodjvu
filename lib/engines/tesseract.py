@@ -47,6 +47,20 @@ _bbox_extras_template = '''\
 </script>
 '''
 
+def _is_stderr_boring(stderr):
+    if len(stderr) > 2:
+        return False
+    for line in stderr:
+        # Tesseract prints its own name on standard error
+        # even if nothing went wrong.
+        # We also don't want page numbers,
+        # because we always pass just a single page to Tesseract.
+        if line.startswith(('Tesseract Open Source OCR Engine', 'Page ')):
+            continue
+        else:
+            return False
+    return True
+
 def _wait_for_worker(worker):
     stderr = worker.stderr.readlines()
     try:
@@ -55,12 +69,8 @@ def _wait_for_worker(worker):
         for line in stderr:
             sys.stderr.write('tesseract: {0}'.format(line))
         raise
-    if len(stderr) == 1:
-        [line] = stderr
-        if line.startswith(('Tesseract Open Source OCR Engine', 'Page')):
-            # Annoyingly, Tesseract prints its own name on standard error even
-            # if nothing went wrong. Filter out such an unhelpful message.
-            return
+    if _is_stderr_boring(stderr):
+        return
     for line in stderr:
         sys.stderr.write('tesseract: {0}'.format(line))
 
