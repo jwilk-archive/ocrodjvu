@@ -1,5 +1,8 @@
 ocrodjvu (0.9.2) UNRELEASED; urgency=low
 
+  * Fix crashes on empty pages.
+    https://bitbucket.org/jwilk/ocrodjvu/issues/18
+    Thanks to Janusz S. Bień for the bug report.
   * Fix typo in the documentation.
   * Ignore boring diagnostic messages from Tesseract.
   * Update the HTML5 specification URLs.
@@ -8,7 +11,7 @@ ocrodjvu (0.9.2) UNRELEASED; urgency=low
   * Rename the test modules, so that passing --all to nosetests is no longer
     necessary.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 31 May 2016 20:59:31 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 31 May 2016 21:37:41 +0200
 
 ocrodjvu (0.9.1) unstable; urgency=low
 

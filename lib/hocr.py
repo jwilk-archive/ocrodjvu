@@ -254,13 +254,12 @@ def _scan(node, settings, page_size=None):
     has_string = has_nonempty_string = False
     has_zone = has_char_zone = has_nonchar_zone = False
     children = get_children(node)
+    if djvu_class is const.TEXT_ZONE_PAGE:
+        empty = [text_zones.Zone(type=djvu_class, bbox=bbox)]
+    else:
+        empty = []
     if len(children) == 0:
-        if djvu_class is const.TEXT_ZONE_PAGE:
-            # For all other zone types, 0-child zones are simply skipped.
-            # We return from the function here, to make further checks simpler.
-            return [text_zones.Zone(type=djvu_class, bbox=bbox)]
-        else:
-            return []
+        return empty
 
     for child in children:
         if isinstance(child, basestring):
@@ -323,7 +322,7 @@ def _scan(node, settings, page_size=None):
         text = ''.join(children)
         children = _apply_bboxes(djvu_class, settings.bbox_data or title, text, settings, page_size)
         if len(children) == 0:
-            return []
+            return empty
         if isinstance(children[0], basestring):
             # Get rid of e.g. trailing newlines.
             children[0] = children[0].rstrip()
@@ -343,13 +342,13 @@ def _scan(node, settings, page_size=None):
         children = text_zones.group_words(children, settings.details, break_iterator)
         has_string = False
         if len(children) == 0:
-            return []
+            return empty
 
     if has_zone and has_string:
         assert not has_nonempty_string
         children = [child for child in children if not isinstance(child, basestring)]
         if len(children) == 0:
-            return []
+            return empty
 
     assert len(children) > 0
 
