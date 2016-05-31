@@ -16,4 +16,4 @@ recursive-include tests *.html
 recursive-include tests *.djvused
 recursive-include tests *.test[0-9]
 recursive-include tests *.djvu
-recursive-include tests fake-executable
+recursive-include tests fake-*
