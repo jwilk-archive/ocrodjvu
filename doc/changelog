@@ -4,7 +4,7 @@ ocrodjvu (0.9.2) UNRELEASED; urgency=low
     https://bitbucket.org/jwilk/ocrodjvu/issues/18
     https://bitbucket.org/jwilk/ocrodjvu/issues/7
     Thanks to Janusz S. Bień for the bug report.
-  * Fix typo in the documentation.
+  * Fix typos.
   * Ignore boring diagnostic messages from Tesseract.
   * Update the HTML5 specification URLs.
   * Update the ICU website URL.
