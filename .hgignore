@@ -3,7 +3,7 @@ syntax: glob
 *.py[co]
 .coverage
 MANIFEST
-build/
-dist/
+build
+dist
 doc/*.1
-secret/
+secret
