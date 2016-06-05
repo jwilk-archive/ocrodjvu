@@ -145,8 +145,8 @@ ocrodjvu (0.7.13) unstable; urgency=low
 
   * Abort early if one tries to use an incompatible Python version.
   * Improve the manual pages, as per man-pages(7) recommendations:
-    - Remove the “AUTHOR” sections.
-    - Rename the “REPORTING BUGS” sections as “BUGS”.
+    + Remove the “AUTHOR” sections.
+    + Rename the “REPORTING BUGS” sections as “BUGS”.
   * Improve the test suite.
   * Make “setup.py clean -a” remove compiled manual pages (unless they were
     built by “setup.py sdist”).
