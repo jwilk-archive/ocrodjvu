@@ -52,7 +52,7 @@ def b_to_t(lang, permissive=False):
         raise TypeError
     if len(lang) != 3:
         if not permissive:
-            raise ValueError
+            raise ValueError(lang)
         else:
             return lang
     return _b_to_t.get(lang, lang)
