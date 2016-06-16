@@ -27,8 +27,8 @@ ocrodjvu (0.9.1) unstable; urgency=low
 
   * Use the subprocess32 module (a thread-safe replacement for the subprocess
     module) when it's available.
-  * Issue a warning when the -j/--jobs is enabled, but the subprocess is not
-    thread-safe.
+  * Issue a warning when the -j/--jobs is enabled, but the subprocess module
+    is not thread-safe.
   * Include an example script for converting scans to DjVu + hOCR.
   * Improve error handling.
 
