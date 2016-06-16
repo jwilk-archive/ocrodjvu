@@ -1,0 +1,9 @@
+#!/bin/sh
+[ "$1" = "-l" ] &&
+cat <<EOF
+Cuneiform for Linux 0.7.0 (multilang) 
+Supported languages: eng ger fra rus swe spa ita ruseng ukr srp hrv pol dan por dut cze rum hun bul slo lav lit est tur rus_ger rus_fra rus_swe rus_spa rus_pol rus_dan rus_por rus_dut rus_cze rus_lav rus_lit rus_est rus_tur.
+EOF
+exit 1
+
+# vim:ts=4 sts=4 sw=4 et

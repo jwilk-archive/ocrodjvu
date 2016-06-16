@@ -29,13 +29,7 @@ from lib.engines.cuneiform import (
 here = os.path.dirname(__file__)
 here = os.path.relpath(here)
 
-engine = None
-
-def setup_module():
-    global engine
-    engine = Engine(executable=os.path.join(here, 'fake-cuneiform'))
-
-class test_language():
+class test_cuneiform():
 
     existing_languages = (
         ('eng', 'eng'),
@@ -46,12 +40,20 @@ class test_language():
     )
     missing_languages = 'tlh',
 
+    fake_executable = 'fake-cuneiform'
+
+    @classmethod
+    def setup_class(cls):
+        cls.engine = Engine(
+            executable=os.path.join(here, cls.fake_executable)
+        )
+
     def _test_has_language(self, lang, ok):
         if ok:
-            engine.check_language(lang)
+            self.engine.check_language(lang)
         else:
             with assert_raises_regex(lib.errors.MissingLanguagePack, '^language pack for the selected language (.+) is not available$'):
-                engine.check_language(lang)
+                self.engine.check_language(lang)
 
     def test_has_language(self):
         for lang1, lang2 in self.existing_languages:
@@ -64,13 +66,13 @@ class test_language():
     def _test_recognize(self, lang1, lang2):
         def fake_subprocess(args, *rest, **kwrest):
             # Record arguments that were used and break immediately.
-            assert_equal(args[0], engine.executable)
+            assert_equal(args[0], self.engine.executable)
             assert_equal(args[1], '-l')
             assert_equal(args[2], lang1)
             raise EOFError
         with interim(lib.ipc, Subprocess=fake_subprocess):
             with assert_raises(EOFError):
-                with engine.recognize(sys.stdin, lang1):
+                with self.engine.recognize(sys.stdin, lang1):
                     pass
 
     def test_recognize(self):
@@ -78,5 +80,9 @@ class test_language():
             yield self._test_recognize, lang1, lang2
             if lang1 != lang2:
                 yield self._test_recognize, lang1, lang1
+
+class test_cuneiform_multilang(test_cuneiform):
+
+    fake_executable = 'fake-cuneiform-multilang'
 
 # vim:ts=4 sts=4 sw=4 et

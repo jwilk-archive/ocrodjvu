@@ -14,6 +14,7 @@
 import os
 import re
 import shlex
+import warnings
 
 from . import common
 from .. import errors
@@ -84,7 +85,10 @@ class Engine(common.Engine):
                             # the former means Slovak.
                             isocode = 'slk'
                     else:
-                        isocode = iso639.b_to_t(code)
+                        try:
+                            isocode = iso639.b_to_t(code)
+                        except ValueError:
+                            warnings.warn('unparsable language code: {0!r}'.format(code), category=RuntimeWarning, stacklevel=2)
                     self._cuneiform_to_iso[code] = isocode
                     self._user_to_cuneiform[frozenset(isocode.split('+'))] = code
                     yield isocode
