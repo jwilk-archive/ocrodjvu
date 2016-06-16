@@ -31,13 +31,13 @@ here = os.path.relpath(here)
 
 class test_cuneiform():
 
-    existing_languages = (
+    existing_languages = [
         ('eng', 'eng'),
         ('ger', 'deu'),
         ('ruseng', 'rus-eng'),
         ('ruseng', 'rus+eng'),
         ('ruseng', 'eng+rus'),
-    )
+    ]
     missing_languages = 'tlh',
 
     fake_executable = 'fake-cuneiform'
