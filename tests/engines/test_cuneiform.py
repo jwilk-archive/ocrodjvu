@@ -83,6 +83,11 @@ class test_cuneiform():
 
 class test_cuneiform_multilang(test_cuneiform):
 
+    existing_languages = test_cuneiform.existing_languages + [
+        ('rus_cze', 'rus+ces'),
+        ('rus_cze', 'ces+rus'),
+    ]
+
     fake_executable = 'fake-cuneiform-multilang'
 
 # vim:ts=4 sts=4 sw=4 et

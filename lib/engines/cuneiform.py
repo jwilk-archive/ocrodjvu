@@ -86,7 +86,9 @@ class Engine(common.Engine):
                             isocode = 'slk'
                     else:
                         try:
-                            isocode = iso639.b_to_t(code)
+                            isocode = '+'.join(
+                                iso639.b_to_t(c) for c in code.split('_')
+                            )
                         except ValueError:
                             warnings.warn('unparsable language code: {0!r}'.format(code), category=RuntimeWarning, stacklevel=2)
                     self._cuneiform_to_iso[code] = isocode
