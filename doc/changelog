@@ -1,9 +1,8 @@
 ocrodjvu (0.10) UNRELEASED; urgency=low
 
-  * ocrodjvu:
-    + Add support for cuneiform-multilang as OCR engine.
-      Thanks to Alexey Shipunov for the bug report.
-    + Improve error handling.
+  * Add support for cuneiform-multilang as OCR engine.
+    Thanks to Alexey Shipunov for the bug report.
+  * Improve error handling.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Fri, 17 Jun 2016 00:14:24 +0200
 
