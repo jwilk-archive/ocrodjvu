@@ -1,8 +1,9 @@
 ocrodjvu (0.10.1) UNRELEASED; urgency=low
 
-  * 
+  * Don't hardcode the Python interpreter path in script shebangs; use
+    “#!/usr/bin/env python” instead.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 18 Jun 2016 14:42:11 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 16 Jul 2016 11:17:18 +0200
 
 ocrodjvu (0.10) unstable; urgency=low
 
