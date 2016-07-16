@@ -23,6 +23,7 @@ install:
 - if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then pip install argparse; fi
 - pip install --verbose lxml
 - pip install --verbose pyicu
+- pip install --upgrade setuptools
 - pip install html5lib
 - pip install --verbose pillow
 script:
