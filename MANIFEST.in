@@ -10,7 +10,7 @@ include examples/*
 include ocrodjvu.py
 include private/*
 include tests/coverage.txt
-recursive-include tests *.bmp *.pbm *.ppm *.tif
+recursive-include tests *.bmp *.png *.pbm *.ppm *.tif
 recursive-include tests *.py
 recursive-include tests *.html
 recursive-include tests *.djvused
