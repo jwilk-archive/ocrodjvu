@@ -15,6 +15,7 @@
 
 import logging
 import os
+import pipes
 import re
 import signal
 
@@ -73,11 +74,6 @@ del get_signal_names
 # Subprocess
 # ==========
 
-def shell_escape(s, safe=re.compile(r'\A[a-zA-Z0-9_+/=.,:%-]+\Z').match):
-    if safe(s):
-        return s
-    return "'{0}'".format(s.replace("'", r"'\''"))
-
 class Subprocess(subprocess.Popen):
 
     @classmethod
@@ -107,7 +103,7 @@ class Subprocess(subprocess.Popen):
         except KeyError:
             commandline = args[0]
         if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(' '.join(shell_escape(s) for s in commandline))
+            logger.debug(' '.join(pipes.quote(s) for s in commandline))
         self.__command = commandline[0]
         try:
             subprocess.Popen.__init__(self, *args, **kwargs)
