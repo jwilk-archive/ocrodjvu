@@ -36,11 +36,11 @@ if os.name == 'posix':
     signal.signal(signal.SIGCHLD, signal.SIG_DFL)
 
 def get_signal_names():
-    _signame_pattern = re.compile('^SIG[A-Z0-9]*$')
+    signame_pattern = re.compile('^SIG[A-Z0-9]*$')
     data = dict(
         (name, getattr(signal, name))
         for name in dir(signal)
-        if _signame_pattern.match(name)
+        if signame_pattern.match(name)
     )
     try:
         if data['SIGABRT'] == data['SIGIOT']:
