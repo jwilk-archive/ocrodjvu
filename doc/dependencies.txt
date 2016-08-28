@@ -65,7 +65,7 @@ source:
 .. _GOCR:
    http://jocr.sourceforge.net/
 .. _Tesseract:
-   https://code.google.com/p/tesseract-ocr/
+   https://github.com/tesseract-ocr/tesseract
 .. _DjVuLibre:
    http://djvu.sourceforge.net/
 .. _DjVu:

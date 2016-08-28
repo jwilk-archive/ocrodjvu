@@ -42,7 +42,7 @@
         produced by
         <ulink url='https://code.google.com/p/ocropus/'><application>OCRopus</application></ulink> or
         <ulink url='https://launchpad.net/cuneiform-linux'><application>Cuneiform</application></ulink> or
-        <ulink url='https://code.google.com/p/tesseract-ocr/'><application>Tesseract</application></ulink>)
+        <ulink url='https://github.com/tesseract-ocr/tesseract'><application>Tesseract</application></ulink>)
         and converts them to a <command>djvused</command> script.
     </para>
     <para>

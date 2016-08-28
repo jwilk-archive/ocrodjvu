@@ -103,7 +103,7 @@
             <para><ulink url='http://jocr.sourceforge.net/'><application>GOCR</application></ulink>.</para>
         </listitem>
         <listitem>
-            <para>Stand-alone <ulink url='https://code.google.com/p/tesseract-ocr/'><application>Tesseract</application></ulink>.</para>
+            <para>Stand-alone <ulink url='https://github.com/tesseract-ocr/tesseract'><application>Tesseract</application></ulink>.</para>
         </listitem>
         </itemizedlist>
     </para>
