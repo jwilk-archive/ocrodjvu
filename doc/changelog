@@ -3,8 +3,9 @@ ocrodjvu (0.10.1) UNRELEASED; urgency=low
   * Don't hardcode the Python interpreter path in script shebangs; use
     “#!/usr/bin/env python” instead.
   * Include a missing test image in the tarball.
+  * Update Tesseract homepage URL.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 22 Jul 2016 12:19:18 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 28 Aug 2016 15:03:26 +0200
 
 ocrodjvu (0.10) unstable; urgency=low
 
