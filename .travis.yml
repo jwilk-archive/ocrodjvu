@@ -22,7 +22,8 @@ install:
 - if [ -n "$SUBPROCESS32" ]; then pip install --verbose subprocess32; fi
 - if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then pip install argparse; fi
 - pip install --verbose lxml
-- pip install --verbose pyicu
+- if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then PYICU_VERSION=1.9.3; fi
+- pip install --verbose pyicu${PYICU_VERSION:+==$PYICU_VERSION}
 - pip install --upgrade setuptools
 - pip install html5lib
 - pip install --verbose pillow
