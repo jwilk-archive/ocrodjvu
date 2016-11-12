@@ -16,7 +16,6 @@ import glob
 import os
 import re
 import sys
-import warnings
 
 from nose.tools import (
     assert_equal,
