@@ -18,8 +18,8 @@ ocrodjvu (0.10) unstable; urgency=low
 ocrodjvu (0.9.2) unstable; urgency=low
 
   * Fix crashes on empty pages.
-    https://bitbucket.org/jwilk/ocrodjvu/issues/18
-    https://bitbucket.org/jwilk/ocrodjvu/issues/7
+    https://github.com/jwilk/ocrodjvu/issues/18
+    https://github.com/jwilk/ocrodjvu/issues/7
     Thanks to Janusz S. Bień for the bug report.
   * Fix typos.
   * Ignore boring diagnostic messages from Tesseract.
@@ -46,7 +46,7 @@ ocrodjvu (0.9) unstable; urgency=low
 
   * If python-djvulibre >= 0.4 is installed, don't escape non-ASCII characters
     in djvused scripts.
-    https://bitbucket.org/jwilk/ocrodjvu/issues/13
+    https://github.com/jwilk/ocrodjvu/issues/13
     Thanks to Janusz S. Bień for the bug report.
   * Improve error handling.
 
@@ -56,10 +56,10 @@ ocrodjvu (0.8) unstable; urgency=low
 
   * Change the default OCR engine to Tesseract.
   * Add the “tesseract: ” prefix to messages Tesseract prints on stderr.
-    https://bitbucket.org/jwilk/ocrodjvu/issues/10
+    https://github.com/jwilk/ocrodjvu/issues/10
     Thanks to Janusz S. Bień for the bug report.
   * Ensure that exit code is non-zero if the program recovered from an error.
-    https://bitbucket.org/jwilk/ocrodjvu/issues/6
+    https://github.com/jwilk/ocrodjvu/issues/6
   * Improve error handling.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Wed, 10 Jun 2015 21:17:32 +0200
@@ -68,7 +68,7 @@ ocrodjvu (0.7.19) unstable; urgency=low
 
   * Make sure that text zones are at least 1 pixel wide and 1 pixel high.
   * Tesseract: fix splitting bounding boxes for character clusters.
-    https://bitbucket.org/jwilk/ocrodjvu/issues/12
+    https://github.com/jwilk/ocrodjvu/issues/12
     Thanks to Janusz S. Bień for the bug report.
   * Fix typos in the documentation.
 
@@ -89,7 +89,7 @@ ocrodjvu (0.7.18) unstable; urgency=low
 ocrodjvu (0.7.17) unstable; urgency=low
 
   * Fix compatibility with Tesseract > 3.02.
-    https://bitbucket.org/jwilk/ocrodjvu/issues/9
+    https://github.com/jwilk/ocrodjvu/issues/9
     Thanks to Heinrich Schwietering for the bug report.
   * ocrodjvu:
     + Ensure that exit code is non-zero if the program was interrupted by
@@ -105,9 +105,9 @@ ocrodjvu (0.7.16) unstable; urgency=low
     + Fix option names in documentation of the --ocr-only option.
     + Don't crash if file identifier is not in UTF-8 or if it cannot be
       converted to locale encoding; use the page number instead.
-      https://bitbucket.org/jwilk/ocrodjvu/issues/4
+      https://github.com/jwilk/ocrodjvu/issues/4
     + Don't hang if a page cannot be decoded.
-      https://bitbucket.org/jwilk/ocrodjvu/issues/5
+      https://github.com/jwilk/ocrodjvu/issues/5
 
  -- Jakub Wilk <jwilk@jwilk.net>  Sun, 28 Apr 2013 15:08:19 +0200
 
@@ -119,7 +119,7 @@ ocrodjvu (0.7.15) unstable; urgency=low
     Thanks to Janusz S. Bień for the bug report.
   * ocrodjvu:
     + Make it possible to pass multiple languages to Tesseract ≥ 3.02.
-      https://bitbucket.org/jwilk/ocrodjvu/issues/3
+      https://github.com/jwilk/ocrodjvu/issues/3
       Thanks to Janusz S. Bień for the bug report.
     + Cuneiform: rename mixed Russian-English language code:
       “rus-eng” → “rus+eng”. This is for consistency with Tesseract.
@@ -176,7 +176,7 @@ ocrodjvu (0.7.11) unstable; urgency=low
 
   * hocr2djvused:
     + Allow processing multiple hOCR documents at once.
-      https://bitbucket.org/jwilk/ocrodjvu/issues/1
+      https://github.com/jwilk/ocrodjvu/issues/1
       Thanks to Thomas Koch for the bug report and the initial patch.
   * Fix merging results of two Tesseract runs.
     Thanks to Janusz S. Bień for the bug report.

@@ -14,8 +14,8 @@ Missing tests
   - for empty pages
 * for https://bugs.debian.org/575484#35
 * for https://bugs.debian.org/671764
-* for https://bitbucket.org/jwilk/ocrodjvu/issues/4
-* for https://bitbucket.org/jwilk/ocrodjvu/issues/12
+* for https://github.com/jwilk/ocrodjvu/issues/4
+* for https://github.com/jwilk/ocrodjvu/issues/12
 
 Documentation
 =============
