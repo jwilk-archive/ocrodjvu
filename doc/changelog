@@ -4,8 +4,10 @@ ocrodjvu (0.10.1) UNRELEASED; urgency=low
     “#!/usr/bin/env python” instead.
   * Include a missing test image in the tarball.
   * Update Tesseract homepage URL.
+  * Update bug tracker URLs.
+    The project repo has moved to GitHub.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sun, 28 Aug 2016 15:03:26 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 17 Nov 2016 13:38:59 +0100
 
 ocrodjvu (0.10) unstable; urgency=low
 
