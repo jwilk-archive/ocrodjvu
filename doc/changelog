@@ -1,4 +1,4 @@
-ocrodjvu (0.10.1) UNRELEASED; urgency=low
+ocrodjvu (0.10.1) unstable; urgency=low
 
   * Don't hardcode the Python interpreter path in script shebangs; use
     “#!/usr/bin/env python” instead.
@@ -7,7 +7,7 @@ ocrodjvu (0.10.1) UNRELEASED; urgency=low
   * Update bug tracker URLs.
     The project repo has moved to GitHub.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 17 Nov 2016 13:38:59 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 22 Nov 2016 16:45:13 +0100
 
 ocrodjvu (0.10) unstable; urgency=low
 
