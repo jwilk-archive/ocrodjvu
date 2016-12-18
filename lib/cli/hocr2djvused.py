@@ -29,9 +29,8 @@ class ArgumentParser(argparse.ArgumentParser):
     )
 
     def __init__(self):
-        version = '%(prog)s ' + __version__
         argparse.ArgumentParser.__init__(self)
-        self.add_argument('-v', '--version', action='version', version=version, help='show version information and exit')
+        self.add_argument('--version', action=version.VersionAction)
         self.add_argument('--rotation', dest='rotation', action='store', type=int, default=0, help='page rotation (in degrees)')
         def size(s):
             return map(int, s.split('x', 1))

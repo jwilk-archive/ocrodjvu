@@ -49,8 +49,8 @@ def test_version():
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(djvu2hocr.main, ['', '--version'])
     assert_equal(rc, 0)
-    assert_not_equal(stderr.getvalue(), '')
-    assert_equal(stdout.getvalue(), '')
+    assert_equal(stderr.getvalue(), '')
+    assert_not_equal(stdout.getvalue(), '')
 
 def _test_from_file(base_filename, index):
     base_filename = os.path.join(here, base_filename)

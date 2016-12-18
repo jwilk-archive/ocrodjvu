@@ -50,8 +50,8 @@ def test_version():
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(hocr2djvused.main, ['', '--version'])
     assert_equal(rc, 0)
-    assert_not_equal(stderr.getvalue(), '')
-    assert_equal(stdout.getvalue(), '')
+    assert_equal(stderr.getvalue(), '')
+    assert_not_equal(stdout.getvalue(), '')
 
 def normalize_sexpr(match):
     return djvu.sexpr.Expression.from_string(match.group(1)).as_string(width=80)

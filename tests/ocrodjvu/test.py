@@ -42,8 +42,8 @@ def test_version():
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--version'])
     assert_equal(rc, 0)
-    assert_not_equal(stderr.getvalue(), '')
-    assert_equal(stdout.getvalue(), '')
+    assert_equal(stderr.getvalue(), '')
+    assert_not_equal(stdout.getvalue(), '')
 
 def test_list_engines():
     global engines

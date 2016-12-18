@@ -43,9 +43,8 @@ class ArgumentParser(argparse.ArgumentParser):
 
     def __init__(self):
         usage = '%(prog)s [options] FILE'
-        version = '%(prog)s ' + __version__
         argparse.ArgumentParser.__init__(self, usage=usage)
-        self.add_argument('-v', '--version', action='version', version=version, help='show version information and exit')
+        self.add_argument('--version', action=version.VersionAction)
         group = self.add_argument_group(title='input selection options')
         group.add_argument('path', metavar='FILE', help='DjVu file to covert')
         def pages(x):
