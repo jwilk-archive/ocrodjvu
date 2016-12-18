@@ -15,18 +15,11 @@ from . import utils
 
 def get_icu():
     try:
-        # For PyICU ≥ 1.0
         import icu
-        return icu
     except ImportError:  # <no-coverage>
-        pass
-    try:  # <no-coverage>
-        # For PyICU < 1.0
-        import PyICU as icu
-        return icu
-    except ImportError as ex:  # <no-coverage>
         utils.enhance_import_error(ex, 'PyICU', 'python-pyicu', 'https://pypi.python.org/pypi/PyICU/')
-        raise
+    else:
+        return icu
 
 def simple_word_break_iterator(text):
     '''

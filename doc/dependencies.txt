@@ -38,7 +38,7 @@ Additionally, some optional features require the following software:
   backported from Python 3.X;
   strongly recommended for the ``-j``/``--jobs`` option
 
-* PyICU_ -
+* PyICU_ ≥ 1.0 -
   Python bindings for PyICU IBM's ICU_ C++ API;
   required for the ``--word-segmentation=uax29`` option
 
