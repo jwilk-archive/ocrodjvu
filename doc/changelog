@@ -1,3 +1,9 @@
+ocrodjvu (0.10.2) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 18 Dec 2016 19:02:20 +0100
+
 ocrodjvu (0.10.1) unstable; urgency=low
 
   * Don't hardcode the Python interpreter path in script shebangs; use
