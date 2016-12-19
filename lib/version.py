@@ -64,8 +64,8 @@ class VersionAction(argparse.Action):
         parser.exit()
 
 __all__ = [
-    '__version__',
     'VersionAction',
+    '__version__',
 ]
 
 # vim:ts=4 sts=4 sw=4 et
