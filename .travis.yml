@@ -27,9 +27,11 @@ install:
 - pip install --upgrade setuptools
 - pip install html5lib
 - pip install --verbose pillow
+- pip install pyflakes
 - pip install docutils
 script:
 - nosetests --verbose
+- private/run-pyflakes
 - grep -r -l ft=rst doc/ | xargs -t -n1 -I{} rst2xml.py --strict {} /dev/null
 - xmllint --noout --valid doc/*.xml
 
