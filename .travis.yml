@@ -27,8 +27,10 @@ install:
 - pip install --upgrade setuptools
 - pip install html5lib
 - pip install --verbose pillow
+- pip install docutils
 script:
 - nosetests --verbose
+- grep -r -l ft=rst doc/ | xargs -t -n1 -I{} rst2xml.py --strict {} /dev/null
 - xmllint --noout --valid doc/*.xml
 
 # vim:ts=2 sts=2 sw=2 et
