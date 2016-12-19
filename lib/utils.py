@@ -159,11 +159,11 @@ def get_cpu_count():
     try:
         import multiprocessing
         return multiprocessing.cpu_count()
-    except (ImportError, NotImplementedError):  # <no-coverage>
+    except (ImportError, NotImplementedError):  # no coverage
         pass
-    try:  # <no-coverage>
+    try:  # no coverage
         return os.sysconf('SC_NPROCESSORS_ONLN')
-    except (ValueError, OSError, AttributeError):  # <no-coverage>
+    except (ValueError, OSError, AttributeError):  # no coverage
         return 1
 
 # vim:ts=4 sts=4 sw=4 et

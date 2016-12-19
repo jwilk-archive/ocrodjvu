@@ -36,26 +36,26 @@ class VersionAction(argparse.Action):
             print('+ subprocess32')
         try:
             djvu_decode = sys.modules['djvu.decode']
-        except LookupError:  # <no-coverage>
+        except LookupError:  # no coverage
             pass
         else:
             print('+ python-djvulibre {0}'.format(djvu_decode.__version__))
         try:
             lxml_etree = sys.modules['lxml.etree']
-        except LookupError:  # <no-coverage>
+        except LookupError:  # no coverage
             pass
         else:
             print('+ lxml {0}'.format(lxml_etree.__version__))
         try:
             import html5lib
-        except ImportError:  # <no-coverage>
+        except ImportError:  # no coverage
             pass
         else:
             print('+ html5lib-python {0}'.format(html5lib.__version__))
         try:
             from . import unicode_support
             pyicu = unicode_support.get_icu()
-        except ImportError:  # <no-coverage>
+        except ImportError:  # no coverage
             pass
         else:
             print('+ PyICU {0}'.format(pyicu.VERSION))

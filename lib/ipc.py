@@ -22,7 +22,7 @@ import signal
 thread_safe = True
 try:
     import subprocess32 as subprocess
-except ImportError:  # <no-coverage>
+except ImportError:  # no coverage
     import subprocess
     if os.name == 'posix':
         thread_safe = False
@@ -46,12 +46,12 @@ def get_signal_names():
     try:
         if data['SIGABRT'] == data['SIGIOT']:
             del data['SIGIOT']
-    except KeyError:  # <no-coverage>
+    except KeyError:  # no coverage
         pass
     try:
         if data['SIGCHLD'] == data['SIGCLD']:
             del data['SIGCLD']
-    except KeyError:  # <no-coverage>
+    except KeyError:  # no coverage
         pass
     return dict((no, name) for name, no in data.iteritems())
 

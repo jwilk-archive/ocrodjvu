@@ -16,7 +16,7 @@ try:
     from djvu.dllpath import set_dll_search_path
 except ImportError:
     pass
-else:  # <no-coverage>
+else:  # no coverage
     set_dll_search_path()
 
 from . import utils
@@ -25,7 +25,7 @@ try:
     from djvu import const
     from djvu import decode
     from djvu import sexpr
-except ImportError as ex:  # <no-coverage>
+except ImportError as ex:  # no coverage
     utils.enhance_import_error(ex, 'python-djvulibre', 'python-djvu', 'http://jwilk.net/software/python-djvulibre')
     raise
 
