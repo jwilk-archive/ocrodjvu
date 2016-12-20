@@ -139,10 +139,17 @@ class sdist(distutils_sdist):
             file.write(self.manpage_stamp)
             file.write(contents)
 
+    def _maybe_move_file(self, base_dir, src, dst):
+        src = os.path.join(base_dir, src)
+        dst = os.path.join(base_dir, dst)
+        if os.path.exists(src):
+            self.move_file(src, dst)
+
     def make_release_tree(self, base_dir, files):
         distutils_sdist.make_release_tree(self, base_dir, files)
         for manname in glob.iglob(os.path.join(base_dir, 'doc', '*.1')):
             self.execute(self._rewrite_manpage, [manname], 'rewriting {0}'.format(manname))
+        self._maybe_move_file(base_dir, 'COPYING', 'doc/COPYING')
 
 scripts = ['ocrodjvu', 'hocr2djvused', 'djvu2hocr']
 
