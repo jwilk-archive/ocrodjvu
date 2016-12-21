@@ -5,6 +5,7 @@ include COPYING
 include doc/*.1
 include doc/*.txt
 include doc/*.xml
+include doc/COPYING
 include doc/changelog
 include examples/*
 include ocrodjvu.py
