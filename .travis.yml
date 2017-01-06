@@ -26,7 +26,8 @@ install:
 - pip install --verbose pyicu${PYICU_VERSION:+==$PYICU_VERSION}
 - pip install --upgrade setuptools
 - pip install html5lib
-- pip install --verbose pillow
+- if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then PILLOW_VERSION=3.4.2; fi
+- pip install --verbose pillow${PILLOW_VERSION:+==$PILLOW_VERSION}
 - pip install pyflakes
 - pip install docutils
 script:
