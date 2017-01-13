@@ -17,7 +17,7 @@ def get_icu():
     try:
         import icu
     except ImportError as ex:  # no coverage
-        utils.enhance_import_error(ex, 'PyICU', 'python-pyicu', 'https://pypi.python.org/pypi/PyICU/')
+        utils.enhance_import_error(ex, 'PyICU', 'python-pyicu', 'https://pypi.python.org/pypi/PyICU')
     else:
         return icu
 

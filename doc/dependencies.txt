@@ -83,7 +83,7 @@ source:
 .. _subprocess:
    https://docs.python.org/2/library/subprocess.html
 .. _PyICU:
-   https://pypi.python.org/pypi/PyICU/
+   https://pypi.python.org/pypi/PyICU
 .. _ICU:
    http://site.icu-project.org/
 .. _html5lib:
