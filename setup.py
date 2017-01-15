@@ -20,6 +20,18 @@ from __future__ import with_statement
 # supported, so that people running setup.py against the unsupported version
 # get a nice error message instead of SyntaxError.
 
+import glob
+import os
+import re
+
+import distutils.command
+import distutils.core
+from distutils.command.build import build as distutils_build
+from distutils.command.clean import clean as distutils_clean
+from distutils.command.sdist import sdist as distutils_sdist
+
+from lib import version
+
 classifiers = '''
 Development Status :: 4 - Beta
 Environment :: Console
@@ -33,18 +45,6 @@ Programming Language :: Python :: 2.7
 Topic :: Text Processing
 Topic :: Multimedia :: Graphics
 '''.strip().splitlines()
-
-import glob
-import os
-import re
-
-import distutils.command
-import distutils.core
-from distutils.command.build import build as distutils_build
-from distutils.command.clean import clean as distutils_clean
-from distutils.command.sdist import sdist as distutils_sdist
-
-from lib import version
 
 class test(distutils.core.Command):
 
