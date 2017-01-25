@@ -33,7 +33,7 @@ install:
 script:
 - nosetests --verbose
 - private/run-pyflakes
-- grep -r -l ft=rst doc/ | xargs -t -n1 -I{} rst2xml.py --strict {} /dev/null
+- private/check-rst
 - xmllint --noout --valid doc/*.xml
 
 # vim:ts=2 sts=2 sw=2 et
