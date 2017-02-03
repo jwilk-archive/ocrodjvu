@@ -171,7 +171,7 @@ class ArgumentParser(cli.ArgumentParser):
 
     def __init__(self):
         usage = '%(prog)s [options] FILE'
-        argparse.ArgumentParser.__init__(self, usage=usage)
+        cli.ArgumentParser.__init__(self, usage=usage)
         self.add_argument('--version', action=version.VersionAction)
         group = self.add_argument_group(title='options controlling output')
         for saver_type in self.savers:
@@ -265,7 +265,7 @@ class ArgumentParser(cli.ArgumentParser):
                 namespace.saver = None
 
     def parse_args(self, args=None, namespace=None):
-        options = argparse.ArgumentParser.parse_args(self, args, namespace)
+        options = cli.ArgumentParser.parse_args(self, args, namespace)
         options.details = self._details_map[options.details]
         options.render_layers = self._render_map[options.render_layers]
         options.resume_on_error = options.on_error == 'resume'

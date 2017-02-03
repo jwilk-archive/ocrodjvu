@@ -46,7 +46,7 @@ class ArgumentParser(cli.ArgumentParser):
 
     def __init__(self):
         usage = '%(prog)s [options] FILE'
-        argparse.ArgumentParser.__init__(self, usage=usage)
+        cli.ArgumentParser.__init__(self, usage=usage)
         self.add_argument('--version', action=version.VersionAction)
         group = self.add_argument_group(title='input selection options')
         group.add_argument('path', metavar='FILE', help='DjVu file to covert')
@@ -62,7 +62,7 @@ class ArgumentParser(cli.ArgumentParser):
         group.add_argument('--css', metavar='STYLE', dest='css', help='CSS style', default='')
 
     def parse_args(self, args=None, namespace=None):
-        options = argparse.ArgumentParser.parse_args(self, args, namespace)
+        options = cli.ArgumentParser.parse_args(self, args, namespace)
         if options.word_segmentation == 'uax29':
             options.icu = icu = unicode_support.get_icu()
             options.locale = icu.Locale(options.language)

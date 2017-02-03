@@ -32,7 +32,7 @@ class ArgumentParser(cli.ArgumentParser):
     )
 
     def __init__(self):
-        argparse.ArgumentParser.__init__(self)
+        cli.ArgumentParser.__init__(self)
         self.add_argument('--version', action=version.VersionAction)
         self.add_argument('--rotation', dest='rotation', action='store', type=int, default=0, help='page rotation (in degrees)')
         def size(s):
@@ -48,7 +48,7 @@ class ArgumentParser(cli.ArgumentParser):
         self.add_argument('input_files', metavar='FILE', nargs='*', type=argparse.FileType('r'), default=[sys.stdin], help='hOCR file to parse (default: standard input)')
 
     def parse_args(self, args=None, namespace=None):
-        options = argparse.ArgumentParser.parse_args(self, args, namespace)
+        options = cli.ArgumentParser.parse_args(self, args, namespace)
         if options.rotation % 90 != 0:
             self.error('rotation must be a multiple of 90 degrees')
         options.details = self._details_map[options.details]
