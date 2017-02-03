@@ -19,9 +19,9 @@ import shlex
 import shutil
 import sys
 
-from lib.cli import djvu2hocr
-from lib import temporary
 from lib import ipc
+from lib import temporary
+from lib.cli import djvu2hocr
 
 from tests.tools import (
     assert_equal,
