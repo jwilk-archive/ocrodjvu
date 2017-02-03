@@ -20,6 +20,7 @@ import shutil
 import sys
 
 from lib import ipc
+from lib import errors
 from lib import temporary
 from lib.cli import djvu2hocr
 
@@ -43,6 +44,15 @@ def test_help():
     assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
     assert_not_equal(stdout.getvalue(), '')
+
+def test_bad_options():
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
+    with interim(sys, stdout=stdout, stderr=stderr):
+        rc = try_run(djvu2hocr.main, [''])
+    assert_equal(rc, errors.EXIT_FATAL)
+    assert_not_equal(stderr.getvalue(), '')
+    assert_equal(stdout.getvalue(), '')
 
 def test_version():
     # https://bugs.debian.org/573496

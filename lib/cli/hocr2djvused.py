@@ -16,13 +16,14 @@
 import argparse
 import sys
 
+from .. import cli
 from .. import hocr
 from .. import text_zones
 from .. import version
 
 __version__ = version.__version__
 
-class ArgumentParser(argparse.ArgumentParser):
+class ArgumentParser(cli.ArgumentParser):
 
     _details_map = dict(
         lines=hocr.TEXT_DETAILS_LINE,

@@ -26,6 +26,7 @@ import sys
 import threading
 import traceback
 
+from .. import cli
 from .. import engines
 from .. import errors
 from .. import ipc
@@ -150,7 +151,7 @@ def expand_template(template, pageno, pageid):
         d[var] = d[base_var] + offset
     return formatter.vformat(template, (), d)
 
-class ArgumentParser(argparse.ArgumentParser):
+class ArgumentParser(cli.ArgumentParser):
 
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
     engines = list(engines.get_engines())

@@ -22,6 +22,7 @@ import sys
 
 import djvu.sexpr
 
+from lib import errors
 from lib.cli import hocr2djvused
 
 from tests.tools import (
@@ -54,6 +55,15 @@ def test_version():
     assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
     assert_not_equal(stdout.getvalue(), '')
+
+def test_bad_options():
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
+    with interim(sys, stdout=stdout, stderr=stderr):
+        rc = try_run(hocr2djvused.main, ['', '--bad-option'])
+    assert_equal(rc, errors.EXIT_FATAL)
+    assert_not_equal(stderr.getvalue(), '')
+    assert_equal(stdout.getvalue(), '')
 
 def normalize_sexpr(match):
     return djvu.sexpr.Expression.from_string(match.group(1)).as_string(width=80)

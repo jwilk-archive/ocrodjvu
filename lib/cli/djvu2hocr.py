@@ -22,6 +22,7 @@ import os
 import re
 import sys
 
+from .. import cli
 from .. import hocr
 from .. import ipc
 from .. import logger
@@ -41,7 +42,7 @@ system_encoding = locale.getpreferredencoding()
 
 logger = logger.setup()
 
-class ArgumentParser(argparse.ArgumentParser):
+class ArgumentParser(cli.ArgumentParser):
 
     def __init__(self):
         usage = '%(prog)s [options] FILE'
