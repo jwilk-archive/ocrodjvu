@@ -26,10 +26,11 @@ install:
 - pip install html5lib
 - if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then PILLOW_VERSION=3.4.2; fi
 - pip install --verbose pillow${PILLOW_VERSION:+==$PILLOW_VERSION}
-- pip install pyflakes
+- pip install pydiatra pyflakes
 - pip install docutils
 script:
 - nosetests --verbose
+- private/run-pydiatra
 - private/run-pyflakes
 - private/check-rst
 - xmllint --noout --valid doc/*.xml
