@@ -4,8 +4,9 @@ ocrodjvu (0.10.2) UNRELEASED; urgency=low
   * Make --version print to stdout, not stderr.
   * Make bad usage exit status 1.
   * Drop support for PyICU < 1.0.
+  * Update DocBook XSL homepage URL.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 03 Feb 2017 19:30:35 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 06 Feb 2017 23:32:03 +0100
 
 ocrodjvu (0.10.1) unstable; urgency=low
 
