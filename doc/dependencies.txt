@@ -95,6 +95,6 @@ source:
 .. _libxslt:
    http://xmlsoft.org/XSLT/
 .. _Docbook XSL stylesheets:
-   http://wiki.docbook.org/DocBookXslStylesheets
+   https://github.com/docbook/xslt10-stylesheets
 
 .. vim:ft=rst ts=3 sts=3 sw=3 et tw=72
