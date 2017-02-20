@@ -125,7 +125,7 @@ _xml_string_re = re.compile(
     ([^\x00-\x08\x0b\x0c\x0e-\x1f]*)
     ( [\x00-\x08\x0b\x0c\x0e-\x1f]?)
     ''',
-    re.UNICODE | re.VERBOSE
+    re.VERBOSE
 )
 
 def set_text(element, text):
