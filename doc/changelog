@@ -1,3 +1,9 @@
+ocrodjvu (0.10.3) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 20 Feb 2017 20:41:14 +0100
+
 ocrodjvu (0.10.2) unstable; urgency=low
 
   * Make --version print also versions of Python and the libraries.
