@@ -92,7 +92,7 @@ def fix_html(s):
         | &[#]x[0-9a-f]+;
         | [^<>&]+
         )
-        ''', re.IGNORECASE | re.VERBOSE | re.MULTILINE
+        ''', re.IGNORECASE | re.VERBOSE | re.DOTALL
     )
     return ''.join(
         chunk if n & 1 else cgi.escape(chunk)
