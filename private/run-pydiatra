@@ -21,7 +21,7 @@ then
         $(grep -l -r '^#!.*python' .) \
         $(find . -name '*.py')
 fi
-# It would be tempting to use "python -m py2diatra" here,
+# It would be tempting to use "python -m pydiatra" here,
 # but that doesn't work in Python 2.6.
 exec "$PYTHON" "$py2diatra" "$@"
 
