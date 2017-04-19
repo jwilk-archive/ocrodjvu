@@ -92,7 +92,11 @@ class Engine(common.Engine):
                                 iso639.b_to_t(c) for c in code.split('_')
                             )
                         except ValueError:
-                            warnings.warn('unparsable language code: {0!r}'.format(code), category=RuntimeWarning, stacklevel=2)
+                            warnings.warn(
+                                'unparsable language code: {0!r}'.format(code),
+                                category=RuntimeWarning,
+                                stacklevel=2
+                            )
                     self._cuneiform_to_iso[code] = isocode
                     self._user_to_cuneiform[frozenset(isocode.split('+'))] = code
                     yield isocode
