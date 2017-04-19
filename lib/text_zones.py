@@ -152,8 +152,12 @@ class Zone(object):
         for x in self.bbox:
             assert x is not None
         if xform is None:
-            assert self.type == const.TEXT_ZONE_PAGE, 'the exterior zone is {tp} rather than {pg}'.format(tp=self.type, pg=const.TEXT_ZONE_PAGE)
-            assert self.bbox[:2] == (0, 0), 'top-left page corner is ({0}, {1}) rather than (0, 0)'.format(*self.bbox[:2])
+            assert self.type == const.TEXT_ZONE_PAGE, (
+                'the exterior zone is {tp} rather than {pg}'.format(tp=self.type, pg=const.TEXT_ZONE_PAGE)
+            )
+            assert self.bbox[:2] == (0, 0), (
+                'top-left page corner is ({0}, {1}) rather than (0, 0)'.format(*self.bbox[:2])
+            )
             page_size = self.bbox[2:]
             if (rotation // 90) & 1:
                 xform = decode.AffineTransform((0, 0) + tuple(reversed(page_size)), (0, 0) + page_size)
