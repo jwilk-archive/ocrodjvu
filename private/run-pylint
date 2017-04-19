@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Copyright © 2015-2017 Jakub Wilk <jwilk@jwilk.net>
+#
+# This file is part of ocrodjvu.
+#
+# ocrodjvu is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# ocrodjvu is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+# for more details.
+
+set -e -u
+PYTHON=${PYTHON:-python}
+"$PYTHON" -m pylint --version >/dev/null
+if [ $# -eq 0 ]
+then
+    pyscripts=$(grep -l -r '^#!.*python' .)
+    set -- lib tests $pyscripts
+fi
+set -- --extension-pkg-whitelist=djvu.decode,djvu.sexpr "$@"
+set -- --load-plugins=pylint.extensions.check_elif "$@"
+log=$(mktemp -t pylint.XXXXXX)
+"$PYTHON" -m pylint "$@" > "$log" || [ $? != 1 ]
+! grep '^\w:' "$log" \
+| grep -v ': missing-docstring \[\w' \
+| grep -v -P '^\w: (?!lib/).*: missing-docstring ' \
+| grep -v ": redefined-builtin \\[.*\\] Redefining built-in 'file'" \
+| grep '.' || exit 1
+rm "$log"
+
+# vim:ts=4 sts=4 sw=4 et
