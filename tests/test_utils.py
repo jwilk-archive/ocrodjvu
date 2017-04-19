@@ -94,6 +94,7 @@ class test_enhance_import():
         with interim(lib.utils, debian=True):
             t()
 
+# pylint: disable=eval-used
 class test_smart_repr():
 
     def test_byte_string(self):
@@ -118,6 +119,7 @@ class test_smart_repr():
             assert_is_instance(s_repr, unicode)
             assert_in(u'ż', s_repr)
             assert_equal(eval(s_repr.encode('UTF-8')), s)
+# pylint: enable=eval-used
 
 class test_parse_page_numbers():
 
