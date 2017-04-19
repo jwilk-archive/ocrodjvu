@@ -143,16 +143,15 @@ def _apply_bboxes(djvu_class, bbox_source, text, settings, page_size):
             coordinates += [bbox]
     if len(coordinates) == len(text):
         pass  # OK
+    elif 0 < len(coordinates) - len(text) <= trailing_whitespace_len:
+        # Cuneiform ≥ 0.9 provides bounding boxes for some whitespace characters.
+        # Also, a newline character can appear at the end of line.
+        del coordinates[len(text):]
+    elif not settings.cuneiform and not embedded_eol and len(coordinates) == len(text) + 1:
+        # OCRopus produces weird hOCR output if line ends with a hyphen.
+        del coordinates[-1]
     else:
-        if 0 < len(coordinates) - len(text) <= trailing_whitespace_len:
-            # Cuneiform ≥ 0.9 provides bounding boxes for some whitespace characters.
-            # Also, a newline character can appear at the end of line.
-            del coordinates[len(text):]
-        elif not settings.cuneiform and not embedded_eol and len(coordinates) == len(text) + 1:
-            # OCRopus produces weird hOCR output if line ends with a hyphen.
-            del coordinates[-1]
-        else:
-            raise errors.MalformedHocr("number of bboxes doesn't match text length")
+        raise errors.MalformedHocr("number of bboxes doesn't match text length")
     assert len(coordinates) == len(text)
     if djvu_class > const.TEXT_ZONE_WORD:
         # Split words
@@ -439,11 +438,10 @@ def read_document(stream, settings):
             root_element = etree.fromstring(contents, etree.HTMLParser(encoding='UTF-8'))
             return etree.ElementTree(root_element)
         del contents
+    elif settings.html5:
+        return html5_support.parse(stream)
     else:
-        if settings.html5:
-            return html5_support.parse(stream)
-        else:
-            return etree.parse(stream, etree.HTMLParser())
+        return etree.parse(stream, etree.HTMLParser())
 
 def extract_text(stream, **kwargs):
     '''
