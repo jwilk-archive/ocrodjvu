@@ -226,7 +226,10 @@ class Engine(common.Engine):
 
     def recognize_hocr(self, image, language, details=text_zones.TEXT_DETAILS_WORD, uax29=None):
         language = self.user_to_tesseract(language)
-        character_details = details < text_zones.TEXT_DETAILS_WORD or (uax29 and details <= text_zones.TEXT_DETAILS_WORD)
+        character_details = (
+            details < text_zones.TEXT_DETAILS_WORD or
+            (uax29 and details <= text_zones.TEXT_DETAILS_WORD)
+        )
         with temporary.directory() as output_dir:
             tessconf_path = os.path.join(output_dir, 'tessconf')
             with open(tessconf_path, 'wt') as tessconf:
@@ -263,8 +266,13 @@ class Engine(common.Engine):
             with open(os.path.join(output_dir, hocr_path), 'r') as hocr_file:
                 contents = hocr_file.read()
             if character_details:
-                worker = ipc.Subprocess(
-                    [self.executable, image.name, os.path.join(output_dir, 'tmp'), '-l', language, 'makebox'] + self.extra_args,
+                worker = ipc.Subprocess([
+                        self.executable,
+                        image.name,
+                        os.path.join(output_dir, 'tmp'),
+                        '-l', language,
+                        'makebox'
+                    ] + self.extra_args,
                     stderr=ipc.PIPE,
                 )
                 _wait_for_worker(worker)
