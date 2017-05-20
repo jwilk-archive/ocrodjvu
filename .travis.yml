@@ -12,6 +12,7 @@ addons:
   apt:
     packages:
     - djvulibre-bin
+    - docbook-xml
     - libdjvulibre-dev
     - libxml2-utils
 cache: pip
@@ -35,6 +36,6 @@ script:
 - private/run-pydiatra
 - private/run-pyflakes
 - private/check-rst
-- xmllint --noout --valid doc/*.xml
+- xmllint --nonet --noout --valid doc/*.xml
 
 # vim:ts=2 sts=2 sw=2 et
