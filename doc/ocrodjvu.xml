@@ -550,7 +550,7 @@
         <title>Known bugs</title>
         <para>
             Tesseract 3.00 is affected by a bug <footnote><para><ulink
-            url='https://code.google.com/p/tesseract-ocr/issues/detail?id=376'/></para></footnote> making it produce invalid
+            url='https://groups.google.com/d/topic/tesseract-issues/AdZhdGFkTrA'/></para></footnote> making it produce invalid
             hOCR output in certain circumstances. &p; does not try recover form this fault (which couldn't be done reliably
             anyway) unless you pass the <option>-X fix-html=1</option> option.
         </para>
