@@ -90,7 +90,7 @@
             <term><option>--word-segmentation=uax29</option></term>
             <listitem>
                 <para>
-                    Use the <ulink url='http://unicode.org/reports/tr29/'>Unicode Text Segmentation</ulink> algorithm
+                    Use the <ulink url='https://unicode.org/reports/tr29/'>Unicode Text Segmentation</ulink> algorithm
                     to break lines into words, possibly fixing word segmentation found in the DjVu file.
                 </para>
             </listitem>
