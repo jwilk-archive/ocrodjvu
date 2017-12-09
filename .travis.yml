@@ -20,16 +20,16 @@ install:
 - pip install --upgrade pip
 - pip install --verbose cython${CYTHON_VERSION:+==$CYTHON_VERSION}
 - pip install --verbose python-djvulibre${PYTHON_DJVULIBRE_VERSION:+==$PYTHON_DJVULIBRE_VERSION}
-- if [ -n "$SUBPROCESS32" ]; then pip install --verbose subprocess32; fi
-- if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then pip install argparse; fi
+- if [[ -n $SUBPROCESS32 ]]; then pip install --verbose subprocess32; fi
+- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pip install argparse; fi
 - pip install --verbose lxml
-- if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then PYICU_VERSION=1.9.3; fi
-- pip install --verbose pyicu${PYICU_VERSION:+==$PYICU_VERSION}
+- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pyicu_suffix===1.9.3; fi
+- pip install --verbose pyicu${pyicu_suffix}
 - pip install --upgrade setuptools
-- if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then HTML5LIB_VERSION=0.999999999; fi
-- pip install html5lib${HTML5LIB_VERSION:+==$HTML5LIB_VERSION}
-- if [ "$TRAVIS_PYTHON_VERSION" = '2.6' ]; then PILLOW_VERSION=3.4.2; fi
-- pip install --verbose pillow${PILLOW_VERSION:+==$PILLOW_VERSION}
+- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then html5lib_suffix===0.999999999; fi
+- pip install html5lib${html5lib_suffix}
+- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pillow_suffix===3.4.2; fi
+- pip install --verbose pillow${pillow_suffix}
 - pip install pydiatra pyflakes
 - pip install docutils
 script:
