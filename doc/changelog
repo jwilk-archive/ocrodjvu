@@ -2,8 +2,10 @@ ocrodjvu (0.10.3) UNRELEASED; urgency=low
 
   * Tesseract: fix stripping multi-line comments.
   * Drop support for python-djvulibre < 0.3.9.
+  * Document untrusted search path vulnerability that was unknowingly fixed in
+    0.4.7.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 06 May 2017 22:07:27 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sun, 10 Dec 2017 17:01:15 +0100
 
 ocrodjvu (0.10.2) unstable; urgency=low
 
@@ -380,6 +382,9 @@ ocrodjvu (0.4.7) unstable; urgency=low
   * Preserve as much environment as possible when calling external programs.
     https://bugs.debian.org/594385
     Thanks to Heinrich Schwietering for the bug report.
+    + In particular, preserve PATH, instead of letting Python fall back to
+      insecure default PATH, which contains current working directory.
+      https://bugs.python.org/issue26414
 
  -- Jakub Wilk <jwilk@jwilk.net>  Wed, 25 Aug 2010 20:27:17 +0200
 
