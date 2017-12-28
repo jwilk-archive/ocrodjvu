@@ -1,11 +1,12 @@
 ocrodjvu (0.10.3) UNRELEASED; urgency=low
 
+  * Fix compatiblity with Tesseract 4.
   * Tesseract: fix stripping multi-line comments.
   * Drop support for python-djvulibre < 0.3.9.
   * Document untrusted search path vulnerability that was unknowingly fixed in
     0.4.7.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sun, 10 Dec 2017 17:01:15 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 28 Dec 2017 12:46:46 +0100
 
 ocrodjvu (0.10.2) unstable; urgency=low
 
