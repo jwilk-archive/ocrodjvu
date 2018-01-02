@@ -17,7 +17,6 @@ addons:
     - libxml2-utils
 cache: pip
 install:
-- pip install --upgrade pip
 - pip install --verbose cython${CYTHON_VERSION:+==$CYTHON_VERSION}
 - pip install --verbose python-djvulibre${PYTHON_DJVULIBRE_VERSION:+==$PYTHON_DJVULIBRE_VERSION}
 - if [[ -n $SUBPROCESS32 ]]; then pip install --verbose subprocess32; fi
