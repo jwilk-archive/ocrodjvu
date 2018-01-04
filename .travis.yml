@@ -39,12 +39,11 @@ script:
 - private/run-pyflakes
 - private/check-rst
 - xmllint --nonet --noout --valid doc/*.xml
-- python setup.py install --user
-- export PYTHONPATH=~/.local/lib/python$TRAVIS_PYTHON_VERSION/site-packages"${PYTHONPATH:+:$PYTHONPATH}"
+- python setup.py install
 - djvu2hocr --version
 - hocr2djvused --version
 - ocrodjvu --version
-- export MANPATH=~/.local/share/man MANWIDTH=80
+- export MANPATH="$VIRTUAL_ENV/share/man" MANWIDTH=80
 - man 1 ocrodjvu | grep -A 10 -w OCRODJVU
 - man 1 djvu2hocr | grep -A 10 -w DJVU2HOCR
 - man 1 hocr2djvused | grep -A 10 -w HOCR2DJVUSED
