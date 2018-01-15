@@ -25,7 +25,7 @@ The following software is needed to run ocrodjvu:
 * python-djvulibre_ ≥ 0.3.9 —
   Python bindings for DjVuLibre_
 
-* argparse_ —
+* argparse_ (only for Python 2.6) —
   Python command line parser
 
 * lxml_ —
