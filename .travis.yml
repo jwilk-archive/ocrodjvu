@@ -24,7 +24,6 @@ install:
 - if [[ -n $SUBPROCESS32 ]]; then pip install --verbose subprocess32; fi
 - if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pip install argparse; fi
 - pip install --verbose lxml
-- pyicu_suffix===1.9.8
 - if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pyicu_suffix===1.9.3; fi
 - pip install --verbose pyicu${pyicu_suffix}
 - pip install --upgrade setuptools
