@@ -17,10 +17,7 @@
 *ocrodjvu* is a wrapper for OCR systems that allows you to perform OCR on `DjVu <http://djvu.org/>`_ files.
 '''
 
-from __future__ import with_statement
-# Let's keep this __future__ import here, even though Python 2.5 is no longer
-# supported, so that people running setup.py against the unsupported version
-# get a nice error message instead of SyntaxError.
+b''  # Python >= 2.6 is required
 
 import glob
 import os
