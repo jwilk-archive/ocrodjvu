@@ -4,10 +4,14 @@ ocrodjvu (0.10.3) UNRELEASED; urgency=low
     https://bugs.debian.org/886113
   * Tesseract: fix stripping multi-line comments.
   * Drop support for python-djvulibre < 0.3.9.
-  * Document untrusted search path vulnerability that was unknowingly fixed in
-    0.4.7.
+  * Improve documentation:
+    + Document untrusted search path vulnerability that was unknowingly fixed
+      in 0.4.7.
+    + Document that argparse is only needed for Python 2.6.
+    + Use HTTPS for unicode.org URLs.
+    + Update Tesseract bug tracker URL.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 28 Dec 2017 12:46:46 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 05 Feb 2018 18:39:47 +0100
 
 ocrodjvu (0.10.2) unstable; urgency=low
 
