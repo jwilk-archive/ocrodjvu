@@ -1,8 +1,8 @@
 #!/bin/sh
-version=${1:?"no version number provided"}
+export version=${1:?"no version number provided"}
 set -e
 set -x
 dch -m -v "$version" -u low -c doc/changelog
-sed -i -E -e "s/^(__version__) = '[0-9.]+'$/\1 = '$version'/" lib/version.py
-sed -i -E -e "s/<(!ENTITY version) '[0-9.]+'>/<\1 '$version'>/" doc/*.xml
-sed -i -E -e "s/(djvu2hocr) [0-9.]+/\1 $version/" tests/djvu2hocr/*.test*
+perl -pi -e 's/^__version__ = '"'"'\K[\w.]+/$ENV{version}/' lib/version.py
+perl -pi -e 's/<(!ENTITY version) '"'"'\K[0-9.]+/$ENV{version}/' doc/*.xml
+perl -pi -e 's/djvu2hocr \K[0-9.]+/$ENV{version}/' tests/djvu2hocr/*.test*
