@@ -35,7 +35,7 @@ install:
 - pip install docutils
 script:
 - nosetests --verbose
-- private/run-pydiatra
+- py2diatra .
 - private/run-pyflakes
 - private/check-rst
 - xmllint --nonet --noout --valid doc/*.xml
