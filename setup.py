@@ -36,7 +36,10 @@ except ImportError:
 else:
     distutils644.install()
 
-from lib import version
+def get_version():
+    with open('doc/changelog', 'r') as file:
+        line = file.readline()
+    return line.split()[1].strip('()')
 
 classifiers = '''
 Development Status :: 4 - Beta
@@ -179,7 +182,7 @@ else:
 
 distutils.core.setup(
     name='ocrodjvu',
-    version=version.__version__,
+    version=get_version(),
     license='GNU GPL 2',
     description='OCR for DjVu',
     long_description=__doc__.strip(),
