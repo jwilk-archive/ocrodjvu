@@ -22,7 +22,6 @@ install:
 - pip install --verbose cython${CYTHON_VERSION:+==$CYTHON_VERSION}
 - pip install --verbose python-djvulibre${PYTHON_DJVULIBRE_VERSION:+==$PYTHON_DJVULIBRE_VERSION}
 - if [[ -n $SUBPROCESS32 ]]; then pip install --verbose subprocess32; fi
-- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pip install argparse; fi
 - pip install --verbose lxml
 - if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pyicu_suffix===1.9.3; fi
 - pip install --verbose pyicu${pyicu_suffix}
