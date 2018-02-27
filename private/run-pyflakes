@@ -22,6 +22,6 @@ fi
 # It would be tempting to use "python -m pyflakes" here,
 # but that doesn't work in Python 2.6.
 ! "$PYTHON" "$pyflakes" "$@" \
-| grep -v -E "/lib/hocr.py:[0-9]+: list comprehension redefines '[xy][01]' "  # https://bugs.launchpad.net/pyflakes/+bug/1461208
+| grep -v -E "/lib/hocr.py:[0-9]+: list comprehension redefines '[xy][01]' "  # https://github.com/PyCQA/pyflakes/issues/110
 
 # vim:ts=4 sts=4 sw=4 et
