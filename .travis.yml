@@ -39,6 +39,7 @@ script:
 - private/check-rst
 - xmllint --nonet --noout --valid doc/*.xml
 - python setup.py install
+- cd /
 - djvu2hocr --version
 - hocr2djvused --version
 - ocrodjvu --version
