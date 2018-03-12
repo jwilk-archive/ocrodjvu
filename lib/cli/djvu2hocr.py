@@ -122,8 +122,8 @@ class Zone(object):
 
 _xml_string_re = re.compile(
     u'''
-    ([^\x00-\x08\x0b\x0c\x0e-\x1f]*)
-    ( [\x00-\x08\x0b\x0c\x0e-\x1f]?)
+    ([^\x00-\x08\x0B\x0C\x0E-\x1F]*)
+    ( [\x00-\x08\x0B\x0C\x0E-\x1F]?)
     ''',
     re.VERBOSE
 )

@@ -24,7 +24,7 @@ from lib.unicode_support import (
     word_break_iterator,
 )
 
-text = u'\u201cJekyll,\u201d cried Utterson, with a\xa0loud voice, \u201cI demand to see you.\u201d'
+text = u'\u201CJekyll,\u201D cried Utterson, with a\xa0loud voice, \u201CI demand to see you.\u201D'
 
 class test_simple_word_break_iterator():
 

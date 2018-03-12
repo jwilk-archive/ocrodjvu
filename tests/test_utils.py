@@ -152,10 +152,10 @@ class test_sanitize_utf8():
             warnings.showwarning = show
             t = sanitize_utf8(s).decode('UTF-8')
         assert_equal(t,
-            u'\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd'
-            u'\ufffd\t\n\ufffd\ufffd\r\ufffd\ufffd'
-            u'\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd'
-            u'\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd'
+            u'\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD'
+            u'\uFFFD\t\n\uFFFD\uFFFD\r\uFFFD\uFFFD'
+            u'\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD'
+            u'\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD'
         )
 
     def test_ascii(self):

@@ -52,7 +52,7 @@ def parse_page_numbers(pages):
             result += [int(page_range, 10)]
     return result
 
-_special_chars_replace = re.compile(ur'''[\x00-\x1f'"\x5c\x7f-\x9f]''').sub
+_special_chars_replace = re.compile(ur'''[\x00-\x1F'"\x5C\x7F-\x9F]''').sub
 
 def _special_chars_escape(m):
     ch = m.group(0)
