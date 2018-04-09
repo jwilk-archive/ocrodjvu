@@ -18,17 +18,21 @@ addons:
     - libxml2-utils
     - xsltproc
 cache: pip
-install:
-- pip install --verbose cython${CYTHON_VERSION:+==$CYTHON_VERSION}
-- pip install --verbose python-djvulibre${PYTHON_DJVULIBRE_VERSION:+==$PYTHON_DJVULIBRE_VERSION}
-- if [[ -n $SUBPROCESS32 ]]; then pip install --verbose subprocess32; fi
-- pip install --verbose lxml
+before_install:
+- cython_suffix=${CYTHON_VERSION:+==$CYTHON_VERSION}
+- pydjvu_suffix=${PYTHON_DJVULIBRE_VERSION:+==$PYTHON_DJVULIBRE_VERSION}
+- if [[ -z $SUBPROCESS32 ]]; then if_subprocess32=:; fi
 - if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pyicu_suffix===1.9.3; fi
+- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then html5lib_suffix===0.999999999; fi
+- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pillow_suffix===3.4.2; fi
+install:
+- pip install --verbose cython${cython_suffix}
+- pip install --verbose python-djvulibre${pydjvu_suffix}
+- $if_subprocess32 pip install --verbose subprocess32
+- pip install --verbose lxml
 - pip install --verbose pyicu${pyicu_suffix}
 - pip install --upgrade setuptools
-- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then html5lib_suffix===0.999999999; fi
 - pip install html5lib${html5lib_suffix}
-- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pillow_suffix===3.4.2; fi
 - pip install --verbose pillow${pillow_suffix}
 - pip install pydiatra pyflakes
 - pip install docutils
