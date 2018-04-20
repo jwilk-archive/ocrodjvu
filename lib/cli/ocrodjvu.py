@@ -335,7 +335,7 @@ class ArgumentParser(cli.ArgumentParser):
             options.n_jobs = 1
         if options.n_jobs > 1 and not ipc.thread_safe:
             exc = Warning('the subprocess module is not thread-safe')
-            utils.enhance_import_error(exc, 'subprocess32', None, 'https://pypi.python.org/pypi/subprocess32')
+            utils.enhance_import_error(exc, 'subprocess32', None, 'https://pypi.org/project/subprocess32/')
             print('Warning: {exc}'.format(exc=exc), file=sys.stderr)
         return options
 

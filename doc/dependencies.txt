@@ -73,17 +73,17 @@ source:
 .. _python-djvulibre:
    http://jwilk.net/software/python-djvulibre
 .. _argparse:
-   https://pypi.python.org/pypi/argparse
+   https://pypi.org/project/argparse/
 .. _lxml:
    http://lxml.de/
 .. _libxml2:
    http://xmlsoft.org/
 .. _subprocess32:
-   https://pypi.python.org/pypi/subprocess32
+   https://pypi.org/project/subprocess32/
 .. _subprocess:
    https://docs.python.org/2/library/subprocess.html
 .. _PyICU:
-   https://pypi.python.org/pypi/PyICU
+   https://pypi.org/project/PyICU/
 .. _ICU:
    http://site.icu-project.org/
 .. _html5lib:

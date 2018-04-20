@@ -19,7 +19,7 @@ from .. import utils
 try:
     import argparse
 except ImportError as ex:  # no coverage
-    utils.enhance_import_error(ex, 'argparse', 'python-argparse', 'https://pypi.python.org/pypi/argparse')
+    utils.enhance_import_error(ex, 'argparse', 'python-argparse', 'https://pypi.org/project/argparse/')
     raise
 
 class ArgumentParser(argparse.ArgumentParser):
