@@ -10,8 +10,9 @@ ocrodjvu (0.10.3) UNRELEASED; urgency=low
     + Document that argparse is only needed for Python 2.6.
     + Use HTTPS for unicode.org URLs.
     + Update Tesseract bug tracker URL.
+    + Update PyPI URLs.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 05 Feb 2018 18:39:47 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 20 Apr 2018 18:10:54 +0200
 
 ocrodjvu (0.10.2) unstable; urgency=low
 
