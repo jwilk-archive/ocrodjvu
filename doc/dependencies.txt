@@ -89,7 +89,7 @@ source:
 .. _html5lib:
    https://github.com/html5lib/html5lib-python
 .. _HTML5:
-   https://whatwg.org/html
+   https://html.spec.whatwg.org/multipage/
 .. _xsltproc:
    http://xmlsoft.org/XSLT/xsltproc2.html
 .. _libxslt:
