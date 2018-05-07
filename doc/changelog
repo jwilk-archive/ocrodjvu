@@ -1,7 +1,5 @@
 ocrodjvu (0.10.3) UNRELEASED; urgency=low
 
-  * Fix compatibility with Tesseract 4.
-    https://bugs.debian.org/886113
   * Tesseract: fix stripping multi-line comments.
   * Drop support for python-djvulibre < 0.3.9.
   * Improve documentation:
@@ -12,7 +10,7 @@ ocrodjvu (0.10.3) UNRELEASED; urgency=low
     + Update Tesseract bug tracker URL.
     + Update PyPI URLs.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 20 Apr 2018 18:10:54 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 07 May 2018 15:52:49 +0200
 
 ocrodjvu (0.10.2) unstable; urgency=low
 
