@@ -170,22 +170,17 @@ class Engine(common.Engine):
     def _get_languages(self):
         self._user_to_tesseract = {}
         wildcard = '*.{ext}'.format(ext=self._extension)
-        directory = self._directory
-        directories = [directory]
-        if os.path.basename(directory) != 'tessdata':
-            directories += [os.path.join(directory, 'tessdata')]
-        for directory in directories:
-            for filename in glob.iglob(os.path.join(directory, wildcard)):
-                filename = os.path.basename(filename)
-                code = os.path.splitext(filename)[0]
-                if code == 'osd':
-                    continue
-                try:
-                    isocode = self.user_to_iso639(code)
-                except errors.InvalidLanguageId:
-                    continue
-                self._user_to_tesseract[isocode] = code
-                yield isocode
+        for filename in glob.iglob(os.path.join(self._directory, wildcard)):
+            filename = os.path.basename(filename)
+            code = os.path.splitext(filename)[0]
+            if code == 'osd':
+                continue
+            try:
+                isocode = self.user_to_iso639(code)
+            except errors.InvalidLanguageId:
+                continue
+            self._user_to_tesseract[isocode] = code
+            yield isocode
 
     def user_to_iso639(self, language):
         match = _language_pattern.match(language)
