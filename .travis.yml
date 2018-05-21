@@ -1,13 +1,15 @@
 dist: trusty
 sudo: false
 language: python
-python:
-- "2.6"
-- "2.7"
-env:
-- PYTHON_DJVULIBRE_VERSION=0.3.9 CYTHON_VERSION=0.22.1
-- PYTHON_DJVULIBRE_VERSION= SUBPROCESS32=y
-- PYTHON_DJVULIBRE_VERSION=
+matrix:
+  include:
+  - python: "2.6"
+    env: CYTHON=0.22.1 PYDJVU=0.3.9 PYICU=1.4 HTML5LIB=0.95 PILLOW=1.0
+  - python: "2.7"
+  - python: "2.7"
+    env: SUBPROCESS32=3.2.7
+  - python: "2.7"
+    env: SUBPROCESS32=latest
 addons:
   apt:
     packages:
@@ -19,21 +21,26 @@ addons:
     - xsltproc
 cache: pip
 before_install:
-- cython_suffix=${CYTHON_VERSION:+==$CYTHON_VERSION}
-- pydjvu_suffix=${PYTHON_DJVULIBRE_VERSION:+==$PYTHON_DJVULIBRE_VERSION}
-- if [[ -z $SUBPROCESS32 ]]; then if_subprocess32=:; fi
-- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pyicu_suffix===1.9.3; fi
-- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then html5lib_suffix===0.999999999; fi
-- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pillow_suffix===3.4.2; fi
+- cython="cython${CYTHON:+==$CYTHON}"
+- pydjvu="python-djvulibre${PYDJVU:+==$PYDJVU}"
+- if [[ -z $SUBPROCESS32 ]]; then
+    if_subprocess32=:;
+  else
+    subprocess32="subprocess32==$SUBPROCESS32";
+    subprocess32="${subprocess32%==latest}";
+  fi
+- pyicu="pyicu${PYICU:+==$PYICU}"
+- html5lib="html5lib${HTML5LIB:+==$HTML5LIB}"
+- pillow="pillow${PILLOW:+==$PILLOW}"
 install:
-- pip install --verbose cython${cython_suffix}
-- pip install --verbose python-djvulibre${pydjvu_suffix}
-- $if_subprocess32 pip install --verbose subprocess32
+- pip install --verbose $cython
+- pip install --verbose $pydjvu
+- $if_subprocess32 pip install --verbose $subprocess32
 - pip install --verbose lxml
-- pip install --verbose pyicu${pyicu_suffix}
+- pip install --verbose $pyicu
 - pip install --upgrade setuptools
-- pip install html5lib${html5lib_suffix}
-- pip install --verbose pillow${pillow_suffix}
+- pip install $html5lib
+- pip install --verbose $pillow
 - pip install pydiatra pyflakes
 - pip install docutils
 script:
