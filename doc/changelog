@@ -9,8 +9,10 @@ ocrodjvu (0.10.3) UNRELEASED; urgency=low
     + Use HTTPS for unicode.org URLs.
     + Update Tesseract bug tracker URL.
     + Update PyPI URLs.
+  * Improve the test suite:
+    + Fix compatibility with subprocess32 3.5.0.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 07 May 2018 15:52:49 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 21 May 2018 12:20:46 +0200
 
 ocrodjvu (0.10.2) unstable; urgency=low
 
