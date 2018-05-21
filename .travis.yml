@@ -17,6 +17,7 @@ addons:
     - docbook-xml
     - docbook-xsl
     - libdjvulibre-dev
+    - libicu-dev
     - libxml2-utils
     - xsltproc
 cache: pip
