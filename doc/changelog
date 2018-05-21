@@ -1,4 +1,4 @@
-ocrodjvu (0.10.3) UNRELEASED; urgency=low
+ocrodjvu (0.10.3) unstable; urgency=low
 
   * Tesseract: fix stripping multi-line comments.
   * Drop support for python-djvulibre < 0.3.9.
@@ -17,7 +17,7 @@ ocrodjvu (0.10.3) UNRELEASED; urgency=low
   * Improve the test suite:
     + Fix compatibility with subprocess32 3.5.0.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 21 May 2018 22:18:39 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 21 May 2018 23:47:49 +0200
 
 ocrodjvu (0.10.2) unstable; urgency=low
 
