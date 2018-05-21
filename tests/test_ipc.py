@@ -63,7 +63,11 @@ class test_wait():
         child = ipc.Subprocess(['false'])
         with assert_raises(ipc.CalledProcessError) as ecm:
             child.wait()
-        assert_equal(str(ecm.exception), "Command 'false' returned non-zero exit status 1")
+        message = str(ecm.exception)
+        if message[-1] == '.':  # subprocess32 >= 3.5
+            message = message[:-1]
+
+        assert_equal(message, "Command 'false' returned non-zero exit status 1")
 
     def _test_signal(self, name):
         child = ipc.Subprocess(['cat'], stdin=ipc.PIPE)  # Any long-standing process would do.
