@@ -1,3 +1,9 @@
+ocrodjvu (0.10.4) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 22 May 2018 16:47:46 +0200
+
 ocrodjvu (0.10.3) unstable; urgency=low
 
   * Tesseract: fix stripping multi-line comments.
