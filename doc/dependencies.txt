@@ -33,16 +33,16 @@ The following software is needed to run ocrodjvu:
 
 Additionally, some optional features require the following software:
 
-* subprocess32_ -
+* subprocess32_ —
   thread-safe replacement for the subprocess_ management module,
   backported from Python 3.X;
   strongly recommended for the ``-j``/``--jobs`` option
 
-* PyICU_ ≥ 1.0 -
+* PyICU_ ≥ 1.0 —
   Python bindings for PyICU IBM's ICU_ C++ API;
   required for the ``--word-segmentation=uax29`` option
 
-* html5lib_ -
+* html5lib_ —
   HTML parser based on the HTML5_ specification;
   required for the ``--html5`` option
 
@@ -50,7 +50,7 @@ Additionally, some optional features require the following software:
 The following software is needed to rebuild the manual pages from
 source:
 
-* xsltproc_ -
+* xsltproc_ —
   command line XSLT processor, part of libxslt_
 
 * `DocBook XSL stylesheets`_
