@@ -14,13 +14,16 @@
 # for more details.
 
 here=${0%/*}
+here=${here#./}
+root="$here/../"
+root=${root#private/../}
 rst2xml=$(command -v rst2xml) \
 || rst2xml=$(command -v rst2xml.py) \
 || { printf 'rst2xml not found\n' >&2; exit 1; }
 options='--input-encoding=UTF-8 --strict'
 if [ $# -eq 0 ]
 then
-    grep -rwl 'ft=rst' doc/
+    grep -rwl 'ft=rst' "${root}doc"
 else
     printf '%s\n' "$@"
 fi |
