@@ -48,6 +48,7 @@ install:
 - pip install $pyflakes
 - pip install docutils
 script:
+- dpkg-parsechangelog -ldoc/changelog --all 2>&1 >/dev/null | { ! grep .; }
 - nosetests --verbose
 - py2diatra .
 - private/run-pyflakes
