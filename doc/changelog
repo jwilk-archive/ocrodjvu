@@ -1,6 +1,6 @@
 ocrodjvu (0.10.4) UNRELEASED; urgency=low
 
-  * Fix handling input file with non-ASCII names.
+  * Fix handling input files with non-ASCII names.
     Regression introduced in 0.9.1.
     https://github.com/jwilk/ocrodjvu/issues/23
     Thanks to @derrikF for the bug report.
