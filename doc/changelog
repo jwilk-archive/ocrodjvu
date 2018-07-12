@@ -1,8 +1,15 @@
 ocrodjvu (0.10.4) UNRELEASED; urgency=low
 
-  * 
+  * Fix handling input file with non-ASCII names.
+    Regression introduced in 0.9.1.
+    https://github.com/jwilk/ocrodjvu/issues/23
+    Thanks to @derrikF for the bug report.
+  * Improve documentation:
+    + Fix punctuation.
+    + Clarify Python version requirements.
+    + Update the credits file.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 22 May 2018 16:47:46 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 12 Jul 2018 20:56:23 +0200
 
 ocrodjvu (0.10.3) unstable; urgency=low
 
