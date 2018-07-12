@@ -230,6 +230,8 @@ class ArgumentParser(cli.ArgumentParser):
     class list_engines(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
             for engine in parser.engines:
+                if engine.name[0] == '_':
+                    continue
                 try:
                     engine = engine()
                 except errors.EngineNotFound:
