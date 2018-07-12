@@ -13,12 +13,16 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+import codecs
 import contextlib
 import glob
+import locale
 import logging
 import os
 import re
 import sys
+
+from nose import SkipTest
 
 from nose.tools import (
     assert_equal,
@@ -177,6 +181,13 @@ def remove_logging_handlers(prefix):
             if logger.name.startswith(prefix):
                 logger.removeHandler(handler)
 
+def require_locale_encoding(encoding):
+    req_encoding = codecs.lookup(encoding).name
+    locale_encoding = locale.getpreferredencoding()
+    locale_encoding = codecs.lookup(locale_encoding).name
+    if req_encoding != locale_encoding:
+        raise SkipTest('locale encoding {enc} is required'.format(enc=encoding))
+
 __all__ = [
     'assert_equal',
     'assert_false',
@@ -195,6 +206,7 @@ __all__ = [
     'interim',
     'interim_environ',
     'remove_logging_handlers',
+    'require_locale_encoding',
     'sorted_glob',
     'try_run',
 ]
