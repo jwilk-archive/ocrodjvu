@@ -1,6 +1,6 @@
 # encoding=UTF-8
 
-# Copyright © 2011-2015 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2011-2018 Jakub Wilk <jwilk@jwilk.net>
 #
 # This file is part of ocrodjvu.
 #
