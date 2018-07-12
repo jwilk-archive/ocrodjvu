@@ -15,6 +15,7 @@
 
 import contextlib
 import glob
+import logging
 import os
 import re
 import sys
@@ -165,6 +166,17 @@ def try_run(f, *args, **kwargs):
 def sorted_glob(*args, **kwargs):
     return sorted(glob.iglob(*args, **kwargs))
 
+def remove_logging_handlers(prefix):
+    loggers = logging.Logger.manager.loggerDict.values()
+    for logger in loggers:
+        try:
+            handlers = logger.handlers
+        except AttributeError:
+            continue
+        for handler in handlers:
+            if logger.name.startswith(prefix):
+                logger.removeHandler(handler)
+
 __all__ = [
     'assert_equal',
     'assert_false',
@@ -182,6 +194,7 @@ __all__ = [
     'assert_true',
     'interim',
     'interim_environ',
+    'remove_logging_handlers',
     'sorted_glob',
     'try_run',
 ]
