@@ -116,9 +116,9 @@ class test_smart_repr():
             assert_equal(eval(s_repr), s)
         for s in 'jeż', '''j'e"ż''':
             s_repr = smart_repr(s, 'UTF-8')
-            assert_is_instance(s_repr, unicode)
-            assert_in(u'ż', s_repr)
-            assert_equal(eval(s_repr.encode('UTF-8')), s)
+            assert_is_instance(s_repr, str)
+            assert_in('ż', s_repr)
+            assert_equal(eval(s_repr), s)
 # pylint: enable=eval-used
 
 class test_parse_page_numbers():

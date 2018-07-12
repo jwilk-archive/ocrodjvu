@@ -68,7 +68,9 @@ def smart_repr(s, encoding=None):
         u = s.decode(encoding)
     except UnicodeDecodeError:
         return repr(s)
-    return u"'{0}'".format(_special_chars_replace(_special_chars_escape, u))
+    u = _special_chars_replace(_special_chars_escape, u)
+    s = u.encode(encoding)
+    return "'{0}'".format(s)
 
 class EncodingWarning(UserWarning):
     pass
