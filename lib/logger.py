@@ -19,17 +19,19 @@ def setup():
     logger = logging.getLogger('ocrodjvu.main')
     ipc_logger = logging.getLogger('ocrodjvu.ipc')
     # Main handler:
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter('%(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
     logger.setLevel(logging.INFO)
     # IPC handler:
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter('+ %(message)s')
-    handler.setFormatter(formatter)
-    ipc_logger.addHandler(handler)
-    ipc_logger.setLevel(logging.INFO)
+    if not ipc_logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('+ %(message)s')
+        handler.setFormatter(formatter)
+        ipc_logger.addHandler(handler)
+        ipc_logger.setLevel(logging.INFO)
     return logger
 
 __all__ = ['setup']
