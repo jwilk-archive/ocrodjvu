@@ -14,9 +14,11 @@
 # for more details.
 
 import io
+import os
 import sys
 
 from lib import errors
+from lib import temporary
 from lib.cli import ocrodjvu
 
 from tests.tools import (
@@ -24,6 +26,8 @@ from tests.tools import (
     assert_is_not_none,
     assert_not_equal,
     interim,
+    remove_logging_handlers,
+    require_locale_encoding,
     try_run,
 )
 
@@ -80,5 +84,22 @@ def test_list_languages():
     assert_is_not_none(engines)
     for engine in engines:
         yield _test_list_languages, engine
+
+def test_nonascii_path():
+    require_locale_encoding('UTF-8')  # djvused breaks otherwise
+    remove_logging_handlers('ocrodjvu.')
+    here = os.path.dirname(__file__)
+    here = os.path.abspath(here)
+    path = os.path.join(here, '..', 'data', 'empty.djvu')
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
+    with temporary.directory() as tmpdir:
+        tmp_path = os.path.join(tmpdir, 'тмп.djvu')
+        os.symlink(path, tmp_path)
+        with interim(sys, stdout=stdout, stderr=stderr):
+            rc = try_run(ocrodjvu.main, ['', '--engine', '_dummy', '--in-place', tmp_path])
+    assert_equal(rc, 0)
+    assert_equal(stderr.getvalue(), '')
+    assert_equal(stdout.getvalue(), '')
 
 # vim:ts=4 sts=4 sw=4 et

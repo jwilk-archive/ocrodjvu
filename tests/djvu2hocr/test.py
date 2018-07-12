@@ -29,6 +29,8 @@ from tests.tools import (
     assert_multi_line_equal,
     assert_not_equal,
     interim,
+    remove_logging_handlers,
+    require_locale_encoding,
     sorted_glob,
     try_run,
 )
@@ -106,5 +108,22 @@ def test_from_file():
         index = int(test_filename[-1])
         base_filename = os.path.basename(test_filename[:-6])
         yield _test_from_file, base_filename, index
+
+def test_nonascii_path():
+    require_locale_encoding('UTF-8')  # djvused breaks otherwise
+    remove_logging_handlers('ocrodjvu.')
+    here = os.path.dirname(__file__)
+    here = os.path.abspath(here)
+    path = os.path.join(here, '..', 'data', 'empty.djvu')
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
+    with temporary.directory() as tmpdir:
+        tmp_path = os.path.join(tmpdir, 'тмп.djvu')
+        os.symlink(path, tmp_path)
+        with interim(sys, stdout=stdout, stderr=stderr):
+            rc = try_run(djvu2hocr.main, ['', tmp_path])
+    assert_equal(rc, 0)
+    assert_equal(stderr.getvalue(), '')
+    assert_not_equal(stdout.getvalue(), '')
 
 # vim:ts=4 sts=4 sw=4 et
