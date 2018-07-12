@@ -1,4 +1,4 @@
-ocrodjvu (0.10.4) UNRELEASED; urgency=low
+ocrodjvu (0.10.4) unstable; urgency=low
 
   * Fix handling input files with non-ASCII names.
     Regression introduced in 0.9.1.
@@ -9,7 +9,7 @@ ocrodjvu (0.10.4) UNRELEASED; urgency=low
     + Clarify Python version requirements.
     + Update the credits file.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 12 Jul 2018 20:56:23 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 12 Jul 2018 21:07:40 +0200
 
 ocrodjvu (0.10.3) unstable; urgency=low
 
