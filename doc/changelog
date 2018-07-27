@@ -13,7 +13,8 @@ ocrodjvu (0.10.4) unstable; urgency=low
   * Improve documentation:
     + Fix punctuation.
     + Clarify Python version requirements.
-    + Update the credits file.
+    + Update the credits file to make it clear that the project is no longer
+      being funded.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Thu, 12 Jul 2018 21:07:40 +0200
 
