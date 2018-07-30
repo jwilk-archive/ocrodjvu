@@ -43,8 +43,8 @@ def test_help():
     stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(djvu2hocr.main, ['', '--help'])
-    assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
+    assert_equal(rc, 0)
     assert_not_equal(stdout.getvalue(), '')
 
 def test_bad_options():
@@ -62,8 +62,8 @@ def test_version():
     stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(djvu2hocr.main, ['', '--version'])
-    assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
+    assert_equal(rc, 0)
     assert_not_equal(stdout.getvalue(), '')
 
 def _test_from_file(base_filename, index):
@@ -122,8 +122,8 @@ def test_nonascii_path():
         os.symlink(path, tmp_path)
         with interim(sys, stdout=stdout, stderr=stderr):
             rc = try_run(djvu2hocr.main, ['', tmp_path])
-    assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
+    assert_equal(rc, 0)
     assert_not_equal(stdout.getvalue(), '')
 
 # vim:ts=4 sts=4 sw=4 et

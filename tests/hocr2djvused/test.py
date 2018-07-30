@@ -42,8 +42,8 @@ def test_help():
     stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(hocr2djvused.main, ['', '--help'])
-    assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
+    assert_equal(rc, 0)
     assert_not_equal(stdout.getvalue(), '')
 
 def test_version():
@@ -52,8 +52,8 @@ def test_version():
     stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(hocr2djvused.main, ['', '--version'])
-    assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
+    assert_equal(rc, 0)
     assert_not_equal(stdout.getvalue(), '')
 
 def test_bad_options():

@@ -38,8 +38,8 @@ def test_help():
     stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--help'])
-    assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
+    assert_equal(rc, 0)
     assert_not_equal(stdout.getvalue(), '')
 
 def test_version():
@@ -67,8 +67,8 @@ def test_list_engines():
     stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--list-engines'])
-    assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
+    assert_equal(rc, 0)
     engines = stdout.getvalue().splitlines()
 
 def _test_list_languages(engine):
@@ -76,8 +76,8 @@ def _test_list_languages(engine):
     stderr = io.BytesIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--engine', engine, '--list-languages'])
-    assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
+    assert_equal(rc, 0)
     assert_not_equal(stdout.getvalue(), '')
 
 def test_list_languages():
@@ -98,8 +98,8 @@ def test_nonascii_path():
         os.symlink(path, tmp_path)
         with interim(sys, stdout=stdout, stderr=stderr):
             rc = try_run(ocrodjvu.main, ['', '--engine', '_dummy', '--in-place', tmp_path])
-    assert_equal(rc, 0)
     assert_equal(stderr.getvalue(), '')
+    assert_equal(rc, 0)
     assert_equal(stdout.getvalue(), '')
 
 # vim:ts=4 sts=4 sw=4 et
