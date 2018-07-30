@@ -1,8 +1,10 @@
 ocrodjvu (0.10.5) UNRELEASED; urgency=low
 
-  * 
+  * Improve documentation:
+    + Use HTTPS for lxml homepage URL.
+    + Update hOCR specification URL.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 19 Jul 2018 11:18:39 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 30 Jul 2018 18:31:30 +0200
 
 ocrodjvu (0.10.4) unstable; urgency=low
 
