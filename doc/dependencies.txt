@@ -75,7 +75,7 @@ source:
 .. _argparse:
    https://pypi.org/project/argparse/
 .. _lxml:
-   http://lxml.de/
+   https://lxml.de/
 .. _libxml2:
    http://xmlsoft.org/
 .. _subprocess32:
