@@ -17,7 +17,7 @@
 Process hOCR documents.
 
 The hOCR format specification:
-https://docs.google.com/Doc?id=dfxcv4vc_67g844kf
+http://kba.github.io/hocr-spec/1.2/
 '''
 
 import functools

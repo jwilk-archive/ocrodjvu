@@ -38,7 +38,8 @@
 <refsection>
     <title>Description</title>
     <para>
-        &p; reads one or more <ulink url='https://docs.google.com/View?docid=dfxcv4vc_67g844kf'>hOCR</ulink> files (as
+        &p; reads one or more <ulink url='http://kba.github.io/hocr-spec/1.2/'>hOCR</ulink> files (as
+
         produced by
         <ulink url='https://code.google.com/p/ocropus/'><application>OCRopus</application></ulink> or
         <ulink url='https://launchpad.net/cuneiform-linux'><application>Cuneiform</application></ulink> or
