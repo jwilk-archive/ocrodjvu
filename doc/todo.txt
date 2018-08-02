@@ -21,8 +21,9 @@ Documentation
 =============
 * write better documentation for -X
 
-Nice-to-have things
-===================
+Miscellanea
+===========
 * ``--debug`` should enable debug logging
+* don't use ``<script>``
 
 .. vim:ft=rst ts=3 sts=3 sw=3 et tw=72
