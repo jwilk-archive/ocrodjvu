@@ -46,7 +46,6 @@ Additionally, some optional features require the following software:
   HTML parser based on the HTML5_ specification;
   required for the ``--html5`` option
 
-
 The following software is needed to rebuild the manual pages from
 source:
 
