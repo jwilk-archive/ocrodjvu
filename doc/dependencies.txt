@@ -8,7 +8,7 @@ The following software is needed to run ocrodjvu:
 
   + Cuneiform_ ≥ 0.7
 
-  + Ocrad_
+  + Ocrad_ ≥ 0.10
 
   + GOCR_ ≥ 0.40
 
