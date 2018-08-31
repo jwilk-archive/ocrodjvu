@@ -87,7 +87,7 @@ class BMP(ImageFormat):
     '''
     Uncompressed Windows Bitmap.
 
-    http://www.fileformat.info/format/bmp/egff.htm
+    https://www.fileformat.info/format/bmp/egff.htm
     '''
 
     extension = 'bmp'
@@ -138,7 +138,7 @@ class TIFF(ImageFormat):
     '''
     Uncompressed TIFF.
 
-    http://www.fileformat.info/format/tiff/corion.htm
+    https://www.fileformat.info/format/tiff/corion.htm
     '''
 
     extension = 'tif'
