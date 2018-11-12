@@ -15,7 +15,7 @@
 
 set -e -u
 cd "${0%/*}/.."
-version=$(IFS='()' read _ v _ < doc/changelog && echo $v)
+IFS='()' read _ version _ < doc/changelog
 python setup.py sdist --formats=tar
 target="dist/ocrodjvu-$version.tar"
 xz -4ef "$target"
