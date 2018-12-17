@@ -17,8 +17,7 @@
 *ocrodjvu* is a wrapper for OCR systems that allows you to perform OCR on `DjVu <http://djvu.org/>`_ files.
 '''
 
-b''  # Python >= 2.6 is required
-exec b''  # Python 2.X is required
+exec b''  # Python 2.6 or 2.7 is required
 
 import glob
 import os
