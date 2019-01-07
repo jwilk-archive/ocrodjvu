@@ -20,7 +20,7 @@ The following software is needed to run ocrodjvu:
 
 * argparse_
 
-* lxml_
+* lxml_ ≥ 2.0
 
 Additionally, some optional features require the following software:
 
