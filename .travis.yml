@@ -3,7 +3,7 @@ language: python
 matrix:
   include:
   - python: "2.6"
-    env: CYTHON=0.22.1 PYDJVU=0.3.9 PYICU=1.4 HTML5LIB=0.95 PILLOW=1.0
+    env: CYTHON=0.22.1 PYDJVU=0.3.9 LXML=2.0 PYICU=1.4 HTML5LIB=0.95 PILLOW=1.0
   - python: "2.7"
   - python: "2.7"
     env: SUBPROCESS32=3.2.7
@@ -23,6 +23,7 @@ cache: pip
 before_install:
 - cython="cython${CYTHON:+==$CYTHON}"
 - pydjvu="python-djvulibre${PYDJVU:+==$PYDJVU}"
+- lxml="lxml${LXML:+==$LXML}"
 - if [[ -z $SUBPROCESS32 ]]; then
     if_subprocess32=:;
   else
@@ -38,7 +39,7 @@ install:
 - pip install --verbose $cython
 - pip install --verbose $pydjvu
 - $if_subprocess32 pip install --verbose $subprocess32
-- pip install --verbose lxml
+- pip install --verbose $lxml
 - pip install --verbose $pyicu
 - pip install --upgrade setuptools
 - pip install $html5lib
