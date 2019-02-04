@@ -13,6 +13,11 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import print_function
+
+import argparse
+import sys
+
 class UnknownLanguageList(Exception):
 
     def __init__(self):
@@ -64,6 +69,12 @@ class MalformedHocr(MalformedOcrOutput):
 EXIT_FATAL = 1
 EXIT_NONFATAL = 2
 
+def fatal(message):
+    ap = argparse.ArgumentParser()
+    message = '{prog}: {msg}'.format(prog=ap.prog, msg=message)
+    print(message, file=sys.stderr)
+    sys.exit(EXIT_FATAL)
+
 __all__ = [
     'UnknownLanguageList',
     'InvalidLanguageId',
@@ -73,6 +84,7 @@ __all__ = [
     'MalformedHocr',
     'EXIT_FATAL',
     'EXIT_NONFATAL',
+    'fatal',
 ]
 
 # vim:ts=4 sts=4 sw=4 et
