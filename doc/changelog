@@ -1,12 +1,16 @@
 ocrodjvu (0.10.5) UNRELEASED; urgency=low
 
-  * Fix error handling when PyICU is missing.
-    Regression introduced in 0.10.2.
+  * Improve error handling.
+    + Fix error handling when PyICU is missing.
+      Regression introduced in 0.10.2.
+    + Check for existence of djvused early.
   * Improve documentation:
     + Use HTTPS for lxml homepage URL.
+    + Document lxml version requirement.
     + Update hOCR specification URL.
+  * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 03 Oct 2018 22:52:20 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 04 Feb 2019 23:51:53 +0100
 
 ocrodjvu (0.10.4) unstable; urgency=low
 
