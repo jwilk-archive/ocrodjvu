@@ -66,7 +66,6 @@ class test_wait():
         message = str(ecm.exception)
         if message[-1] == '.':  # subprocess32 >= 3.5
             message = message[:-1]
-
         assert_equal(message, "Command 'false' returned non-zero exit status 1")
 
     def _test_signal(self, name):
