@@ -23,8 +23,6 @@ import stat
 from tests.tools import (
     assert_equal,
     assert_false,
-    assert_is_instance,
-    assert_is_none,
     assert_raises,
     assert_true,
     interim_environ,
