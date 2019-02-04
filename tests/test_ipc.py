@@ -23,6 +23,8 @@ import stat
 from tests.tools import (
     assert_equal,
     assert_false,
+    assert_is_instance,
+    assert_is_none,
     assert_raises,
     assert_true,
     interim_environ,
@@ -186,5 +188,20 @@ class test_environment():
     def test_locale_lang(self):
         with interim_environ(LC_ALL=None, LC_CTYPE=None, LANG='en_US.UTF-8'):
             self._test_locale()
+
+class test_require():
+
+    def test_ok(self):
+        ipc.require('cat')
+
+    def test_fail(self):
+        prog = 'ocrodjvu-nonexistent'
+        with assert_raises(OSError) as ecm:
+            ipc.require(prog)
+        exc_message = "[Errno {errno.ENOENT}] command not found: {cmd!r}".format(
+            errno=errno,
+            cmd=prog,
+        )
+        assert_equal(str(ecm.exception), exc_message)
 
 # vim:ts=4 sts=4 sw=4 et
