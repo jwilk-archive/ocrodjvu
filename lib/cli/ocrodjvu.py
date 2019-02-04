@@ -50,6 +50,9 @@ class Saver(object):
 
     in_place = False
 
+    def check(self):
+        pass
+
     @utils.not_overridden
     def save(self, document, pages, djvu_path, sed_file):
         raise NotImplementedError('Cannot save results in this format')  # no coverage
@@ -61,7 +64,11 @@ class BundledSaver(Saver):
     options = '-o', '--save-bundled'
 
     def __init__(self, save_path):
+        self._ips = InPlaceSaver()
         self._save_path = os.path.abspath(save_path)
+
+    def check(self):
+        self._ips.check()
 
     def save(self, document, pages, djvu_path, sed_file):
         file = open(self._save_path, 'wb')
@@ -69,7 +76,7 @@ class BundledSaver(Saver):
             document.save(file=file, pages=pages)
         finally:
             file.close()
-        InPlaceSaver().save(None, pages, self._save_path, sed_file)
+        self._ips.save(None, pages, self._save_path, sed_file)
 
 class IndirectSaver(Saver):
 
@@ -78,11 +85,15 @@ class IndirectSaver(Saver):
     options = '-i', '--save-indirect'
 
     def __init__(self, save_path):
+        self._ips = InPlaceSaver()
         self._save_path = os.path.abspath(save_path)
+
+    def check(self):
+        self._ips.check()
 
     def save(self, document, pages, djvu_path, sed_file):
         document.save(indirect=self._save_path, pages=pages)
-        InPlaceSaver().save(None, pages, self._save_path, sed_file)
+        self._ips.save(None, pages, self._save_path, sed_file)
 
 class ScriptSaver(Saver):
 
@@ -102,6 +113,9 @@ class InPlaceSaver(Saver):
 
     options = '--in-place',
     in_place = True
+
+    def check(self):
+        ipc.require('djvused')
 
     def save(self, document, pages, djvu_path, sed_file):
         sed_file_name = os.path.abspath(sed_file.name)
@@ -279,6 +293,14 @@ class ArgumentParser(cli.ArgumentParser):
                     opt=', '.join('/'.join(saver.options) for saver in self.savers)
                 )
             )
+        else:
+            try:
+                saver.check()
+            except OSError as exc:
+                errors.fatal('cannot find {path!r}: {msg}'.format(
+                    path=exc.filename,
+                    msg=exc.strerror,
+                ))
         if options.save_raw_ocr_dir is not None:
             try:
                 os.stat(os.path.join(options.save_raw_ocr_dir, ''))
