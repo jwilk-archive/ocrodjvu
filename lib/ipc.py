@@ -15,6 +15,7 @@
 
 '''interprocess communication'''
 
+import errno
 import logging
 import os
 import pipes
@@ -129,6 +130,17 @@ class Subprocess(subprocess.Popen):
 
 PIPE = subprocess.PIPE
 
+# require()
+# =========
+
+def require(command):
+    directories = os.environ['PATH'].split(os.pathsep)
+    for directory in directories:
+        path = os.path.join(directory, command)
+        if os.access(path, os.X_OK):
+            return
+    raise OSError(errno.ENOENT, 'command not found', command)
+
 # logging support
 # ===============
 
@@ -140,6 +152,7 @@ logger = logging.getLogger('ocrodjvu.ipc')
 __all__ = [
     'CalledProcessError', 'CalledProcessInterrupted',
     'Subprocess', 'PIPE',
+    'require',
     'thread_safe',
 ]
 
