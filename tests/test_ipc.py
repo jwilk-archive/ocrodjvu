@@ -15,6 +15,7 @@
 
 from __future__ import print_function
 
+import errno
 import os
 import signal
 import stat
@@ -52,6 +53,18 @@ class test_exceptions():
         ex = ipc.CalledProcessInterrupted(signal.NSIG, 'eggs')
         assert_equal(str(ex), "Command 'eggs' was interrupted by signal {0}".format(signal.NSIG))
         assert_false(ex.by_user)
+
+def test_init_exc():
+    # https://bugs.python.org/issue32490
+    prog = 'ocrodjvu-nonexistent'
+    with assert_raises(EnvironmentError) as ecm:
+        ipc.Subprocess([prog])
+    msg = '[Errno {err}] {strerr}: {prog!r}'.format(
+        err=errno.ENOENT,
+        strerr=os.strerror(errno.ENOENT),
+        prog=prog
+    )
+    assert_equal(str(ecm.exception), msg)
 
 class test_wait():
 
