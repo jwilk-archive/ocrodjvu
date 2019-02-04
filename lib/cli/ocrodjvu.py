@@ -246,11 +246,9 @@ class ArgumentParser(cli.ArgumentParser):
                 for language in sorted(namespace.engine().list_languages()):
                     print(language)
             except errors.EngineNotFound as ex:
-                logger.error(ex)
-                sys.exit(errors.EXIT_FATAL)
+                errors.fatal(ex)
             except errors.UnknownLanguageList as ex:
-                logger.error(ex)
-                sys.exit(errors.EXIT_FATAL)
+                errors.fatal(ex)
             else:
                 sys.exit(0)
 
@@ -285,7 +283,7 @@ class ArgumentParser(cli.ArgumentParser):
             try:
                 os.stat(os.path.join(options.save_raw_ocr_dir, ''))
             except EnvironmentError as ex:
-                self.error('cannot open {path!r}: {msg}'.format(
+                errors.fatal('cannot open {path!r}: {msg}'.format(
                     path=ex.filename,
                     msg=ex[1],
                 ))
@@ -318,15 +316,15 @@ class ArgumentParser(cli.ArgumentParser):
         try:
             options.engine = options.engine(**kwargs)
         except AttributeError as ex:
-            self.error(str(ex))
+            errors.fatal(ex)
         except errors.EngineNotFound as ex:
-            self.error(str(ex))
+            errors.fatal(ex)
         try:
             options.engine.check_language(options.language)
         except errors.MissingLanguagePack as ex:
-            self.error(str(ex))
+            errors.fatal(ex)
         except errors.InvalidLanguageId as ex:
-            self.error(str(ex))
+            errors.fatal(ex)
         except errors.UnknownLanguageList:
             # For now, let's assume the language pack is installed.
             pass
