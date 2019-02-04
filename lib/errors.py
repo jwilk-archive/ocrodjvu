@@ -64,4 +64,15 @@ class MalformedHocr(MalformedOcrOutput):
 EXIT_FATAL = 1
 EXIT_NONFATAL = 2
 
+__all__ = [
+    'UnknownLanguageList',
+    'InvalidLanguageId',
+    'MissingLanguagePack',
+    'EngineNotFound',
+    'MalformedOcrOutput',
+    'MalformedHocr',
+    'EXIT_FATAL',
+    'EXIT_NONFATAL',
+]
+
 # vim:ts=4 sts=4 sw=4 et
