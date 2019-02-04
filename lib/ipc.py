@@ -110,6 +110,10 @@ class Subprocess(subprocess.Popen):
         try:
             subprocess.Popen.__init__(self, *args, **kwargs)
         except EnvironmentError as ex:
+            suffix = ': ' + repr(self.__command)
+            if ex.strerror.endswith(suffix):
+                # https://bugs.python.org/issue32490
+                ex.strerror = ex.strerror[:-len(suffix)]
             ex.filename = self.__command
             raise
 
