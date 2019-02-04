@@ -41,7 +41,7 @@ def main():
         '--cover-erase',
         'tests',
     ]
-    path = os.path.join('tests', 'coverage.txt')
+    path = os.path.join('tests', 'coverage')
     plugin = Coverage()
     report_stream = plugin.stream = io.BytesIO()
     print('Generated automatically by private/update-coverage. '

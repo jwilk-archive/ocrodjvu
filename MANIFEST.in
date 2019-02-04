@@ -10,7 +10,7 @@ include doc/changelog
 include examples/*
 include ocrodjvu.py
 include private/*
-include tests/coverage.txt
+include tests/coverage
 recursive-include tests *.bmp *.png *.pbm *.ppm *.tif
 recursive-include tests *.py
 recursive-include tests *.html
