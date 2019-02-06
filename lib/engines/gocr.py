@@ -34,7 +34,6 @@ from .. import utils
 
 const = text_zones.const
 
-_default_language = 'eng'
 _language_pattern = re.compile('^[a-z]{3}$')
 _version_re = re.compile(r'\bgocr ([0-9]+).([0-9]+)\b')
 
@@ -142,18 +141,14 @@ class Engine(common.Engine):
         finally:
             gocr.wait()
 
-    @classmethod
-    def get_default_language(cls):
-        return _default_language
-
     def check_language(self, language):
         if not _language_pattern.match(language):
             raise errors.InvalidLanguageId(language)
-        if language != _default_language:
+        if language != self.default_language:
             raise errors.MissingLanguagePack(language)
 
     def list_languages(self):
-        yield _default_language
+        yield self.default_language
 
     def recognize(self, image, language, details=None, uax29=None):
         worker = ipc.Subprocess(

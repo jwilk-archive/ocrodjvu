@@ -26,7 +26,6 @@ from .. import iso639
 from .. import temporary
 from .. import utils
 
-_default_language = 'eng'
 _language_pattern = re.compile('^[a-z]{3}(?:[+][a-z]{3})*$')
 _language_info_pattern = re.compile(r"^Supported languages: (.*)[.]$")
 
@@ -109,10 +108,6 @@ class Engine(common.Engine):
             else:
                 raise errors.UnknownLanguageList
         raise errors.UnknownLanguageList
-
-    @classmethod
-    def get_default_language(cls):
-        return _default_language
 
     def check_language(self, language):
         if language == 'slo':

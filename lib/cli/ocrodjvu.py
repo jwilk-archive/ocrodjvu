@@ -325,7 +325,7 @@ class ArgumentParser(cli.ArgumentParser):
         # desirable to be able to specify a language *before* specifying an OCR
         # engine.
         if options.language is None:
-            options.language = options.engine.get_default_language()
+            options.language = options.engine.default_language
         kwargs = {}
         for prop in options.properties:
             try:

@@ -25,10 +25,6 @@ class Engine(common.Engine):
     def check_language(self, language):
         return
 
-    @classmethod
-    def get_default_language(cls):
-        return 'eng'
-
     def list_languages(self):
         return []
 

@@ -205,10 +205,6 @@ class Engine(common.Engine):
     def check_language(self, language):
         self.user_to_tesseract(language)
 
-    @classmethod
-    def get_default_language(cls):
-        return 'eng'
-
     def recognize_plain_text(self, image, language, details=None, uax29=None):
         language = self.user_to_tesseract(language)
         with temporary.directory() as output_dir:

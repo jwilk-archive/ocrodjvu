@@ -23,6 +23,7 @@ class Engine(object):
     name = None
     image_format = None
     needs_utf8_fix = False
+    default_language = 'eng'
 
     def __init__(self, *args, **kwargs):
         tpname = '{mod}.{tp}'.format(tp=type(self).__name__, mod=self.__module__)

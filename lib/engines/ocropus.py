@@ -71,10 +71,6 @@ class Engine(common.Engine):
         from .. import hocr
         self._hocr = hocr
 
-    @classmethod
-    def get_default_language(cls):
-        return tesseract.Engine.get_default_language()
-
     def check_language(self, language):
         return self.tesseract.check_language(language)
 

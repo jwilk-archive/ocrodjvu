@@ -27,7 +27,6 @@ from .. import utils
 
 const = text_zones.const
 
-_default_language = 'eng'
 _language_pattern = re.compile('^[a-z]{3}$')
 
 class ExtractSettings(object):
@@ -116,7 +115,7 @@ class Engine(common.Engine):
             raise errors.EngineNotFound(self.name)
 
     def _get_languages(self):
-        result = [_default_language]
+        result = [self.default_language]
         try:
             ocrad = ipc.Subprocess([self.executable, '--charset=help'],
                 stdout=ipc.PIPE,
@@ -143,10 +142,6 @@ class Engine(common.Engine):
             raise errors.InvalidLanguageId(language)
         if language not in self._languages:
             raise errors.MissingLanguagePack(language)
-
-    @classmethod
-    def get_default_language(cls):
-        return _default_language
 
     def list_languages(self):
         return iter(self._languages)
