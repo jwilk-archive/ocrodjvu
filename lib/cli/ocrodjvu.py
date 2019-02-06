@@ -23,7 +23,6 @@ import os.path
 import shutil
 import string
 import sys
-import threading
 import traceback
 
 from .. import cli
@@ -494,10 +493,15 @@ class Context(djvu.decode.Context):
         else:
             pages = [document.pages[i - 1] for i in pages]
         results = Results()
+        njobs = self._options.n_jobs
+        if njobs == 1:
+            from .. import nothreading as threading
+        else:
+            import threading
         condition = threading.Condition()
         threads = [
             threading.Thread(target=self.page_thread, args=(pages, results, condition))
-            for i in xrange(self._options.n_jobs)
+            for i in xrange(njobs)
         ]
         def stop_threads():
             with condition:
