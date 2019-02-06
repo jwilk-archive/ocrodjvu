@@ -349,9 +349,7 @@
                     <quote><literal>+</literal></quote> characters.
                 </para>
                 <para>
-                    For OCRopus, the default is <quote><literal>eng</literal></quote> (English), unless the
-                    <varname>tesslanguage</varname> environment variable is set.
-                    For other OCR engines, the default is always <quote><literal>eng</literal></quote>.
+                    The default is always <quote><literal>eng</literal></quote> (English).
                 </para>
             </listitem>
         </varlistentry>
@@ -514,17 +512,6 @@
     <para>
         The following environment variables affects &p;:
         <variablelist>
-        <varlistentry>
-            <term><varname>tesslanguage</varname></term>
-            <listitem>
-                <para>
-                    Recognition language for Tesseract.
-                </para>
-                <para>
-                    (Use of this variable is deprecated in favor of the <option>--language</option> option.)
-                </para>
-            </listitem>
-        </varlistentry>
         <varlistentry>
             <term><varname>TMPDIR</varname></term>
             <!-- As per IEEE Std 1003.1, 2004 Edition, “8.3 Other Environment Variables”:

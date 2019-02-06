@@ -207,7 +207,7 @@ class Engine(common.Engine):
 
     @classmethod
     def get_default_language(cls):
-        return os.getenv('tesslanguage') or 'eng'
+        return 'eng'
 
     def recognize_plain_text(self, image, language, details=None, uax29=None):
         language = self.user_to_tesseract(language)
