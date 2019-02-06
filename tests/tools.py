@@ -41,10 +41,31 @@ def noseimport(vmaj, vmin, name=None):
     return wrapper
 
 @noseimport(2, 7)
+def assert_greater(x, y):
+    assert_true(
+        x > y,
+        msg='{0!r} not greater than {1!r}'.format(x, y)
+    )
+
+@noseimport(2, 7)
 def assert_greater_equal(x, y):
     assert_true(
         x >= y,
         msg='{0!r} not greater than or equal to {1!r}'.format(x, y)
+    )
+
+@noseimport(2, 7)
+def assert_less(x, y):
+    assert_true(
+        x < y,
+        msg='{0!r} not less than {1!r}'.format(x, y)
+    )
+
+@noseimport(2, 7)
+def assert_less_equal(x, y):
+    assert_true(
+        x <= y,
+        msg='{0!r} not less than or equal to {1!r}'.format(x, y)
     )
 
 @noseimport(2, 7)
@@ -191,12 +212,15 @@ def require_locale_encoding(encoding):
 __all__ = [
     'assert_equal',
     'assert_false',
+    'assert_greater',
     'assert_greater_equal',
     'assert_in',
     'assert_is',
     'assert_is_instance',
     'assert_is_none',
     'assert_is_not_none',
+    'assert_less',
+    'assert_less_equal',
     'assert_multi_line_equal',
     'assert_not_equal',
     'assert_raises',
