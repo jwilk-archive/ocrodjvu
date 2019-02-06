@@ -18,11 +18,13 @@ import warnings
 
 from tests.tools import (
     assert_equal,
+    assert_greater,
     assert_greater_equal,
     assert_in,
     assert_is,
     assert_is_instance,
     assert_is_none,
+    assert_less_equal,
     assert_raises,
     assert_raises_regex,
     interim,
@@ -266,5 +268,20 @@ def test_get_cpu_count():
     n = lib.utils.get_cpu_count()
     assert_is_instance(n, int)
     assert_greater_equal(n, 1)
+
+def test_get_thread_limit():
+    def t(nitems, njobs, xlim):
+        lim = lib.utils.get_thread_limit(nitems, njobs)
+        assert_equal(lim, xlim)
+    for nitems in range(0, 10):
+        for njobs in range(1, 10):
+            lim = lib.utils.get_thread_limit(nitems, njobs)
+            assert_is_instance(lim, int)
+            if nitems == 0:
+                assert_equal(lim, 1)
+            else:
+                npitems = min(nitems, njobs)
+                assert_less_equal(lim * npitems, njobs)
+                assert_greater((lim + 1) * npitems, njobs)
 
 # vim:ts=4 sts=4 sw=4 et

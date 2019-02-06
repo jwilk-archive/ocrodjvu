@@ -170,4 +170,9 @@ def get_cpu_count():
     except (ValueError, OSError, AttributeError):  # no coverage
         return 1
 
+def get_thread_limit(nitems, njobs):
+    if nitems == 0:
+        return 1
+    return max(1, njobs // nitems)
+
 # vim:ts=4 sts=4 sw=4 et
