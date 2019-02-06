@@ -1,5 +1,11 @@
 ocrodjvu (0.10.5) UNRELEASED; urgency=low
 
+  * Limit number of threads used by Tesseract, so that the overall number of
+    threads doesn't exceed the number specified by -j.
+    Thanks to Alexey Shipunov for the bug report.
+  * Don't spawn any threads when not needed.
+    (This could fix rare dead-locks when subprocess32 is not available, even
+    when no parallelism when requested by user.)
   * Improve error handling.
     + Fix error handling when PyICU is missing.
       Regression introduced in 0.10.2.
@@ -8,9 +14,14 @@ ocrodjvu (0.10.5) UNRELEASED; urgency=low
     + Use HTTPS for lxml homepage URL.
     + Document lxml version requirement.
     + Update hOCR specification URL.
+    + Improve ocrodjvu manual page:
+      + Describe -j in more detail.
+      + Remove 0.1 compatibility notes.
+        (These versions are long obsolete.)
+      + Fix typo.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 04 Feb 2019 23:51:53 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 06 Feb 2019 18:05:36 +0100
 
 ocrodjvu (0.10.4) unstable; urgency=low
 
