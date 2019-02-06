@@ -1,4 +1,4 @@
-ocrodjvu (0.10.5) UNRELEASED; urgency=low
+ocrodjvu (0.11) UNRELEASED; urgency=low
 
   * Limit number of threads used by Tesseract, so that the overall number of
     threads doesn't exceed the number specified by -j.
@@ -23,7 +23,7 @@ ocrodjvu (0.10.5) UNRELEASED; urgency=low
       + Fix typo.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 06 Feb 2019 18:12:44 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 06 Feb 2019 19:06:32 +0100
 
 ocrodjvu (0.10.4) unstable; urgency=low
 

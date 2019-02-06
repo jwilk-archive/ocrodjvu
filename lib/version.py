@@ -18,7 +18,7 @@ from __future__ import print_function
 import argparse
 import sys
 
-__version__ = '0.10.5'
+__version__ = '0.11'
 
 class VersionAction(argparse.Action):
     '''
