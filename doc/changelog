@@ -6,6 +6,8 @@ ocrodjvu (0.10.5) UNRELEASED; urgency=low
   * Don't spawn any threads when not needed.
     (This could fix rare dead-locks when subprocess32 is not available, even
     when no parallelism when requested by user.)
+  * Stop honoring the “tessdata” environment variable.
+    (It has been deprecated since ocrodjvu 0.2.1. Use --language instead.)
   * Improve error handling.
     + Fix error handling when PyICU is missing.
       Regression introduced in 0.10.2.
@@ -21,7 +23,7 @@ ocrodjvu (0.10.5) UNRELEASED; urgency=low
       + Fix typo.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 06 Feb 2019 18:05:36 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 06 Feb 2019 18:12:44 +0100
 
 ocrodjvu (0.10.4) unstable; urgency=low
 
