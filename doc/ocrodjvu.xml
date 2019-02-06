@@ -412,7 +412,10 @@
             <term><option>--jobs=<replaceable>n</replaceable></option></term>
             <listitem>
                 <para>
-                    Start up to <replaceable>n</replaceable> OCR processes.
+                    Start up to <replaceable>n</replaceable> OCR threads.
+                </para>
+                <para>
+                    The default is 1.
                 </para>
             </listitem>
         </varlistentry>
