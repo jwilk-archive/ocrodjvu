@@ -176,9 +176,6 @@
                 <para>
                     Save OCR results in place.
                 </para>
-                <para>
-                    (Use this option to retain compatibility with &p; &lt; 0.2.)
-                </para>
             </listitem>
         </varlistentry>
         <varlistentry>
@@ -214,9 +211,6 @@
             <listitem>
                 <para>
                     Remove existing hidden text if present in the pages not selected for OCR.
-                </para>
-                <para>
-                    (Use this option to retain compatibility with &p; &lt; 0.2.)
                 </para>
             </listitem>
         </varlistentry>
