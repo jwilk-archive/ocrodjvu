@@ -498,6 +498,8 @@ class Context(djvu.decode.Context):
             from .. import nothreading as threading
         else:
             import threading
+        thread_limit = utils.get_thread_limit(len(pages), njobs)
+        os.environ['OMP_THREAD_LIMIT'] = str(thread_limit)
         condition = threading.Condition()
         threads = [
             threading.Thread(target=self.page_thread, args=(pages, results, condition))
