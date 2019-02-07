@@ -185,7 +185,7 @@ class Engine(common.Engine):
     def user_to_iso639(self, language):
         match = _language_pattern.match(language)
         if match is None:
-            raise errors.InvalidLanguageId(language)
+            return language
         isocode = iso639.b_to_t(match.group(1))
         if match.group(2) is not None:
             isocode += '-' + match.group(2)
