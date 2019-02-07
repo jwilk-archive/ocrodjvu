@@ -1,13 +1,19 @@
 ocrodjvu (0.11) UNRELEASED; urgency=low
 
-  * Tesseract: be less strict about language codes.
-    This is useful because Tesseract 4 provides training data files for whole
-    scripts, such as “Latin”, with names that don't follow that pattern.
-    https://github.com/jwilk/ocrodjvu/issues/29
-    Thanks to @vltavskachobotnice for the bug report.
-  * Limit number of threads used by Tesseract, so that the overall number of
-    threads doesn't exceed the number specified by -j.
-    Thanks to Alexey Shipunov for the bug report.
+  * Tesseract:
+    + Don't insist that language codes are always 3-letter long.
+      (Tesseract 4 provides training data files for whole scripts, such as
+      “Latin”, with names that don't follow that pattern.)
+      https://github.com/jwilk/ocrodjvu/issues/29
+      Thanks to @vltavskachobotnice for the bug report.
+    + Make it possible to pass arbitrary options to Tesseract.
+      For example, to force legacy OCR engine, use:
+        -X extra_args='--oem 0'
+      https://github.com/jwilk/ocrodjvu/issues/30
+      Thanks to Janusz S. Bień for the bug report.
+    + Limit number of threads used by Tesseract, so that the overall number of
+      threads doesn't exceed the number specified by -j.
+      Thanks to Alexey Shipunov for the bug report.
   * Don't spawn any threads when not needed.
     This could fix rare dead-locks when subprocess32 is not available, even
     when no parallelism were requested by user.
@@ -29,7 +35,7 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
       + Fix typo.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 07 Feb 2019 22:45:17 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 08 Feb 2019 00:06:33 +0100
 
 ocrodjvu (0.10.4) unstable; urgency=low
 
@@ -206,7 +212,7 @@ ocrodjvu (0.7.15) unstable; urgency=low
     + Tesseract: fix support for Chinese language pack.
     + Tesseract: make it possible to pass the -psm option in order to
       customize layout analysis. For example, to enable OSD, use:
-      “-X extra_args='-psm 1'”.
+        -X extra_args='-psm 1'
     + Make --list-languages output sorted.
     + Tesseract: remove “osd” from language list.
     + Accept both ISO 639-2/T and ISO 639-2/B language codes.
