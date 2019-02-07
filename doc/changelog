@@ -1,13 +1,19 @@
 ocrodjvu (0.11) UNRELEASED; urgency=low
 
+  * Tesseract: be less strict about language codes.
+    This is useful because Tesseract 4 provides training data files for whole
+    scripts, such as “Latin”, with names that don't follow that pattern.
+    https://github.com/jwilk/ocrodjvu/issues/29
+    Thanks to @vltavskachobotnice for the bug report.
   * Limit number of threads used by Tesseract, so that the overall number of
     threads doesn't exceed the number specified by -j.
     Thanks to Alexey Shipunov for the bug report.
   * Don't spawn any threads when not needed.
-    (This could fix rare dead-locks when subprocess32 is not available, even
-    when no parallelism when requested by user.)
+    This could fix rare dead-locks when subprocess32 is not available, even
+    when no parallelism were requested by user.
   * Stop honoring the “tessdata” environment variable.
-    (It has been deprecated since ocrodjvu 0.2.1. Use --language instead.)
+    The variable has been deprecated since ocrodjvu 0.2.1.
+    Use --language instead.
   * Improve error handling.
     + Fix error handling when PyICU is missing.
       Regression introduced in 0.10.2.
@@ -19,11 +25,11 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
     + Improve ocrodjvu manual page:
       + Describe -j in more detail.
       + Remove 0.1 compatibility notes.
-        (These versions are long obsolete.)
+        These versions are long obsolete.
       + Fix typo.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 06 Feb 2019 19:06:32 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 07 Feb 2019 22:45:17 +0100
 
 ocrodjvu (0.10.4) unstable; urgency=low
 
