@@ -23,6 +23,7 @@ import os.path
 import shutil
 import string
 import sys
+import threading
 import traceback
 
 from .. import cli
@@ -490,10 +491,6 @@ class Context(djvu.decode.Context):
             pages = [document.pages[i - 1] for i in pages]
         results = Results()
         njobs = self._options.n_jobs
-        if njobs == 1:
-            from .. import nothreading as threading
-        else:
-            import threading
         thread_limit = utils.get_thread_limit(len(pages), njobs)
         os.environ['OMP_THREAD_LIMIT'] = str(thread_limit)
         condition = threading.Condition()
