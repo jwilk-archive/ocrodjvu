@@ -11,9 +11,10 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
         -X extra_args='--oem 0'
       https://github.com/jwilk/ocrodjvu/issues/30
       Thanks to Janusz S. Bień for the bug report.
-    + Limit number of threads used by Tesseract, so that the overall number of
-      threads doesn't exceed the number specified by -j.
-      Thanks to Alexey Shipunov for the bug report.
+    + Speed up extraction of character-level details for Tesseract ≥ 3.04.
+  * Limit the number of OMP threads (used by Tesseract), so that the overall
+    number of threads doesn't exceed the number specified by -j.
+    Thanks to Alexey Shipunov for the bug report.
   * Don't spawn any threads when not needed.
     This could fix rare dead-locks when subprocess32 is not available, even
     when no parallelism were requested by user.
@@ -32,10 +33,10 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
       + Describe -j in more detail.
       + Remove 0.1 compatibility notes.
         These versions are long obsolete.
-      + Fix typo.
+      + Fix typos.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 08 Feb 2019 00:06:33 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 08 Feb 2019 09:33:15 +0100
 
 ocrodjvu (0.10.4) unstable; urgency=low
 
