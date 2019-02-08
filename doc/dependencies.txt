@@ -20,12 +20,11 @@ The following software is needed to run ocrodjvu:
 
 * argparse_
 
+* subprocess32_
+
 * lxml_ ≥ 2.0
 
 Additionally, some optional features require the following software:
-
-* subprocess32_ —
-  strongly recommended for the ``-j``/``--jobs`` option
 
 * PyICU_ ≥ 1.0 —
   required for the ``--word-segmentation=uax29`` option
