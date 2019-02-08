@@ -32,7 +32,7 @@ except ImportError:  # no coverage
     import subprocess
     if os.name == 'posix':
         exc = Warning('the subprocess module is not thread-safe')
-        utils.enhance_import_error(exc, 'subprocess32', None, 'https://pypi.org/project/subprocess32/')
+        utils.enhance_import_error(exc, 'subprocess32', 'python-subprocess32', 'https://pypi.org/project/subprocess32/')
         warnings.warn(exc)
         del exc
 
