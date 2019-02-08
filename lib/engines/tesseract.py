@@ -238,6 +238,8 @@ class Engine(common.Engine):
                 self.extra_args +
                 [tessconf_path]
             )
+            if character_details:
+                commandline += ['makebox']
             worker = ipc.Subprocess(
                 commandline,
                 stdout=ipc.PIPE,
@@ -250,13 +252,18 @@ class Engine(common.Engine):
             with open(os.path.join(output_dir, hocr_path), 'r') as hocr_file:
                 contents = hocr_file.read()
             if character_details:
-                commandline[-1] = 'makebox'
-                worker = ipc.Subprocess(
-                    commandline,
-                    stderr=ipc.PIPE,
-                )
-                _wait_for_worker(worker)
-                with open(os.path.join(output_dir, 'tmp.box'), 'r') as box_file:
+                assert commandline[-1] == 'makebox'
+                assert commandline[-2] == tessconf_path
+                box_path = os.path.join(output_dir, 'tmp.box')
+                if not os.path.exists(box_path):
+                    # Tesseract << 3.04
+                    del commandline[-2]
+                    worker = ipc.Subprocess(
+                        commandline,
+                        stderr=ipc.PIPE,
+                    )
+                    _wait_for_worker(worker)
+                with open(box_path, 'r') as box_file:
                     contents = contents.replace(
                         '</body>',
                         _bbox_extras_template.format(box_file.read()) + '</body>'
