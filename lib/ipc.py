@@ -21,6 +21,9 @@ import os
 import pipes
 import re
 import signal
+import warnings
+
+from . import utils
 
 thread_safe = True
 try:
@@ -28,7 +31,10 @@ try:
 except ImportError:  # no coverage
     import subprocess
     if os.name == 'posix':
-        thread_safe = False
+        exc = Warning('the subprocess module is not thread-safe')
+        utils.enhance_import_error(exc, 'subprocess32', None, 'https://pypi.org/project/subprocess32/')
+        warnings.warn(exc)
+        del exc
 
 # CalledProcessError, CalledProcessInterrupted
 # ============================================
@@ -153,7 +159,6 @@ __all__ = [
     'CalledProcessError', 'CalledProcessInterrupted',
     'Subprocess', 'PIPE',
     'require',
-    'thread_safe',
 ]
 
 # vim:ts=4 sts=4 sw=4 et
