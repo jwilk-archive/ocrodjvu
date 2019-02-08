@@ -539,9 +539,9 @@
             anyway) unless you pass the <option>-X fix-html=1</option> option.
         </para>
         <para>
-            When using Tesseract ≥ 3.00, extracting bounding boxes of particular characters (which happens when either
-            <option>--details=chars</option> or <option>--word-segmentation=uax29</option>) is inefficient.
-            This is due to limitations of the Tesseract command-line interface.
+            Extracting bounding boxes of particular characters (which happens when either
+            <option>--details=chars</option> or <option>--word-segmentation=uax29</option> is enabled)
+            is slow with Tesseract &lt; 3.04.
         </para>
     </refsection>
     <refsection>
