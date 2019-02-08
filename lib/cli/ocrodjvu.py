@@ -530,6 +530,7 @@ class Context(djvu.decode.Context):
                             # Result is not yet available.
                             condition.wait()
                             continue
+                        results[page.n] = Ellipsis  # no longer needed
                         if isinstance(result, Exception):
                             stop_threads()
                         break
@@ -545,6 +546,7 @@ class Context(djvu.decode.Context):
                     pass
                 else:
                     text_zones.print_sexpr(result, sed_file)
+                result = None  # no longer needed
                 sed_file.write('\n.\n\n')
             sed_file.flush()
             saver = self._options.saver
