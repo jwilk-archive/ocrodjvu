@@ -71,7 +71,7 @@ EXIT_NONFATAL = 2
 
 def fatal(message):
     ap = argparse.ArgumentParser()
-    message = '{prog}: {msg}'.format(prog=ap.prog, msg=message)
+    message = '{prog}: error: {msg}'.format(prog=ap.prog, msg=message)
     print(message, file=sys.stderr)
     sys.exit(EXIT_FATAL)
 
