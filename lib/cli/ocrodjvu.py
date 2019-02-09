@@ -165,11 +165,32 @@ def expand_template(template, pageno, pageid):
         d[var] = d[base_var] + offset
     return formatter.vformat(template, (), d)
 
+class EngineChoices(object):
+
+    default = 'tesseract'
+
+    def __init__(self):
+        self._data = data = {}
+        for eng in engines.get_engines():
+            data[eng.name] = eng
+
+    def __iter__(self):
+        return iter(sorted(
+            key
+            for key in self._data
+            if key[0] != '_'
+        ))
+
+    def __contains__(self, key):
+        return key in self._data
+
+    def __getitem__(self, key):
+        return self._data[key]
+
 class ArgumentParser(cli.ArgumentParser):
 
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
-    engines = list(engines.get_engines())
-    [default_engine] = [engine for engine in engines if engine.name == 'tesseract']
+    engines = EngineChoices()
 
     _details_map = dict(
         lines=text_zones.TEXT_DETAILS_LINE,
@@ -211,7 +232,7 @@ class ArgumentParser(cli.ArgumentParser):
         group.add_argument('--clear-text', dest='clear_text', action='store_true', default=False, help='remove existing hidden text')
         group.add_argument('--save-raw-ocr', dest='save_raw_ocr_dir', metavar='DIRECTORY', help='save raw OCR output')
         group.add_argument('--raw-ocr-filename-template', metavar='TEMPLATE', default='{id-ext}', help='file naming scheme for raw OCR')
-        self.add_argument('-e', '--engine', dest='engine', nargs=1, action=self.set_engine, default=self.default_engine, help='OCR engine to use (default: {0})'.format(self.default_engine.name))
+        self.add_argument('-e', '--engine', dest='engine', choices=self.engines, metavar='ENGINE', help='OCR engine to use (default: {0})'.format(self.engines.default))
         self.add_argument('--list-engines', action=self.list_engines, nargs=0, help='print list of available OCR engines')
         self.add_argument('-l', '--language', dest='language', help='set recognition language')
         self.add_argument('--list-languages', action=self.list_languages, nargs=0, help='print list of available languages')
@@ -230,34 +251,24 @@ class ArgumentParser(cli.ArgumentParser):
         group.add_argument('--on-error', choices=('abort', 'resume'), default='abort', help='error handling strategy')
         group.add_argument('--html5', dest='html5', action='store_true', help='use HTML5 parse')
 
-    class set_engine(argparse.Action):
-        def __call__(self, parser, namespace, values, option_string=None):
-            [value] = values
-            for engine in parser.engines:
-                if engine.name != value:
-                    continue
-                namespace.engine = engine
-                break
-            else:
-                parser.error('Invalid OCR engine name')
-
     class list_engines(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
-            for engine in parser.engines:
-                if engine.name[0] == '_':
-                    continue
+            for ename in parser.engines:
+                engine = parser.engines[ename]
                 try:
                     engine = engine()
                 except errors.EngineNotFound:
                     pass
                 else:
-                    print(engine.name)
+                    print(ename)
             sys.exit(0)
 
     class list_languages(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
+            ename = namespace.engine or parser.engines.default
+            engine = parser.engines[ename]
             try:
-                for language in sorted(namespace.engine().list_languages()):
+                for language in sorted(engine().list_languages()):
                     print(language)
             except errors.EngineNotFound as ex:
                 errors.fatal(ex)
@@ -321,6 +332,8 @@ class ArgumentParser(cli.ArgumentParser):
                     tmpl=options.raw_ocr_filename_template,
                     key=ex.args[0],
                 ))
+        ename = options.engine or self.engines.default
+        options.engine = self.engines[ename]
         # It might be tempting to verify language name correctness at argument
         # parse time (rather than after argument parsing). However, it's
         # desirable to be able to specify a language *before* specifying an OCR
