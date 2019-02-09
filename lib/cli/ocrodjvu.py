@@ -332,6 +332,7 @@ class ArgumentParser(cli.ArgumentParser):
                     tmpl=options.raw_ocr_filename_template,
                     key=ex.args[0],
                 ))
+        implicit_default_engine = options.engine is None
         ename = options.engine or self.engines.default
         options.engine = self.engines[ename]
         # It might be tempting to verify language name correctness at argument
@@ -353,7 +354,10 @@ class ArgumentParser(cli.ArgumentParser):
         except AttributeError as ex:
             errors.fatal(ex)
         except errors.EngineNotFound as ex:
-            errors.fatal(ex)
+            msg = str(ex)
+            if implicit_default_engine:
+                msg += '; use -e/--engine to use another engine'
+            errors.fatal(msg)
         try:
             options.engine.check_language(options.language)
         except errors.MissingLanguagePack as ex:
