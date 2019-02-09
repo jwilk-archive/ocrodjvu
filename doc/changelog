@@ -15,12 +15,17 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
   * Limit the number of OMP threads (used by Tesseract), so that the overall
     number of threads doesn't exceed the number specified by -j.
     Thanks to Alexey Shipunov for the bug report.
-  * Don't spawn any threads when not needed.
-    This could fix rare dead-locks when subprocess32 is not available, even
-    when no parallelism were requested by user.
+  * Require subprocess32, even when no parallelism were requested by user.
+    This could fix rare dead-locks.
+  * Reduce memory consumption by keeping OCR results in memory only as long as
+    necessary.
   * Stop honoring the “tessdata” environment variable.
     The variable has been deprecated since ocrodjvu 0.2.1.
     Use --language instead.
+  * Suggest using -e/--engine if (implicitly selected) default OCR engine
+    was not found.
+    https://github.com/jwilk/ocrodjvu/issues/20
+    Thanks to @libBletchley for the bug report.
   * Improve error handling.
     + Fix error handling when PyICU is missing.
       Regression introduced in 0.10.2.
@@ -29,6 +34,7 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
     + Use HTTPS for lxml homepage URL.
     + Document lxml version requirement.
     + Update hOCR specification URL.
+    + Update GOCR homepage URL.
     + Improve ocrodjvu manual page:
       + Describe -j in more detail.
       + Remove 0.1 compatibility notes.
@@ -36,7 +42,7 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
       + Fix typos.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Fri, 08 Feb 2019 09:33:15 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 09 Feb 2019 20:26:59 +0100
 
 ocrodjvu (0.10.4) unstable; urgency=low
 
