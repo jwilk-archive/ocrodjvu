@@ -16,7 +16,7 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
     number of threads doesn't exceed the number specified by -j.
     Thanks to Alexey Shipunov for the bug report.
   * Require subprocess32, even when no parallelism were requested by user.
-    This could fix rare dead-locks.
+    This could fix rare deadlocks.
   * Reduce memory consumption by keeping OCR results in memory only as long as
     necessary.
   * Stop honoring the “tessdata” environment variable.
@@ -40,9 +40,10 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
       + Remove 0.1 compatibility notes.
         These versions are long obsolete.
       + Fix typos.
+    + Mention that argparse is only needed for Python 2.6.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 09 Feb 2019 20:26:59 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 09 Feb 2019 22:27:06 +0100
 
 ocrodjvu (0.10.4) unstable; urgency=low
 
