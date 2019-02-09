@@ -47,7 +47,7 @@ source:
 .. _Ocrad:
    https://www.gnu.org/software/ocrad/
 .. _GOCR:
-   http://jocr.sourceforge.net/
+   http://www-e.uni-magdeburg.de/jschulen/ocr/
 .. _Tesseract:
    https://github.com/tesseract-ocr/tesseract
 .. _DjVuLibre:

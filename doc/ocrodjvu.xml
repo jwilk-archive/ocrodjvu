@@ -100,7 +100,7 @@
             <para><ulink url='https://www.gnu.org/software/ocrad/'><application>Ocrad</application></ulink>.</para>
         </listitem>
         <listitem>
-            <para><ulink url='http://jocr.sourceforge.net/'><application>GOCR</application></ulink>.</para>
+            <para><ulink url='http://www-e.uni-magdeburg.de/jschulen/ocr/'><application>GOCR</application></ulink>.</para>
         </listitem>
         <listitem>
             <para>Stand-alone <ulink url='https://github.com/tesseract-ocr/tesseract'><application>Tesseract</application></ulink>.</para>
