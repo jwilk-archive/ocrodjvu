@@ -23,7 +23,7 @@ main_pids=$(pgrep -f 'ocrodjvu ') || {
 for main_pid in $main_pids
 do
     printf '%s\n\n' "$dbar"
-    ps -o pid=,args= -p $main_pid
+    ps -o pid= -o args= -p $main_pid
     pstree=$(pstree -Ap $main_pid)
     printf '\n%s\n\n' "$pstree"
     all_pids=$(printf '%s\n' "$pstree" | grep -v '{.*}' | grep -o -E '[(][0-9]+[)]' | tr -d '()')
@@ -31,7 +31,7 @@ do
     for pid in $all_pids
     do
         printf '\n%s\n\n' "$sbar"
-        ps -o pid=,args= -p $pid
+        ps -o pid= -o args= -p $pid
         printf '\n'
         set -- -ex 'thread apply all bt'
         if [ $pid -eq $main_pid ]
