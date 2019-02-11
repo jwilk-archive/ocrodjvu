@@ -1,4 +1,4 @@
-ocrodjvu (0.11) UNRELEASED; urgency=low
+ocrodjvu (0.11) unstable; urgency=low
 
   * Tesseract:
     + Don't insist that language codes are always 3-letter long.
@@ -44,7 +44,7 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
     + Document lxml version requirement.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 11 Feb 2019 18:42:47 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 11 Feb 2019 18:43:02 +0100
 
 ocrodjvu (0.10.4) unstable; urgency=low
 
