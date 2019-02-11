@@ -27,7 +27,7 @@ do
     pstree=$(pstree -ApT $main_pid)
     printf '\n%s\n\n' "$pstree"
     all_pids=$(printf '%s\n' "$pstree" | grep -o -E '[(][0-9]+[)]' | tr -d '()')
-    ps -m -o pid,lwp,s,start,etimes,times,pcpu,args $all_pids
+    ps -m -o pid,lwp,s,start,etime,time,pcpu,args $all_pids
     for pid in $all_pids
     do
         printf '\n%s\n\n' "$sbar"
