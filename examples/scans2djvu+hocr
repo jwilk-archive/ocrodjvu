@@ -17,7 +17,7 @@ set -e
 
 usage()
 {
-    echo 'scans2djvu+hocr <didjvu-arguments> <ocrodjvu-arguments> <djvu2hocr-arguments> <root> [--ext=...] [--keep-djvu-ocr=1]' >&2
+    echo 'scans2djvu+hocr DIDJVU-ARGS OCRODJVU-ARGS DJVU2HOCR-ARGS ROOT-DIR [--ext=EXT] [--keep-djvu-ocr=1]' >&2
     exit 1
 }
 
