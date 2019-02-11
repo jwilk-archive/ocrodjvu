@@ -34,6 +34,7 @@ class Coverage(nose.plugins.cover.Coverage):
 def main():
     basedir = os.path.join(os.path.dirname(__file__), os.pardir)
     os.chdir(basedir)
+    os.environ['NOSE_IGNORE_FILES'] = r'^test_integration\b'
     argv = [
         sys.argv[0],
         '--with-coverage',
