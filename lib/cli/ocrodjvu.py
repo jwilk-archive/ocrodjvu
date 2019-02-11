@@ -356,7 +356,7 @@ class ArgumentParser(cli.ArgumentParser):
         except errors.EngineNotFound as ex:
             msg = str(ex)
             if implicit_default_engine:
-                msg += '; use -e/--engine to use another engine'
+                msg += '; use -e/--engine to select another engine'
             errors.fatal(msg)
         try:
             options.engine.check_language(options.language)
