@@ -24,9 +24,9 @@ for main_pid in $main_pids
 do
     printf '%s\n\n' "$dbar"
     ps -o pid=,args= -p $main_pid
-    pstree=$(pstree -ApT $main_pid)
+    pstree=$(pstree -Ap $main_pid)
     printf '\n%s\n\n' "$pstree"
-    all_pids=$(printf '%s\n' "$pstree" | grep -o -E '[(][0-9]+[)]' | tr -d '()')
+    all_pids=$(printf '%s\n' "$pstree" | grep -v '{.*}' | grep -o -E '[(][0-9]+[)]' | tr -d '()')
     ps -m -o pid,lwp,s,start,etime,time,pcpu,args $all_pids
     for pid in $all_pids
     do
