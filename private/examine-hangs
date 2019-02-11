@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# Copyright © 2019 Jakub Wilk <jwilk@jwilk.net>
+#
+# This file is part of ocrodjvu.
+#
+# ocrodjvu is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# ocrodjvu is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+# for more details.
+
+set -e -u
+dbar=$(printf '%099d' 0 | tr '0' '=')
+sbar=$(printf '%099d' 0 | tr '0' '-')
+main_pids=$(pgrep -f 'ocrodjvu ') || {
+    printf '%s: error: no ocrodjvu processes found\n' "$0" >&2
+    exit 1
+}
+for main_pid in $main_pids
+do
+    printf '%s\n\n' "$dbar"
+    ps -o pid=,args= -p $main_pid
+    pstree=$(pstree -ApT $main_pid)
+    printf '\n%s\n\n' "$pstree"
+    all_pids=$(printf '%s\n' "$pstree" | grep -o -E '[(][0-9]+[)]' | tr -d '()')
+    ps -m -o pid,lwp,s,start,etimes,times,pcpu,args $all_pids
+    for pid in $all_pids
+    do
+        printf '\n%s\n\n' "$sbar"
+        ps -o pid=,args= -p $pid
+        printf '\n'
+        set -- -ex 'thread apply all bt'
+        if [ $pid -eq $main_pid ]
+        then
+            set -- "$@" -ex 'thread apply all py-bt'
+        fi
+        gdb --batch --pid=$pid "$@" 2>&1
+        set --
+    done
+    printf '\n'
+done
+printf '%s\n' "$dbar"
+
+# vim:ts=4 sts=4 sw=4 et
