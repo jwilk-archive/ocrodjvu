@@ -32,7 +32,6 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
     + Check for existence of djvused early.
   * Improve documentation:
     + Use HTTPS for lxml homepage URL.
-    + Document lxml version requirement.
     + Update hOCR specification URL.
     + Update GOCR homepage URL.
     + Improve ocrodjvu manual page:
@@ -40,10 +39,12 @@ ocrodjvu (0.11) UNRELEASED; urgency=low
       + Remove 0.1 compatibility notes.
         These versions are long obsolete.
       + Fix typos.
+    + Make the dependency list less verbose.
     + Mention that argparse is only needed for Python 2.6.
+    + Document lxml version requirement.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 09 Feb 2019 22:27:06 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 11 Feb 2019 18:42:47 +0100
 
 ocrodjvu (0.10.4) unstable; urgency=low
 
