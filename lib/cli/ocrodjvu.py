@@ -195,6 +195,26 @@ class EngineChoices(object):
     def __getitem__(self, key):
         return self._data[key]
 
+class HelpFormatter(argparse.HelpFormatter):
+
+    important_options = set(['-e', '-l', '-j'])
+
+    def add_usage(self, usage, actions, groups, prefix=None):
+        orig_actions = actions
+        actions = [
+            act for act in orig_actions
+            if set(act.option_strings) & self.important_options
+        ]
+        actions += [argparse.Action(['options'], 'options', nargs=0, required=False)]
+        actions += [
+            act for act in orig_actions
+            if (
+                act.required or
+                isinstance(act, ArgumentParser.set_output)
+            )
+        ]
+        return argparse.HelpFormatter.add_usage(self, usage, actions, groups, prefix)
+
 class ArgumentParser(cli.ArgumentParser):
 
     savers = BundledSaver, IndirectSaver, ScriptSaver, InPlaceSaver, DryRunSaver
@@ -213,8 +233,7 @@ class ArgumentParser(cli.ArgumentParser):
     )
 
     def __init__(self):
-        usage = '%(prog)s [options] FILE'
-        cli.ArgumentParser.__init__(self, usage=usage)
+        cli.ArgumentParser.__init__(self, formatter_class=HelpFormatter)
         self.add_argument('--version', action=version.VersionAction)
         group = self.add_argument_group(title='options controlling output')
         saver_group = group.add_mutually_exclusive_group(required=True)
