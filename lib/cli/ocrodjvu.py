@@ -209,6 +209,7 @@ class ArgumentParser(cli.ArgumentParser):
         cli.ArgumentParser.__init__(self, usage=usage)
         self.add_argument('--version', action=version.VersionAction)
         group = self.add_argument_group(title='options controlling output')
+        saver_group = group.add_mutually_exclusive_group(required=True)
         for saver_type in self.savers:
             options = saver_type.options
             try:
@@ -219,7 +220,7 @@ class ArgumentParser(cli.ArgumentParser):
             metavar = None
             if n_args == 1:
                 metavar = 'FILE'
-            group.add_argument(
+            saver_group.add_argument(
                 *options,
                 **dict(
                     metavar=metavar,
@@ -282,12 +283,7 @@ class ArgumentParser(cli.ArgumentParser):
             self.saver_type = kwargs.pop('saver_type')
             argparse.Action.__init__(self, **kwargs)
         def __call__(self, parser, namespace, values, option_string=None):
-            try:
-                namespace.saver
-            except AttributeError:
-                namespace.saver = self.saver_type(*values)
-            else:
-                namespace.saver = None
+            namespace.saver = self.saver_type(*values)
 
     def parse_args(self, args=None, namespace=None):
         options = cli.ArgumentParser.parse_args(self, args, namespace)
@@ -295,23 +291,12 @@ class ArgumentParser(cli.ArgumentParser):
         options.render_layers = self._render_map[options.render_layers]
         options.resume_on_error = options.on_error == 'resume'
         try:
-            saver = options.saver
-        except AttributeError:
-            saver = None
-        if saver is None:
-            self.error(
-                'exactly one of the following options is required: {opt}'.format(
-                    opt=', '.join('/'.join(saver.options) for saver in self.savers)
-                )
-            )
-        else:
-            try:
-                saver.check()
-            except OSError as exc:
-                errors.fatal('cannot find {path!r}: {msg}'.format(
-                    path=exc.filename,
-                    msg=exc.strerror,
-                ))
+            options.saver.check()
+        except OSError as exc:
+            errors.fatal('cannot find {path!r}: {msg}'.format(
+                path=exc.filename,
+                msg=exc.strerror,
+            ))
         if options.save_raw_ocr_dir is not None:
             try:
                 os.stat(os.path.join(options.save_raw_ocr_dir, ''))
