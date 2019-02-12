@@ -50,6 +50,14 @@ class Saver(object):
 
     in_place = False
 
+    def __init__(self):
+        pass
+
+    @classmethod
+    def get_n_args(cls):
+        init_args, _, _, _ = inspect.getargspec(cls.__init__)
+        return len(init_args) - 1
+
     def check(self):
         pass
 
@@ -212,14 +220,8 @@ class ArgumentParser(cli.ArgumentParser):
         saver_group = group.add_mutually_exclusive_group(required=True)
         for saver_type in self.savers:
             options = saver_type.options
-            try:
-                init_args, _, _, _ = inspect.getargspec(saver_type.__init__)
-                n_args = len(init_args) - 1
-            except TypeError:
-                n_args = 0
-            metavar = None
-            if n_args == 1:
-                metavar = 'FILE'
+            n_args = saver_type.get_n_args()
+            metavar = [None, 'FILE'][n_args]
             saver_group.add_argument(
                 *options,
                 **dict(
