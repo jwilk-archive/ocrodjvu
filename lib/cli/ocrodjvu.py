@@ -271,7 +271,7 @@ class ArgumentParser(cli.ArgumentParser):
         group.add_argument('-D', '--debug', dest='debug', action='store_true', default=False, help='''don't delete intermediate files''')
         group.add_argument('-X', dest='properties', metavar='KEY=VALUE', help='set an engine-specific property', action='append', default=[])
         group.add_argument('--on-error', choices=('abort', 'resume'), default='abort', help='error handling strategy')
-        group.add_argument('--html5', dest='html5', action='store_true', help='use HTML5 parse')
+        group.add_argument('--html5', dest='html5', action='store_true', help='use HTML5 parser')
 
     class list_engines(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
