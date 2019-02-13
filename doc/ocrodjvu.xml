@@ -410,7 +410,9 @@
             <term><option>--jobs=<replaceable>n</replaceable></option></term>
             <listitem>
                 <para>
-                    Start up to <replaceable>n</replaceable> OCR threads.
+                    Start <replaceable>n</replaceable> OCR threads.
+                    <replaceable>n</replaceable> can be a positive integer,
+                    or “<literal>auto</literal>” to use the number of CPU cores.
                 </para>
                 <para>
                     The default is 1.
