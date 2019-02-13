@@ -262,7 +262,14 @@ class ArgumentParser(cli.ArgumentParser):
         def pages(x):
             return utils.parse_page_numbers(x)
         self.add_argument('-p', '--pages', dest='pages', action='store', default=None, type=pages, help='pages to process')
-        self.add_argument('-j', '--jobs', dest='n_jobs', metavar='N', nargs='?', type=int, default=1, help='number of jobs to run simultaneously')
+        def jobs(s):
+            if s == 'auto':
+                return utils.get_cpu_count()
+            n = int(s)
+            if n <= 0:
+                raise ValueError
+            return n
+        self.add_argument('-j', '--jobs', dest='n_jobs', metavar='N', type=jobs, default=1, help='number of jobs to run simultaneously')
         self.add_argument('path', metavar='FILE', help='DjVu file to process')
         group = self.add_argument_group(title='text segmentation options')
         group.add_argument('-t', '--details', dest='details', choices=('lines', 'words', 'chars'), action='store', default='words', help='amount of text details to extract')
@@ -376,8 +383,6 @@ class ArgumentParser(cli.ArgumentParser):
         options.uax29 = options.language if options.word_segmentation == 'uax29' else None
         if options.n_jobs is None:
             options.n_jobs = utils.get_cpu_count()
-        elif options.n_jobs < 1:
-            options.n_jobs = 1
         return options
 
 class Results(dict):
