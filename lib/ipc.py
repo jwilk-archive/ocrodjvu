@@ -25,7 +25,6 @@ import warnings
 
 from . import utils
 
-thread_safe = True
 try:
     import subprocess32 as subprocess
 except ImportError:  # no coverage
