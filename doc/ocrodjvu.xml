@@ -349,7 +349,7 @@
                     <quote><literal>+</literal></quote> characters.
                 </para>
                 <para>
-                    The default is always <quote><literal>eng</literal></quote> (English).
+                    The default is <quote><literal>eng</literal></quote> (English).
                 </para>
             </listitem>
         </varlistentry>
