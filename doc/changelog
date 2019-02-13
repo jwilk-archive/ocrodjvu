@@ -1,8 +1,16 @@
 ocrodjvu (0.11.1) UNRELEASED; urgency=low
 
-  * 
+  * Add “-j auto” to start as many OCR threads as the number of available
+    CPUs.
+  * Disallow -j without arguments. (It did the same thing as “-j auto”.)
+  * Disallow “-j 0” or “-j N” for negative N.
+  * Improve help message:
+    + Include the most important options in the “usage: …” part.
+    + Update the description for -j.
+    + Fix typo.
+  * Improve error handling.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 11 Feb 2019 23:33:49 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Wed, 13 Feb 2019 17:46:07 +0100
 
 ocrodjvu (0.11) unstable; urgency=low
 
