@@ -269,7 +269,7 @@ class ArgumentParser(cli.ArgumentParser):
             if n <= 0:
                 raise ValueError
             return n
-        self.add_argument('-j', '--jobs', dest='n_jobs', metavar='N', type=jobs, default=1, help='number of jobs to run simultaneously')
+        self.add_argument('-j', '--jobs', dest='n_jobs', metavar='N', type=jobs, default=1, help='start N OCR threads')
         self.add_argument('path', metavar='FILE', help='DjVu file to process')
         group = self.add_argument_group(title='text segmentation options')
         group.add_argument('-t', '--details', dest='details', choices=('lines', 'words', 'chars'), action='store', default='words', help='amount of text details to extract')
