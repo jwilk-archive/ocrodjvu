@@ -94,16 +94,16 @@
             </para>
         </listitem>
         <listitem>
-            <para><ulink url='https://launchpad.net/cuneiform-linux'><application>Cuneiform for Linux</application></ulink>.</para>
+            <para><ulink url='https://launchpad.net/cuneiform-linux'><application>Cuneiform for Linux</application></ulink>;</para>
         </listitem>
         <listitem>
-            <para><ulink url='https://www.gnu.org/software/ocrad/'><application>Ocrad</application></ulink>.</para>
+            <para><ulink url='https://www.gnu.org/software/ocrad/'><application>Ocrad</application></ulink>;</para>
         </listitem>
         <listitem>
-            <para><ulink url='http://www-e.uni-magdeburg.de/jschulen/ocr/'><application>GOCR</application></ulink>.</para>
+            <para><ulink url='http://www-e.uni-magdeburg.de/jschulen/ocr/'><application>GOCR</application></ulink>;</para>
         </listitem>
         <listitem>
-            <para>Stand-alone <ulink url='https://github.com/tesseract-ocr/tesseract'><application>Tesseract</application></ulink>.</para>
+            <para>stand-alone <ulink url='https://github.com/tesseract-ocr/tesseract'><application>Tesseract</application></ulink>.</para>
         </listitem>
         </itemizedlist>
     </para>
