@@ -5,13 +5,9 @@ The following software is needed to run ocrodjvu:
 * an OCR engine:
 
   + OCRopus_ 0.2, 0.3 or 0.3.1
-
   + Cuneiform_ ≥ 0.7
-
   + Ocrad_ ≥ 0.10
-
   + GOCR_ ≥ 0.40
-
   + Tesseract_ ≥ 2.00
 
 * DjVuLibre_ ≥ 3.5.21
