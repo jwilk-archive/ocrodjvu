@@ -52,6 +52,7 @@ script:
 - py2diatra .
 - private/run-pyflakes
 - make -C doc check
+- make -C doc all
 - python setup.py install
 - cd /
 - djvu2hocr --version
