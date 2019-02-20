@@ -15,9 +15,46 @@
 
 set -e -u
 cd "${0%/*}/.."
-IFS='()' read _ version _ < doc/changelog
-python setup.py sdist --formats=tar
-target="dist/ocrodjvu-$version.tar"
-xz -4ef "$target"
+if [ $# -ge 2 ]
+then
+    printf '%s [commit]\n' "$0" >&2
+    exit 1
+fi
+if ! [ -d .git ]
+then
+    printf '%s requires git checkout\n' "$0" >&2
+    exit 1
+fi
+pwd="$PWD"
+commit=${1:-HEAD}
+commit=$(git describe "$commit")
+header=$(git cat-file blob "$commit:doc/changelog")
+IFS='(); ' read name version release _ <<EOF
+$header
+EOF
+if [ "$release" = UNRELEASED ]
+then
+    date=$(git rev-list -1 --format=%cI "$commit" | grep -o '^....-..-..' | tr -d -)
+    version="${version}rc${date}"
+fi
+printf 'Commit: %s\nVersion: %s\n' "$commit" "$version" >&2
+set -x
+sourceroot=$(mktemp -d -t "$name-source-XXXXXX")
+tar_opts='--owner root --group root --mode u=rwX,go=rX --format ustar --sort name'
+xz='xz -4e'
+git archive "$commit" --prefix="$name-$version/" | tar -C "$sourceroot" -xf -
+cd "$sourceroot"/*
+make -C doc/
+mv COPYING doc/
+rm .git*
+rm .travis.yml
+rm -f private/make-release-tarball
+cd ..
+mkdir -p "$pwd/dist"
+tar $tar_opts -I "$xz" -cf "$pwd/dist/$name-$version.tar.xz" */
+rm -r "$sourceroot"
+set +x
+cd "$pwd"
+ls -d "dist/$name-$version.tar.xz"
 
 # vim:ts=4 sts=4 sw=4 et
