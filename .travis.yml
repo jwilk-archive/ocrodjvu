@@ -48,12 +48,10 @@ install:
 - pip install $pyflakes
 - pip install docutils
 script:
-- dpkg-parsechangelog -ldoc/changelog --all 2>&1 >/dev/null | { ! grep .; }
 - nosetests --verbose
 - py2diatra .
 - private/run-pyflakes
-- private/check-rst
-- xmllint --nonet --noout --valid doc/*.xml
+- make -C doc check
 - python setup.py install
 - cd /
 - djvu2hocr --version
