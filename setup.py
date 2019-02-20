@@ -79,10 +79,6 @@ class build_doc(distutils_build):
         re.MULTILINE
     )
 
-    _date_regex = re.compile(
-        '"(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/(?P<year>[0-9]{4})"'
-    )
-
     def build_man(self, manname, commandline):
         self.spawn(commandline)
         with open(manname, 'r+') as file:
@@ -91,11 +87,6 @@ class build_doc(distutils_build):
             contents = self._url_regex.sub(
                 lambda m: r'\m[blue]\fI{0}\fR\m[]'.format(*m.groups()),
                 contents,
-            )
-            # Use RFC 3339 date format:
-            contents = self._date_regex.sub(
-                lambda m: '{year}-{month}-{day}'.format(**m.groupdict()),
-                contents
             )
             file.seek(0)
             file.truncate()
