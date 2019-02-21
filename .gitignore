@@ -1,6 +1,5 @@
 *.py[co]
 /.coverage
-/MANIFEST
 /build
 /dist
 /doc/*.1
