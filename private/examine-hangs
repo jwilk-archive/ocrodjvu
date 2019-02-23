@@ -26,7 +26,12 @@ do
     ps -o pid= -o args= -p $main_pid
     pstree=$(pstree -Ap $main_pid)
     printf '\n%s\n\n' "$pstree"
-    all_pids=$(printf '%s\n' "$pstree" | grep -v '{.*}' | grep -o -E '[(][0-9]+[)]' | tr -d '()')
+    all_pids=$(printf '%s\n' "$pstree" | sed -e 's/{.*}.*//' | grep -o -E '[(][0-9]+[)]' | tr -d '()')
+    if [ -z "$all_pids" ]
+    then
+        printf '%s: error: could not extract process identifiers\n' "$0" >&2
+        exit 1
+    fi
     ps -m -o pid,lwp,s,start,etime,time,pcpu,rsz,vsz,args $all_pids
     for pid in $all_pids
     do
