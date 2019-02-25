@@ -135,6 +135,14 @@ class Subprocess(subprocess.Popen):
 
 PIPE = subprocess.PIPE
 
+# DEVNULL
+# =======
+
+try:
+    DEVNULL = subprocess.DEVNULL
+except AttributeError:
+    DEVNULL = open(os.devnull, 'rw')
+
 # require()
 # =========
 
@@ -156,7 +164,7 @@ logger = logging.getLogger('ocrodjvu.ipc')
 
 __all__ = [
     'CalledProcessError', 'CalledProcessInterrupted',
-    'Subprocess', 'PIPE',
+    'Subprocess', 'PIPE', 'DEVNULL',
     'require',
 ]
 
