@@ -46,8 +46,9 @@ class Engine(common.Engine):
         for script_name in script_names:
             try:
                 ocropus = ipc.Subprocess(['ocroscript', script_name],
+                    stdin=ipc.DEVNULL,
                     stdout=ipc.PIPE,
-                    stderr=ipc.PIPE,
+                    stderr=ipc.DEVNULL,
                 )
             except OSError:
                 raise errors.EngineNotFound(self.name)
@@ -91,6 +92,7 @@ class Engine(common.Engine):
                 yield arg
             yield image.name
         ocropus = ipc.Subprocess(list(get_command_line()),
+            stdin=ipc.DEVNULL,
             stdout=ipc.PIPE,
             env=dict(tesslanguage=language),
         )
