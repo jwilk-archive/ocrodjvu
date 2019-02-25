@@ -59,7 +59,6 @@ class Engine(common.Engine):
             cuneiform = ipc.Subprocess([self.executable, '-l'],
                 stdin=ipc.DEVNULL,
                 stdout=ipc.PIPE,
-                stderr=ipc.PIPE,
             )
         except OSError:
             raise errors.UnknownLanguageList
