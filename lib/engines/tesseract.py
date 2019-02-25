@@ -49,19 +49,15 @@ _bbox_extras_template = '''\
 </script>
 '''
 
-def _is_stderr_boring(stderr):
-    if len(stderr) > 2:
-        return False
-    for line in stderr:
+def _filter_boring_stderr(stderr):
+    if stderr and stderr[0].startswith('Tesseract Open Source OCR Engine'):
         # Tesseract prints its own name on standard error
         # even if nothing went wrong.
+        del stderr[0]
+    if stderr and stderr[0] == 'Page 1':
         # We also don't want page numbers,
         # because we always pass just a single page to Tesseract.
-        if line.startswith(('Tesseract Open Source OCR Engine', 'Page ')):
-            continue
-        else:
-            return False
-    return True
+        del stderr[0]
 
 def _wait_for_worker(worker):
     stderr = worker.stderr.read().splitlines()
@@ -73,8 +69,7 @@ def _wait_for_worker(worker):
     except Exception:
         print_errors()
         raise
-    if _is_stderr_boring(stderr):
-        return
+    _filter_boring_stderr(stderr)
     print_errors()
 
 def fix_html(s):
