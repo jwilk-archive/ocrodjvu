@@ -133,7 +133,8 @@ class Engine(common.Engine):
     def get_filesystem_info(self):
         try:
             tesseract = ipc.Subprocess([self.executable, '', '', '-l', 'nonexistent'],
-                stdout=ipc.PIPE,
+                stdin=ipc.DEVNULL,
+                stdout=ipc.DEVNULL,
                 stderr=ipc.PIPE,
             )
         except OSError:
@@ -206,7 +207,8 @@ class Engine(common.Engine):
         with temporary.directory() as output_dir:
             worker = ipc.Subprocess(
                 [self.executable, image.name, os.path.join(output_dir, 'tmp'), '-l', language] + self.extra_args,
-                stdout=ipc.PIPE,
+                stdin=ipc.DEVNULL,
+                stdout=ipc.DEVNULL,
                 stderr=ipc.PIPE,
             )
             _wait_for_worker(worker)
@@ -238,7 +240,8 @@ class Engine(common.Engine):
                 commandline += ['makebox']
             worker = ipc.Subprocess(
                 commandline,
-                stdout=ipc.PIPE,
+                stdin=ipc.DEVNULL,
+                stdout=ipc.DEVNULL,
                 stderr=ipc.PIPE,
             )
             _wait_for_worker(worker)
@@ -256,6 +259,8 @@ class Engine(common.Engine):
                     del commandline[-2]
                     worker = ipc.Subprocess(
                         commandline,
+                        stdin=ipc.DEVNULL,
+                        stdout=ipc.DEVNULL,
                         stderr=ipc.PIPE,
                     )
                     _wait_for_worker(worker)
