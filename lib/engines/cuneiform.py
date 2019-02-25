@@ -57,6 +57,7 @@ class Engine(common.Engine):
     def _get_languages(self):
         try:
             cuneiform = ipc.Subprocess([self.executable, '-l'],
+                stdin=ipc.DEVNULL,
                 stdout=ipc.PIPE,
                 stderr=ipc.PIPE,
             )
@@ -153,10 +154,9 @@ class Engine(common.Engine):
                     '-f', 'hocr',
                     '-o', hocr_file_name
                 ] + self.extra_args + [image.name],
-                stdin=ipc.PIPE,
-                stdout=ipc.PIPE,
+                stdin=ipc.DEVNULL,
+                stdout=ipc.DEVNULL,
             )
-            worker.stdin.close()
             worker.wait()
             with open(hocr_file_name, 'r') as hocr_file:
                 return common.Output(
