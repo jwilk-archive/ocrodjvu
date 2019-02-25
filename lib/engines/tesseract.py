@@ -65,16 +65,17 @@ def _is_stderr_boring(stderr):
 
 def _wait_for_worker(worker):
     stderr = worker.stderr.readlines()
+    def print_errors():
+        for line in stderr:
+            sys.stderr.write('tesseract: {0}'.format(line))
     try:
         worker.wait()
     except Exception:
-        for line in stderr:
-            sys.stderr.write('tesseract: {0}'.format(line))
+        print_errors()
         raise
     if _is_stderr_boring(stderr):
         return
-    for line in stderr:
-        sys.stderr.write('tesseract: {0}'.format(line))
+    print_errors()
 
 def fix_html(s):
     '''
