@@ -118,7 +118,8 @@ class Engine(common.Engine):
         result = [self.default_language]
         try:
             ocrad = ipc.Subprocess([self.executable, '--charset=help'],
-                stdout=ipc.PIPE,
+                stdin=ipc.DEVNULL,
+                stdout=ipc.DEVNULL,
                 stderr=ipc.PIPE,
             )
         except OSError:
@@ -152,6 +153,7 @@ class Engine(common.Engine):
             charset = 'iso-8859-9'
         worker = ipc.Subprocess(
             [self.executable, '--charset', charset, '--format=utf8', '-x'] + self.extra_args + ['-', image.name],
+            stdin=ipc.DEVNULL,
             stdout=ipc.PIPE,
         )
         try:
