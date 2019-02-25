@@ -64,10 +64,10 @@ def _is_stderr_boring(stderr):
     return True
 
 def _wait_for_worker(worker):
-    stderr = worker.stderr.readlines()
+    stderr = worker.stderr.read().splitlines()
     def print_errors():
         for line in stderr:
-            sys.stderr.write('tesseract: {0}'.format(line))
+            print('tesseract: {0}'.format(line), file=sys.stderr)
     try:
         worker.wait()
     except Exception:
