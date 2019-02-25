@@ -123,7 +123,8 @@ class Engine(common.Engine):
     def _check_version(self):
         try:
             gocr = ipc.Subprocess([self.executable],
-                stdout=ipc.PIPE,
+                stdin=ipc.DEVNULL,
+                stdout=ipc.DEVNULL,
                 stderr=ipc.PIPE,
             )
         except OSError:
@@ -153,6 +154,7 @@ class Engine(common.Engine):
     def recognize(self, image, language, details=None, uax29=None):
         worker = ipc.Subprocess(
             [self.executable, '-i', image.name, '-f', 'XML'] + self.extra_args,
+            stdin=ipc.PIPE,
             stdout=ipc.PIPE,
         )
         try:
