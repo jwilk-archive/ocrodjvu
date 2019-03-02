@@ -1,4 +1,4 @@
-ocrodjvu (0.11.1) UNRELEASED; urgency=low
+ocrodjvu (0.12) UNRELEASED; urgency=low
 
   * Add “-j auto” to start as many OCR threads as the number of available
     CPUs.
@@ -10,7 +10,7 @@ ocrodjvu (0.11.1) UNRELEASED; urgency=low
     + Fix typo.
   * Improve error handling.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Wed, 13 Feb 2019 17:46:07 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 02 Mar 2019 22:42:46 +0100
 
 ocrodjvu (0.11) unstable; urgency=low
 

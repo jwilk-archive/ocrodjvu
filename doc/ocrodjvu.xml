@@ -2,7 +2,7 @@
 <!DOCTYPE refentry PUBLIC '-//OASIS//DTD DocBook XML V4.5//EN' 'http://www.docbook.org/xml/4.5/docbookx.dtd'
 [
     <!ENTITY p 'ocrodjvu'>
-    <!ENTITY version '0.11.1'>
+    <!ENTITY version '0.12'>
 ]>
 
 <refentry>
@@ -10,7 +10,7 @@
 <refentryinfo>
     <title>&p; manual</title>
     <productname>ocrodjvu</productname>
-    <date>2019-02-20</date>
+    <date>2019-03-02</date>
     <author>
         <firstname>Jakub</firstname> <surname>Wilk</surname>
         <email>jwilk@jwilk.net</email>
