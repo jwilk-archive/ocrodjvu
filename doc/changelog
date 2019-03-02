@@ -1,16 +1,24 @@
 ocrodjvu (0.12) UNRELEASED; urgency=low
 
+  * Remake the build system.
+    The new build system if based on makefiles.
   * Add “-j auto” to start as many OCR threads as the number of available
     CPUs.
   * Disallow -j without arguments. (It did the same thing as “-j auto”.)
   * Disallow “-j 0” or “-j N” for negative N.
+  * Redirect unused file descriptors to /dev/null when executing OCR engines.
+  * Tesseract: be more eager at filtering out uninteresting messages on
+    stderr.
+  * Improve documentation.
+    + Fix punctuation in the OCR engine list.
+    + Remove .txt extensions.
   * Improve help message:
     + Include the most important options in the “usage: …” part.
     + Update the description for -j.
     + Fix typo.
   * Improve error handling.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 02 Mar 2019 22:42:46 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 02 Mar 2019 22:46:53 +0100
 
 ocrodjvu (0.11) unstable; urgency=low
 
