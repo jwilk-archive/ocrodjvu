@@ -58,6 +58,14 @@ class test_word_break_iterator():
         assert_equal(t, s)
         assert_equal(s[-1], len(text))
 
+    def test_en_simple(self):
+        # Trigger reference-counting bug that was fixed in PyICU 1.0.1:
+        # https://github.com/ovalhub/pyicu/commit/515e076682e29d806aeb5f6b1016b799d03d92a9
+        icu = get_icu()
+        assert_not_equal(icu, None)
+        t = list(word_break_iterator('eggs', icu.Locale('en')))
+        assert_equal(t, [4])
+
     def test_en_empty(self):
         icu = get_icu()
         assert_not_equal(icu, None)
