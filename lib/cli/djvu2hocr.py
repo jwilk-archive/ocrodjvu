@@ -185,9 +185,7 @@ def break_chars(char_zone_list, options):
         i = j
 
 def break_plain_text(text, bbox, options):
-    icu_text = options.icu.UnicodeString(text)
-    break_iterator = options.icu.BreakIterator.createWordInstance(options.locale)
-    break_iterator.setText(icu_text)
+    break_iterator = unicode_support.word_break_iterator(text, options.locale)
     i = 0
     element = None
     for j in break_iterator:
