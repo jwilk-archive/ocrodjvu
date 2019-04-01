@@ -22,7 +22,7 @@ The following software is needed to run ocrodjvu:
 
 Additionally, some optional features require the following software:
 
-* PyICU_ ≥ 1.0 —
+* PyICU_ ≥ 1.0.1 —
   required for the ``--word-segmentation=uax29`` option
 
 * html5lib_ —
