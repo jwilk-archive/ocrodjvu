@@ -102,4 +102,20 @@ def test_nonascii_path():
     assert_equal(rc, 0)
     assert_equal(stdout.getvalue(), '')
 
+def test_bad_page_id():
+    remove_logging_handlers('ocrodjvu.')
+    here = os.path.dirname(__file__)
+    here = os.path.abspath(here)
+    path = os.path.join(here, '..', 'data', 'bad-page-id.djvu')
+    stdout = io.BytesIO()
+    stderr = io.BytesIO()
+    with temporary.directory() as tmpdir:
+        out_path = os.path.join(tmpdir, 'tmp.djvu')
+        with interim(sys, stdout=stdout, stderr=stderr):
+            with interim(ocrodjvu, system_encoding='ASCII'):
+                rc = try_run(ocrodjvu.main, ['', '--engine', '_dummy', '--save-bundled', out_path, path])
+    assert_equal(stderr.getvalue(), '')
+    assert_equal(rc, 0)
+    assert_equal(stdout.getvalue(), '')
+
 # vim:ts=4 sts=4 sw=4 et
