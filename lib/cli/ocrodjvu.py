@@ -542,7 +542,7 @@ class Context(djvu.decode.Context):
                 try:
                     file_id = page.file.id.encode(system_encoding)
                 except UnicodeError:
-                    pageno = page.file.n + 1
+                    pageno = page.n + 1
                     logger.warning('warning: cannot convert page {n} identifier to locale encoding'.format(n=pageno))
                     sed_file.write('select {n}\n'.format(n=pageno))
                 else:
