@@ -15,6 +15,7 @@
 
 import io
 import os
+import shutil
 import sys
 
 from lib import errors
@@ -95,7 +96,7 @@ def test_nonascii_path():
     stderr = io.BytesIO()
     with temporary.directory() as tmpdir:
         tmp_path = os.path.join(tmpdir, 'тмп.djvu')
-        os.symlink(path, tmp_path)
+        shutil.copy(path, tmp_path)
         with interim(sys, stdout=stdout, stderr=stderr):
             rc = try_run(ocrodjvu.main, ['', '--engine', '_dummy', '--in-place', tmp_path])
     assert_equal(stderr.getvalue(), '')
