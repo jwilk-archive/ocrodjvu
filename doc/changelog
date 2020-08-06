@@ -18,7 +18,7 @@ ocrodjvu (0.12) UNRELEASED; urgency=low
     + Fix typo.
   * Improve error handling.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 02 Mar 2019 22:46:53 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 06 Aug 2020 18:59:47 +0200
 
 ocrodjvu (0.11) unstable; urgency=low
 
