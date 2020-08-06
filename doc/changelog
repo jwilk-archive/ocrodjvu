@@ -1,5 +1,6 @@
 ocrodjvu (0.12) UNRELEASED; urgency=low
 
+  [ Jakub Wilk ]
   * Remake the build system.
     The new build system if based on makefiles.
   * Add “-j auto” to start as many OCR threads as the number of available
@@ -17,8 +18,13 @@ ocrodjvu (0.12) UNRELEASED; urgency=low
     + Update the description for -j.
     + Fix typo.
   * Improve error handling.
+  * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 06 Aug 2020 18:59:47 +0200
+  [ Pieter-Tjerk de Boer ]
+  * Fix counting pages when file identifier cannot be converted to locale
+    encoding.
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 06 Aug 2020 19:01:33 +0200
 
 ocrodjvu (0.11) unstable; urgency=low
 
