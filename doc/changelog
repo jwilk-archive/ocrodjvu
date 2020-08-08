@@ -1,4 +1,4 @@
-ocrodjvu (0.12) UNRELEASED; urgency=low
+ocrodjvu (0.12) unstable; urgency=low
 
   [ Jakub Wilk ]
   * Remake the build system.
@@ -24,7 +24,7 @@ ocrodjvu (0.12) UNRELEASED; urgency=low
   * Fix counting pages when file identifier cannot be converted to locale
     encoding.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 06 Aug 2020 19:01:33 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 08 Aug 2020 17:26:59 +0200
 
 ocrodjvu (0.11) unstable; urgency=low
 
