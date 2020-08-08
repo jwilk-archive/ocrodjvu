@@ -154,7 +154,7 @@ class Engine(common.Engine):
     def recognize(self, image, language, details=None, uax29=None):
         worker = ipc.Subprocess(
             [self.executable, '-i', image.name, '-f', 'XML'] + self.extra_args,
-            stdin=ipc.PIPE,
+            stdin=ipc.DEVNULL,
             stdout=ipc.PIPE,
         )
         try:
