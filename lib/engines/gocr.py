@@ -55,7 +55,7 @@ def scan(stream, settings):
     word_break_iterator = functools.partial(unicode_support.word_break_iterator, locale=settings.uax29)
     stack = [[], [], []]
     for _, element in stream:
-        if element.tag in ('barcode', 'img'):
+        if element.tag in {'barcode', 'img'}:
             continue
         if element.tag == 'page':
             if len(stack) != 1:
@@ -88,7 +88,7 @@ def scan(stream, settings):
             children = text_zones.group_words(children, settings.details, word_break_iterator)
             zone = text_zones.Zone(const.TEXT_ZONE_LINE, bbox, children)
             stack[-1] += [zone]
-        elif element.tag in ('box', 'space'):
+        elif element.tag in {'box', 'space'}:
             if len(stack) > 3:
                 raise errors.MalformedOcrOutput('<{tag}> at unexpected depth'.format(tag=element.tag))
             while len(stack) < 3:

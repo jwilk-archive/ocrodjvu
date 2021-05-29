@@ -56,7 +56,7 @@ _special_chars_replace = re.compile(ur'''[\x00-\x1F'"\x5C\x7F-\x9F]''').sub
 
 def _special_chars_escape(m):
     ch = m.group(0)
-    if ch in ('"', "'"):
+    if ch in {'"', "'"}:
         return '\\' + ch
     else:
         return repr(ch)[2:-1]
