@@ -1,6 +1,6 @@
 The following software is needed to run ocrodjvu:
 
-* Python 2.6 or 2.7
+* Python 2.7
 
 * an OCR engine:
 
@@ -13,8 +13,6 @@ The following software is needed to run ocrodjvu:
 * DjVuLibre_ ≥ 3.5.21
 
 * python-djvulibre_
-
-* argparse_ (only for Python 2.6)
 
 * subprocess32_
 
@@ -50,8 +48,6 @@ source:
    http://djvu.sourceforge.net/
 .. _python-djvulibre:
    http://jwilk.net/software/python-djvulibre
-.. _argparse:
-   https://pypi.org/project/argparse/
 .. _lxml:
    https://lxml.de/
 .. _subprocess32:
