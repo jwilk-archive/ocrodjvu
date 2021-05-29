@@ -2,10 +2,9 @@ dist: xenial
 language: python
 jobs:
   include:
-  - python: "2.6"
+  - python: "2.7"
     env: CYTHON=0.22.1 PYDJVU=0.3.9 LXML=2.0 PYICU=1.4 HTML5LIB=0.95 PILLOW=1.0
     dist: trusty
-  - python: "2.7"
   - python: "2.7"
     env: SUBPROCESS32=3.2.7
   - python: "2.7"
@@ -34,8 +33,6 @@ before_install:
 - pyicu="pyicu${PYICU:+==$PYICU}"
 - html5lib="html5lib${HTML5LIB:+==$HTML5LIB}"
 - pillow="pillow${PILLOW:+==$PILLOW}"
-- pyflakes=pyflakes
-- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pyflakes='pyflakes<2'; fi
 install:
 - pip install --verbose $cython
 - pip install --verbose $pydjvu
@@ -46,7 +43,7 @@ install:
 - pip install $html5lib
 - pip install --verbose $pillow
 - pip install pydiatra
-- pip install $pyflakes
+- pip install pyflakes
 - pip install docutils
 script:
 - make test
