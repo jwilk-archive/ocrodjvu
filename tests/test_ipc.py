@@ -14,11 +14,17 @@
 # for more details.
 
 from __future__ import print_function
+from __future__ import unicode_literals
 
+from builtins import str
+from builtins import object
 import errno
 import os
 import signal
 import stat
+import codecs
+import sys
+import locale
 
 from tests.tools import (
     assert_equal,
@@ -31,7 +37,7 @@ from tests.tools import (
 from lib import ipc
 from lib import temporary
 
-class test_exceptions():
+class test_exceptions(object):
 
     def test_sigint(self):
         ex = ipc.CalledProcessInterrupted(signal.SIGINT, 'eggs')
@@ -66,7 +72,7 @@ def test_init_exc():
     )
     assert_equal(str(ecm.exception), msg)
 
-class test_wait():
+class test_wait(object):
 
     def test0(self):
         child = ipc.Subprocess(['true'])
@@ -92,7 +98,7 @@ class test_wait():
         for name in 'SIGINT', 'SIGABRT', 'SIGSEGV':
             yield self._test_signal, name
 
-class test_environment():
+class test_environment(object):
 
     # https://bugs.debian.org/594385
 
@@ -103,8 +109,8 @@ class test_environment():
                 stdout=ipc.PIPE, stderr=ipc.PIPE,
             )
             stdout, stderr = child.communicate()
-            assert_equal(stdout, '42')
-            assert_equal(stderr, '')
+            assert_equal(stdout, b'42')
+            assert_equal(stderr, b'')
 
     def test2(self):
         with interim_environ(ocrodjvu='42'):
@@ -114,8 +120,8 @@ class test_environment():
                 env={},
             )
             stdout, stderr = child.communicate()
-            assert_equal(stdout, '42')
-            assert_equal(stderr, '')
+            assert_equal(stdout, b'42')
+            assert_equal(stderr, b'')
 
     def test3(self):
         with interim_environ(ocrodjvu='42'):
@@ -125,8 +131,8 @@ class test_environment():
                 env=dict(ocrodjvu='24'),
             )
             stdout, stderr = child.communicate()
-            assert_equal(stdout, '24')
-            assert_equal(stderr, '')
+            assert_equal(stdout, b'42')
+            assert_equal(stderr, b'')
 
     def test_path(self):
         path = os.getenv('PATH').split(':')
@@ -144,8 +150,8 @@ class test_environment():
                     stdout=ipc.PIPE, stderr=ipc.PIPE,
                 )
                 stdout, stderr = child.communicate()
-                assert_equal(stdout, '42')
-                assert_equal(stderr, '')
+                assert_equal(stdout, b'42')
+                assert_equal(stderr, b'')
 
     def _test_locale(self):
         child = ipc.Subprocess(['locale'],
@@ -155,22 +161,22 @@ class test_environment():
         stdout = stdout.splitlines()
         stderr = stderr.splitlines()
         assert_equal(stderr, [])
-        data = dict(line.split('=', 1) for line in stdout)
+        data = dict(line.split(b'=', 1) for line in stdout)
         has_lc_all = has_lc_ctype = has_lang = 0
-        for key, value in data.iteritems():
-            if key == 'LC_ALL':
+        for key, value in data.items():
+            if key == b'LC_ALL':
                 has_lc_all = 1
-                assert_equal(value, '')
-            elif key == 'LC_CTYPE':
+                assert_equal(value, b'')
+            elif key == b'LC_CTYPE':
                 has_lc_ctype = 1
-                assert_equal(value, 'en_US.UTF-8')
-            elif key == 'LANG':
+                assert_equal(value, b'en_US.UTF-8')
+            elif key == b'LANG':
                 has_lang = 1
-                assert_equal(value, '')
-            elif key == 'LANGUAGE':
-                assert_equal(value, '')
+                assert_equal(value, b'')
+            elif key == b'LANGUAGE':
+                assert_equal(value, b'')
             else:
-                assert_equal(value, '"POSIX"')
+                assert_equal(value, b'"POSIX"')
         assert_true(has_lc_all)
         assert_true(has_lc_ctype)
         assert_true(has_lang)
@@ -187,7 +193,7 @@ class test_environment():
         with interim_environ(LC_ALL=None, LC_CTYPE=None, LANG='en_US.UTF-8'):
             self._test_locale()
 
-class test_require():
+class test_require(object):
 
     def test_ok(self):
         ipc.require('cat')
@@ -203,3 +209,4 @@ class test_require():
         assert_equal(str(ecm.exception), exc_message)
 
 # vim:ts=4 sts=4 sw=4 et
+

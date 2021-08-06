@@ -14,7 +14,13 @@
 # for more details.
 
 from __future__ import print_function
+from __future__ import unicode_literals
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+from builtins import object
 import argparse
 import contextlib
 import inspect
@@ -258,7 +264,7 @@ class ArgumentParser(cli.ArgumentParser):
         self.add_argument('--list-engines', action=self.list_engines, nargs=0, help='print list of available OCR engines')
         self.add_argument('-l', '--language', dest='language', help='set recognition language')
         self.add_argument('--list-languages', action=self.list_languages, nargs=0, help='print list of available languages')
-        self.add_argument('--render', dest='render_layers', choices=self._render_map.keys(), action='store', default='mask', help='image layers to render')
+        self.add_argument('--render', dest='render_layers', choices=list(self._render_map.keys()), action='store', default='mask', help='image layers to render')
         def pages(x):
             return utils.parse_page_numbers(x)
         self.add_argument('-p', '--pages', dest='pages', action='store', default=None, type=pages, help='pages to process')
@@ -400,9 +406,9 @@ class Context(djvu.decode.Context):
         bpp = 24 if self._options.render_layers != djvu.decode.RENDER_MASK_ONLY else 1
         self._image_format = self._options.engine.image_format(bpp)
 
-    def _temp_file(self, name, auto_remove=True):
+    def _temp_file(self, name, mode='w+', encoding=locale.getpreferredencoding(),auto_remove=True):
         path = os.path.join(self._temp_dir, name)
-        file = open(path, 'w+b')
+        file = open(path,mode=mode,encoding=encoding)
         if not self._debug and auto_remove:
             file = temporary.wrapper(file, file.name)
         return file
@@ -417,7 +423,7 @@ class Context(djvu.decode.Context):
         file = self._temp_file('{n:06}.{ext}'.format(
             n=nth,
             ext=output_format.extension
-        ))
+        ),mode='wb',encoding=None)
         try:
             output_format.write_image(page_job, self._options.render_layers, file)
             file.flush()
@@ -510,7 +516,7 @@ class Context(djvu.decode.Context):
 
     def _process(self, path, pages=None):
         self._engine = self._options.engine
-        logger.info('Processing {path}:'.format(path=utils.smart_repr(path, system_encoding)))
+        logger.info('Processing {path}:'.format(path=path))
         document = self.new_document(djvu.decode.FileURI(path))
         document.decoding_job.wait()
         if pages is None:
@@ -524,7 +530,7 @@ class Context(djvu.decode.Context):
         condition = threading.Condition()
         threads = [
             threading.Thread(target=self.page_thread, args=(pages, results, condition))
-            for i in xrange(njobs)
+            for i in range(njobs)
         ]
         def stop_threads():
             with condition:
@@ -540,7 +546,7 @@ class Context(djvu.decode.Context):
                 sed_file.write('remove-txt\n')
             for page in pages:
                 try:
-                    file_id = page.file.id.encode(system_encoding)
+                    file_id = page.file.id
                 except UnicodeError:
                     pageno = page.n + 1
                     logger.warning('warning: cannot convert page {n} identifier to locale encoding'.format(n=pageno))

@@ -13,6 +13,8 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
+from builtins import map
 import argparse
 import sys
 
@@ -36,7 +38,7 @@ class ArgumentParser(cli.ArgumentParser):
         self.add_argument('--version', action=version.VersionAction)
         self.add_argument('--rotation', dest='rotation', action='store', type=int, default=0, help='page rotation (in degrees)')
         def size(s):
-            return map(int, s.split('x', 1))
+            return list(map(int, s.split('x', 1)))
         self.add_argument('--page-size', metavar='WxH', dest='page_size', action='store', type=size, default=None, help='page size (in pixels)')
         group = self.add_argument_group(title='word segmentation options')
         group.add_argument('-t', '--details', dest='details', choices=('lines', 'words', 'chars'), action='store', default='words', help='amount of text details to extract')

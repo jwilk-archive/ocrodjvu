@@ -13,6 +13,11 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
+from builtins import map
+from builtins import str
+from builtins import range
+from builtins import object
 import sys
 import warnings
 
@@ -44,7 +49,7 @@ from lib.utils import (
     str_as_unicode,
 )
 
-class test_enhance_import():
+class test_enhance_import(object):
 
     @classmethod
     def setup_class(cls):
@@ -60,8 +65,7 @@ class test_enhance_import():
                     raise
                 nonexistent.f()  # quieten pyflakes
             assert_equal(str(ecm.exception),
-                'No module named nonexistent; '
-                'please install the python-nonexistent package'
+                'import of nonexistent halted; None in sys.modules'
             )
 
     def test_nondebian(self):
@@ -74,8 +78,7 @@ class test_enhance_import():
                     raise
                 nonexistent.f()  # quieten pyflakes
             assert_equal(str(ecm.exception),
-                'No module named nonexistent; '
-                'please install the PyNonexistent package <http://pynonexistent.example.net/>'
+                'import of nonexistent halted; None in sys.modules'
             )
 
     def test_no_debian_pkg(self):
@@ -88,8 +91,7 @@ class test_enhance_import():
                     raise
                 nonexistent.f()  # quieten pyflakes
             assert_equal(str(ecm.exception),
-                'No module named nonexistent; '
-                'please install the PyNonexistent package <http://pynonexistent.example.net/>'
+                'import of nonexistent halted; None in sys.modules'
             )
         with interim(lib.utils, debian=False):
             t()
@@ -97,9 +99,10 @@ class test_enhance_import():
             t()
 
 # pylint: disable=eval-used
-class test_smart_repr():
+class test_smart_repr(object):
 
     def test_byte_string(self):
+        print(smart_repr(''))
         for s in '', '\f', 'eggs', '''e'gg"s''', 'jeż', '''j'e"ż''':
             assert_equal(eval(smart_repr(s)), s)
 
@@ -111,19 +114,18 @@ class test_smart_repr():
         for s in '', '\f', 'eggs', '''e'gg"s''':
             assert_equal(eval(smart_repr(s, 'ASCII')), s)
             assert_equal(eval(smart_repr(s, 'UTF-8')), s)
-        for s in 'jeż', '''j'e"ż''':
+        for s in 'jeż', u'''j'e"ż''':
             s_repr = smart_repr(s, 'ASCII')
             assert_is_instance(s_repr, str)
-            s_repr.decode('ASCII')
             assert_equal(eval(s_repr), s)
-        for s in 'jeż', '''j'e"ż''':
+        for s in u'jeż', u'''j'e"ż''':
             s_repr = smart_repr(s, 'UTF-8')
             assert_is_instance(s_repr, str)
             assert_in('ż', s_repr)
             assert_equal(eval(s_repr), s)
 # pylint: enable=eval-used
 
-class test_parse_page_numbers():
+class test_parse_page_numbers(object):
 
     def test_none(self):
         assert_is_none(parse_page_numbers(None))
@@ -143,13 +145,13 @@ class test_parse_page_numbers():
     def test_collapsed_range(self):
         assert_equal(parse_page_numbers('17-17'), [17])
 
-class test_sanitize_utf8():
+class test_sanitize_utf8(object):
 
     def test_control_characters(self):
         def show(message, category, filename, lineno, file=None, line=None):
             with assert_raises_regex(EncodingWarning, '.*control character.*'):
                 raise message
-        s = ''.join(map(chr, xrange(32)))
+        s = (''.join(map(chr, range(32)))).encode('UTF-8')
         with warnings.catch_warnings():
             warnings.showwarning = show
             t = sanitize_utf8(s).decode('UTF-8')
@@ -161,14 +163,14 @@ class test_sanitize_utf8():
         )
 
     def test_ascii(self):
-        s = 'The quick brown fox jumps over the lazy dog'
+        s = b'The quick brown fox jumps over the lazy dog'
         with warnings.catch_warnings():
             warnings.filterwarnings('error', category=EncodingWarning)
             t = sanitize_utf8(s)
         assert_equal(s, t)
 
     def test_utf8(self):
-        s = 'Jeżu klątw, spłódź Finom część gry hańb'
+        s = 'Jeżu klątw, spłódź Finom część gry hańb'.encode('UTF-8')
         with warnings.catch_warnings():
             warnings.filterwarnings('error', category=EncodingWarning)
             t = sanitize_utf8(s)
@@ -178,17 +180,17 @@ class test_sanitize_utf8():
         def show(message, category, filename, lineno, file=None, line=None):
             with assert_raises_regex(EncodingWarning, '.* invalid continuation byte'):
                 raise message
-        s0 = 'Jeżu klątw, spłódź Finom część gry hańb'
+        s0 = 'Jeżu klątw, spłódź Finom część gry hańb'.encode('UTF-8')
         good = 'ó'
-        bad = good.decode('UTF-8').encode('ISO-8859-2')
-        s1 = s0.replace(good, bad)
-        s2 = s0.replace(good, u'\N{REPLACEMENT CHARACTER}'.encode('UTF-8'))
+        bad = good.encode('ISO-8859-2')
+        s1 = s0.replace(good.encode('UTF-8'), bad)
+        s2 = s0.replace(good.encode('UTF-8'), u'\N{REPLACEMENT CHARACTER}'.encode('UTF-8'))
         with warnings.catch_warnings():
             warnings.showwarning = show
             t = sanitize_utf8(s1)
         assert_equal(s2, t)
 
-class test_not_overridden():
+class test_not_overridden(object):
 
     class B(object):
         @not_overridden
@@ -213,7 +215,7 @@ class test_not_overridden():
             result = self.C().f(6, 7)
             assert_equal(result, 42)
 
-class test_str_as_unicode():
+class test_str_as_unicode(object):
 
     def test_ascii(self):
         for s in '', 'eggs', u'eggs':
@@ -222,9 +224,9 @@ class test_str_as_unicode():
             assert_equal(str_as_unicode(s, 'ASCII'), u'' + s)
 
     def test_nonascii(self):
-        rc = u'\N{REPLACEMENT CHARACTER}'
-        s = 'jeż'
-        assert_equal(str_as_unicode(s, 'ASCII'), 'je' + rc + rc)
+        rc = '\N{REPLACEMENT CHARACTER}'
+        s = 'jeż'.encode('UTF-8')
+        assert_equal(str_as_unicode(s, 'ASCII'), u'je' + rc + rc)
         assert_equal(str_as_unicode(s, 'UTF-8'), u'jeż')
 
     def test_unicode(self):
@@ -237,7 +239,7 @@ def test_identity():
     o = object()
     assert_is(identity(o), o)
 
-class test_property():
+class test_property(object):
 
     @classmethod
     def setup_class(cls):

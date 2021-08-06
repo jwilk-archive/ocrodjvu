@@ -13,6 +13,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
 import io
 import os
 import shutil
@@ -35,8 +36,8 @@ from tests.tools import (
 engines = None
 
 def test_help():
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--help'])
     assert_equal(stderr.getvalue(), '')
@@ -45,8 +46,8 @@ def test_help():
 
 def test_version():
     # https://bugs.debian.org/573496
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--version'])
     assert_equal(rc, 0)
@@ -54,8 +55,8 @@ def test_version():
     assert_not_equal(stdout.getvalue(), '')
 
 def test_bad_options():
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, [''])
     assert_equal(rc, errors.EXIT_FATAL)
@@ -64,8 +65,8 @@ def test_bad_options():
 
 def test_list_engines():
     global engines
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--list-engines'])
     assert_equal(stderr.getvalue(), '')
@@ -73,8 +74,8 @@ def test_list_engines():
     engines = stdout.getvalue().splitlines()
 
 def _test_list_languages(engine):
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(ocrodjvu.main, ['', '--engine', engine, '--list-languages'])
     assert_equal(stderr.getvalue(), '')
@@ -92,8 +93,8 @@ def test_nonascii_path():
     here = os.path.dirname(__file__)
     here = os.path.abspath(here)
     path = os.path.join(here, '..', 'data', 'empty.djvu')
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with temporary.directory() as tmpdir:
         tmp_path = os.path.join(tmpdir, 'тмп.djvu')
         shutil.copy(path, tmp_path)
@@ -108,8 +109,8 @@ def test_bad_page_id():
     here = os.path.dirname(__file__)
     here = os.path.abspath(here)
     path = os.path.join(here, '..', 'data', 'bad-page-id.djvu')
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with temporary.directory() as tmpdir:
         out_path = os.path.join(tmpdir, 'tmp.djvu')
         with interim(sys, stdout=stdout, stderr=stderr):

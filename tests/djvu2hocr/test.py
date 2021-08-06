@@ -13,11 +13,13 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
 import io
 import os
 import shlex
 import shutil
 import sys
+import codecs
 
 from lib import ipc
 from lib import errors
@@ -39,8 +41,8 @@ here = os.path.dirname(__file__)
 here = os.path.relpath(here)
 
 def test_help():
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(djvu2hocr.main, ['', '--help'])
     assert_equal(stderr.getvalue(), '')
@@ -48,8 +50,8 @@ def test_help():
     assert_not_equal(stdout.getvalue(), '')
 
 def test_bad_options():
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(djvu2hocr.main, [''])
     assert_equal(rc, errors.EXIT_FATAL)
@@ -58,8 +60,8 @@ def test_bad_options():
 
 def test_version():
     # https://bugs.debian.org/573496
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(djvu2hocr.main, ['', '--version'])
     assert_equal(stderr.getvalue(), '')
@@ -70,7 +72,7 @@ def _test_from_file(base_filename, index):
     base_filename = os.path.join(here, base_filename)
     test_filename = '{base}.test{i}'.format(base=base_filename, i=index)
     djvused_filename = base_filename + '.djvused'
-    with open(test_filename, 'rb') as file:
+    with open(test_filename, 'r') as file:
         commandline = file.readline()
         expected_output = file.read()
     args = shlex.split(commandline)
@@ -83,7 +85,7 @@ def _test_from_file(base_filename, index):
             djvu_filename)
         ipc.Subprocess(['djvused', '-f', djvused_filename, '-s', djvu_filename]).wait()
         xml_filename = os.path.join(tmpdir, 'output.html')
-        with open(xml_filename, 'w+b') as xml_file:
+        with open(xml_filename, 'w+') as xml_file:
             xmllint = ipc.Subprocess(['xmllint', '--format', '-'], stdin=ipc.PIPE, stdout=xml_file)
             try:
                 with open(os.devnull, 'w') as null:
@@ -116,7 +118,7 @@ def test_nonascii_path():
     here = os.path.abspath(here)
     path = os.path.join(here, '..', 'data', 'empty.djvu')
     stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stderr = io.StringIO()
     with temporary.directory() as tmpdir:
         tmp_path = os.path.join(tmpdir, 'тмп.djvu')
         os.symlink(path, tmp_path)
