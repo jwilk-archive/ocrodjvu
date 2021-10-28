@@ -254,14 +254,14 @@ class test_property():
 
     def test_default_filter(self):
         dummy = self.Dummy()
-        assert_equal(dummy.eggs, None)
+        assert_is_none(dummy.eggs)
         assert_equal(dummy.ham, 42)
         dummy.eggs = -4
         dummy.ham = -2
         assert_equal(dummy.eggs, -4)
         assert_equal(dummy.ham, -2)
         dummy = self.Dummy()
-        assert_equal(dummy.eggs, None)
+        assert_is_none(dummy.eggs)
         assert_equal(dummy.ham, 42)
 
 def test_get_cpu_count():
