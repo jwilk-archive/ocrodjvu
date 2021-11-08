@@ -13,6 +13,8 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
+from builtins import object
 import os
 import sys
 
@@ -31,7 +33,7 @@ from lib.engines.cuneiform import (
 here = os.path.dirname(__file__)
 here = os.path.relpath(here)
 
-class test_cuneiform():
+class test_cuneiform(object):
 
     existing_languages = [
         ('eng', 'eng'),

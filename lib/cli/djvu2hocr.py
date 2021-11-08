@@ -14,9 +14,16 @@
 # for more details.
 
 from __future__ import print_function
+from __future__ import division
+from __future__ import unicode_literals
 
+from builtins import str
+from builtins import map
+from builtins import range
+from past.utils import old_div
+from builtins import object
 import argparse
-import cgi
+import html
 import locale
 import os
 import re
@@ -99,7 +106,7 @@ class Zone(object):
             raise TypeError('list of {0} (!= 6) elements'.format(len(self._sexpr)))  # no coverage
         if not isinstance(self._sexpr[5], sexpr.StringExpression):
             raise TypeError('last element is not a string')  # no coverage
-        return unicode(self._sexpr[5].value, 'UTF-8', 'replace')
+        return self._sexpr[5].value
 
     @property
     def children(self):
@@ -153,9 +160,9 @@ def break_chars(char_zone_list, options):
             continue
         for i, char in enumerate(char_text):
             subbox = text_zones.BBox(
-                int(bbox.x0 + (bbox.x1 - bbox.x0) * 1.0 * i / len(char_text) + 0.5),
+                int(bbox.x0 + old_div((bbox.x1 - bbox.x0) * 1.0 * i, len(char_text)) + 0.5),
                 bbox.y0,
-                int(bbox.x0 + (bbox.x1 - bbox.x0) * 1.0 * (i + 1) / len(char_text) + 0.5),
+                int(bbox.x0 + old_div((bbox.x1 - bbox.x0) * 1.0 * (i + 1), len(char_text)) + 0.5),
                 bbox.y1,
             )
             bbox_list += [subbox]
@@ -172,7 +179,7 @@ def break_chars(char_zone_list, options):
             i = j
             continue
         bbox = text_zones.BBox()
-        for k in xrange(i, j):
+        for k in range(i, j):
             bbox.update(bbox_list[k])
         element = etree.Element('span')
         element.set('class', 'ocrx_word')
@@ -196,9 +203,9 @@ def break_plain_text(text, bbox, options):
             i = j
             continue
         subbox = text_zones.BBox(
-            int(bbox.x0 + (bbox.x1 - bbox.x0) * 1.0 * i / len(text) + 0.5),
+            int(bbox.x0 + old_div((bbox.x1 - bbox.x0) * 1.0 * i, len(text)) + 0.5),
             bbox.y0,
-            int(bbox.x0 + (bbox.x1 - bbox.x0) * 1.0 * j / len(text) + 0.5),
+            int(bbox.x0 + old_div((bbox.x1 - bbox.x0) * 1.0 * j, len(text)) + 0.5),
             bbox.y1,
         )
         element = etree.Element('span')
@@ -244,7 +251,7 @@ def process_zone(parent, zone, last, options):
         if child is not None and zone_type == const.TEXT_ZONE_WORD and not last:
             child.tail = ' '
         self = None
-    elif isinstance(child_zone, unicode):
+    elif isinstance(child_zone, str):
         text = child_zone
         if zone_type >= const.TEXT_ZONE_WORD and options.icu is not None and parent is not None:
             # Do word segmentation by hand.
@@ -267,7 +274,7 @@ def process_zone(parent, zone, last, options):
 def process_page(page_text, options):
     result = process_zone(None, page_text, last=True, options=options)
     tree = etree.ElementTree(result)
-    tree.write(sys.stdout, encoding='UTF-8')
+    tree.write(sys.stdout)
 
 hocr_header_template = '''\
 <?xml version="1.0" encoding="UTF-8"?>
@@ -290,9 +297,9 @@ hocr_footer = '''
 </html>
 '''
 
-def main(argv=sys.argv):
+def main(argv=[os.fsencode(arg) for arg in sys.argv]):
     options = ArgumentParser().parse_args(argv[1:])
-    logger.info('Converting {path}:'.format(path=utils.smart_repr(options.path, system_encoding)))
+    logger.info('Converting {path}:'.format(path=options.path))
     if options.pages is None:
         djvused = ipc.Subprocess(
             ['djvused', '-e', 'n', os.path.abspath(options.path)],
@@ -302,9 +309,9 @@ def main(argv=sys.argv):
             n_pages = int(djvused.stdout.readline())
         finally:
             djvused.wait()
-        options.pages = xrange(1, n_pages + 1)
+        options.pages = range(1, n_pages + 1)
     page_iterator = iter(options.pages)
-    sed_script = temporary.file(suffix='.djvused')
+    sed_script = temporary.file(suffix='.djvused', mode='w+',encoding='UTF-8')
     for n in options.pages:
         print('select {0}; size; print-txt'.format(n), file=sed_script)
     sed_script.flush()
@@ -316,17 +323,17 @@ def main(argv=sys.argv):
     hocr_header = hocr_header_template.format(
         ocr_system=ocr_system,
         ocr_capabilities=' '.join(hocr.djvu2hocr_capabilities),
-        title=cgi.escape(options.title),
-        css=cgi.escape(options.css),
+        title=html.escape(options.title),
+        css=html.escape(options.css),
     )
     if not options.css:
         hocr_header = re.sub(hocr_header_style_re, '', hocr_header, count=1)
-    sys.stdout.write(hocr_header)
+    sys.stdout.write(hocr_header.encode('UTF-8'))
     for n in page_iterator:
         try:
             page_size = [
                 int(str(sexpr.Expression.from_stream(djvused.stdout).value).split('=')[1])
-                for i in xrange(2)
+                for i in range(2)
             ]
             options.page_bbox = text_zones.BBox(0, 0, page_size[0], page_size[1])
             page_text = sexpr.Expression.from_stream(djvused.stdout)
@@ -335,7 +342,7 @@ def main(argv=sys.argv):
         logger.info('- Page #{n}'.format(n=n))
         page_zone = Zone(page_text, page_size[1])
         process_page(page_zone, options)
-    sys.stdout.write(hocr_footer)
+    sys.stdout.write(hocr_footer.encode('UTF-8'))
     djvused.wait()
 
 # vim:ts=4 sts=4 sw=4 et

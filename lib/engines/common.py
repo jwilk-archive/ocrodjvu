@@ -13,6 +13,9 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
+from builtins import str
+from builtins import object
 from .. import utils
 from .. import image_io
 
@@ -33,7 +36,7 @@ class Engine(object):
             raise TypeError('{tp}.name must be a string'.format(tp=tpname))  # no coverage
         if not issubclass(self.image_format, image_io.ImageFormat):
             raise TypeError('{tp}.image_format must be an ImageFormat subclass'.format(tp=tpname))  # no coverage
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             try:
                 prop = getattr(type(self), key)
                 if not isinstance(prop, utils.property):
@@ -63,6 +66,6 @@ class Output(object):
             file.write(str(self))
 
     def as_stringio(self):
-        return io.BytesIO(str(self))
+        return io.StringIO(str(self))
 
 # vim:ts=4 sts=4 sw=4 et

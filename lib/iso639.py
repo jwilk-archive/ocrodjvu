@@ -16,6 +16,7 @@
 '''
 ISO 639-2 support
 '''
+from __future__ import unicode_literals
 
 # Reference:
 # https://www.loc.gov/standards/iso639-2/php/code_list.php

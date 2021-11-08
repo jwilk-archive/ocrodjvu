@@ -13,6 +13,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
 import distutils.spawn
 import io
 import os
@@ -39,8 +40,8 @@ def _test_ocr(engine, layers):
     here = os.path.dirname(__file__)
     here = os.path.abspath(here)
     path = os.path.join(here, '..', 'data', 'alice.djvu')
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with temporary.directory() as tmpdir:
         tmp_path = os.path.join(tmpdir, 'tmp.djvu')
         with interim(sys, stdout=stdout, stderr=stderr):

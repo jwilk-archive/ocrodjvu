@@ -14,7 +14,10 @@
 # for more details.
 
 from __future__ import division
+from __future__ import unicode_literals
 
+from builtins import map
+from builtins import object
 import functools
 import re
 import shlex

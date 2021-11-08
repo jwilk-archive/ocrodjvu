@@ -13,6 +13,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
 import contextlib
 import io
 import os
@@ -38,8 +39,8 @@ here = os.path.dirname(__file__)
 here = os.path.relpath(here)
 
 def test_help():
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(hocr2djvused.main, ['', '--help'])
     assert_equal(stderr.getvalue(), '')
@@ -48,8 +49,8 @@ def test_help():
 
 def test_version():
     # https://bugs.debian.org/573496
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(hocr2djvused.main, ['', '--version'])
     assert_equal(stderr.getvalue(), '')
@@ -57,8 +58,8 @@ def test_version():
     assert_not_equal(stdout.getvalue(), '')
 
 def test_bad_options():
-    stdout = io.BytesIO()
-    stderr = io.BytesIO()
+    stdout = io.StringIO()
+    stderr = io.StringIO()
     with interim(sys, stdout=stdout, stderr=stderr):
         rc = try_run(hocr2djvused.main, ['', '--bad-option'])
     assert_equal(rc, errors.EXIT_FATAL)
@@ -76,13 +77,13 @@ def _test_from_file(base_filename, index, extra_args):
     base_filename = os.path.join(here, base_filename)
     test_filename = '{base}.test{i}'.format(base=base_filename, i=index)
     html_filename = '{base}.html'.format(base=base_filename)
-    with open(test_filename, 'rb') as file:
+    with open(test_filename, 'r') as file:
         commandline = file.readline()
         expected_output = file.read()
     args = shlex.split(commandline) + shlex.split(extra_args)
     assert_equal(args[0], '#')
-    with contextlib.closing(io.BytesIO()) as output_file:
-        with open(html_filename, 'rb') as html_file:
+    with contextlib.closing(io.StringIO()) as output_file:
+        with open(html_filename, 'r') as html_file:
             with interim(sys, stdin=html_file, stdout=output_file):
                 rc = try_run(hocr2djvused.main, args)
         assert_equal(rc, 0)
@@ -99,8 +100,8 @@ def _rough_test_from_file(base_filename, args):
         args += ['--page-size=1000x1000']
     base_filename = os.path.join(here, base_filename)
     html_filename = '{base}.html'.format(base=base_filename)
-    with contextlib.closing(io.BytesIO()) as output_file:
-        with open(html_filename, 'rb') as html_file:
+    with contextlib.closing(io.StringIO()) as output_file:
+        with open(html_filename, 'r') as html_file:
             with interim(sys, stdin=html_file, stdout=output_file):
                 rc = try_run(hocr2djvused.main, args)
         assert_equal(rc, 0)

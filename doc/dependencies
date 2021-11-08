@@ -14,6 +14,8 @@ The following software is needed to run ocrodjvu:
 
 * python-djvulibre_
 
+* python-regex
+
 * subprocess32_
 
 * lxml_ ≥ 2.0

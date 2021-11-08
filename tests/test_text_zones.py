@@ -13,6 +13,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
 import io
 import distutils.version
 
@@ -30,8 +31,8 @@ def test_print_sexpr():
     if python_djvulibre_version < V('0.4'):
         out = r'"je\305\274"'
     else:
-        out = '"jeż"'
-    fp = io.BytesIO()
+        out = u'"jeż"'
+    fp = io.StringIO()
     expr = text_zones.sexpr.Expression(inp)
     text_zones.print_sexpr(expr, fp)
     fp.seek(0)

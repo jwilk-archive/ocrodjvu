@@ -13,6 +13,8 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
+from builtins import object
 from tests.tools import (
     assert_equal,
     assert_not_equal,
@@ -26,7 +28,7 @@ from lib.unicode_support import (
 
 text = u'\u201CJekyll,\u201D cried Utterson, with a\xa0loud voice, \u201CI demand to see you.\u201D'
 
-class test_simple_word_break_iterator():
+class test_simple_word_break_iterator(object):
 
     def test_nonempty(self):
         t = list(simple_word_break_iterator(text))
@@ -38,7 +40,7 @@ class test_simple_word_break_iterator():
         t = list(simple_word_break_iterator(''))
         assert_equal(t, [])
 
-class test_word_break_iterator():
+class test_word_break_iterator(object):
 
     def test_nolocale(self):
         t = list(word_break_iterator(text))

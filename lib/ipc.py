@@ -14,6 +14,7 @@
 # for more details.
 
 '''interprocess communication'''
+from __future__ import unicode_literals
 
 import errno
 import logging
@@ -22,6 +23,7 @@ import pipes
 import re
 import signal
 import warnings
+import sys
 
 from . import utils
 
@@ -30,10 +32,11 @@ try:
 except ImportError:  # no coverage
     import subprocess
     if os.name == 'posix':
-        exc = RuntimeWarning('the subprocess module is not thread-safe')
-        utils.enhance_import_error(exc, 'subprocess32', 'python-subprocess32', 'https://pypi.org/project/subprocess32/')
-        warnings.warn(exc, category=type(exc))
-        del exc
+        if sys.version_info <= (3, 3):  # no coverage
+            exc = RuntimeWarning('the subprocess module is not thread-safe')
+            utils.enhance_import_error(exc, 'subprocess32', 'python-subprocess32', 'https://pypi.org/project/subprocess32/')
+            warnings.warn(exc, category=type(exc))
+            del exc
 
 # CalledProcessError, CalledProcessInterrupted
 # ============================================
@@ -61,7 +64,7 @@ def get_signal_names():
             del data['SIGCLD']
     except KeyError:  # no coverage
         pass
-    return dict((no, name) for name, no in data.iteritems())
+    return dict((no, name) for name, no in data.items())
 
 CalledProcessError = subprocess.CalledProcessError
 
@@ -93,13 +96,13 @@ class Subprocess(subprocess.Popen):
         lc_ctype = env.get('LC_ALL') or env.get('LC_CTYPE') or env.get('LANG')
         env = dict(
             (k, v)
-            for k, v in env.iteritems()
+            for k, v in env.items()
             if not (k.startswith('LC_') or k in ('LANG', 'LANGUAGE'))
         )
         if lc_ctype:
             env['LC_CTYPE'] = lc_ctype
         if override:
-            env.update(override)
+            env.update(env)
         return env
 
     def __init__(self, *args, **kwargs):

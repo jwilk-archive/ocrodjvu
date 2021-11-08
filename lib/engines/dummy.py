@@ -13,6 +13,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
 from . import common
 from .. import image_io
 from .. import text_zones

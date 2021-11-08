@@ -13,6 +13,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
+from __future__ import unicode_literals
 import codecs
 import contextlib
 import glob
@@ -50,12 +51,12 @@ def interim(obj, **override):
         (key, getattr(obj, key))
         for key in override
     )
-    for key, value in override.iteritems():
+    for key, value in override.items():
         setattr(obj, key, value)
     try:
         yield
     finally:
-        for key, value in copy.iteritems():
+        for key, value in copy.items():
             setattr(obj, key, value)
 
 @contextlib.contextmanager
@@ -64,10 +65,10 @@ def interim_environ(**override):
     copy_keys = keys & set(os.environ)
     copy = dict(
         (key, value)
-        for key, value in os.environ.iteritems()
+        for key, value in os.environ.items()
         if key in copy_keys
     )
-    for key, value in override.iteritems():
+    for key, value in override.items():
         if value is None:
             os.environ.pop(key, None)
         else:
@@ -92,7 +93,7 @@ def sorted_glob(*args, **kwargs):
     return sorted(glob.iglob(*args, **kwargs))
 
 def remove_logging_handlers(prefix):
-    loggers = logging.Logger.manager.loggerDict.values()
+    loggers = list(logging.Logger.manager.loggerDict.values())
     for logger in loggers:
         try:
             handlers = logger.handlers
