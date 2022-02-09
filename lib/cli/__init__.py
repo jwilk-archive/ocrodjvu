@@ -13,14 +13,9 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
 
-from .. import errors
-from .. import utils
+import argparse
 
-try:
-    import argparse
-except ImportError as ex:  # no coverage
-    utils.enhance_import_error(ex, 'argparse', 'python-argparse', 'https://pypi.org/project/argparse/')
-    raise
+from .. import errors
 
 class ArgumentParser(argparse.ArgumentParser):
 
