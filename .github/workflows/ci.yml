@@ -1,0 +1,137 @@
+name: CI
+on:
+- push
+- pull_request
+jobs:
+  main:
+    strategy:
+      matrix:
+        include:
+        - cython: cython-0.22.1
+          pydjvu: python-djvulibre-0.3.9
+          lxml: lxml-2.0
+          pyicu: pyicu-1.9.5  # earlier versions FTBFS in this env
+          html5lib: html5lib-0.95
+          pillow: pillow-1.0
+          os: ubuntu-18.04
+        - subprocess: subprocess32-3.2.7
+          os: ubuntu-20.04
+        - gamera: gamera-3.4.0
+          subprocess: subprocess32
+          os: ubuntu-20.04
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v2
+    - name: set up Python 2.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 2.7
+    - name: set up APT pinning
+      run: |
+        printf '\n\nPackage: *\nPin: release o=Ubuntu\nPin-Priority: 9999\n' | sudo tee -a /etc/apt/preferences
+    - name: apt update
+      run:
+        sudo apt-get update
+    - name: apt install deps
+      run:
+        sudo apt-get install -y
+          djvulibre-bin
+          docbook-xml
+          docbook-xsl
+          libdjvulibre-dev
+          libicu-dev
+          libxml2-utils
+          libxslt1-dev
+          xsltproc
+    - name: set up pip cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: pip-${{matrix.os}}
+    - name: install wheel
+      run: |
+        pip install wheel
+    - name: install Cython
+      run: |
+        v=${{matrix.cython}}
+        v=${v#cython-}
+        python -m pip install cython${v:+==$v}
+    - name: install python-djvulibre
+      run: |
+        v=${{matrix.pydjvu}}
+        v=${v#python-djvulibre-}
+        python -m pip install python-djvulibre${v:+==$v}
+    - name: install lxml
+      run: |
+        v=${{matrix.lxml}}
+        v=${v#lxml-}
+        python -m pip install lxml${v:+==$v}
+    - name: install subprocess32
+      if: ${{matrix.subprocess}}
+      run: |
+        dist=${{matrix.subprocess}}
+        dist=${dist/-/==}
+        python -m pip install $dist
+    - name: install PyICU
+      run: |
+        v=${{matrix.pyicu}}
+        v=${v#pyicu-}
+        python -m pip install pyicu${v:+==$v}
+    - name: install html5lib
+      run: |
+        v=${{matrix.html5lib}}
+        v=${v#html5lib-}
+        python -m pip install html5lib${v:+==$v}
+    - name: install Pillow
+      run: |
+        v=${{matrix.pillow}}
+        v=${v#pillow-}
+        python -m pip install pillow${v:+==$v}
+    - name: install nose
+      run: |
+        python -m pip install nose
+    - name: run tests
+      run: |
+        make test
+    - name: check docs
+      run: |
+        python -m pip install docutils
+        make -C doc check
+    - name: build docs
+      run:
+        make -C doc all
+    - name: install
+      run:
+        make install PREFIX=$HOME/.local
+    - name: check whether the executable were installed correctly
+      run: |
+        cd /
+        djvu2hocr --version
+        hocr2djvused --version
+        ocrodjvu --version
+    - name: check whether the man pages were installed correctly
+      env:
+        MANPATH: /home/runner/.local/share/man
+        MANWIDTH: 80
+      run: |
+        cd /
+        man 1 ocrodjvu | grep -A 10 -w OCRODJVU
+        man 1 djvu2hocr | grep -A 10 -w DJVU2HOCR
+        man 1 hocr2djvused | grep -A 10 -w HOCR2DJVUSED
+    - name: run pydiatra
+      run: |
+        python -m pip install pydiatra
+        python -m pydiatra -v .
+    - name: run pyflakes
+      run: |
+        python -m pip install pyflakes
+        private/run-pyflakes
+  pypi:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check for namesquatting
+      run: |
+        set +e
+        curl -fsS https://pypi.org/simple/ocrodjvu/; [ $? -eq 22 ] || exit 1
+
+# vim:ts=2 sts=2 sw=2 et
