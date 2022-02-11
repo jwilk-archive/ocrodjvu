@@ -47,7 +47,7 @@ source:
 .. _DjVuLibre:
    http://djvu.sourceforge.net/
 .. _python-djvulibre:
-   http://jwilk.net/software/python-djvulibre
+   https://jwilk.net/software/python-djvulibre
 .. _lxml:
    https://lxml.de/
 .. _subprocess32:

@@ -20,7 +20,7 @@ from . import utils
 try:
     import djvu.decode
 except ImportError as ex:
-    utils.enhance_import_error(ex, 'python-djvulibre', 'python-djvu', 'http://jwilk.net/software/python-djvulibre')
+    utils.enhance_import_error(ex, 'python-djvulibre', 'python-djvu', 'https://jwilk.net/software/python-djvulibre')
     raise
 
 class ImageFormat(object):
