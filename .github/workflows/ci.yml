@@ -26,15 +26,14 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 2.7
-    - name: set up APT pinning
+    - name: set up APT
       run: |
         printf '\n\nPackage: *\nPin: release o=Ubuntu\nPin-Priority: 9999\n' | sudo tee -a /etc/apt/preferences
-    - name: apt update
-      run:
+        printf 'Apt::Install-Recommends "false";\n' | sudo tee -a /etc/apt/apt.conf
         sudo apt-get update
     - name: apt install deps
       run:
-        sudo apt-get install --no-install-recommends -y
+        sudo apt-get install -y
           djvulibre-bin
           docbook-xml
           docbook-xsl
