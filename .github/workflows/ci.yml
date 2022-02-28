@@ -102,7 +102,7 @@ jobs:
     - name: install
       run:
         make install PREFIX=$HOME/.local
-    - name: check whether the executable were installed correctly
+    - name: check whether the executables were installed correctly
       run: |
         cd /
         djvu2hocr --version
