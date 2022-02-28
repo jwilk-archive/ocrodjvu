@@ -131,6 +131,7 @@ jobs:
     - name: check for namesquatting
       run: |
         set +e
-        curl -fsS https://pypi.org/simple/ocrodjvu/; [ $? -eq 22 ] || exit 1
+        curl -fsS https://pypi.org/simple/ocrodjvu/
+        [ $? -eq 22 ] || exit 1
 
 # vim:ts=2 sts=2 sw=2 et
