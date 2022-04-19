@@ -197,7 +197,7 @@ class EngineChoices(object):
 
 class HelpFormatter(argparse.HelpFormatter):
 
-    important_options = set(['-e', '-l', '-j'])
+    important_options = {'-e', '-l', '-j'}
 
     def add_usage(self, usage, actions, groups, prefix=None):
         orig_actions = actions
