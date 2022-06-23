@@ -129,7 +129,7 @@ class test_environment():
             assert_equal(stderr, '')
 
     def test_path(self):
-        path = os.getenv('PATH').split(':')
+        path = os.getenv('PATH')
         with temporary.directory() as tmpdir:
             command_name = temporary.name(dir=tmpdir)
             command_path = os.path.join(tmpdir, command_name)
@@ -137,8 +137,7 @@ class test_environment():
                 print('#!/bin/sh', file=file)
                 print('printf 42', file=file)
             os.chmod(command_path, stat.S_IRWXU)
-            path[:0] = [tmpdir]
-            path = ':'.join(path)
+            path = str.join(os.pathsep, [tmpdir, path])
             with interim_environ(PATH=path):
                 child = ipc.Subprocess([command_name],
                     stdout=ipc.PIPE, stderr=ipc.PIPE,
