@@ -87,9 +87,9 @@ class Engine(common.Engine):
                             isocode = 'slk'
                     else:
                         try:
-                            isocode = '+'.join(
+                            isocode = str.join('+', (
                                 iso639.b_to_t(c) for c in code.split('_')
-                            )
+                            ))
                         except ValueError:
                             warnings.warn(
                                 'unparsable language code: {0!r}'.format(code),

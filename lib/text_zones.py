@@ -178,7 +178,7 @@ class Zone(object):
                 child.rotate(rotation, xform)
 
 def group_words(zones, details, word_break_iterator):
-    text = ''.join(z[0] for z in zones)
+    text = str.join('', (z[0] for z in zones))
     if details > TEXT_DETAILS_WORD:
         # One zone per line
         return [text]

@@ -160,7 +160,7 @@ def break_chars(char_zone_list, options):
             )
             bbox_list += [subbox]
         text += [char_text]
-    text = ''.join(text)
+    text = str.join('', text)
     break_iterator = unicode_support.word_break_iterator(text, options.locale)
     element = None
     i = 0
@@ -177,8 +177,8 @@ def break_chars(char_zone_list, options):
         element = etree.Element('span')
         element.set('class', 'ocrx_word')
         element.set('title', 'bbox {bbox}; bboxes {bboxes}'.format(
-            bbox=' '.join(map(str, bbox)),
-            bboxes=', '.join(' '.join(map(str, bbox)) for bbox in bbox_list[i:j])
+            bbox=str.join(' ', map(str, bbox)),
+            bboxes=str.join(', ', (str.join(' ', map(str, bbox)) for bbox in bbox_list[i:j]))
         ))
         set_text(element, subtext)
         yield element
@@ -203,7 +203,7 @@ def break_plain_text(text, bbox, options):
         )
         element = etree.Element('span')
         element.set('class', 'ocrx_word')
-        element.set('title', 'bbox ' + ' '.join(map(str, subbox)))
+        element.set('title', 'bbox ' + str.join(' ', map(str, subbox)))
         set_text(element, subtext)
         yield element
         i = j
@@ -224,7 +224,7 @@ def process_zone(parent, zone, last, options):
         bbox = options.page_bbox
     else:
         bbox = zone.bbox
-    self.set('title', 'bbox ' + ' '.join(map(str, bbox)))
+    self.set('title', 'bbox ' + str.join(' ', map(str, bbox)))
     n_children = zone.n_children
     character_level_details = False
     for n, child_zone in enumerate(zone.children):
@@ -315,7 +315,7 @@ def main(argv=sys.argv):
     ocr_system = 'djvu2hocr {ver}'.format(ver=__version__)
     hocr_header = hocr_header_template.format(
         ocr_system=ocr_system,
-        ocr_capabilities=' '.join(hocr.djvu2hocr_capabilities),
+        ocr_capabilities=str.join(' ', hocr.djvu2hocr_capabilities),
         title=cgi.escape(options.title),
         css=cgi.escape(options.css),
     )

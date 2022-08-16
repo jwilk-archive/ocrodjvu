@@ -149,7 +149,7 @@ class test_sanitize_utf8():
         def show(message, category, filename, lineno, file=None, line=None):
             with assert_raises_regex(EncodingWarning, '.*control character.*'):
                 raise message
-        s = ''.join(map(chr, xrange(32)))
+        s = str.join('', map(chr, xrange(32)))
         with warnings.catch_warnings():
             warnings.showwarning = show
             t = sanitize_utf8(s).decode('UTF-8')

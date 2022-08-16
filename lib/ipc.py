@@ -111,7 +111,7 @@ class Subprocess(subprocess.Popen):
         except KeyError:
             commandline = args[0]
         if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(' '.join(pipes.quote(s) for s in commandline))
+            logger.debug(str.join(' ', map(pipes.quote, commandline)))
         self.__command = commandline[0]
         try:
             subprocess.Popen.__init__(self, *args, **kwargs)

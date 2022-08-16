@@ -90,10 +90,10 @@ def fix_html(s):
         )
         ''', re.IGNORECASE | re.VERBOSE | re.DOTALL
     )
-    return ''.join(
+    return str.join('', (
         chunk if n & 1 else cgi.escape(chunk)
         for n, chunk in enumerate(regex.split(s))
-    )
+    ))
 
 class ExtractSettings(object):
 
@@ -197,7 +197,7 @@ class Engine(common.Engine):
             except LookupError:
                 raise errors.MissingLanguagePack(isocode)
             result += [tesseract_code]
-        return '+'.join(result)
+        return str.join('+', result)
 
     def check_language(self, language):
         self.user_to_tesseract(language)

@@ -182,7 +182,7 @@ class TIFF(ImageFormat):
         header += struct.pack('<HHII', 0x11B, 5, 1, 14),  # YResolution
         header += struct.pack('<I', 0),  # offset to next IFD
         assert len(header) == n_tags + 5
-        header = ''.join(header)
+        header = str.join('', header)
         assert len(header) == data_offset
         file.write(header)
         file.write(data)

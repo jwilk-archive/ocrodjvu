@@ -299,7 +299,7 @@ def _scan(node, settings, page_size=None):
         elif has_string:
             if not bbox:
                 raise errors.MalformedHocr("zone without bounding box information")
-            text = ''.join(children)
+            text = str.join('', children)
             children = _apply_bboxes(djvu_class, settings.bbox_data or title, text, settings, page_size)
             if len(children) == 1 and isinstance(children[0], basestring):
                 result = text_zones.Zone(type=const.TEXT_ZONE_CHARACTER, bbox=bbox, children=children)
@@ -320,7 +320,7 @@ def _scan(node, settings, page_size=None):
             bboxes_node = node.find('span[@class="ocr_cinfo"]')
             if bboxes_node is not None and len(bboxes_node) == 0 and bboxes_node.text is None:
                 title = bboxes_node.get('title') or ''
-        text = ''.join(children)
+        text = str.join('', children)
         children = _apply_bboxes(djvu_class, settings.bbox_data or title, text, settings, page_size)
         if len(children) == 0:
             return empty

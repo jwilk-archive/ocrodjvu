@@ -75,10 +75,10 @@ def smart_repr(s, encoding=None):
 class EncodingWarning(UserWarning):
     pass
 
-_control_characters_regex = re.compile('[{0}]'.format(''.join(
+_control_characters_regex = re.compile('[{0}]'.format(str.join('', (
     ch for ch in map(chr, xrange(32))
     if ch not in u'\n\r\t'
-)))
+))))
 
 def sanitize_utf8(text):
     '''
