@@ -1,4 +1,4 @@
-# Copyright © 2018-2022 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2018-2019 Jakub Wilk <jwilk@jwilk.net>
 #
 # This file is part of ocrodjvu.
 #
@@ -29,7 +29,7 @@ all: $(man-files)
 
 %.1: %.xml
 	$(xsltproc) $(xsl) $(<)
-	perl -pi -e 's#^\\m\[blue\]\\fI(\\%https?://.*)\\fR\\m\[\]#$$1#; s#^\\%(https?://.*)#.UR $$1\n.UE#' $(@)
+	perl -pi -e 's#^(\\%https?://.*)#\\m[blue]\\fI$$1\\fR\\m[]#' $(@)
 
 .PHONY: check
 check: check-changelog check-rst check-xml
