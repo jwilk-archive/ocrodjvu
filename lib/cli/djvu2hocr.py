@@ -274,7 +274,7 @@ def process_zone(parent, zone, last, options):
 def process_page(page_text, options):
     result = process_zone(None, page_text, last=True, options=options)
     tree = etree.ElementTree(result)
-    tree.write(sys.stdout)
+    tree.write(sys.stdout.buffer)
 
 hocr_header_template = '''\
 <?xml version="1.0" encoding="UTF-8"?>
@@ -328,7 +328,7 @@ def main(argv=[os.fsencode(arg) for arg in sys.argv]):
     )
     if not options.css:
         hocr_header = re.sub(hocr_header_style_re, '', hocr_header, count=1)
-    sys.stdout.write(hocr_header.encode('UTF-8'))
+    sys.stdout.buffer.write(hocr_header.encode('UTF-8'))
     for n in page_iterator:
         try:
             page_size = [
@@ -342,7 +342,7 @@ def main(argv=[os.fsencode(arg) for arg in sys.argv]):
         logger.info('- Page #{n}'.format(n=n))
         page_zone = Zone(page_text, page_size[1])
         process_page(page_zone, options)
-    sys.stdout.write(hocr_footer.encode('UTF-8'))
+    sys.stdout.buffer.write(hocr_footer.encode('UTF-8'))
     djvused.wait()
 
 # vim:ts=4 sts=4 sw=4 et

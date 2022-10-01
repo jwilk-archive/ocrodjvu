@@ -1,0 +1,4 @@
+future
+lxml
+python-djvulibre
+regex
