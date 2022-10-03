@@ -7,6 +7,34 @@ that allows you to perform OCR on DjVu_ files.
 .. _DjVu:
    http://djvu.org/
 
+Example
+-------
+
+.. code:: console
+
+   $ wget -q 'https://sources.debian.org/data/main/o/ocropus/0.3.1-3/data/pages/alice_1.png'
+   $ gm convert -threshold 50% 'alice_1.png' 'alice.pbm'
+   $ cjb2 'alice.pbm' 'alice.djvu'
+   $ ocrodjvu --in-place 'alice.djvu'
+   Processing 'alice.djvu':
+   - Page #1
+   $ djvused -e print-txt 'alice.djvu'
+   (page 0 0 2488 3507
+    (column 470 2922 1383 2978
+     (para 470 2922 1383 2978
+      (line 470 2922 1383 2978
+       (word 470 2927 499 2976 "1")
+       (word 588 2926 787 2978 "Down")
+       (word 817 2925 927 2977 "the")
+       (word 959 2922 1383 2976 "Rabbit-Hole"))))
+    (column 451 707 2076 2856
+     (para 463 2626 2076 2856
+      (line 465 2803 2073 2856
+       (word 465 2819 569 2856 "Alice")
+       (word 592 2819 667 2841 "was")
+       (word 690 2808 896 2854 "beginning")
+   ⋮
+
 Requisites
 ==========
 
