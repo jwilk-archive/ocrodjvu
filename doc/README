@@ -1,3 +1,15 @@
+Overview
+========
+
+**ocrodjvu** is a wrapper for OCR systems
+that allows you to perform OCR on DjVu_ files.
+
+.. _DjVu:
+   http://djvu.org/
+
+Requisites
+==========
+
 The following software is needed to run ocrodjvu:
 
 * Python 2.7
@@ -60,5 +72,12 @@ source:
    http://xmlsoft.org/XSLT/xsltproc2.html
 .. _DocBook XSL stylesheets:
    https://github.com/docbook/xslt10-stylesheets
+
+Acknowledgment
+==============
+
+ocrodjvu development was supported by the Polish Ministry of Science
+and Higher Education's grant no. N N519 384036 (2009–2012,
+https://bitbucket.org/jsbien/ndt).
 
 .. vim:ft=rst ts=3 sts=3 sw=3 et tw=72

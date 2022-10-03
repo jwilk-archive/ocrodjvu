@@ -48,6 +48,7 @@ make -C doc/
 mv COPYING doc/
 rm -r .git*
 rm -f private/make-release-tarball
+rm README.rst  # shipped as doc/README
 cd ..
 mkdir -p "$pwd/dist"
 tar $tar_opts -I "$xz" -cf "$pwd/dist/$name-$version.tar.xz" */
