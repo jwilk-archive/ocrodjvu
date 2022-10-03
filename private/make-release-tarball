@@ -46,8 +46,7 @@ git archive "$commit" --prefix="$name-$version/" | tar -C "$sourceroot" -xf -
 cd "$sourceroot"/*
 make -C doc/
 mv COPYING doc/
-rm .git*
-rm .travis.yml
+rm -r .git*
 rm -f private/make-release-tarball
 cd ..
 mkdir -p "$pwd/dist"
