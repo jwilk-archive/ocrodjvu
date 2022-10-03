@@ -94,7 +94,7 @@ jobs:
         make test
     - name: check docs
       run: |
-        python -m pip install docutils
+        python -m pip install docutils pygments
         make -C doc check
     - name: build docs
       run:
